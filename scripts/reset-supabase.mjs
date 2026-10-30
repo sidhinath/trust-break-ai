@@ -185,7 +185,7 @@ async function verifyState() {
 }
 
 async function main() {
-  console.log('Starting full Supabase project wipe for GhostNet...')
+  console.log('Starting full Supabase project wipe for TrustBreak AI...')
 
   await request(
     `${SUPABASE_URL}/rest/v1/scan_history?id=not.is.null`,

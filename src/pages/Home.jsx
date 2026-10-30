@@ -14,7 +14,7 @@ import { SkeletonCard, ThreatListSkeleton, MetricCardSkeleton } from "../compone
 export default function Home() {
   const [seniorModeActive, setSeniorModeActive] = useState(() => {
     try {
-      return document.body.classList.contains("family-safety-mode") || localStorage.getItem("ghostnet_senior_mode") === "true";
+      return document.body.classList.contains("family-safety-mode") || localStorage.getItem("trustbreak_senior_mode") === "true";
     } catch {
       return false;
     }
@@ -22,15 +22,15 @@ export default function Home() {
 
   useEffect(() => {
     const syncMode = () => {
-      const active = document.body.classList.contains("family-safety-mode") || localStorage.getItem("ghostnet_senior_mode") === "true";
+      const active = document.body.classList.contains("family-safety-mode") || localStorage.getItem("trustbreak_senior_mode") === "true";
       setSeniorModeActive(active);
     };
     syncMode();
 
-    window.addEventListener("ghostnet_senior_mode_change", syncMode);
+    window.addEventListener("trustbreak_senior_mode_change", syncMode);
     window.addEventListener("storage", syncMode);
     return () => {
-      window.removeEventListener("ghostnet_senior_mode_change", syncMode);
+      window.removeEventListener("trustbreak_senior_mode_change", syncMode);
       window.removeEventListener("storage", syncMode);
     };
   }, []);
@@ -38,10 +38,10 @@ export default function Home() {
   const handleSwitchToNormalMode = () => {
     setSeniorModeActive(false);
     try {
-      localStorage.setItem("ghostnet_senior_mode", "false");
+      localStorage.setItem("trustbreak_senior_mode", "false");
     } catch {}
     document.body.classList.remove("family-safety-mode");
-    window.dispatchEvent(new Event("ghostnet_senior_mode_change"));
+    window.dispatchEvent(new Event("trustbreak_senior_mode_change"));
   };
 
   const { data: scans = [], isLoading: loadingScans } = useQuery({

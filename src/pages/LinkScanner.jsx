@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useQueryClient } from "@tanstack/react-query";
-import { Link2, Globe, Lock, Clock, Users, Eye, Sparkles, ShieldCheck } from "lucide-react";
+import { Link2, Users, Eye, Sparkles, ShieldCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import ScannerHeader from "../components/scanner/ScannerHeader";
@@ -9,7 +9,6 @@ import ClickSimulationModal from "../components/scanner/ClickSimulationModal";
 import SeniorScanExplanation from "../components/SeniorScanExplanation";
 import TrustedContactModal from "../components/TrustedContactModal";
 import { useNotify } from "../components/useNotify";
-import { motion } from "framer-motion";
 import { createScanHistory } from "@/lib/data";
 import { analyzeLink, investigateWebsite } from "@/lib/api";
 import { useLocation } from "react-router-dom";

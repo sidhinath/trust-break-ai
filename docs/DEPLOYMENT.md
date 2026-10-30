@@ -1,15 +1,15 @@
 # Production Deployment & Infrastructure Guide
 
-This guide details the infrastructure, environment variable matrices, database migrations, and deployment procedures for GhostNet AI.
+This guide details the infrastructure, environment variable matrices, database migrations, and deployment procedures for **TrustBreak AI**.
 
 ---
 
 ## 1. Production Architecture Overview
 
-GhostNet AI is architected for zero-maintenance serverless scalability on **Vercel** coupled with **Supabase (PostgreSQL 15)**:
+TrustBreak AI is architected for zero-maintenance serverless scalability on **Vercel** coupled with **Supabase (PostgreSQL 15)**:
 
 * **Frontend:** Vite 6 React single-page application distributed globally across Vercel Edge CDN nodes with HTTP caching.
-* **Backend:** Node.js Serverless Functions deployed to edge regions (`/api/analyze`, `/api/analyze-voice`, `/api/blocklist-lite`, `/api/cron/sync-feeds`).
+* **Backend:** Node.js Serverless Functions deployed to edge regions (`/api/analyze`, `/api/analyze-voice`, `/api/blocklist-lite`, `/api/tinyfish/investigate`, `/api/health`, `/api/cron/sync-feeds`).
 * **Database:** Supabase managed PostgreSQL 15 with connection pooling, Row-Level Security, and PostgREST upsert APIs.
 * **Cron Infrastructure:** Vercel Cron runner executing daily synchronization at `00:00 UTC`.
 
@@ -26,6 +26,7 @@ Configure these environment variables in your Vercel Project Dashboard (**Projec
 | `SUPABASE_SERVICE_ROLE_KEY` | **Yes** | Server-Only Secret | Administrative secret for threat indicator upsertion & cron feed sync. **Never prefix with `VITE_`.** |
 | `GROQ_API_KEY` | **Yes** | Server-Only Secret | Groq LPU inference key (`llama-3.3-70b-versatile` & `whisper-large-v3`). |
 | `GEMINI_API_KEY` | **Yes** | Server-Only Secret | Google Gemini 2.5 Flash key for visual OCR and multimodal analysis. |
+| `TINYFISH_API_KEY` | No | Server-Only Secret | TinyFish API key for live headless browser web investigation. |
 | `OPENAI_API_KEY` | No | Server-Only Secret | Optional fallback LLM key (`gpt-4o-mini`). |
 | `CRON_SECRET` | **Yes** | Server-Only Secret | Bearer authentication token protecting `/api/cron/sync-feeds`. |
 | `ENABLE_VOICE_SCANNER` | **Yes** | Server-Only Flag | Feature flag activating `/api/analyze-voice` (`true`). |
@@ -59,6 +60,12 @@ Configure these environment variables in your Vercel Project Dashboard (**Projec
       "destination": "/index.html"
     }
   ],
+  "functions": {
+    "api/**/*.js": {
+      "maxDuration": 60,
+      "memory": 1024
+    }
+  },
   "crons": [
     {
       "path": "/api/cron/sync-feeds",
@@ -68,39 +75,29 @@ Configure these environment variables in your Vercel Project Dashboard (**Projec
 }
 ```
 
-> [!IMPORTANT]
-> **Vercel Hobby Tier Cron Constraint:** Vercel Hobby accounts restrict cron execution to **at most once per day**. Setting schedules like `0 */6 * * *` will trigger build rejections (`3Fpeeb1`). The schedule is set to `0 0 * * *` for guaranteed deployment success.
-
 ---
 
-## 4. Production Bundle Splitting & Vite Optimization
+## 4. Pre-Deployment Quality Checklist
 
-To prevent monolithic JavaScript downloads and stay well below CDN performance thresholds, `vite.config.js` decomposes dependencies into modular vendor chunks:
+Before deploying changes, verify that all local quality gates pass:
 
-```javascript
-build: {
-  chunkSizeWarningLimit: 600,
-  rollupOptions: {
-    output: {
-      manualChunks: {
-        'vendor': ['react', 'react-dom', 'react-router-dom'],
-        'radix': ['@radix-ui/react-dialog', '@radix-ui/react-slot', '@radix-ui/react-tooltip'],
-        'motion': ['framer-motion'],
-        'charts': ['recharts'],
-        'data': ['@supabase/supabase-js', 'date-fns', 'lodash'],
-        'icons': ['lucide-react'],
-        'three': ['three', '@designcodeio/threeui']
-      }
-    }
-  }
-}
+```bash
+# 1. Run all 51 automated unit and integration tests
+npm test
+
+# 2. Check for ESLint errors
+npm run lint
+
+# 3. Verify TypeScript types
+npm run typecheck
+
+# 4. Verify production build output
+npm run build
 ```
 
-Every chunk builds under **460kB** (gzipped under 155kB), delivering sub-second First Contentful Paint (FCP).
-
 ---
 
-## 5. Supabase Database Migration Runbook
+## 5. Database Schema Migration
 
 Before triggering the first deployment, apply the PostgreSQL schema in Supabase:
 
@@ -111,7 +108,7 @@ npm run supabase:setup
 
 ### Method B: Consolidated SQL Editor
 Open the **SQL Editor** in the Supabase Dashboard and execute the consolidated migration:
-* [`supabase/006-consolidated-audit-repairs.sql`](file:///d:/LOQ/Documents/Hackathon%20Project/GhostNet%20ai/GhostNet-app/GhostNet-app/supabase/006-consolidated-audit-repairs.sql)
+* [`supabase/006-consolidated-audit-repairs.sql`](file:///c:/Users/LENOVO%20USER/Downloads/TrustBreak%20AI/supabase/006-consolidated-audit-repairs.sql)
 
 This idempotently sets up tables (`scans`, `reports`, `public_blocklist`, `threat_indicators`), indexes, and Row-Level Security policies.
 
@@ -130,4 +127,4 @@ This idempotently sets up tables (`scans`, `reports`, `public_blocklist`, `threa
    * Deploys edge serverless functions
    * Registers cron schedules
 3. Monitor real-time status in GitHub commit checks or the Vercel Dashboard.
-4. Verify live production at [https://ghost-net-zeta.vercel.app](https://ghost-net-zeta.vercel.app).
+4. Verify live production at [https://trust-break-ai.vercel.app](https://trust-break-ai.vercel.app).

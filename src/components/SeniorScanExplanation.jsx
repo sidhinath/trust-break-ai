@@ -7,7 +7,7 @@ import { REASON_CODE_DICT } from "@/lib/reasonCodes";
  * SeniorScanExplanation Component
  * Reusable plain-language scan-result explanation formatted specifically for senior users.
  * Explains:
- * 1. What GhostNet detected
+ * 1. What TrustBreak AI detected
  * 2. Why we flagged it (plain English evidence)
  * 3. What the user should do next (actionable safety advice)
  */
@@ -65,7 +65,7 @@ export default function SeniorScanExplanation({ result, rawInput = "", scanType 
     if (result.reasons && result.reasons.length > 0) {
       result.reasons.forEach((r) => plainWhyBullets.push(r));
     } else if (riskLevel === "scam" || riskLevel === "suspicious") {
-      plainWhyBullets.push("GhostNet flagged suspicious keywords or links commonly associated with digital fraud.");
+      plainWhyBullets.push("TrustBreak AI flagged suspicious keywords or links commonly associated with digital fraud.");
     } else {
       plainWhyBullets.push("No suspicious links, OTP requests, or emergency threats were found.");
     }
@@ -109,14 +109,14 @@ export default function SeniorScanExplanation({ result, rawInput = "", scanType 
       {/* Built-in Voice Assistance Control */}
       <VoiceAssistance textToRead={voiceSpeechText} title="🔊 Read Explanation Aloud" />
 
-      {/* Section 1: What GhostNet Detected */}
+      {/* Section 1: What TrustBreak AI Detected */}
       <div className="p-4 rounded-2xl border border-slate-300 dark:border-slate-800 bg-slate-100/80 dark:bg-slate-900/60 space-y-1.5">
         <h4 className="font-black text-sm sm:text-base flex items-center gap-2 text-cyan-700 dark:text-cyan-400">
           <HelpCircle className="w-4 h-4" />
-          <span>What GhostNet Detected</span>
+          <span>What TrustBreak AI Detected</span>
         </h4>
         <p className="text-sm font-bold leading-relaxed text-slate-900 dark:text-slate-100">
-          {result.analysis || result.ai_analysis || "GhostNet completed scanning your submitted content."}
+          {result.analysis || result.ai_analysis || "TrustBreak AI completed scanning your submitted content."}
         </p>
       </div>
 

@@ -51,7 +51,7 @@ export default function UserModal({ isOpen, onClose, user }) {
                 Operator Account Details
               </h3>
               <p className="text-xs" style={{ color: "var(--ghost-text-dim)" }}>
-                Verified GhostNet Security Session
+                Verified TrustBreak AI Security Session
               </p>
             </div>
           </div>
@@ -134,7 +134,7 @@ export default function UserModal({ isOpen, onClose, user }) {
         <Button
           onClick={handleSignOut}
           className="w-full h-10 rounded-xl font-bold bg-rose-500 hover:bg-rose-600 text-white text-xs transition-colors">
-          <LogOut className="w-3.5 h-3.5 mr-1.5" /> Sign Out of GhostNet Console
+          <LogOut className="w-3.5 h-3.5 mr-1.5" /> Sign Out of TrustBreak AI Console
         </Button>
       </motion.div>
     </div>

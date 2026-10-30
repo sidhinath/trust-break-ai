@@ -15,7 +15,7 @@ import { filterValidReasonCodes } from './reasonCodes.js'
 function getGroqKey() {
   let key = ''
   try {
-    key = localStorage.getItem('ghostnet_groq_api_key') || import.meta.env?.VITE_GROQ_API_KEY || import.meta.env?.GROQ_API_KEY || ''
+    key = localStorage.getItem('trustbreak_groq_api_key') || import.meta.env?.VITE_GROQ_API_KEY || import.meta.env?.GROQ_API_KEY || ''
   } catch {
     key = import.meta.env?.VITE_GROQ_API_KEY || import.meta.env?.GROQ_API_KEY || ''
   }
@@ -26,7 +26,7 @@ function getGroqKey() {
 function getGeminiKey() {
   let key = ''
   try {
-    key = localStorage.getItem('ghostnet_gemini_api_key') || import.meta.env?.VITE_GEMINI_API_KEY || import.meta.env?.GEMINI_API_KEY || ''
+    key = localStorage.getItem('trustbreak_gemini_api_key') || import.meta.env?.VITE_GEMINI_API_KEY || import.meta.env?.GEMINI_API_KEY || ''
   } catch {
     key = import.meta.env?.VITE_GEMINI_API_KEY || import.meta.env?.GEMINI_API_KEY || ''
   }
@@ -40,7 +40,7 @@ async function analyzeWithClientGroq(type, payload) {
 
   let prompt = ''
   if (type === 'message') {
-    prompt = `You are GhostNet AI, an elite cybersecurity fraud and phishing detection engine.
+    prompt = `You are TrustBreak AI, an elite cybersecurity fraud and phishing detection engine.
 Analyze this message for social engineering, phishing, urgency, financial fraud, impersonation, credential harvesting, or coercion.
 
 Message:
@@ -55,7 +55,7 @@ Return STRICT JSON only with keys:
 - attack_intent (plain-English summary of what the attacker is attempting to accomplish)
 - reasonCodes (array of string codes: URGENCY_LANGUAGE, IMPERSONATES_BRAND, REQUESTS_OTP, LOOKALIKE_DOMAIN, REQUESTS_PAYMENT)`
   } else if (type === 'link') {
-    prompt = `You are GhostNet AI, an elite cybersecurity URL and domain inspection engine.
+    prompt = `You are TrustBreak AI, an elite cybersecurity URL and domain inspection engine.
 Analyze this URL for phishing, typosquatting, lookalike domains, credential harvesting, or deceptive redirects.
 
 URL:
@@ -87,7 +87,7 @@ Return STRICT JSON only with keys:
           temperature: 0.1,
           response_format: { type: 'json_object' },
           messages: [
-            { role: 'system', content: 'You are GhostNet AI. Respond in strict JSON only.' },
+            { role: 'system', content: 'You are TrustBreak AI. Respond in strict JSON only.' },
             { role: 'user', content: prompt },
           ],
         }),
@@ -119,7 +119,7 @@ Return STRICT JSON only with keys:
           emergency_actions: {
             stop: 'Do NOT click any links, enter PINs, or share verification codes.',
             verify: 'Call the organization using their official verified hotline.',
-            report: 'Record this threat in the GhostNet community database.',
+            report: 'Record this threat in the TrustBreak AI community database.',
             secure: 'Freeze affected cards or rotate credentials immediately if compromised.'
           }
         }
@@ -210,7 +210,7 @@ async function analyzeVoiceWithClientGemini(payload) {
   const apiKey = getGeminiKey()
   if (!apiKey) return null
 
-  const prompt = `You are GhostNet AI, an elite voice call scam, deepfake, voice cloning, and social engineering threat detector.
+  const prompt = `You are TrustBreak AI, an elite voice call scam, deepfake, voice cloning, and social engineering threat detector.
 Analyze this audio recording or transcript for synthesized voice indicators, emergency extortion traps, banking impersonation, OTP coercion, and financial fraud.
 Return strict JSON only with keys:
 - transcript (string - verbatim transcription of all spoken words)
@@ -335,7 +335,7 @@ async function analyzeVoiceWithClientGroq(payload) {
           temperature: 0.1,
           response_format: { type: 'json_object' },
           messages: [
-            { role: 'system', content: 'You are GhostNet AI voice detector. Respond in strict JSON only.' },
+            { role: 'system', content: 'You are TrustBreak AI voice detector. Respond in strict JSON only.' },
             {
               role: 'user',
               content: `Analyze this transcribed voice call for social engineering, deepfakes, extortion, urgency, and financial fraud.
@@ -385,8 +385,9 @@ async function postAnalyze(type, payload) {
     if (window.location?.origin) {
       endpoints.push(`${window.location.origin}/api/analyze`)
     }
+    endpoints.push('https://trust-break-ai.vercel.app/api/analyze')
     endpoints.push('https://ghost-net-zeta.vercel.app/api/analyze')
-    endpoints.push('https://ghostnet-app.vercel.app/api/analyze')
+    endpoints.push('https://trustbreak-app.vercel.app/api/analyze')
   }
 
   const reqHeaders = { 'Content-Type': 'application/json' }
@@ -457,8 +458,9 @@ export async function investigateWebsite(url) {
     if (window.location?.origin) {
       endpoints.push(`${window.location.origin}/api/tinyfish/investigate`)
     }
+    endpoints.push('https://trust-break-ai.vercel.app/api/tinyfish/investigate')
     endpoints.push('https://ghost-net-zeta.vercel.app/api/tinyfish/investigate')
-    endpoints.push('https://ghostnet-app.vercel.app/api/tinyfish/investigate')
+    endpoints.push('https://trustbreak-app.vercel.app/api/tinyfish/investigate')
   }
 
   for (const endpoint of endpoints) {
@@ -515,8 +517,9 @@ export async function analyzeVoice(payload = {}) {
     if (window.location?.origin) {
       endpoints.push(`${window.location.origin}/api/analyze-voice`)
     }
+    endpoints.push('https://trust-break-ai.vercel.app/api/analyze-voice')
     endpoints.push('https://ghost-net-zeta.vercel.app/api/analyze-voice')
-    endpoints.push('https://ghostnet-app.vercel.app/api/analyze-voice')
+    endpoints.push('https://trustbreak-app.vercel.app/api/analyze-voice')
   }
 
   const reqHeaders = { 'Content-Type': 'application/json' }

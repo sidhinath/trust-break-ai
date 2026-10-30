@@ -39,7 +39,7 @@ export default class AppErrorBoundary extends React.Component {
           </p>
           <h1 className="text-2xl font-extrabold text-white">Something went wrong.</h1>
           <p className="text-sm" style={{ color: 'var(--ghost-text-dim)' }}>
-            GhostNet encountered an unexpected error. Your session is safe, but this view could not render.
+            TrustBreak AI encountered an unexpected error. Your session is safe, but this view could not render.
           </p>
           <div className="rounded-xl px-3 py-2 text-xs font-medium break-all" style={{ background: 'var(--ghost-surface-2)', color: '#8fa8c8' }}>
             {this.state.errorMessage}

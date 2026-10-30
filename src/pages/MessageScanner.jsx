@@ -28,7 +28,7 @@ export default function MessageScanner() {
   const [showTrustedContact, setShowTrustedContact] = useState(false);
   const [seniorModeActive, setSeniorModeActive] = useState(() => {
     try {
-      return document.body.classList.contains("family-safety-mode") || localStorage.getItem("ghostnet_senior_mode") === "true";
+      return document.body.classList.contains("family-safety-mode") || localStorage.getItem("trustbreak_senior_mode") === "true";
     } catch {
       return false;
     }
@@ -38,10 +38,10 @@ export default function MessageScanner() {
 
   useEffect(() => {
     const syncSeniorMode = () => {
-      setSeniorModeActive(document.body.classList.contains("family-safety-mode") || localStorage.getItem("ghostnet_senior_mode") === "true");
+      setSeniorModeActive(document.body.classList.contains("family-safety-mode") || localStorage.getItem("trustbreak_senior_mode") === "true");
     };
-    window.addEventListener("ghostnet_senior_mode_change", syncSeniorMode);
-    return () => window.removeEventListener("ghostnet_senior_mode_change", syncSeniorMode);
+    window.addEventListener("trustbreak_senior_mode_change", syncSeniorMode);
+    return () => window.removeEventListener("trustbreak_senior_mode_change", syncSeniorMode);
   }, []);
 
   useEffect(() => {

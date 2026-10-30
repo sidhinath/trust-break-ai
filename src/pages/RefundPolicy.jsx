@@ -36,7 +36,7 @@ export default function RefundPolicy() {
             1. Free Tier & Evaluation Plan
           </h2>
           <p style={{ color: 'var(--ghost-text-dim)' }}>
-            GhostNet.ai provides a 100% free community tier for individual consumers, senior citizens, and hackathon evaluation. No credit card is required, and zero charges will ever be applied to free evaluation accounts.
+            TrustBreak AI.ai provides a 100% free community tier for individual consumers, senior citizens, and hackathon evaluation. No credit card is required, and zero charges will ever be applied to free evaluation accounts.
           </p>
         </section>
 
@@ -46,7 +46,7 @@ export default function RefundPolicy() {
             2. 14-Day Money-Back Guarantee for Paid API & Enterprise Tiers
           </h2>
           <p style={{ color: 'var(--ghost-text-dim)' }}>
-            For commercial organizations and enterprise developers subscribing to GhostNet Pro or Enterprise API credit allocations:
+            For commercial organizations and enterprise developers subscribing to TrustBreak AI Pro or Enterprise API credit allocations:
           </p>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
@@ -55,7 +55,7 @@ export default function RefundPolicy() {
                 <RefreshCw className="w-4 h-4 text-blue-500" /> 14-Day Full Refund Window
               </span>
               <p style={{ color: 'var(--ghost-text-dim)' }}>
-                If you are dissatisfied with GhostNet API accuracy or integration performance within 14 calendar days of your initial purchase, you are eligible for a 100% full refund with no questions asked.
+                If you are dissatisfied with TrustBreak AI API accuracy or integration performance within 14 calendar days of your initial purchase, you are eligible for a 100% full refund with no questions asked.
               </p>
             </div>
 
@@ -89,7 +89,7 @@ export default function RefundPolicy() {
             To initiate a refund request, email our billing support team with your account email address and transaction reference:
           </p>
           <div className="font-mono text-xs text-blue-600 dark:text-blue-400 font-bold">
-            Email: billing@ghostnet.ai / support@ghostnet.ai
+            Email: billing@trustbreak.ai / support@trustbreak.ai
           </div>
           <p className="text-[11px]" style={{ color: 'var(--ghost-text-dim)' }}>
             Refund requests are processed within 2 to 5 business days to the original payment method (UPI, Netbanking, Credit Card, or Wire Transfer).

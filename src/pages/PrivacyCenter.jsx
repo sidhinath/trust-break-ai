@@ -34,7 +34,7 @@ export default function PrivacyCenter() {
 
       <div className="ghost-card p-6 space-y-4">
         <h3 className="text-xs font-bold uppercase tracking-wider flex items-center gap-2" style={{ color: 'var(--ghost-text-dim)' }}>
-          <ShieldCheck className="w-4 h-4 text-emerald-500" /> GhostNet Privacy Guarantees
+          <ShieldCheck className="w-4 h-4 text-emerald-500" /> TrustBreak AI Privacy Guarantees
         </h3>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">

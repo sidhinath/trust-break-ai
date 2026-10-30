@@ -1,14 +1,14 @@
-# GhostNet AI — Final Production Demo Lock & Judging Checklist
+# TrustBreak AI — Final Production Demo Lock & Judging Checklist
 
-This document is the authoritative quick-reference checklist for demonstrating GhostNet AI during hackathon judging and live product evaluations.
+This document is the authoritative quick-reference checklist for demonstrating TrustBreak AI during judging, product walkthroughs, and live evaluations.
 
-* **Live Production URL:** [https://ghost-net-zeta.vercel.app](https://ghost-net-zeta.vercel.app)
+* **Live Production URL:** [https://trust-break-ai.vercel.app](https://trust-break-ai.vercel.app)
 * **Local Fallback:** [http://localhost:5173](http://localhost:5173)
 
 ---
 
 ## 1. Pre-Demo Setup (1 Minute Before Judging)
-- [ ] Open the live deployment at [https://ghost-net-zeta.vercel.app](https://ghost-net-zeta.vercel.app) (or `http://localhost:5173`).
+- [ ] Open the live deployment at [https://trust-break-ai.vercel.app](https://trust-break-ai.vercel.app) (or `http://localhost:5173`).
 - [ ] If prompted by the login gate, click **"⚡ Explore as Guest / Judge Demo Mode"** for instant access.
 - [ ] Ensure browser permissions allow Camera and Microphone on the deployed domain.
 - [ ] Verify the header displays **"PRO DEFENSE"** and theme is set to Dark Mode (default).
@@ -102,15 +102,25 @@ This document is the authoritative quick-reference checklist for demonstrating G
 
 ---
 
-## 10. Offline Fallback Test
+## 10. Senior & Family Safety Mode Verification
+- Click the **Senior Mode** toggle in the header.
+- **Verify**:
+  - Senior Home view activates with 4 accessible cards (Message, Link, Screenshot, Emergency).
+  - Web Speech API voice read-aloud button is functional.
+  - Emergency Guidance playbook opens with offline scam scenarios (1930 Cybercrime helpline).
+  - Trusted Contact sharing modal allows 1-click safety updates to family.
+
+---
+
+## 11. Offline Fallback Test
 - Disconnect Wi-Fi or turn off network adapter.
 - Run a message scan or link scan in the UI.
 - **Verify**: The UI immediately displays a full verdict card tagged with `source: offline-heuristic` in `< 5ms`.
 
 ---
 
-## 11. Final Quality Gates Record
-- Automated Tests: **40 / 40 passing** (`tests/scanner.test.js` across 15 test suites).
+## 12. Final Quality Gates Record
+- Automated Tests: **51 / 51 passing** (`tests/scanner.test.js` & `tests/tinyfish.test.js` across 18 test suites).
 - Linter: **0 errors** (`eslint . --quiet`).
 - Typecheck: **0 errors** (`tsc -p ./jsconfig.json`).
 - Build: **Clean production build** (`vite build` in `< 5s`).

@@ -1,4 +1,4 @@
-# GhostNet AI — Hackathon Pitch Deck & Executive Dossier
+# TrustBreak AI — Pitch Deck & Executive Dossier
 
 ## 1. Executive Summary
 
@@ -9,7 +9,7 @@ Current cybersecurity solutions fail consumers because:
 2. **They speak in technical jargon:** Terms like *Punycode, reverse DNS, and SSL cipher suites* confuse everyday users and vulnerable elderly demographics.
 3. **They fail under offline conditions:** Completely collapsing when users lose network connectivity or external APIs suffer outages.
 
-**GhostNet AI delivers the solution: An autonomous, explainable multi-modal cyber defense platform.**
+**TrustBreak AI delivers the solution: An autonomous, explainable multi-modal cyber defense platform.**
 
 ```text
 Detect ➔ Explain ➔ Reconstruct ➔ Intercept ➔ Contain
@@ -34,7 +34,7 @@ Detect ➔ Explain ➔ Reconstruct ➔ Intercept ➔ Contain
 7. **Guaranteed 100% Offline Continuity:**
    An autonomous local regex and NLP heuristic engine scores threats in under 5ms directly on the client if cloud APIs or cellular networks are unavailable.
 8. **Senior & Family Safety Mode:**
-   1-click transformation designed for non-technical family members: enlarges touch targets to 48dp, scales typography, and translates technical cyber indicators into plain-English advice.
+   1-click transformation designed for non-technical family members: enlarges touch targets to 48dp, scales typography, enables Web Speech API read-aloud, and translates technical cyber indicators into plain-English advice.
 
 ---
 
@@ -52,16 +52,16 @@ Detect ➔ Explain ➔ Reconstruct ➔ Intercept ➔ Contain
 ## 4. Technical Architecture Summary
 
 * **Frontend:** React 18, Vite 6, Tailwind CSS 3.4, ThreeUI ambient living shaders, Framer Motion.
-* **Edge Gateways:** Vercel Edge Serverless Microservices (`/api/analyze`, `/api/analyze-voice`, `/api/blocklist-lite`, `/api/cron/sync-feeds`).
+* **Edge Gateways:** Vercel Edge Serverless Microservices (`/api/analyze`, `/api/analyze-voice`, `/api/blocklist-lite`, `/api/tinyfish/investigate`, `/api/cron/sync-feeds`).
 * **Database & Auth:** Supabase PostgreSQL 15 with strict Row-Level Security, separate anon/service-role access keys, and PostgREST atomic upserts.
-* **Mobile Runtime:** Native Android package via Capacitor 8.5.
+* **Mobile Runtime:** Native Android package via Capacitor 8.5 (`com.trustbreak.app`).
 * **Browser Extension:** Google Chrome Manifest V3 with DeclarativeNetRequest background interceptors.
-* **Automated Quality Gates:** 40/40 tests passing across 15 suites in `tests/scanner.test.js`.
+* **Automated Quality Gates:** 51/51 tests passing across 18 suites in `tests/scanner.test.js` and `tests/tinyfish.test.js`.
 
 ---
 
 ## 5. The Closing Pitch
 
-> "Cybersecurity should not require a computer science degree. GhostNet AI puts an autonomous, explainable security operations center directly into the pocket of every citizen.
+> "Cybersecurity should not require a computer science degree. TrustBreak AI puts an autonomous, explainable security operations center directly into the pocket of every citizen.
 >
-> **GhostNet AI — See the scam before it sees you.**"
+> **TrustBreak AI — See the scam before it sees you.**"

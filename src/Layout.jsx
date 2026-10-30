@@ -44,7 +44,7 @@ export default function Layout({ children, currentPageName }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [familyMode, setFamilyMode] = useState(() => {
     try {
-      return document.body.classList.contains("family-safety-mode") || localStorage.getItem("ghostnet_senior_mode") === "true";
+      return document.body.classList.contains("family-safety-mode") || localStorage.getItem("trustbreak_senior_mode") === "true";
     } catch {
       return false;
     }
@@ -58,7 +58,7 @@ export default function Layout({ children, currentPageName }) {
 
   useEffect(() => {
     const syncSeniorMode = () => {
-      const active = document.body.classList.contains("family-safety-mode") || localStorage.getItem("ghostnet_senior_mode") === "true";
+      const active = document.body.classList.contains("family-safety-mode") || localStorage.getItem("trustbreak_senior_mode") === "true";
       setFamilyMode(active);
       if (active) {
         document.body.classList.add("family-safety-mode");
@@ -68,10 +68,10 @@ export default function Layout({ children, currentPageName }) {
     };
     syncSeniorMode();
 
-    window.addEventListener("ghostnet_senior_mode_change", syncSeniorMode);
+    window.addEventListener("trustbreak_senior_mode_change", syncSeniorMode);
     window.addEventListener("storage", syncSeniorMode);
     return () => {
-      window.removeEventListener("ghostnet_senior_mode_change", syncSeniorMode);
+      window.removeEventListener("trustbreak_senior_mode_change", syncSeniorMode);
       window.removeEventListener("storage", syncSeniorMode);
     };
   }, []);
@@ -80,14 +80,14 @@ export default function Layout({ children, currentPageName }) {
     const next = !familyMode;
     setFamilyMode(next);
     try {
-      localStorage.setItem("ghostnet_senior_mode", next ? "true" : "false");
+      localStorage.setItem("trustbreak_senior_mode", next ? "true" : "false");
     } catch {}
     if (next) {
       document.body.classList.add("family-safety-mode");
     } else {
       document.body.classList.remove("family-safety-mode");
     }
-    window.dispatchEvent(new Event("ghostnet_senior_mode_change"));
+    window.dispatchEvent(new Event("trustbreak_senior_mode_change"));
   };
 
   // Capacitor Android Hardware Back Button Handler & Android Share Sheet App Launch Listener
@@ -140,14 +140,14 @@ export default function Layout({ children, currentPageName }) {
 
   // Desktop sidebar toggle state (stored in localStorage)
   const [sidebarOpen, setSidebarOpen] = useState(() => {
-    const saved = localStorage.getItem("ghostnet_sidebar_open");
+    const saved = localStorage.getItem("trustbreak_sidebar_open");
     return saved !== null ? JSON.parse(saved) : true;
   });
 
   const toggleSidebar = () => {
     setSidebarOpen(prev => {
       const next = !prev;
-      localStorage.setItem("ghostnet_sidebar_open", JSON.stringify(next));
+      localStorage.setItem("trustbreak_sidebar_open", JSON.stringify(next));
       return next;
     });
   };
@@ -163,12 +163,12 @@ export default function Layout({ children, currentPageName }) {
 
   // Initialize theme from localStorage or default to light
   const [theme, setTheme] = useState(() => {
-    return localStorage.getItem("ghostnet_theme") || "light";
+    return localStorage.getItem("trustbreak_theme") || "light";
   });
 
   useEffect(() => {
     const syncTheme = () => {
-      const savedTheme = localStorage.getItem("ghostnet_theme") || "light";
+      const savedTheme = localStorage.getItem("trustbreak_theme") || "light";
       setTheme(savedTheme);
       const root = document.documentElement;
       const body = document.body;
@@ -186,10 +186,10 @@ export default function Layout({ children, currentPageName }) {
     };
     syncTheme();
 
-    window.addEventListener("ghostnet_theme_change", syncTheme);
+    window.addEventListener("trustbreak_theme_change", syncTheme);
     window.addEventListener("storage", syncTheme);
     return () => {
-      window.removeEventListener("ghostnet_theme_change", syncTheme);
+      window.removeEventListener("trustbreak_theme_change", syncTheme);
       window.removeEventListener("storage", syncTheme);
     };
   }, []);
@@ -211,8 +211,8 @@ export default function Layout({ children, currentPageName }) {
       root.classList.add("light");
       body.classList.add("light");
     }
-    localStorage.setItem("ghostnet_theme", next);
-    window.dispatchEvent(new Event("ghostnet_theme_change"));
+    localStorage.setItem("trustbreak_theme", next);
+    window.dispatchEvent(new Event("trustbreak_theme_change"));
   };
 
   useEffect(() => {

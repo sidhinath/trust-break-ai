@@ -1,8 +1,8 @@
-# Hackathon Live Demonstration & Presentation Script (3–5 Minutes)
+# Live Demonstration & Presentation Script (3–5 Minutes)
 
-Use this authoritative presentation script for hackathon judging panels, live stage presentations, and investor demonstrations.
+Use this authoritative presentation script for judging panels, live stage presentations, and investor demonstrations.
 
-* **Live Production URL:** [https://ghost-net-zeta.vercel.app](https://ghost-net-zeta.vercel.app)
+* **Live Production URL:** [https://trust-break-ai.vercel.app](https://trust-break-ai.vercel.app)
 * **Local Fallback:** [http://localhost:5173](http://localhost:5173)
 
 ---
@@ -10,10 +10,10 @@ Use this authoritative presentation script for hackathon judging panels, live st
 ## 🎬 Step-by-Step Presentation Script
 
 ### [0:00 – 0:40] Introduction: The Paradigm Shift
-1. **Open:** [https://ghost-net-zeta.vercel.app](https://ghost-net-zeta.vercel.app).
+1. **Open:** [https://trust-break-ai.vercel.app](https://trust-break-ai.vercel.app).
 2. **If prompted with the login gate:** Click **`⚡ Explore as Guest / Judge Demo Mode`** for immediate, zero-credential access.
 3. **The Hook:**
-   > *"Judges, digital fraud is a $10 Billion crisis. Modern attackers use generative AI to automate spear-phishing, synthesize fake banking alerts, clone executive voices, and generate malicious QR codes. Traditional security products act as opaque black boxes that output useless percentage scores. GhostNet AI shifts the paradigm: we detect, explain, and reconstruct cyber threats in real-time."*
+   > *"Judges, digital fraud is a $10 Billion crisis. Modern attackers use generative AI to automate spear-phishing, synthesize fake banking alerts, clone executive voices, and generate malicious QR codes. Traditional security products act as opaque black boxes that output useless percentage scores. TrustBreak AI shifts the paradigm: we detect, explain, and reconstruct cyber threats in real-time."*
 4. **Command Center Overview:**
    * Point out the **Security Score (98/100)**, **Threats Blocked**, the live ambient **ThreeUI Particle Drift**, and the top **Judge & Live Demo Mode** benchmark bar.
 
@@ -23,7 +23,7 @@ Use this authoritative presentation script for hackathon judging panels, live st
 1. In the top demo bar, click **`Banking Scam: Urgent Bank KYC Account Freeze`**.
 2. Click **`Inspect & Reconstruct Threat`**.
 3. **Talking Points:**
-   * *"Notice that GhostNet does not output a generic score. It performs **Threat Reconstruction™**, decomposing the attack into an interactive 5-stage cyber kill-chain: Ingress ➔ Urgency Coercion ➔ Phishing Gateway ➔ Credential Harvesting ➔ Financial Loss."*
+   * *"Notice that TrustBreak does not output a generic score. It performs **Threat Reconstruction™**, decomposing the attack into an interactive 5-stage cyber kill-chain: Ingress ➔ Urgency Coercion ➔ Phishing Gateway ➔ Credential Harvesting ➔ Financial Loss."*
    * Point out the **10 Fixed Reason Code Badges** (`URGENCY_SCARE_TACTICS`, `IMPERSONATION_BRAND`, `SUSPICIOUS_DOMAIN`).
    * *"We strictly filter out LLM hallucinations using a code-defense parser. Downstream users receive verifiable facts, not AI guesses."*
 
@@ -44,7 +44,7 @@ Use this authoritative presentation script for hackathon judging panels, live st
 2. Click **`Load Deepfake Police Scam Audio`** (or speak into the live mic).
 3. Click **`Analyze Voice Safety`**.
 4. **Key Talking Points:**
-   * *"Voice cloning and digital arrest scams are surging globally. GhostNet calculates in-memory **Wiener Spectral Flatness** using FFT to spot synthetic neural vocoders, paired with **Groq Whisper-large-v3** for linguistic coercion analysis."*
+   * *"Voice cloning and digital arrest scams are surging globally. TrustBreak calculates in-memory **Wiener Spectral Flatness** using FFT to spot synthetic neural vocoders, paired with **Groq Whisper-large-v3** for linguistic coercion analysis."*
    * Highlight the **Synthetic Probability (88%)** and the detected high-frequency energy ratio.
 
 ---
@@ -59,8 +59,8 @@ Use this authoritative presentation script for hackathon judging panels, live st
 ---
 
 ### [3:20 – 3:45] Accessibility, Quality Gates & Conclusion
-1. Click the **`Senior Mode`** button in the top header:
-   * *"With one click, typography magnifies and technical alerts turn into clear, high-contrast instructions for senior citizens."*
+1. Click the **`Senior Mode`** toggle in the top header:
+   * *"With one click, typography magnifies, touch targets enlarge to 48dp+, audio read-aloud activates, and technical alerts turn into clear, high-contrast instructions for senior citizens."*
 2. Click the **`Theme Toggle`** (Sun/Moon) to showcase Light and Dark mode rendering.
 3. **Closing Statement:**
-   > *"GhostNet AI is production-live on Vercel, backed by Supabase PostgreSQL RLS, packaged for Android via Capacitor 8, and backed by a comprehensive 40/40 automated test suite. See the scam before it sees you. Thank you!"*
+   > *"TrustBreak AI is production-live on Vercel at https://trust-break-ai.vercel.app, backed by Supabase PostgreSQL RLS, packaged for Android via Capacitor 8.5, and supported by a comprehensive 51/51 automated test suite. See the scam before it sees you. Thank you!"*

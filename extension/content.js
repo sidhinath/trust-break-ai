@@ -1,20 +1,20 @@
 ﻿/**
- * GhostNet AI — Content Script Overlay
+ * TrustBreak AI — Content Script Overlay
  * Displays an isolated warning banner at the top of high-risk pages without breaking page layout.
  */
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-  if (request.action === "GHOSTNET_SHOW_OVERLAY" && request.threat) {
+  if (request.action === "TRUSTBREAK AI_SHOW_OVERLAY" && request.threat) {
     showThreatBanner(request.threat);
     sendResponse({ ok: true });
   }
 });
 
 function showThreatBanner(threat) {
-  if (document.getElementById("ghostnet-threat-host")) return;
+  if (document.getElementById("trustbreak-threat-host")) return;
 
   const host = document.createElement("div");
-  host.id = "ghostnet-threat-host";
+  host.id = "trustbreak-threat-host";
   host.style.cssText = "all: initial; position: fixed; top: 0; left: 0; width: 100%; z-index: 2147483647;";
 
   const shadow = host.attachShadow({ mode: "closed" });
@@ -121,7 +121,7 @@ function showThreatBanner(threat) {
         <div class="shield">!</div>
         <div class="info">
           <h4>
-            GhostNet AI Warning
+            TrustBreak AI Warning
             <span class="badge">Potential Scam / Phishing</span>
           </h4>
           <p>${reasons.join(" • ")}</p>

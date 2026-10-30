@@ -1,5 +1,5 @@
 -- Feature 3: Public Threat Feed Blocklist
--- GhostNet AI — Migration 004
+-- TrustBreak AI — Migration 004
 
 CREATE TABLE IF NOT EXISTS public_blocklist (
   id bigserial PRIMARY KEY,

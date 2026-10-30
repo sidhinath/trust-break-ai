@@ -1,5 +1,5 @@
 /**
- * GhostNet AI — TinyFish Web Automation & Read-Only Investigation Service
+ * TrustBreak AI — TinyFish Web Automation & Read-Only Investigation Service
  * Server-Side Service Module (SERVER ONLY)
  * Connects securely to POST https://agent.tinyfish.ai/v1/automation/run-sse
  */
@@ -73,12 +73,12 @@ export function parseSseBuffer(buffer) {
 }
 
 /**
- * Normalizes raw TinyFish SSE event results or text into GhostNet's internal schema.
+ * Normalizes raw TinyFish SSE event results or text into TrustBreak AI's internal schema.
  * @param {string} url - Target URL.
  * @param {object|string} rawResult - Result data object or text string.
  * @param {string} [status='completed'] - Investigation status.
  * @param {string|null} [errorCode=null] - Error code if failed.
- * @returns {object} Standardized GhostNet investigation output structure.
+ * @returns {object} Standardized TrustBreak AI investigation output structure.
  */
 export function normalizeTinyFishResult(url, rawResult, status = 'completed', errorCode = null) {
   const id = `tf-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`
@@ -151,7 +151,7 @@ export function normalizeTinyFishResult(url, rawResult, status = 'completed', er
  * Executes a TinyFish SSE live investigation for a target URL.
  * @param {string} targetUrl - Target URL.
  * @param {object} [options={}] - Options (apiKey, timeoutMs, fetchFn, onProgress).
- * @returns {Promise<object>} GhostNet normalized investigation result.
+ * @returns {Promise<object>} TrustBreak AI normalized investigation result.
  */
 export async function runTinyFishInvestigation(targetUrl, options = {}) {
   const apiKey = options.apiKey || process.env.TINYFISH_API_KEY

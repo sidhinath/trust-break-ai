@@ -19,7 +19,7 @@ export default function PrivacyPolicy() {
           style={{ background: 'var(--ghost-surface-2)', borderColor: 'var(--ghost-border)' }}>
           <div>
             <span className="font-bold text-sm block" style={{ color: 'var(--ghost-text)' }}>
-              Data Fiduciary: GhostNet Cyber Defense Systems
+              Data Fiduciary: TrustBreak AI Cyber Defense Systems
             </span>
             <span style={{ color: 'var(--ghost-text-dim)' }}>
               Effective Date: September 26, 2026 | Version 2.4 (DPDP Act 2023 Compliant)
@@ -36,7 +36,7 @@ export default function PrivacyPolicy() {
             1. Data Minimization & Collection Principles
           </h2>
           <p style={{ color: 'var(--ghost-text-dim)' }}>
-            GhostNet.ai operates under strict data minimization principles. We only collect and process personal data that is strictly necessary to deliver multi-modal cybersecurity inspection services, user authentication, and community threat telemetry.
+            TrustBreak AI.ai operates under strict data minimization principles. We only collect and process personal data that is strictly necessary to deliver multi-modal cybersecurity inspection services, user authentication, and community threat telemetry.
           </p>
           <ul className="list-disc pl-5 space-y-1" style={{ color: 'var(--ghost-text-dim)' }}>
             <li><strong className="text-slate-900 dark:text-slate-100">Account Credentials:</strong> Email address and password hash for user authentication via Supabase Auth.</li>
@@ -51,7 +51,7 @@ export default function PrivacyPolicy() {
             2. Compliance with India’s Digital Personal Data Protection (DPDP) Act 2023
           </h2>
           <p style={{ color: 'var(--ghost-text-dim)' }}>
-            Under the provisions of India’s Digital Personal Data Protection Act 2023, GhostNet.ai acts as a <strong>Data Fiduciary</strong>. Data Principal rights guaranteed under Section 6 through Section 13 include:
+            Under the provisions of India’s Digital Personal Data Protection Act 2023, TrustBreak AI.ai acts as a <strong>Data Fiduciary</strong>. Data Principal rights guaranteed under Section 6 through Section 13 include:
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
             <div className="p-3 rounded-xl border space-y-1" style={{ background: 'var(--ghost-surface-2)', borderColor: 'var(--ghost-border)' }}>
@@ -87,7 +87,7 @@ export default function PrivacyPolicy() {
             3. Data Protection of Children & Minors
           </h2>
           <p style={{ color: 'var(--ghost-text-dim)' }}>
-            In accordance with DPDP Act Section 9, GhostNet.ai does not knowingly track, profile, or process personal data of minors under 18 years of age without verifiable parental or guardian consent. If you suspect minor data has been submitted, notify `dpo@ghostnet.ai` for immediate deletion.
+            In accordance with DPDP Act Section 9, TrustBreak AI.ai does not knowingly track, profile, or process personal data of minors under 18 years of age without verifiable parental or guardian consent. If you suspect minor data has been submitted, notify `dpo@trustbreak.ai` for immediate deletion.
           </p>
         </section>
 
@@ -117,11 +117,11 @@ export default function PrivacyPolicy() {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs font-mono">
             <div className="flex items-center gap-2">
               <Building className="w-3.5 h-3.5 text-cyan-500" />
-              <span>GhostNet Cyber Defense Systems</span>
+              <span>TrustBreak AI Cyber Defense Systems</span>
             </div>
             <div className="flex items-center gap-2">
               <Mail className="w-3.5 h-3.5 text-cyan-500" />
-              <span>dpo@ghostnet.ai / privacy@ghostnet.ai</span>
+              <span>dpo@trustbreak.ai / privacy@trustbreak.ai</span>
             </div>
             <div className="flex items-center gap-2">
               <MapPin className="w-3.5 h-3.5 text-cyan-500" />

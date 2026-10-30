@@ -1,12 +1,12 @@
 # Testing Strategy & Automated Quality Gates
 
-GhostNet AI enforces automated quality gates ensuring zero regressions across core scanning algorithms, multi-modal failover paths, cryptographic data isolation, and API security.
+TrustBreak AI enforces automated quality gates ensuring zero regressions across core scanning algorithms, multi-modal failover paths, cryptographic data isolation, TinyFish web automation, and API security.
 
 ---
 
 ## 1. Automated Test Execution
 
-All automated tests utilize Node.js's native test runner (`node --test`), delivering lightning-fast, zero-dependency test execution in under **400ms**:
+All automated tests utilize Node.js's native test runner (`node --test`), delivering lightning-fast, zero-dependency test execution in under **500ms**:
 
 ```bash
 npm test
@@ -14,7 +14,7 @@ npm test
 
 ### Full Automated Quality Gate Commands
 ```bash
-# 1. Automated Unit & Integration Tests (40/40 Passing)
+# 1. Automated Unit & Integration Tests (51/51 Passing across 18 test suites)
 npm test
 
 # 2. Static Code Analysis (ESLint 9)
@@ -29,12 +29,14 @@ npm run build
 
 ---
 
-## 2. Test Suite Breakdown (40/40 Tests Across 15 Suites)
+## 2. Test Suite Breakdown (51/51 Tests Across 18 Suites)
 
-File: [`tests/scanner.test.js`](file:///d:/LOQ/Documents/Hackathon%20Project/GhostNet%20ai/GhostNet-app/GhostNet-app/tests/scanner.test.js)
+Files:
+- [`tests/scanner.test.js`](file:///c:/Users/LENOVO%20USER/Downloads/TrustBreak%20AI/tests/scanner.test.js) (40 tests)
+- [`tests/tinyfish.test.js`](file:///c:/Users/LENOVO%20USER/Downloads/TrustBreak%20AI/tests/tinyfish.test.js) (11 tests)
 
-```
-▶ GhostNet AI Scanner Engine Tests (7 tests)
+```text
+▶ TrustBreak AI Scanner Engine Tests (7 tests)
   ✔ should extract social engineering signals from an urgent KYC SMS
   ✔ should reconstruct a 5-stage attack chain for scam messages
   ✔ should infer clear plain-English attacker intent for UPI scam
@@ -103,6 +105,22 @@ File: [`tests/scanner.test.js`](file:///d:/LOQ/Documents/Hackathon%20Project/Gho
 ▶ Audit Repairs — Pre-Click Blocklist Lite Endpoint (2 tests)
   ✔ should return 404 when ENABLE_PRE_CLICK_INTERCEPTOR is disabled
   ✔ should reject non-GET requests with 405 Method Not Allowed
+
+▶ TinyFish Service — Goal Construction & SSE Parsing (4 tests)
+  ✔ should construct a read-only investigation goal containing safety rules
+  ✔ should parse discrete SSE events from raw text buffer
+  ✔ should handle multiline SSE data and partial trailing buffer
+  ✔ should normalize provider result into internal schema
+
+▶ TinyFish API Security & SSRF Validation (2 tests)
+  ✔ should identify prohibited local and private IP targets
+  ✔ should reject invalid schemes and malformed URLs in validateTargetUrl
+
+▶ TinyFish Provider Integration & Error Handling (4 tests)
+  ✔ should return MISSING_TINYFISH_KEY when API key is not supplied
+  ✔ should handle HTTP error status codes gracefully (e.g. 401, 429, 500)
+  ✔ should parse successful streamed SSE response
+  ✔ should handle request timeouts gracefully
 ```
 
 ---

@@ -1,8 +1,8 @@
-# GhostNet AI — Business Model, GTM & Unit Economics
+# TrustBreak AI — Business Model, GTM & Unit Economics
 
-**Document Version:** 1.0.0-prod  
-**Status:** Feature-Frozen / Hackathon Release  
-**Target Release:** v1.1.0-prod  
+**Document Version:** 1.7.0-prod  
+**Status:** Production Verified  
+**Target Release:** v1.7.0-prod  
 
 ---
 
@@ -10,7 +10,7 @@
 
 The global fraud detection and consumer cybersecurity market is projected to reach **\$42.4 billion by 2028** (CAGR 18.2%). While traditional antivirus software has experienced margin compression and market saturation, demand for **AI-powered fraud interception** is at an all-time high.
 
-GhostNet AI operates a hybrid **Product-Led Growth (PLG) Freemium B2C** and **B2B Fraud-as-a-Service (FaaS) API** monetization engine. By leveraging ultra-low-cost Groq LPUs (\$0.0001/scan) and client-side digital signal processing (\$0 COGS for audio FFT), GhostNet AI achieves an industry-leading **~90% gross margin** while delivering sub-second protection to end users.
+TrustBreak AI operates a hybrid **Product-Led Growth (PLG) Freemium B2C** and **B2B Fraud-as-a-Service (FaaS) API** monetization engine. By leveraging ultra-low-cost Groq LPUs (\$0.0001/scan) and client-side digital signal processing (\$0 COGS for audio FFT), TrustBreak AI achieves an industry-leading **~90% gross margin** while delivering sub-second protection to end users.
 
 ---
 
@@ -18,7 +18,7 @@ GhostNet AI operates a hybrid **Product-Led Growth (PLG) Freemium B2C** and **B2
 
 ```
 +----------------------------------------------------------------------------------------------------+
-|                                      GHOSTNET AI BUSINESS MODEL CANVAS                             |
+|                                    TRUSTBREAK AI BUSINESS MODEL CANVAS                             |
 +---------------------+---------------------+---------------------+------------------+---------------+
 | KEY PARTNERS        | KEY ACTIVITIES      | VALUE PROPOSITION   | CUSTOMER         | CUSTOMER      |
 |                     |                     |                     | RELATIONSHIPS    | SEGMENTS      |
@@ -41,7 +41,7 @@ GhostNet AI operates a hybrid **Product-Led Growth (PLG) Freemium B2C** and **B2
 +-------------------------------------------+----------------------------------------+
 | COST STRUCTURE                            | REVENUE STREAMS                        |
 |                                           |                                        |
-| • AI Inference: Groq LPUs ($0.00010/scan) | • B2C GhostNet Pro: $4.99/mo or $49/yr |
+| • AI Inference: Groq LPUs ($0.00010/scan) | • B2C TrustBreak AI Pro: $4.99/mo or $49/yr |
 | • Vision OCR: Gemini Flash ($0.00015/scan)| • B2C Family Pack (5 seats): $9.99/mo  |
 | • Supabase PostgreSQL & Edge Compute      | • B2B Fraud API: $0.005/call (Tiered)  |
 | • Vercel Edge Serverless Bandwidth        | • Enterprise Browser Shield: $3.50/seat|
@@ -53,7 +53,7 @@ GhostNet AI operates a hybrid **Product-Led Growth (PLG) Freemium B2C** and **B2
 
 ## 3. Detailed Unit Economics & Cost of Goods Sold (COGS)
 
-One of GhostNet AI’s greatest competitive moats is its hyper-efficient cost architecture. By offloading heavy acoustic FFT processing to the client's Web Audio API and utilizing Groq LPUs for conversational reasoning, GhostNet AI's marginal cost per scan is negligible.
+One of TrustBreak AI’s greatest competitive moats is its hyper-efficient cost architecture. By offloading heavy acoustic FFT processing to the client's Web Audio API and utilizing Groq LPUs for conversational reasoning, TrustBreak AI's marginal cost per scan is negligible.
 
 ### 3.1 Per-Scan Infrastructure Breakdown
 
@@ -68,7 +68,7 @@ One of GhostNet AI’s greatest competitive moats is its hyper-efficient cost ar
 
 $$\text{Blended Average Cost Per User Scan} \approx \mathbf{\$0.000125}$$
 
-### 3.2 Gross Margin Analysis (GhostNet Pro @ \$4.99/mo)
+### 3.2 Gross Margin Analysis (TrustBreak AI Pro @ \$4.99/mo)
 - **Assumed Usage:** Heavy consumer scans 150 items per month (mix of SMS, URLs, QR, and Voice).
 - **Monthly COGS per Pro User:**
   $$150 \text{ scans} \times \$0.000125 = \mathbf{\$0.01875\text{ / month}}$$
@@ -97,26 +97,26 @@ $$\text{Blended Average Cost Per User Scan} \approx \mathbf{\$0.000125}$$
 ```
 
 ### 4.1 B2C Consumer Tiers
-1. **GhostNet Free (Community):**
+1. **TrustBreak AI Free (Community):**
    - Unlimited text & URL scans.
    - Access to Global Threat Intelligence map.
    - Manifest V3 Browser Shield basic blocking.
    - Purpose: Viral acquisition and threat telemetry crowd-sourcing.
-2. **GhostNet Pro (\$4.99/month or \$49/year):**
+2. **TrustBreak AI Pro (\$4.99/month or \$49/year):**
    - Multi-modal Voice Deepfake acoustic analyzer.
    - Real-time Camera QR HUD scanning.
    - Gemini Vision OCR screenshot batch analysis.
    - Family Shield pack (\$9.99/mo for up to 5 protected family members with instant emergency SMS notifications).
 
 ### 4.2 B2B Enterprise & FinTech API
-1. **GhostNet Fraud-as-a-Service (FaaS) API:**
+1. **TrustBreak AI Fraud-as-a-Service (FaaS) API:**
    - **Target Customers:** Digital banking apps (Revolut, Chime), payment gateways (Stripe, Razorpay), cryptocurrency wallets (Coinbase, MetaMask).
    - **Use Case:** Pre-transaction scanning of payment links, recipient UPI handles, and message text before funds transfer.
    - **Pricing:**
      - Starter: \$199/month (Includes 50,000 requests, \$0.004/overage).
      - Growth: \$699/month (Includes 200,000 requests, \$0.0035/overage).
      - Enterprise: Custom contract with on-premise container deployment.
-2. **GhostNet Corporate Browser Shield (\$3.50/seat/month):**
+2. **TrustBreak AI Corporate Browser Shield (\$3.50/seat/month):**
    - Corporate Chrome extension deployment via Google Workspace / MDM.
    - Centralized security operations dashboard with zero employee PII leakage.
 
@@ -131,10 +131,10 @@ $$\text{Blended Average Cost Per User Scan} \approx \mathbf{\$0.000125}$$
 
 ### Phase 2: Family Protection & Viral Loops (Months 4–8)
 - **"Protect Your Parents" Viral Campaign:** Targeted marketing educating adult children on digital arrest and elderly utility scams, offering 1-click family setup.
-- **WhatsApp / Telegram Forward Bot:** Lightweight forwarder bot allowing users to forward suspicious messages directly to GhostNet AI for a 2-second reply verdict.
+- **WhatsApp / Telegram Forward Bot:** Lightweight forwarder bot allowing users to forward suspicious messages directly to TrustBreak AI for a 2-second reply verdict.
 
 ### Phase 3: B2B FinTech Partnerships (Months 9–18)
-- **Banking SDK Integration:** Partner with regional neobanks to embed GhostNet's pre-transaction scam detection into payment confirmation screens.
+- **Banking SDK Integration:** Partner with regional neobanks to embed TrustBreak's pre-transaction scam detection into payment confirmation screens.
 - **Capacitor Mobile Store Expansion:** Native Android and iOS app store feature pushes.
 
 ---
@@ -157,4 +157,4 @@ $$\text{Blended Average Cost Per User Scan} \approx \mathbf{\$0.000125}$$
 
 ## 7. Conclusion
 
-GhostNet AI solves an urgent global crisis with superior technical performance and unmatched unit economics. By converting the low computational cost of specialized LPUs and client-side signal processing into an impenetrable defense network, GhostNet AI offers a highly scalable, venture-backable cyber defense platform with sustainable 80%+ gross margins.
+TrustBreak AI solves an urgent global crisis with superior technical performance and unmatched unit economics. By converting the low computational cost of specialized LPUs and client-side signal processing into an impenetrable defense network, TrustBreak AI offers a highly scalable, venture-backable cyber defense platform with sustainable 80%+ gross margins.

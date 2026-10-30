@@ -119,7 +119,7 @@ export default function Reports() {
           <p className="text-xs max-w-sm mx-auto" style={{ color: "var(--ghost-text-dim)" }}>
             {search || filterType !== "all"
               ? "No scan logs match your search filter criteria."
-              : "Perform a scan using any of GhostNet's 5 scanners to populate your history log."}
+              : "Perform a scan using any of TrustBreak AI's 5 scanners to populate your history log."}
           </p>
         </div>
       ) : (

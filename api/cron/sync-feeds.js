@@ -1,5 +1,5 @@
 /**
- * GhostNet AI — Feature 3: Cron Feed Sync Endpoint
+ * TrustBreak AI — Feature 3: Cron Feed Sync Endpoint
  *
  * Called by Vercel Cron every 6 hours.
  * Protected by CRON_SECRET bearer token.

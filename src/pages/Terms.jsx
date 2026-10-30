@@ -19,7 +19,7 @@ export default function Terms() {
           style={{ background: 'var(--ghost-surface-2)', borderColor: 'var(--ghost-border)' }}>
           <div>
             <span className="font-bold text-sm block" style={{ color: 'var(--ghost-text)' }}>
-              GhostNet Cyber Defense Platform Terms of Use
+              TrustBreak AI Cyber Defense Platform Terms of Use
             </span>
             <span style={{ color: 'var(--ghost-text-dim)' }}>
               Effective Date: September 26, 2026 | Version 2.1
@@ -36,7 +36,7 @@ export default function Terms() {
             1. Acceptance of Terms
           </h2>
           <p style={{ color: 'var(--ghost-text-dim)' }}>
-            By accessing, browsing, or utilizing the GhostNet application, APIs, or browser extensions, you agree to be bound by these Terms & Conditions. If you do not agree to all terms, you must immediately cease accessing the platform.
+            By accessing, browsing, or utilizing the TrustBreak AI application, APIs, or browser extensions, you agree to be bound by these Terms & Conditions. If you do not agree to all terms, you must immediately cease accessing the platform.
           </p>
         </section>
 
@@ -46,12 +46,12 @@ export default function Terms() {
             <AlertTriangle className="w-4 h-4" /> 2. Probabilistic Risk Scoring Disclaimer
           </h2>
           <p style={{ color: 'var(--ghost-text-dim)' }}>
-            GhostNet provides probabilistic threat assessments powered by deep neural heuristics, pattern recognition, and community threat intelligence. 
+            TrustBreak AI provides probabilistic threat assessments powered by deep neural heuristics, pattern recognition, and community threat intelligence. 
           </p>
           <ul className="list-disc pl-5 space-y-1 font-medium" style={{ color: 'var(--ghost-text-dim)' }}>
             <li>Threat scores reflect statistical risk probabilities (0% to 100%) rather than deterministic legal or mathematical absolutes.</li>
             <li>No threat scanner guarantees zero false positives or false negatives. Users must exercise independent judgment when inspecting URLs, audio calls, or financial requests.</li>
-            <li>GhostNet shall not be held liable for security decisions, transactions, or actions taken based on automated threat ratings.</li>
+            <li>TrustBreak AI shall not be held liable for security decisions, transactions, or actions taken based on automated threat ratings.</li>
           </ul>
         </section>
 
@@ -61,11 +61,11 @@ export default function Terms() {
             3. Acceptable Use Policy
           </h2>
           <p style={{ color: 'var(--ghost-text-dim)' }}>
-            You agree to use GhostNet.ai strictly for legitimate cybersecurity inspection, educational research, and threat prevention. You MUST NOT:
+            You agree to use TrustBreak AI.ai strictly for legitimate cybersecurity inspection, educational research, and threat prevention. You MUST NOT:
           </p>
           <ul className="list-disc pl-5 space-y-1" style={{ color: 'var(--ghost-text-dim)' }}>
             <li>Submit illegal, defamatory, or harmful content unrelated to scam detection.</li>
-            <li>Attempt to reverse-engineer, exploit, or disrupt GhostNet’s serverless infrastructure.</li>
+            <li>Attempt to reverse-engineer, exploit, or disrupt TrustBreak AI’s serverless infrastructure.</li>
             <li>Automate mass scanning for malicious domain validation or evasion tuning.</li>
           </ul>
         </section>
@@ -76,7 +76,7 @@ export default function Terms() {
             4. Intellectual Property Rights
           </h2>
           <p style={{ color: 'var(--ghost-text-dim)' }}>
-            All platform visual designs, underlying code, heuristic logic, logo branding, and user interface components are the exclusive property of GhostNet Cyber Defense Systems.
+            All platform visual designs, underlying code, heuristic logic, logo branding, and user interface components are the exclusive property of TrustBreak AI Cyber Defense Systems.
           </p>
         </section>
 
@@ -86,7 +86,7 @@ export default function Terms() {
             <Scale className="w-4 h-4" /> 5. Limitation of Liability
           </h2>
           <p style={{ color: 'var(--ghost-text-dim)' }}>
-            To the maximum extent permitted by applicable law in India and international jurisdictions, GhostNet Cyber Defense Systems and its officers, developers, and affiliates shall not be liable for any indirect, incidental, or consequential damages resulting from platform use.
+            To the maximum extent permitted by applicable law in India and international jurisdictions, TrustBreak AI Cyber Defense Systems and its officers, developers, and affiliates shall not be liable for any indirect, incidental, or consequential damages resulting from platform use.
           </p>
         </section>
 

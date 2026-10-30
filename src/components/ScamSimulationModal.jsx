@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { HelpCircle, CheckCircle2, XCircle, X, ShieldAlert, Award, ArrowRight } from "lucide-react";
+import { CheckCircle2, XCircle, X, ShieldAlert, Award, ArrowRight } from "lucide-react";
 import { triggerHaptic } from "@/lib/haptics";
 import VoiceAssistance from "./VoiceAssistance";
 

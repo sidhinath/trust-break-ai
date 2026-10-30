@@ -85,7 +85,7 @@ public class MainActivity extends BridgeActivity {
                             tts.setLanguage(new Locale("en", "IN"));
                         }
                         tts.setSpeechRate(rate);
-                        tts.speak(text, TextToSpeech.QUEUE_FLUSH, null, "GhostNetTTS_" + System.currentTimeMillis());
+                        tts.speak(text, TextToSpeech.QUEUE_FLUSH, null, "TrustBreakTTS_" + System.currentTimeMillis());
                     } catch (Exception e) {
                         e.printStackTrace();
                     }

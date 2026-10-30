@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Phone, ShieldAlert, X, AlertTriangle, ArrowRight, CheckCircle2, Lock, ExternalLink } from "lucide-react";
+import { Phone, ShieldAlert, X, CheckCircle2, Lock } from "lucide-react";
 import VoiceAssistance from "./VoiceAssistance";
 import { triggerHaptic } from "@/lib/haptics";
 

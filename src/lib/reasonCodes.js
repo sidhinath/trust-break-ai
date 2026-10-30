@@ -1,5 +1,5 @@
 /**
- * GhostNet AI - Explainable Risk Reason Code Dictionary
+ * TrustBreak AI - Explainable Risk Reason Code Dictionary
  *
  * This is the FIXED, authoritative set of reason codes the AI is allowed to return.
  * Any code not in this dictionary is filtered out by safeParseVerdict() in api/analyze.js.

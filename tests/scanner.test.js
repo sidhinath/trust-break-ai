@@ -11,7 +11,7 @@ import {
 import { SAMPLE_THREATS } from '../src/lib/threatLibrary.js'
 import { filterValidReasonCodes, VALID_REASON_CODES } from '../src/lib/reasonCodes.js'
 
-describe('GhostNet AI Scanner Engine Tests', () => {
+describe('TrustBreak AI Scanner Engine Tests', () => {
   it('should extract social engineering signals from an urgent KYC SMS', () => {
     const text = 'URGENT: Your SBI bank account will be suspended within 24 hours. Update KYC at http://fake-sbi.top'
     const signals = extractAttackSignals(text)

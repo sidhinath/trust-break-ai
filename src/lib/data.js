@@ -6,7 +6,7 @@ async function requireUserId() {
     if (!error && data?.user?.id) return data.user.id
   } catch {}
   try {
-    const saved = localStorage.getItem('ghostnet_guest_session')
+    const saved = localStorage.getItem('trustbreak_guest_session')
     if (saved) {
       const parsed = JSON.parse(saved)
       if (parsed?.id) return parsed.id
@@ -25,16 +25,16 @@ const mapReport = (row) => ({
   created_date: row.created_at || row.created_date || new Date().toISOString(),
 })
 
-const LOCAL_STORAGE_KEY = 'ghostnet_recent_scans'
+const LOCAL_STORAGE_KEY = 'trustbreak_recent_scans'
 
 const DEFAULT_INITIAL_SCANS = []
 
 export function clearLocalScanHistory() {
   try {
     localStorage.removeItem(LOCAL_STORAGE_KEY)
-    localStorage.removeItem('ghostnet_scam_reports')
-    localStorage.removeItem('ghostnet_guest_session')
-    localStorage.removeItem('ghostnet_guest_session_active')
+    localStorage.removeItem('trustbreak_scam_reports')
+    localStorage.removeItem('trustbreak_guest_session')
+    localStorage.removeItem('trustbreak_guest_session_active')
   } catch (err) {
     console.warn('[data] Failed to clear local scan history:', err)
   }
@@ -116,7 +116,7 @@ export async function createScanHistory(payload) {
 
   saveLocalScanHistory(localScan)
   if (typeof window !== 'undefined') {
-    window.dispatchEvent(new CustomEvent('ghostnet_new_threat', { detail: localScan }))
+    window.dispatchEvent(new CustomEvent('trustbreak_new_threat', { detail: localScan }))
   }
 
   try {
@@ -142,7 +142,7 @@ export async function createScanHistory(payload) {
   return localScan
 }
 
-const LOCAL_REPORTS_KEY = 'ghostnet_scam_reports'
+const LOCAL_REPORTS_KEY = 'trustbreak_scam_reports'
 
 const DEFAULT_INITIAL_SCAM_REPORTS = []
 
@@ -230,7 +230,7 @@ export async function createScamReport(payload) {
 
   saveLocalScamReport(localReport)
   if (typeof window !== 'undefined') {
-    window.dispatchEvent(new CustomEvent('ghostnet_new_threat', { detail: localReport }))
+    window.dispatchEvent(new CustomEvent('trustbreak_new_threat', { detail: localReport }))
   }
 
   try {

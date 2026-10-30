@@ -1,135 +1,30 @@
 # TrustBreak AI
 
-TrustBreak AI is a modern cybersecurity and scam prevention platform designed to help users detect suspicious messages, links, screenshots, and voice-based scam attempts before they cause harm.
+> Autonomous Multi-Modal AI Cybersecurity & Digital Scam Prevention Platform
 
-The platform combines AI-powered analysis, live threat intelligence, user reporting, and a privacy-first security dashboard in a single experience.
+[Live Demo](https://trust-break-ai.vercel.app) • [Repository](https://github.com/sidhinath/trust-break-ai.git)
 
-## Live Demo
-
-- Vercel App: https://trust-break-ai.vercel.app
-- GitHub Repository: https://github.com/sidhinath/trust-break-ai.git
-
-## Product Overview
-
-TrustBreak AI helps users and families stay protected from digital fraud by scanning:
-
-- SMS and chat messages
-- URLs and phishing links
-- Screenshots and visual scam content
-- Voice and audio-based suspicious interactions
-- Community-reported scam indicators and threat feeds
-
-It provides a clear risk score, explanation of scam patterns, and recommended safety actions for users who want a fast and intelligent defense layer against fraud.
+## Overview
+TrustBreak AI detects, explains, and mitigates social engineering threats across messages, links, screenshots, QR codes, and voice calls in real time. It provides explainable verdicts with 10 fixed reason codes and offers a senior‑friendly safety mode.
 
 ## Key Features
+- Multi‑modal scanning (text, URLs, screenshots, voice, QR)
+- Explainable AI with standardized reason codes (`safeParseVerdict`)
+- Browser Shield (Chrome MV3 extension) for pre‑click protection
+- Senior & Family Safety Mode with voice assistance
+- Offline resilience via local heuristics
 
-- Multi-channel scam detection for messages, links, screenshots, and voice inputs
-- AI risk scoring and scam intelligence analysis
-- Live threat monitoring and scam feed tracking
-- User-submitted scam reporting workflow
-- TrustBreak dashboard with security insights and recent activity
-- Privacy-focused experience with security settings and policy pages
-- Mobile-friendly and desktop-ready interface
-- Modern cyber defense SaaS design
-
-## Tech Stack
-
-- React + Vite
-- JavaScript / JSX
-- Tailwind CSS
-- Framer Motion
-- React Router
-- Lucide Icons
-- Supabase data integration
-- Capacitor for mobile app packaging
-- Vercel for deployment
-
-## Project Structure
-
+## Quick Start
 ```bash
-.
-├── src/
-│   ├── components/
-│   ├── lib/
-│   ├── pages/
-│   ├── App.jsx
-│   ├── Layout.jsx
-│   ├── main.jsx
-│   └── index.css
-├── api/
-├── public/
-├── tests/
-├── package.json
-├── vite.config.js
-├── tailwind.config.js
-├── capacitor.config.ts
-├── README.md
-└── .gitignore
-```
-
-## Getting Started
-
-### Prerequisites
-
-- Node.js 18+
-- npm or yarn
-
-### Install Dependencies
-
-```bash
+git clone https://github.com/sidhinath/trust-break-ai.git
+cd "TrustBreak AI"
 npm install
+npm run dev   # starts Vite dev server at http://localhost:5173
 ```
 
-### Run the app locally
-
-```bash
-npm run dev
-```
-
-### Production Build
-
-```bash
-npm run build
-```
-
-### Run tests
-
-```bash
-npm test
-```
-
-## Available Scripts
-
-```bash
-npm run dev        # start the local development server
-npm run build      # create a production build
-npm run preview    # preview the production build locally
-npm test           # run the project test suite
-npm run lint       # lint the codebase
-```
-
-## Security and Privacy
-
-TrustBreak AI is built with a strong emphasis on user safety and data responsibility. The project includes privacy policy, terms, data sovereignty views, and a security-focused dashboard experience to help users stay informed and protected.
-
-## Deployment
-
-This project is deployed on Vercel:
-
-- Production URL: https://trust-break-ai.vercel.app
-
-## Repository
-
-- GitHub: https://github.com/sidhinath/trust-break-ai.git
+## Mobile & Extension
+- Android build with Capacitor (`npm run build && npx cap add android`)
+- Chrome MV3 extension located in `extension/` (load unpacked in chrome://extensions)
 
 ## License
-
-This project is currently distributed under the MIT license unless otherwise specified in the repository.
-
-## Team / Project Note
-
-TrustBreak AI is a cybersecurity-focused product aimed at helping users detect and understand digital fraud, scam activity, and suspicious online behavior through a user-friendly AI-driven interface.
-
----
-
-Built for safer digital experiences with TrustBreak AI.
+MIT © 2024‑2026 TrustBreak AI

@@ -38,7 +38,7 @@ const ARCHITECTURE_STEPS = [
 const DIFFERENTIATION = [
   {
     title: "Threat Reconstruction™",
-    description: "Unlike generic scam checkers that output a single percentage, GhostNet visually maps the attacker's step-by-step kill-chain.",
+    description: "Unlike generic scam checkers that output a single percentage, TrustBreak AI visually maps the attacker's step-by-step kill-chain.",
     icon: Sparkles
   },
   {
@@ -64,7 +64,7 @@ export default function Technology() {
       <ScannerHeader
         icon={Cpu}
         title="Technical Architecture & Defense Engine"
-        description="Deep dive into GhostNet's multi-modal pipeline, serverless routing, and enterprise security architecture"
+        description="Deep dive into TrustBreak AI's multi-modal pipeline, serverless routing, and enterprise security architecture"
         color="#00e5ff"
       />
 
@@ -103,7 +103,7 @@ export default function Technology() {
         <div className="flex items-center gap-2">
           <Sparkles className="w-4 h-4 text-cyan-500" />
           <h3 className="text-xs font-bold uppercase tracking-wider" style={{ color: 'var(--ghost-text)' }}>
-            Why GhostNet? Key Technical Differentiators
+            Why TrustBreak AI? Key Technical Differentiators
           </h3>
         </div>
 

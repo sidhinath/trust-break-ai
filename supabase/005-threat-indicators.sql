@@ -1,5 +1,5 @@
 -- Feature 4: Community Threat Intelligence Indicators
--- GhostNet AI — Migration 005
+-- TrustBreak AI — Migration 005
 
 CREATE TABLE IF NOT EXISTS threat_indicators (
   id bigserial PRIMARY KEY,

@@ -4,7 +4,7 @@ import { CheckCircle, ShieldCheck } from "lucide-react";
 /**
  * SourceBadge — shows which engine produced the verdict.
  * "groq" | "gemini" | "openai" → green AI Online badge
- * "ghostnet-heuristics"        → cyan/green GhostNet Threat Engine Online badge
+ * "trustbreak-heuristics"        → cyan/green TrustBreak AI Threat Engine Online badge
  * "community-threat-feed"       → blue Community Feed badge
  * "public-feed:*"               → red Public Blocklist badge
  */
@@ -33,11 +33,11 @@ export default function SourceBadge({ source }) {
     );
   }
 
-  if (source === "ghostnet-heuristics" || source === "offline-heuristic") {
+  if (source === "trustbreak-heuristics" || source === "offline-heuristic") {
     return (
       <span className="inline-flex items-center gap-1 text-[10px] font-bold px-2.5 py-0.5 rounded-full font-mono border border-cyan-500/40 bg-cyan-500/10 text-cyan-600 dark:text-cyan-400">
         <ShieldCheck className="w-3 h-3" />
-        GhostNet Threat Engine Online
+        TrustBreak AI Threat Engine Online
       </span>
     );
   }

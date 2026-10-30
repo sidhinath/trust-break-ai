@@ -1,6 +1,6 @@
 # REST API Reference Specification
 
-GhostNet AI exposes four serverless edge microservices designed for low latency, resilient failover, and zero-trust authentication.
+TrustBreak AI exposes serverless edge microservices designed for low latency, resilient failover, and zero-trust authentication.
 
 ---
 
@@ -195,7 +195,7 @@ GET /api/blocklist-lite
 
 ### Response (`200 OK`)
 ```
-# GhostNet AI Public Blocklist Lite
+# TrustBreak AI Public Blocklist Lite
 # Format: SHA-256 (hex) | Domain
 # Updated: 2026-09-12T16:00:00.000Z
 a8b2c4e5f6... paypal-update-security.com

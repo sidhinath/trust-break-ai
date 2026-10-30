@@ -95,7 +95,7 @@ export default function ReportScam() {
           <div className="space-y-1">
             <h3 className="text-lg font-bold" style={{ color: 'var(--ghost-text)' }}>Threat Reported Successfully</h3>
             <p className="text-xs max-w-md mx-auto" style={{ color: 'var(--ghost-text-dim)' }}>
-              Your report has been analyzed and syndicated to the GhostNet community threat intelligence database.
+              Your report has been analyzed and syndicated to the TrustBreak AI community threat intelligence database.
             </p>
           </div>
           <div className="pt-2 flex justify-center gap-3">
@@ -210,7 +210,7 @@ export default function ReportScam() {
               className="mt-0.5 w-4 h-4 rounded border-slate-300 text-amber-500 focus:ring-amber-500 accent-amber-500 cursor-pointer"
             />
             <label htmlFor="scam-report-consent" className="text-xs font-medium cursor-pointer" style={{ color: 'var(--ghost-text-dim)' }}>
-              I consent to submit this scam telemetry for automated threat analysis under the <a href="/PrivacyPolicy" className="text-amber-600 dark:text-amber-400 underline font-semibold">GhostNet Privacy Policy</a>.
+              I consent to submit this scam telemetry for automated threat analysis under the <a href="/PrivacyPolicy" className="text-amber-600 dark:text-amber-400 underline font-semibold">TrustBreak AI Privacy Policy</a>.
             </label>
           </div>
 

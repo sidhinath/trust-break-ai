@@ -126,7 +126,7 @@ export default function BusinessModel() {
             <div className="ghost-card p-5 flex flex-col justify-between space-y-4" style={{ background: 'var(--ghost-surface)' }}>
               <div className="space-y-3">
                 <span className="badge-safe text-xs font-bold px-2.5 py-1 rounded-full inline-block">Community Shield</span>
-                <h3 className="text-lg font-bold font-display" style={{ color: 'var(--ghost-text)' }}>GhostNet Free</h3>
+                <h3 className="text-lg font-bold font-display" style={{ color: 'var(--ghost-text)' }}>TrustBreak AI Free</h3>
                 <p className="text-xs" style={{ color: 'var(--ghost-text-dim)' }}>Product-Led Growth top-of-funnel consumer shield.</p>
                 <div className="py-2">
                   <span className="text-3xl font-extrabold font-mono" style={{ color: 'var(--ghost-text)' }}>$0</span>
@@ -154,7 +154,7 @@ export default function BusinessModel() {
               </div>
               <div className="space-y-3">
                 <span className="badge-suspicious text-xs font-bold px-2.5 py-1 rounded-full inline-block">Individual Pro</span>
-                <h3 className="text-lg font-bold font-display" style={{ color: 'var(--ghost-text)' }}>GhostNet Pro</h3>
+                <h3 className="text-lg font-bold font-display" style={{ color: 'var(--ghost-text)' }}>TrustBreak AI Pro</h3>
                 <p className="text-xs" style={{ color: 'var(--ghost-text-dim)' }}>Full multi-modal protection across all 5 vectors.</p>
                 <div className="py-2">
                   <span className="text-3xl font-extrabold text-cyan-600 dark:text-cyan-400 font-mono">
@@ -207,7 +207,7 @@ export default function BusinessModel() {
         <div className="ghost-card p-5 space-y-4" style={{ background: 'var(--ghost-surface)' }}>
           <h3 className="text-base font-bold font-display" style={{ color: 'var(--ghost-text)' }}>Cost of Goods Sold (COGS) Breakdown</h3>
           <p className="text-xs leading-relaxed" style={{ color: 'var(--ghost-text-dim)' }}>
-            By combining client-side digital signal processing (Web Audio API Wiener Flatness) with ultra-fast Groq LPUs, GhostNet achieves an industry-leading ~90.7% gross margin.
+            By combining client-side digital signal processing (Web Audio API Wiener Flatness) with ultra-fast Groq LPUs, TrustBreak AI achieves an industry-leading ~90.7% gross margin.
           </p>
 
           <div className="overflow-x-auto">

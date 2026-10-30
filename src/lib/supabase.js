@@ -9,7 +9,7 @@ if (!supabaseUrl || !supabaseAnonKey) {
 
 let activeToken = null
 
-export const supabase = createClient(supabaseUrl || 'https://ghostnet-demo.supabase.co', supabaseAnonKey || 'anon_key', {
+export const supabase = createClient(supabaseUrl || 'https://trustbreak-demo.supabase.co', supabaseAnonKey || 'anon_key', {
   auth: {
     persistSession: true,
     autoRefreshToken: true,

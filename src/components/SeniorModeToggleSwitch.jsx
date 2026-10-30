@@ -13,7 +13,7 @@ export default function SeniorModeToggleSwitch({ variant = "default", className 
     try {
       return (
         document.body.classList.contains("family-safety-mode") ||
-        localStorage.getItem("ghostnet_senior_mode") === "true"
+        localStorage.getItem("trustbreak_senior_mode") === "true"
       );
     } catch {
       return false;
@@ -24,15 +24,15 @@ export default function SeniorModeToggleSwitch({ variant = "default", className 
     const syncState = () => {
       const isSenior =
         document.body.classList.contains("family-safety-mode") ||
-        localStorage.getItem("ghostnet_senior_mode") === "true";
+        localStorage.getItem("trustbreak_senior_mode") === "true";
       setActive(isSenior);
     };
     syncState();
 
-    window.addEventListener("ghostnet_senior_mode_change", syncState);
+    window.addEventListener("trustbreak_senior_mode_change", syncState);
     window.addEventListener("storage", syncState);
     return () => {
-      window.removeEventListener("ghostnet_senior_mode_change", syncState);
+      window.removeEventListener("trustbreak_senior_mode_change", syncState);
       window.removeEventListener("storage", syncState);
     };
   }, []);
@@ -46,7 +46,7 @@ export default function SeniorModeToggleSwitch({ variant = "default", className 
     setActive(nextState);
 
     try {
-      localStorage.setItem("ghostnet_senior_mode", nextState ? "true" : "false");
+      localStorage.setItem("trustbreak_senior_mode", nextState ? "true" : "false");
     } catch {}
 
     if (nextState) {
@@ -55,7 +55,7 @@ export default function SeniorModeToggleSwitch({ variant = "default", className 
       document.body.classList.remove("family-safety-mode");
     }
 
-    window.dispatchEvent(new Event("ghostnet_senior_mode_change"));
+    window.dispatchEvent(new Event("trustbreak_senior_mode_change"));
   };
 
   // Header Compact Switch Variant

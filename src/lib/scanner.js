@@ -407,7 +407,7 @@ export function analyzeMessageContent(message) {
     emergency_actions: {
       stop: 'Do NOT click any links, call unverified numbers, or enter any PIN/OTP.',
       verify: 'Contact the organization directly via official apps or verified phone directories (e.g. 1930 for cybercrime in India).',
-      report: 'Submit this pattern to the GhostNet community threat database to protect others.',
+      report: 'Submit this pattern to the TrustBreak AI community threat database to protect others.',
       secure: 'If credentials were entered, immediately freeze cards/netbanking and rotate passwords.'
     }
   }

@@ -1,7 +1,7 @@
 ﻿import FFT from 'fft.js'
 
 /**
- * GhostNet AI — Voice & Deepfake Acoustic Feature Extraction
+ * TrustBreak AI — Voice & Deepfake Acoustic Feature Extraction
  *
  * Computes Spectral Flatness Measure (SFM) across audio frames using FFT.js.
  * SFM = (Geometric Mean of Power Spectrum) / (Arithmetic Mean of Power Spectrum)

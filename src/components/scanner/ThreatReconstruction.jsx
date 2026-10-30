@@ -35,7 +35,7 @@ export default function ThreatReconstruction({ attackChain = [], attackerIntent 
           </div>
           <div>
             <h3 className="text-sm font-bold tracking-tight" style={{ color: "var(--ghost-text)" }}>
-              {isSafe ? "GhostNet Security Chain Verification™" : "GhostNet Threat Reconstruction™"}
+              {isSafe ? "TrustBreak AI Security Chain Verification™" : "TrustBreak AI Threat Reconstruction™"}
             </h3>
             <p className="text-xs" style={{ color: "var(--ghost-text-dim)" }}>
               {isSafe

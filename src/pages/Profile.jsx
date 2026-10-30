@@ -58,7 +58,7 @@ export default function Profile() {
             </div>
             <div>
               <h2 className="text-xl font-bold font-display" style={{ color: 'var(--ghost-text)' }}>
-                {user?.user_metadata?.full_name || "GhostNet Security Analyst"}
+                {user?.user_metadata?.full_name || "TrustBreak AI Security Analyst"}
               </h2>
               <p className="text-xs font-mono mt-0.5" style={{ color: 'var(--ghost-text-dim)' }}>
                 {user?.email || "Authenticated Operator"}
@@ -157,7 +157,7 @@ export default function Profile() {
         variant="outline"
         className="w-full h-12 rounded-xl border border-rose-500/30 text-rose-600 dark:text-rose-400 hover:bg-rose-500/10 font-bold transition-all">
         <LogOut className="w-4 h-4 mr-2" />
-        Sign Out of GhostNet Console
+        Sign Out of TrustBreak AI Console
       </Button>
     </div>
   );

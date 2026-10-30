@@ -205,7 +205,7 @@ async function checkCommunityFeed(indicatorHash) {
       risk_level: scoreToRisk(riskScore),
       confidence: 'high',
       reasons: ['Previously identified high-risk indicator matched in community threat database'],
-      analysis: 'This indicator was flagged as high-risk by multiple prior GhostNet scans and recorded in the community threat intelligence feed.',
+      analysis: 'This indicator was flagged as high-risk by multiple prior TrustBreak AI scans and recorded in the community threat intelligence feed.',
       ai_analysis: 'Community threat feed match.',
       reasonCodes: filterValidReasonCodes(row.reason_codes || []),
       explanation: 'Matched community threat intelligence feed.',
@@ -215,7 +215,7 @@ async function checkCommunityFeed(indicatorHash) {
       emergency_actions: {
         stop: 'Do NOT interact with this content.',
         verify: 'This indicator was confirmed malicious by prior community scans.',
-        report: 'Already recorded in the GhostNet community threat database.',
+        report: 'Already recorded in the TrustBreak AI community threat database.',
         secure: 'If you have interacted with this, take immediate protective action.',
       },
     }
@@ -339,7 +339,7 @@ async function analyzeWithGroq(type, payload, req = null) {
 
   let prompt = ''
   if (type === 'message') {
-    prompt = `You are GhostNet AI, an elite cybersecurity fraud and phishing detection engine.
+    prompt = `You are TrustBreak AI, an elite cybersecurity fraud and phishing detection engine.
 Analyze this message for social engineering, phishing, urgency, financial fraud, impersonation, credential harvesting, or coercion.
 
 Message:
@@ -355,7 +355,7 @@ Return STRICT JSON only with keys:
 - signals (object with keys: urgency, financial, credential, impersonation, coercion - short string or null for each)
 ${REASON_CODES_INSTRUCTION}`
   } else if (type === 'link') {
-    prompt = `You are GhostNet AI, an elite cybersecurity URL and domain inspection engine.
+    prompt = `You are TrustBreak AI, an elite cybersecurity URL and domain inspection engine.
 Analyze this URL for phishing, typosquatting, lookalike domains, credential harvesting, or deceptive redirects.
 
 URL:
@@ -401,7 +401,7 @@ ${REASON_CODES_INSTRUCTION}`
           messages: [
             {
               role: 'system',
-              content: 'You are GhostNet AI. Always respond in strict, valid JSON format only.',
+              content: 'You are TrustBreak AI. Always respond in strict, valid JSON format only.',
             },
             {
               role: 'user',
@@ -440,7 +440,7 @@ ${REASON_CODES_INSTRUCTION}`
           emergency_actions: {
             stop: 'Do NOT click any links, enter PINs, or share verification codes.',
             verify: 'Call the organization using their known official hotline.',
-            report: 'Record this threat in the GhostNet community database.',
+            report: 'Record this threat in the TrustBreak AI community database.',
             secure: 'Freeze affected cards or rotate credentials immediately if compromised.'
           }
         }
@@ -555,7 +555,7 @@ async function analyzeScreenshotWithOpenAI(screenshotUrl) {
         messages: [
           {
             role: 'system',
-            content: 'You are GhostNet AI vision detector. Output strict JSON with keys fraud_score, risk_level, reasons, analysis, detected_text, attack_intent.',
+            content: 'You are TrustBreak AI vision detector. Output strict JSON with keys fraud_score, risk_level, reasons, analysis, detected_text, attack_intent.',
           },
           {
             role: 'user',
@@ -626,7 +626,7 @@ export default async function handler(req, res) {
       try {
         groq = await withTimeout(analyzeWithGroq(type, payload, req), AI_TIMEOUT_MS)
       } catch (err) {
-        console.warn('[GhostNet] Groq timed out or failed for message:', err.message)
+        console.warn('[TrustBreak AI] Groq timed out or failed for message:', err.message)
       }
 
       if (groq) {
@@ -668,7 +668,7 @@ export default async function handler(req, res) {
       try {
         groq = await withTimeout(analyzeWithGroq(type, payload, req), AI_TIMEOUT_MS)
       } catch (err) {
-        console.warn('[GhostNet] Groq timed out or failed for link:', err.message)
+        console.warn('[TrustBreak AI] Groq timed out or failed for link:', err.message)
       }
 
       const base = analyzeUrlContent(payload?.url || '')
@@ -698,7 +698,7 @@ export default async function handler(req, res) {
       try {
         groq = await withTimeout(analyzeWithGroq(type, payload, req), AI_TIMEOUT_MS)
       } catch (err) {
-        console.warn('[GhostNet] Groq timed out or failed for report:', err.message)
+        console.warn('[TrustBreak AI] Groq timed out or failed for report:', err.message)
       }
 
       if (groq) {
@@ -721,7 +721,7 @@ export default async function handler(req, res) {
           AI_TIMEOUT_MS * 2 // give screenshots extra time
         )
       } catch (err) {
-        console.warn('[GhostNet] Vision AI timed out or failed:', err.message)
+        console.warn('[TrustBreak AI] Vision AI timed out or failed:', err.message)
       }
 
       res.status(200).json(ai || { ...analyzeScreenshotFallback(), source: 'offline-heuristic', reasonCodes: [], explanation: null })
@@ -730,7 +730,7 @@ export default async function handler(req, res) {
 
     res.status(400).json({ error: 'Unsupported analysis type' })
   } catch (error) {
-    console.error('[GhostNet API Error]', error)
+    console.error('[TrustBreak AI API Error]', error)
     res.status(500).json({
       error: 'Analysis could not be completed at this time.',
       fallback: { ...analyzeMessageContent(payload?.message || ''), source: 'offline-heuristic' }

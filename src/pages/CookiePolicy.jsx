@@ -8,7 +8,7 @@ export default function CookiePolicy() {
       <ScannerHeader
         icon={Cookie}
         title="Cookie & Local Storage Policy"
-        description="Detailed breakdown of essential cookies and browser storage tokens used on GhostNet.ai with zero ad tracking"
+        description="Detailed breakdown of essential cookies and browser storage tokens used on TrustBreak AI.ai with zero ad tracking"
         color="#eab308"
       />
 
@@ -46,13 +46,13 @@ export default function CookiePolicy() {
             2. Essential Cookies & Local Storage Inventory
           </h2>
           <p style={{ color: 'var(--ghost-text-dim)' }}>
-            GhostNet.ai utilizes ONLY essential functional tokens necessary to deliver platform capabilities. We store the following items:
+            TrustBreak AI.ai utilizes ONLY essential functional tokens necessary to deliver platform capabilities. We store the following items:
           </p>
 
           <div className="space-y-2.5">
             <div className="p-3.5 rounded-xl border space-y-1" style={{ background: 'var(--ghost-surface-2)', borderColor: 'var(--ghost-border)' }}>
               <div className="flex justify-between items-center font-bold">
-                <span className="font-mono text-cyan-600 dark:text-cyan-400">ghostnet_theme</span>
+                <span className="font-mono text-cyan-600 dark:text-cyan-400">trustbreak_theme</span>
                 <span className="text-[10px] px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-500 border border-emerald-500/30">Functional</span>
               </div>
               <p style={{ color: 'var(--ghost-text-dim)' }}>Stores your active visual theme preference (Light or Dark mode). Duration: Permanent until cleared.</p>
@@ -60,7 +60,7 @@ export default function CookiePolicy() {
 
             <div className="p-3.5 rounded-xl border space-y-1" style={{ background: 'var(--ghost-surface-2)', borderColor: 'var(--ghost-border)' }}>
               <div className="flex justify-between items-center font-bold">
-                <span className="font-mono text-cyan-600 dark:text-cyan-400">ghostnet_sidebar_open</span>
+                <span className="font-mono text-cyan-600 dark:text-cyan-400">trustbreak_sidebar_open</span>
                 <span className="text-[10px] px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-500 border border-emerald-500/30">Functional</span>
               </div>
               <p style={{ color: 'var(--ghost-text-dim)' }}>Remembers whether you preferred the desktop navigation sidebar open or collapsed. Duration: Permanent until cleared.</p>
@@ -68,7 +68,7 @@ export default function CookiePolicy() {
 
             <div className="p-3.5 rounded-xl border space-y-1" style={{ background: 'var(--ghost-surface-2)', borderColor: 'var(--ghost-border)' }}>
               <div className="flex justify-between items-center font-bold">
-                <span className="font-mono text-cyan-600 dark:text-cyan-400">ghostnet_cookie_consent</span>
+                <span className="font-mono text-cyan-600 dark:text-cyan-400">trustbreak_cookie_consent</span>
                 <span className="text-[10px] px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-500 border border-emerald-500/30">Consent</span>
               </div>
               <p style={{ color: 'var(--ghost-text-dim)' }}>Stores your cookie consent choice ("accepted" or "essential_only") to suppress repeated cookie notifications. Duration: 365 Days.</p>

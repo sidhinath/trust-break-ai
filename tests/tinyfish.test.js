@@ -40,7 +40,7 @@ describe('TinyFish Service — Goal Construction & SSE Parsing', () => {
     assert.equal(remainingBuffer, 'event: status\ndata: Incomplete')
   })
 
-  test('should normalize provider result into GhostNet internal schema', () => {
+  test('should normalize provider result into TrustBreak AI internal schema', () => {
     const rawResult = {
       websiteTitle: 'Fake PayPal Verification',
       websitePurpose: 'Credential harvesting',

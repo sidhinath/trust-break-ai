@@ -164,7 +164,7 @@ export default async function handler(req, res) {
   const apiKey = process.env.TINYFISH_API_KEY
 
   try {
-    const ghostnetHeuristic = analyzeUrlContent(targetUrl)
+    const trustbreakHeuristic = analyzeUrlContent(targetUrl)
 
     let tfResult = null
     if (!apiKey) {
@@ -174,20 +174,20 @@ export default async function handler(req, res) {
         status: 'failed',
         errorCode: 'MISSING_TINYFISH_KEY',
         message: 'TinyFish API key (TINYFISH_API_KEY) is not configured on server.',
-        websiteTitle: ghostnetHeuristic.impersonated_brand
-          ? `${ghostnetHeuristic.impersonated_brand} (Impersonation Target)`
+        websiteTitle: trustbreakHeuristic.impersonated_brand
+          ? `${trustbreakHeuristic.impersonated_brand} (Impersonation Target)`
           : new URL(targetUrl).hostname,
-        websitePurpose: ghostnetHeuristic.attack_intent || 'Unverified Domain Destination',
+        websitePurpose: trustbreakHeuristic.attack_intent || 'Unverified Domain Destination',
         observations: [
           `Target Host: ${new URL(targetUrl).hostname}`,
           'Server Note: TinyFish server API key not configured. Automated domain heuristics attached.',
-          ...ghostnetHeuristic.reasons
+          ...trustbreakHeuristic.reasons
         ],
-        riskIndicators: ghostnetHeuristic.risk_level !== 'safe' ? ghostnetHeuristic.reasons : [],
+        riskIndicators: trustbreakHeuristic.risk_level !== 'safe' ? trustbreakHeuristic.reasons : [],
         evidence: [],
         limitations: ['TinyFish API key not configured on server. Live browser automation skipped.'],
-        summary: ghostnetHeuristic.analysis,
-        rawOutput: `[GhostNet Telemetry Log]\nTarget URL: ${targetUrl}\nStatus: MISSING_TINYFISH_KEY\nRule Matches: ${ghostnetHeuristic.reasons.join('; ')}`,
+        summary: trustbreakHeuristic.analysis,
+        rawOutput: `[TrustBreak AI Telemetry Log]\nTarget URL: ${targetUrl}\nStatus: MISSING_TINYFISH_KEY\nRule Matches: ${trustbreakHeuristic.reasons.join('; ')}`,
         timestamp: new Date().toISOString(),
       }
     } else {
@@ -198,34 +198,34 @@ export default async function handler(req, res) {
     try {
       const parsedHostname = new URL(targetUrl).hostname
       if (!tfResult.websiteTitle) {
-        tfResult.websiteTitle = ghostnetHeuristic.impersonated_brand
-          ? `${ghostnetHeuristic.impersonated_brand} (Impersonation Target)`
+        tfResult.websiteTitle = trustbreakHeuristic.impersonated_brand
+          ? `${trustbreakHeuristic.impersonated_brand} (Impersonation Target)`
           : parsedHostname
       }
       if (!tfResult.websitePurpose) {
-        tfResult.websitePurpose = ghostnetHeuristic.attack_intent || 'Unverified Domain Destination'
+        tfResult.websitePurpose = trustbreakHeuristic.attack_intent || 'Unverified Domain Destination'
       }
 
       if (!tfResult.observations || tfResult.observations.length === 0) {
         tfResult.observations = [
           `Target Host: ${parsedHostname}`,
           `Inspection Note: Domain infrastructure inspection complete. Automated security models attached.`,
-          ...ghostnetHeuristic.reasons
+          ...trustbreakHeuristic.reasons
         ]
       }
 
       if (!tfResult.riskIndicators || tfResult.riskIndicators.length === 0) {
-        if (ghostnetHeuristic.risk_level !== 'safe') {
-          tfResult.riskIndicators = ghostnetHeuristic.reasons
+        if (trustbreakHeuristic.risk_level !== 'safe') {
+          tfResult.riskIndicators = trustbreakHeuristic.reasons
         }
       }
 
       if (!tfResult.summary || tfResult.summary === tfResult.message || tfResult.summary.includes('timed out')) {
-        tfResult.summary = ghostnetHeuristic.analysis
+        tfResult.summary = trustbreakHeuristic.analysis
       }
 
       if (!tfResult.rawOutput) {
-        tfResult.rawOutput = `[GhostNet Telemetry Log]\nTarget URL: ${targetUrl}\nStatus: COMPLETED\nSummary: ${tfResult.summary}`
+        tfResult.rawOutput = `[TrustBreak AI Telemetry Log]\nTarget URL: ${targetUrl}\nStatus: COMPLETED\nSummary: ${tfResult.summary}`
       }
 
       // Mark status as completed so UI renders clean green/cyan completion badge
@@ -236,9 +236,9 @@ export default async function handler(req, res) {
     }
 
     // Combine evidence into a unified assessment
-    let combinedScore = ghostnetHeuristic.fraud_score
-    const combinedReasons = [...ghostnetHeuristic.reasons]
-    const reasonCodesSet = new Set(ghostnetHeuristic.reasonCodes || [])
+    let combinedScore = trustbreakHeuristic.fraud_score
+    const combinedReasons = [...trustbreakHeuristic.reasons]
+    const reasonCodesSet = new Set(trustbreakHeuristic.reasonCodes || [])
 
     if (tfResult.status === 'completed' || tfResult.riskIndicators?.length > 0) {
       if (tfResult.riskIndicators && tfResult.riskIndicators.length > 0) {
@@ -269,17 +269,17 @@ export default async function handler(req, res) {
       risk_level: finalRiskLevel,
       confidence: tfResult.status === 'completed' ? 'high' : 'medium',
       reasons: combinedReasons,
-      analysis: ghostnetHeuristic.analysis,
-      attack_intent: ghostnetHeuristic.attack_intent,
-      signals: ghostnetHeuristic.signals,
-      threat_reconstruction: ghostnetHeuristic.threat_reconstruction,
+      analysis: trustbreakHeuristic.analysis,
+      attack_intent: trustbreakHeuristic.attack_intent,
+      signals: trustbreakHeuristic.signals,
+      threat_reconstruction: trustbreakHeuristic.threat_reconstruction,
       reasonCodes: filteredCodes,
-      is_known_brand_impersonation: ghostnetHeuristic.is_known_brand_impersonation,
-      impersonated_brand: ghostnetHeuristic.impersonated_brand,
-      domain_age_days: ghostnetHeuristic.domain_age_days,
-      ssl_status: ghostnetHeuristic.ssl_status,
-      community_reports: ghostnetHeuristic.community_reports,
-      simulation_steps: ghostnetHeuristic.simulation_steps,
+      is_known_brand_impersonation: trustbreakHeuristic.is_known_brand_impersonation,
+      impersonated_brand: trustbreakHeuristic.impersonated_brand,
+      domain_age_days: trustbreakHeuristic.domain_age_days,
+      ssl_status: trustbreakHeuristic.ssl_status,
+      community_reports: trustbreakHeuristic.community_reports,
+      simulation_steps: trustbreakHeuristic.simulation_steps,
       source: 'tinyfish-agent',
       tinyfishInvestigation: tfResult,
     }

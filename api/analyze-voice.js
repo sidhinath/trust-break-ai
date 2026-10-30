@@ -63,7 +63,7 @@ export default async function handler(req, res) {
     if (geminiKey) {
       try {
         const apiKey = geminiKey
-        const prompt = `You are GhostNet AI, an elite voice call scam, deepfake, voice cloning, and social engineering threat detector.
+        const prompt = `You are TrustBreak AI, an elite voice call scam, deepfake, voice cloning, and social engineering threat detector.
 Analyze this audio recording or transcript for synthesized voice indicators, emergency extortion traps, banking impersonation, OTP coercion, and financial fraud.
 Return strict JSON only with keys:
 - transcript (string - verbatim transcription of all spoken words)
@@ -167,7 +167,7 @@ Return strict JSON only with keys:
               temperature: 0.1,
               response_format: { type: 'json_object' },
               messages: [
-                { role: 'system', content: 'You are GhostNet AI. Always respond in strict JSON.' },
+                { role: 'system', content: 'You are TrustBreak AI. Always respond in strict JSON.' },
                 {
                   role: 'user',
                   content: `Analyze this transcribed call for voice scams, deepfakes, impersonation, urgency pressure, and financial fraud.

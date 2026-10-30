@@ -107,7 +107,7 @@ export default function BrowserShield() {
               Interactive Pre-Click Interception Sandbox
             </h3>
             <p className="text-xs" style={{ color: "var(--ghost-text)" }}>
-              Test how GhostNet blocks known malicious domains before HTTP handshake
+              Test how TrustBreak AI blocks known malicious domains before HTTP handshake
             </p>
           </div>
           <span className="text-[11px] font-mono text-cyan-400 bg-cyan-500/10 px-2.5 py-1 rounded-full border border-cyan-500/20">
@@ -172,7 +172,7 @@ export default function BrowserShield() {
                 Pre-Click Intercept Activated
               </span>
               <h2 className="text-xl font-black text-white tracking-tight">
-                GhostNet Blocked This Page
+                TrustBreak AI Blocked This Page
               </h2>
               <p className="text-xs text-slate-300 max-w-sm mx-auto leading-relaxed">
                 Navigation to this URL was halted before transmission because the target domain matches recognized phishing infrastructure.
@@ -188,7 +188,7 @@ export default function BrowserShield() {
                 onClick={() => setSimulatingBlock(false)}
                 className="w-full bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold py-3"
               >
-                Safe: Return to GhostNet Command Center
+                Safe: Return to TrustBreak AI Command Center
               </Button>
               <button
                 onClick={() => setSimulatingBlock(false)}
@@ -206,7 +206,7 @@ export default function BrowserShield() {
         <div className="flex items-center justify-between">
           <div className="space-y-0.5">
             <h3 className="text-sm font-bold" style={{ color: "var(--ghost-text)" }}>
-              How to Install GhostNet Chrome Extension
+              How to Install TrustBreak AI Chrome Extension
             </h3>
             <p className="text-xs" style={{ color: "var(--ghost-text-dim)" }}>
               Install directly from repository folder into any Chromium browser (Chrome, Brave, Edge, Opera)

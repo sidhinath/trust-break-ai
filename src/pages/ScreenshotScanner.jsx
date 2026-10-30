@@ -1,6 +1,6 @@
 import React, { useState, useRef } from "react";
 import { useQueryClient } from "@tanstack/react-query";
-import { Image, Upload, X, FileSearch, Info, QrCode, Bot, Users } from "lucide-react";
+import { Image, Upload, X, FileSearch, Info, QrCode, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import ScannerHeader from "../components/scanner/ScannerHeader";
 import FraudScoreDisplay from "../components/scanner/FraudScoreDisplay";

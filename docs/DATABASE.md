@@ -1,6 +1,6 @@
 # Database Architecture & PostgreSQL Schema
 
-GhostNet AI utilizes **Supabase (PostgreSQL 15+)** for relational data persistence, community threat syndication, public blocklist caching, user authentication, and encrypted evidence storage.
+TrustBreak AI utilizes **Supabase (PostgreSQL 15+)** for relational data persistence, community threat syndication, public blocklist caching, user authentication, and encrypted evidence storage.
 
 ---
 
@@ -146,7 +146,7 @@ CREATE TABLE IF NOT EXISTS public.reports (
 
 ## 3. Row-Level Security (RLS) & Key Separation
 
-GhostNet strictly enforces the **Principle of Least Privilege**:
+TrustBreak AI strictly enforces the **Principle of Least Privilege**:
 * **Public Anonymous Key (`VITE_SUPABASE_ANON_KEY`)**: Used by frontend clients and serverless read endpoints. Authorized to read active threat telemetry and public blocklists, and manage private user scans.
 * **Service Role Key (`SUPABASE_SERVICE_ROLE_KEY`)**: Server-side secret used exclusively by `/api/analyze` and `/api/cron/sync-feeds` to upsert indicators and sync feeds. NEVER leaked to the client.
 
@@ -210,9 +210,9 @@ Prefer: resolution=merge-duplicates
 
 ## 5. Migration Index (`supabase/`)
 
-1. [`001-initial-schema.sql`](file:///d:/LOQ/Documents/Hackathon%20Project/GhostNet%20ai/GhostNet-app/GhostNet-app/supabase/001-initial-schema.sql) — Core tables: `scans`, `reports`, user references.
-2. [`002-rls-policies.sql`](file:///d:/LOQ/Documents/Hackathon%20Project/GhostNet%20ai/GhostNet-app/GhostNet-app/supabase/002-rls-policies.sql) — User data isolation and containment policies.
-3. [`003-storage-buckets.sql`](file:///d:/LOQ/Documents/Hackathon%20Project/GhostNet%20ai/GhostNet-app/GhostNet-app/supabase/003-storage-buckets.sql) — Evidence upload storage bucket configuration.
-4. [`004-public-blocklist.sql`](file:///d:/LOQ/Documents/Hackathon%20Project/GhostNet%20ai/GhostNet-app/GhostNet-app/supabase/004-public-blocklist.sql) — Feature 3: `public_blocklist` table and indexes.
-5. [`005-threat-indicators.sql`](file:///d:/LOQ/Documents/Hackathon%20Project/GhostNet%20ai/GhostNet-app/GhostNet-app/supabase/005-threat-indicators.sql) — Feature 4: `threat_indicators` schema, indicators type constraints ('url', 'domain', 'phone', 'qr', 'voice').
-6. [`006-consolidated-audit-repairs.sql`](file:///d:/LOQ/Documents/Hackathon%20Project/GhostNet%20ai/GhostNet-app/GhostNet-app/supabase/006-consolidated-audit-repairs.sql) — 1-click idempotent consolidation script applying all schema migrations.
+1. [`supabase/001-initial-schema.sql`](../supabase/001-initial-schema.sql) — Core tables: `scans`, `reports`, user references.
+2. [`supabase/002-rls-policies.sql`](../supabase/002-rls-policies.sql) — User data isolation and containment policies.
+3. [`supabase/003-storage-buckets.sql`](../supabase/003-storage-buckets.sql) — Evidence upload storage bucket configuration.
+4. [`supabase/004-public-blocklist.sql`](../supabase/004-public-blocklist.sql) — Feature 3: `public_blocklist` table and indexes.
+5. [`supabase/005-threat-indicators.sql`](../supabase/005-threat-indicators.sql) — Feature 4: `threat_indicators` schema, indicators type constraints ('url', 'domain', 'phone', 'qr', 'voice').
+6. [`supabase/006-consolidated-audit-repairs.sql`](../supabase/006-consolidated-audit-repairs.sql) — 1-click idempotent consolidation script applying all schema migrations.

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { MessageSquareWarning, Link2, Image, ShieldAlert, HeartHandshake, Award, Users, ArrowRight, Sparkles, CheckCircle2 } from "lucide-react";
+import { MessageSquareWarning, Link2, Image, ShieldAlert, Award, Users, ArrowRight } from "lucide-react";
 import { createPageUrl } from "@/utils";
 import { triggerHaptic } from "@/lib/haptics";
 import SeniorModeToggleSwitch from "./SeniorModeToggleSwitch";
@@ -22,7 +22,7 @@ export default function SeniorHomeView({ onSwitchToNormalMode }) {
   const [showTrustedContactModal, setShowTrustedContactModal] = useState(false);
 
   const homeSpeechText = `
-    Welcome to GhostNet Senior Mode. 
+    Welcome to TrustBreak AI Senior Mode. 
     Select Check a Message to inspect SMS or WhatsApp text. 
     Select Check a Link to test a website address. 
     Select Check a Screenshot to scan an image or QR code. 

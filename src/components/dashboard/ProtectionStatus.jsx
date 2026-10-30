@@ -46,7 +46,7 @@ export default function ProtectionStatus({ threatsBlocked = 0, safetyScore = 100
 
           <p className="text-xs sm:text-sm font-medium leading-relaxed"
             style={{ color: 'var(--ghost-text-dim)' }}>
-            GhostNet protects users before they trust, click, scan, pay or respond.
+            TrustBreak AI protects users before they trust, click, scan, pay or respond.
           </p>
 
           <div className="pt-2 flex flex-wrap items-center gap-2.5">

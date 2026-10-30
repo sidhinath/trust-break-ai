@@ -10,7 +10,7 @@ const AuthContext = createContext(null)
 
 function getStoredGuestSession() {
   try {
-    const rawSession = sessionStorage.getItem('ghostnet_guest_session') || localStorage.getItem('ghostnet_guest_session_active')
+    const rawSession = sessionStorage.getItem('trustbreak_guest_session') || localStorage.getItem('trustbreak_guest_session_active')
     return rawSession ? JSON.parse(rawSession) : null
   } catch {
     return null
@@ -24,7 +24,7 @@ export function AuthProvider({ children }) {
 
   const [hasSeenOnboarding, setHasSeenOnboarding] = useState(() => {
     try {
-      return localStorage.getItem('ghostnet_has_seen_onboarding') === 'true'
+      return localStorage.getItem('trustbreak_has_seen_onboarding') === 'true'
     } catch {
       return false
     }
@@ -44,27 +44,27 @@ export function AuthProvider({ children }) {
   const completeOnboarding = () => {
     setHasSeenOnboarding(true)
     try {
-      localStorage.setItem('ghostnet_has_seen_onboarding', 'true')
+      localStorage.setItem('trustbreak_has_seen_onboarding', 'true')
     } catch {}
   }
 
   const resetOnboarding = () => {
     setHasSeenOnboarding(false)
     try {
-      localStorage.removeItem('ghostnet_has_seen_onboarding')
+      localStorage.removeItem('trustbreak_has_seen_onboarding')
     } catch {}
   }
 
   const persistGuestSession = (nextUser) => {
     setUser(nextUser)
     try {
-      sessionStorage.setItem('ghostnet_guest_session', JSON.stringify(nextUser))
-      localStorage.setItem('ghostnet_guest_session_active', JSON.stringify(nextUser))
+      sessionStorage.setItem('trustbreak_guest_session', JSON.stringify(nextUser))
+      localStorage.setItem('trustbreak_guest_session_active', JSON.stringify(nextUser))
     } catch {}
   }
 
   const continueAsGuest = () => {
-    const demoUser = buildUserFromEmail('operator@ghostnet.ai', 'GhostNet Defense Operator')
+    const demoUser = buildUserFromEmail('operator@trustbreak.ai', 'TrustBreak AI Defense Operator')
     persistGuestSession(demoUser)
     return demoUser
   }
@@ -93,9 +93,9 @@ export function AuthProvider({ children }) {
 
   const signOut = async () => {
     try {
-      sessionStorage.removeItem('ghostnet_guest_session')
-      localStorage.removeItem('ghostnet_guest_session_active')
-      localStorage.removeItem('ghostnet_guest_session')
+      sessionStorage.removeItem('trustbreak_guest_session')
+      localStorage.removeItem('trustbreak_guest_session_active')
+      localStorage.removeItem('trustbreak_guest_session')
     } catch {}
     setUser(null)
     setFirebaseUser(null)

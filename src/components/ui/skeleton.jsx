@@ -307,7 +307,7 @@ function TableSkeleton({ rows = 5, className }) {
  */
 function DashboardSkeleton() {
   return (
-    <div className="space-y-6 pb-6" role="status" aria-label="Loading GhostNet Command Center">
+    <div className="space-y-6 pb-6" role="status" aria-label="Loading TrustBreak AI Command Center">
       {/* 1-Click Judge & Presentation Demo Bar Placeholder */}
       <div className="ghost-card p-3 flex items-center justify-between gap-3 overflow-x-auto" style={{ background: 'var(--ghost-surface)' }}>
         <Skeleton className="h-4 w-36 rounded" />

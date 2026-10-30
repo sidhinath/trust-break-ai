@@ -103,7 +103,7 @@ export default function Threats() {
     };
 
     if (typeof window !== 'undefined') {
-      window.addEventListener('ghostnet_new_threat', handleNewThreat);
+      window.addEventListener('trustbreak_new_threat', handleNewThreat);
     }
 
     // 2. Supabase Realtime Channel
@@ -168,7 +168,7 @@ export default function Threats() {
 
     return () => {
       if (typeof window !== 'undefined') {
-        window.removeEventListener('ghostnet_new_threat', handleNewThreat);
+        window.removeEventListener('trustbreak_new_threat', handleNewThreat);
       }
       if (sub) supabase.removeChannel(sub);
       clearInterval(tickerInterval);
@@ -445,7 +445,7 @@ export default function Threats() {
                   Syndicated Threat Feeds & Rule Engine
                 </h2>
                 <p className="text-xs" style={{ color: 'var(--ghost-text-dim)' }}>
-                  Automated ingest streams from OpenPhish, URLhaus, and GhostNet's 10 Local Heuristics
+                  Automated ingest streams from OpenPhish, URLhaus, and TrustBreak AI's 10 Local Heuristics
                 </p>
               </div>
             </div>
@@ -506,7 +506,7 @@ export default function Threats() {
                     Community Intelligence & Verified Submissions
                   </h2>
                   <p className="text-xs" style={{ color: 'var(--ghost-text-dim)' }}>
-                    User-submitted fraud reports verified by GhostNet multi-modal engines
+                    User-submitted fraud reports verified by TrustBreak AI multi-modal engines
                   </p>
                 </div>
               </div>
@@ -524,7 +524,7 @@ export default function Threats() {
                 <Users className="w-8 h-8 mx-auto text-slate-400 animate-pulse" />
                 <h3 className="text-sm font-bold" style={{ color: 'var(--ghost-text)' }}>NO COMMUNITY REPORTS YET</h3>
                 <p className="text-xs max-w-sm mx-auto" style={{ color: 'var(--ghost-text-dim)' }}>
-                  Be the first operator to report a scam message or phishing link to protect the GhostNet network.
+                  Be the first operator to report a scam message or phishing link to protect the TrustBreak AI network.
                 </p>
               </div>
             ) : (

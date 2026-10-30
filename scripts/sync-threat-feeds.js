@@ -1,5 +1,5 @@
 /**
- * GhostNet AI — Feature 3: Public Threat Feed Sync
+ * TrustBreak AI — Feature 3: Public Threat Feed Sync
  *
  * Fetches OpenPhish and URLhaus free public threat feeds, extracts hostnames,
  * SHA-256 hashes them, and upserts into the public_blocklist table.

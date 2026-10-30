@@ -1,19 +1,19 @@
-# GhostNet AI — TinyFish API Web Automation Integration
+# TrustBreak AI — TinyFish API Web Automation Integration
 
-This document details the architectural design, security controls, server-side implementation, API contracts, local setup, and testing procedures for the **TinyFish Web Automation** integration in GhostNet AI.
+This document details the architectural design, security controls, server-side implementation, API contracts, local setup, and testing procedures for the **TinyFish Web Automation** integration in TrustBreak AI.
 
 ---
 
 ## 1. Overview & Objectives
 
-TinyFish API (`https://agent.tinyfish.ai/v1/automation/run-sse`) powers GhostNet's live browser investigation engine. It enables automated, server-side read-only inspection of suspicious websites to extract DOM text, title claims, payment forms, credential harvesting attempts, and coercive patterns without exposing users or client applications to hostile execution.
+TinyFish API (`https://agent.tinyfish.ai/v1/automation/run-sse`) powers TrustBreak's live browser investigation engine. It enables automated, server-side read-only inspection of suspicious websites to extract DOM text, title claims, payment forms, credential harvesting attempts, and coercive patterns without exposing users or client applications to hostile execution.
 
 ---
 
 ## 2. Architecture & Data Flow
 
 ```
-[ GhostNet Web / Android App ]
+[ TrustBreak Web / Android App ]
              │
              │ POST /api/tinyfish/investigate { url }
              ▼
@@ -31,8 +31,8 @@ TinyFish API (`https://agent.tinyfish.ai/v1/automation/run-sse`) powers GhostNet
   │   └── Captures progress, observations, risk indicators, limitations
   │
   ▼
-[ GhostNet Threat Evidence Evaluator ]
-  │   └── Combines TinyFish observations with GhostNet URL heuristics
+[ TrustBreak Threat Evidence Evaluator ]
+  │   └── Combines TinyFish observations with TrustBreak URL heuristics
   │
   ▼
 [ Unified Verdict & UI Investigation Card ]
@@ -93,8 +93,8 @@ Authorization: Bearer <user_jwt> (optional)
   "source": "tinyfish-agent",
   "reasonCodes": [
     "REQUEST_OTP_PASSWORD",
-    "URGENCY_SCARE_TACTICS font-bold",
-    "LOOKALIKE_DOMAIN"
+    "URGENCY_SCARE_TACTICS",
+    "SUSPICIOUS_DOMAIN"
   ],
   "tinyfishInvestigation": {
     "investigationId": "tf-1728562300-a8f9x",
@@ -162,7 +162,7 @@ npm test
 
 ## 7. Rollback Instructions
 
-If a emergency recovery to pre-integration state is required:
+If an emergency recovery to pre-integration state is required:
 ```bash
 # View rollback instructions
 cat docs/TINYFISH_ROLLBACK.md

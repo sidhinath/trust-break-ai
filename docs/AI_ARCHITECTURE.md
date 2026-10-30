@@ -2,27 +2,31 @@
 
 ## 1. Multi-Modal Pipeline Overview
 
-GhostNet AI operates a multi-modal artificial intelligence pipeline designed to inspect, score, explain, and reconstruct cyber threats across five distinct attack surfaces:
+TrustBreak AI operates a multi-modal artificial intelligence pipeline designed to inspect, score, explain, and reconstruct cyber threats across six distinct attack surfaces:
 
 1. **Natural Language Messages:** SMS smishing, WhatsApp lures, Telegram extortion, and spear-phishing emails.
 2. **Hyperlinks & Lookalike Domains:** Typosquatting URLs, brand lookalikes, IP-literal URLs, and obfuscated redirect gateways.
-3. **Screenshots & Visual Evidence:** Fake banking portals, counterfeit payment receipts, and QR code phishing traps.
-4. **Synthetic Audio & Voice Calls:** Deepfake audio impersonation, AI voice cloning, and robotic IVR fraud calls.
-5. **Decentralized Threat Indicators:** Community threat telemetry and synchronized global blocklists.
+3. **Live Web Browser Sandboxing:** TinyFish autonomous live browser agent tracing redirects and inspecting DOM elements without user exposure.
+4. **Screenshots & Visual Evidence:** Fake banking portals, counterfeit payment receipts, and QR code phishing traps.
+5. **Synthetic Audio & Voice Calls:** Deepfake audio impersonation, AI voice cloning, and robotic IVR fraud calls.
+6. **Decentralized Threat Indicators:** Community threat telemetry and synchronized global blocklists.
 
 ---
 
 ## 2. Multi-Model Inference Cascade & Failover
 
-GhostNet guarantees high availability and zero downtime through a tiered cascade:
+TrustBreak guarantees high availability and zero downtime through a tiered cascade:
 
 ```mermaid
 flowchart TD
-    Ingress["Threat Ingress<br/>Text / URL / Image / Audio"] --> RouteType{Vector Type?}
+    Ingress["Threat Ingress<br/>Text / URL / Image / Audio / Web Target"] --> RouteType{Vector Type?}
 
     RouteType -->|"Text / Message / URL"| GroqPrimary["Groq LPU: llama-3.3-70b-versatile<br/>Sub-800ms Inference Window"]
     GroqPrimary -->|"Timeout 9s / Rate Limit"| GeminiText["Google Gemini 2.5 Flash<br/>Text and Multimodal Fallback"]
     GeminiText -->|"Network Degradation / Offline"| OfflineNLP["Local Heuristic Rule Engine<br/>Regex and Social Engineering Tokens"]
+
+    RouteType -->|"Live Link Deep Dive"| TinyFishGW["TinyFish SSE Web Agent<br/>Headless Read-Only Browser Inspection"]
+    TinyFishGW --> DefenseFilter
 
     RouteType -->|"Screenshot / QR Code"| GeminiVision["Google Gemini 2.5 Flash<br/>Visual OCR and Brand MIMIC Detection"]
     GeminiVision -->|"Fallback / Offline"| OfflineOCR["Client Canvas OCR and Pattern Engine"]
@@ -48,7 +52,7 @@ flowchart TD
 
 ## 3. Explainable Risk Scoring & Reason Codes Defense
 
-Traditional machine learning classifiers suffer from opaque confidence scores and prompt hallucination vulnerabilities. GhostNet enforces strict explainability through **10 Standardized Reason Codes**:
+Traditional machine learning classifiers suffer from opaque confidence scores and prompt hallucination vulnerabilities. TrustBreak enforces strict explainability through **10 Standardized Reason Codes**:
 
 | Reason Code | Category | Plain-English Detection Criterion |
 |:---|:---|:---|
@@ -74,7 +78,7 @@ All LLM responses pass through `safeParseVerdict()`:
 
 ## 4. Acoustic Wiener Spectral Flatness Engine
 
-For synthetic call and voice scam detection, GhostNet utilizes a hybrid acoustic-linguistic engine:
+For synthetic call and voice scam detection, TrustBreak utilizes a hybrid acoustic-linguistic engine:
 
 ### A. Acoustic Spectral Analysis (`src/lib/spectralFeatures.js`)
 * Uses `fft.js` to perform an in-memory 512-point Fast Fourier Transform on 16kHz PCM audio waveforms.
@@ -93,13 +97,13 @@ For synthetic call and voice scam detection, GhostNet utilizes a hybrid acoustic
 
 ## 5. Threat Reconstruction™ (5-Stage Cyber Kill-Chain)
 
-GhostNet contextualizes every attack into an interactive 5-stage progression:
+TrustBreak contextualizes every attack into an interactive 5-stage progression:
 
 ```
-[1. Ingress Vector]
+[1. Ingress & Contact]
       │ (Unsolicited SMS, WhatsApp message, cold IVR call)
       ▼
-[2. Social Engineering Pretext]
+[2. Psychological Coercion]
       │ (Urgent bank KYC expiration, electricity disconnection panic)
       ▼
 [3. Phishing / Trap Gateway]

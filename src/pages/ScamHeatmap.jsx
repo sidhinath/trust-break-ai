@@ -101,7 +101,7 @@ export default function ScamHeatmap() {
     };
 
     if (typeof window !== 'undefined') {
-      window.addEventListener('ghostnet_new_threat', handleNewThreat);
+      window.addEventListener('trustbreak_new_threat', handleNewThreat);
     }
 
     // 2. Supabase Realtime Channel
@@ -166,7 +166,7 @@ export default function ScamHeatmap() {
 
     return () => {
       if (typeof window !== 'undefined') {
-        window.removeEventListener('ghostnet_new_threat', handleNewThreat);
+        window.removeEventListener('trustbreak_new_threat', handleNewThreat);
       }
       if (sub) supabase.removeChannel(sub);
       clearInterval(tickerInterval);
@@ -241,7 +241,7 @@ export default function ScamHeatmap() {
                 </h2>
               </div>
               <p className="text-xs" style={{ color: 'var(--ghost-text-dim)' }}>
-                Incoming cyber fraud incidents recorded by GhostNet security systems
+                Incoming cyber fraud incidents recorded by TrustBreak AI security systems
               </p>
             </div>
           </div>

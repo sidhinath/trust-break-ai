@@ -1,9 +1,9 @@
-﻿/**
- * GhostNet AI — Chrome Extension Service Worker (MV3)
+/**
+ * TrustBreak AI — Chrome Extension Service Worker (MV3)
  * Real-time background URL threat scanner and pre-click interceptor.
  */
 
-const DEFAULT_API_BASE = "https://ghost-net-zeta.vercel.app";
+const DEFAULT_API_BASE = "https://trust-break-ai.vercel.app";
 const urlScanCache = new Map(); // url -> scan result
 
 async function getApiBase() {
@@ -61,13 +61,13 @@ chrome.webNavigation.onCommitted.addListener(async (details) => {
       notifyTab(details.tabId, data);
     }
   } catch (err) {
-    console.warn("[GhostNet Ext] Navigation check skipped:", err.message);
+    console.warn("[TrustBreak AI Ext] Navigation check skipped:", err.message);
   }
 });
 
 function notifyTab(tabId, threatData) {
   chrome.tabs.sendMessage(tabId, {
-    action: "GHOSTNET_SHOW_OVERLAY",
+    action: "TRUSTBREAK AI_SHOW_OVERLAY",
     threat: threatData,
   }).catch(() => {
     // Tab might not be ready or script injected yet; ignore error
@@ -82,7 +82,7 @@ async function syncPreClickBlocklist() {
     const apiBase = await getApiBase();
     const resp = await fetch(`${apiBase}/api/blocklist-lite`);
     if (!resp.ok) {
-      console.log("[GhostNet Ext] Pre-click blocklist not enabled on server or empty.");
+      console.log("[TrustBreak AI Ext] Pre-click blocklist not enabled on server or empty.");
       return;
     }
 
@@ -121,9 +121,9 @@ async function syncPreClickBlocklist() {
       addRules,
     });
 
-    console.log(`[GhostNet Ext] Successfully updated ${addRules.length} pre-click block rules.`);
+    console.log(`[TrustBreak AI Ext] Successfully updated ${addRules.length} pre-click block rules.`);
   } catch (err) {
-    console.warn("[GhostNet Ext] Failed to sync blocklist-lite rules:", err.message);
+    console.warn("[TrustBreak AI Ext] Failed to sync blocklist-lite rules:", err.message);
   }
 }
 

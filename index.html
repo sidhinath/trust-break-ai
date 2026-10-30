@@ -21,7 +21,7 @@
     <script>
       window.addEventListener('error', function(e) {
         console.error('[TrustBreak Global Error]', e.message, e.filename, e.lineno);
-        var errContainer = document.getElementById('ghostnet-fallback-error');
+        var errContainer = document.getElementById('trustbreak-fallback-error');
         if (errContainer) {
           errContainer.style.display = 'block';
           errContainer.innerText = 'Notice: ' + (e.message || 'JS Execution Notice');
@@ -37,7 +37,7 @@
         </div>
         <h1 style="font-weight: 800; margin: 0 0 8px 0; font-size: 22px; color: #ffffff;">TrustBreak Security</h1>
         <p style="color: #94a3b8; font-size: 13px; margin: 0 0 16px 0; font-weight: 500;">Initializing Threat Detection Layer...</p>
-        <div id="ghostnet-fallback-error" style="display: none; max-width: 320px; margin-top: 16px; padding: 12px; border-radius: 12px; background: rgba(239,68,68,0.15); border: 1px solid rgba(239,68,68,0.3); color: #f87171; font-size: 11px; text-align: left; word-break: break-word;"></div>
+        <div id="trustbreak-fallback-error" style="display: none; max-width: 320px; margin-top: 16px; padding: 12px; border-radius: 12px; background: rgba(239,68,68,0.15); border: 1px solid rgba(239,68,68,0.3); color: #f87171; font-size: 11px; text-align: left; word-break: break-word;"></div>
       </div>
     </div>
     <script type="module" src="./src/main.jsx"></script>

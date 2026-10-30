@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Share2, Copy, Check, X, ShieldCheck, Users, HelpCircle } from "lucide-react";
+import { Share2, Copy, Check, X, Users } from "lucide-react";
 import { triggerHaptic } from "@/lib/haptics";
 import VoiceAssistance from "./VoiceAssistance";
 
@@ -15,15 +15,15 @@ export default function TrustedContactModal({ isOpen, onClose, scanSummary }) {
   if (!isOpen) return null;
 
   const defaultText = scanSummary
-    ? `GhostNet Safety Check Report:\nRisk: ${scanSummary.risk_level?.toUpperCase() || 'UNKNOWN'}\nFindings: ${scanSummary.analysis || 'Suspicious content detected.'}\nPlease help me review this message/link.`
-    : `Hi! I ran a safety check on GhostNet and wanted your advice on a message/link I received.`;
+    ? `TrustBreak AI Safety Check Report:\nRisk: ${scanSummary.risk_level?.toUpperCase() || 'UNKNOWN'}\nFindings: ${scanSummary.analysis || 'Suspicious content detected.'}\nPlease help me review this message/link.`
+    : `Hi! I ran a safety check on TrustBreak AI and wanted your advice on a message/link I received.`;
 
   const handleNativeShare = async () => {
     await triggerHaptic("medium");
     if (navigator.share) {
       try {
         await navigator.share({
-          title: "GhostNet Family Safety Check",
+          title: "TrustBreak AI Family Safety Check",
           text: defaultText,
         });
         onClose();

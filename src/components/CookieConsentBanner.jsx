@@ -8,19 +8,19 @@ export default function CookieConsentBanner() {
   const [consentGiven, setConsentGiven] = useState(true); // Default hidden until checked
 
   useEffect(() => {
-    const savedConsent = localStorage.getItem("ghostnet_cookie_consent");
+    const savedConsent = localStorage.getItem("trustbreak_cookie_consent");
     if (!savedConsent) {
       setConsentGiven(false);
     }
   }, []);
 
   const handleAcceptAll = () => {
-    localStorage.setItem("ghostnet_cookie_consent", "accepted");
+    localStorage.setItem("trustbreak_cookie_consent", "accepted");
     setConsentGiven(true);
   };
 
   const handleEssentialOnly = () => {
-    localStorage.setItem("ghostnet_cookie_consent", "essential_only");
+    localStorage.setItem("trustbreak_cookie_consent", "essential_only");
     setConsentGiven(true);
   };
 
@@ -61,7 +61,7 @@ export default function CookieConsentBanner() {
         </div>
 
         <p className="text-xs leading-relaxed" style={{ color: 'var(--ghost-text-dim)' }}>
-          GhostNet uses essential functional storage tokens (session auth, theme preferences) to operate securely. We do <strong>NOT</strong> use third-party advertising or cross-site tracking cookies.
+          TrustBreak AI uses essential functional storage tokens (session auth, theme preferences) to operate securely. We do <strong>NOT</strong> use third-party advertising or cross-site tracking cookies.
         </p>
 
         <div className="flex items-center justify-between gap-2 pt-1">

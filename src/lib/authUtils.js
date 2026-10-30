@@ -1,5 +1,5 @@
 export const AUTH_USERS_KEY = 'trustbreak_auth_users'
-export const LEGACY_AUTH_USERS_KEY = 'ghostnet_auth_users'
+export const LEGACY_AUTH_USERS_KEY = 'trustbreak_auth_users'
 
 export function buildUserFromEmail(email, displayName) {
   const cleanEmail = (email || 'guest@trustbreak.ai').trim()

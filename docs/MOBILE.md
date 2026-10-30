@@ -1,6 +1,6 @@
 # Mobile Architecture & Capacitor Android Guide
 
-GhostNet AI provides native cross-platform Android distribution powered by **Capacitor 8.5**, wrapping the production-optimized Vite React web application inside a hardened native WebView runtime.
+TrustBreak AI provides native cross-platform Android distribution powered by **Capacitor 8.5**, wrapping the production-optimized Vite React web application inside a hardened native WebView runtime.
 
 ---
 
@@ -12,7 +12,7 @@ flowchart TD
         Activity["MainActivity.java (Android Native Runtime)"]
         Permissions["Hardware Permissions (Camera & Microphone)"]
         Bridge["Capacitor Native Bridge"]
-        GoogleAuth["Native GoogleAuth Account Chooser Sheet"]
+        ShareSheet["Android Share Sheet Intent Filter"]
     end
 
     subgraph WebViewRuntime["Hardened Android WebView (ES2018 / Chrome 75 Target)"]
@@ -31,7 +31,7 @@ flowchart TD
 
     Activity --> Bridge
     Bridge --> Permissions
-    Bridge --> GoogleAuth
+    Bridge --> ShareSheet
     Bridge --> ReactApp
     ReactApp --> CanvasField
     ReactApp --> CameraStream
@@ -44,7 +44,7 @@ flowchart TD
     ReactApp -->|"Offline or No Signal Mode"| OfflineEngine
 ```
 
-* **Package Identifier:** `com.ghostnet.app`
+* **Package Identifier:** `com.trustbreak.app`
 * **Target SDK:** Android 34 (Android 14)
 * **Minimum SDK:** Android 22 (Android 5.1 Lollipop)
 * **Web Build Directory:** `dist/`
@@ -85,7 +85,7 @@ Located at `android/app/src/main/AndroidManifest.xml`:
    - Keeps the app focused on local, privacy-first user sessions without external browser redirects or provider lock-in.
    - Updates React state (`setUser(userObj)`) immediately for guest operator flows and in-app account sessions.
 3. **Pure 2D Canvas Constellation Background**:
-   - `ConstellationField.tsx` uses a native 2D Canvas renderer (`canvas.getContext("2d")`) instead of WebGL `srcDoc` iframes.
+   - `ConstellationField.jsx` uses a native 2D Canvas renderer (`canvas.getContext("2d")`) instead of WebGL `srcDoc` iframes.
    - Eliminates WebGL context loss, iframe cross-origin `postMessage` security exceptions, and GPU rendering freezes on mobile devices.
 4. **Fallback Loading Screen & Global Error Boundary**:
    - `index.html` includes an inline dark styled initializer (`<div id="root">...</div>`) and a global `window.onerror` fallback container.
@@ -98,26 +98,24 @@ Located at `android/app/src/main/AndroidManifest.xml`:
 ## 4. Mobile Touch & Accessibility Optimizations
 
 * **Senior & Family Safety Mode**: On mobile screens, activating Senior Mode enlarges touch targets to a minimum of **48x48dp**, increases font sizes by 25%, and simplifies technical cybersecurity reports into plain-English advice.
-* **Responsive Command Center**: Side navigation drawers automatically collapse into an intuitive bottom navigation bar (`Home`, `Scan`, `Threats`, `Reports`, `Settings`).
+* **Responsive Command Center**: Side navigation drawers automatically collapse into an intuitive bottom navigation bar (`Home`, `Universal Scanner`, `Threats`, `Reports`, `Settings`).
 * **Zero-Signal Offline Continuity**: When users travel or lose mobile network coverage, the local heuristic engine takes over completely, scoring messages, URLs, and QR codes directly on the mobile device without network latency.
 
 ---
 
 ## 5. Pre-Built APK Release & Download
 
-The official pre-built Android application bundle is available directly at the root of the repository:
+The pre-built Android application bundle is available directly at the root of the repository:
 
-* **Bundled APK Path:** [`GhostNet.apk`](../GhostNet.apk)
-* **Direct Download Link:** [`https://github.com/ImperialCoder01/GhostNet/raw/main/GhostNet.apk`](https://github.com/ImperialCoder01/GhostNet/raw/main/GhostNet.apk)
+* **Bundled APK Path:** [`TrustBreak AI.apk`](../TrustBreak AI.apk)
 * **APK Size:** ~13.3 MB
-* **In-App Google Auth:** Native Credential Manager modal bottom-sheet via `@codetrix-studio/capacitor-google-auth`.
 
 ---
 
 ## 6. Compilation & Build Runbook
 
 ### Prerequisites
-* **Android Studio:** Ladybug / Hedgehog (2024.1+) or JDK 21 (`C:\Program Files\Android\Android Studio\jbr`).
+* **Android Studio:** Ladybug / Hedgehog (2024.1+) or JDK 21.
 * **Android SDK:** Platform 34 and SDK Build-Tools 34.0.0.
 
 ### Step-by-Step Compilation via Terminal
@@ -131,14 +129,8 @@ npm run build
 # 3. Sync web assets and Capacitor plugins into the Android native folder
 npx cap sync android
 
-# 4. Build APK using terminal with JDK 21
-cd android
-$env:JAVA_HOME="C:\Program Files\Android\Android Studio\jbr"
-.\gradlew assembleDebug
-
-# Output location: android/app/build/outputs/apk/debug/app-debug.apk
-# Copy to root:
-Copy-Item -Path "app/build/outputs/apk/debug/app-debug.apk" -Destination "../../GhostNet.apk"
+# 4. Open in Android Studio or build via Gradle
+npx cap open android
 ```
 
 To run directly on a connected physical Android device or emulator:

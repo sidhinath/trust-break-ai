@@ -1,6 +1,6 @@
 # Architecture Decision Records (ADR)
 
-This log records major architectural decisions, evaluated alternatives, engineering tradeoffs, and rationales across the GhostNet AI engineering lifecycle.
+This log records major architectural decisions, evaluated alternatives, engineering tradeoffs, and rationales across the TrustBreak AI engineering lifecycle.
 
 ---
 
@@ -67,8 +67,24 @@ This log records major architectural decisions, evaluated alternatives, engineer
 
 ---
 
-## ADR 008: Rebranding to Global Threat Intelligence
-* **Context:** The term "Global Scam Heatmap" underrepresented the depth of real-time indicator synchronization, OpenPhish/URLhaus threat ingest, and community telemetry.
-* **Options Considered:** "Scam Map" vs "Scam Heatmap" vs "Global Threat Intelligence".
-* **Decision:** Adopted "Global Threat Intelligence & Radar" across all UI navigation, card titles, and documentation.
-* **Rationale:** Better reflects enterprise cybersecurity positioning, emphasizing aggregated threat telemetry, live velocity tracking, and community intelligence feeds.
+## ADR 008: TinyFish Autonomous Web Investigation Agent Integration
+* **Context:** Static domain inspection cannot evaluate dynamic client-side JavaScript redirects, credential harvesting forms, or deceptive checkout overlays.
+* **Options Considered:** Client-side iframe rendering (unsafe) vs Headless Chrome Puppeteer on Vercel (exceeds serverless memory/bundle limits) vs TinyFish Cloud Web Agent via SSE.
+* **Decision:** Integrated TinyFish API (`https://agent.tinyfish.ai/v1/automation/run-sse`) through a secure serverless proxy (`/api/tinyfish/investigate`).
+* **Rationale:** Executes headless browser investigation in a stealth sandbox; streams live progress via Server-Sent Events (SSE) while enforcing SSRF protection against private IP ranges.
+* **Tradeoffs:** Requires `TINYFISH_API_KEY` for live web automation; falls back gracefully to offline heuristics when key is not provided.
+
+---
+
+## ADR 009: Accessible Senior & Family Safety Mode
+* **Context:** Vulnerable senior citizens and non-technical family members are disproportionately targeted by digital arrest, utility disconnection, and banking KYC scams, but struggle with complex cyber telemetry.
+* **Options Considered:** Separate standalone mobile app vs 1-click in-app Senior Mode transformation.
+* **Decision:** Implemented a persistent 1-click Senior Mode with enlarged 48dp+ touch targets, plain-language explanations (*What We Detected*, *Why We Flagged It*, *What To Do Next*), Web Speech API voice assistance, and 1-tap trusted contact alerts.
+* **Rationale:** Eliminates cognitive barrier while maintaining identical underlying multi-modal threat defense.
+
+---
+
+## ADR 010: Brand Evolution to TrustBreak AI
+* **Context:** The initial prototype was named TrustBreak AI. To represent proactive scam prevention, cognitive defense, and consumer empowerment, the platform evolved into TrustBreak AI.
+* **Decision:** Rebranded the platform to TrustBreak AI (`https://trust-break-ai.vercel.app`, `com.trustbreak.app`), updating all documentation, API endpoints, and configuration.
+* **Rationale:** Aligns with commercial positioning, consumer clarity, and regulatory compliance under the India DPDP Act 2023.

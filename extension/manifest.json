@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "GhostNet AI — Phishing & Scam Shield",
+  "name": "TrustBreak AI — Phishing & Scam Shield",
   "version": "1.0.0",
   "description": "Real-time AI-powered phishing, URL typosquatting, and social engineering detector.",
   "permissions": [
@@ -31,7 +31,7 @@
   },
   "action": {
     "default_popup": "popup.html",
-    "default_title": "GhostNet AI Threat Scanner",
+    "default_title": "TrustBreak AI Threat Scanner",
     "default_icon": {
       "16": "icons/icon16.png",
       "48": "icons/icon48.png",

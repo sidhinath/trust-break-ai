@@ -5,6 +5,6 @@ export function assertRequiredEnv() {
   if (!import.meta.env.VITE_SUPABASE_ANON_KEY) missing.push('VITE_SUPABASE_ANON_KEY')
 
   if (missing.length > 0) {
-    console.warn(`[GhostNet Runtime] Missing environment variables: ${missing.join(', ')}. Operating in local offline mode.`)
+    console.warn(`[TrustBreak AI Runtime] Missing environment variables: ${missing.join(', ')}. Operating in local offline mode.`)
   }
 }

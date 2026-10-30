@@ -1,10 +1,10 @@
-# GhostNet AI — Product Requirements Document (PRD)
+# TrustBreak AI — Product Requirements Document (PRD)
 
-**Document Version:** 1.0.0-prod  
-**Status:** Feature-Frozen / Hackathon Release  
-**Target Release:** v1.1.0-prod  
-**Authors:** GhostNet AI Core Engineering Team  
-**Live Application:** [https://ghost-net-zeta.vercel.app](https://ghost-net-zeta.vercel.app)
+**Document Version:** 1.7.0-prod  
+**Status:** Production Verified / Production Locked  
+**Target Release:** v1.7.0-prod  
+**Authors:** TrustBreak AI Core Engineering Team  
+**Live Application:** [https://trust-break-ai.vercel.app](https://trust-break-ai.vercel.app)
 
 ---
 
@@ -17,15 +17,17 @@ The global digital economy faces a catastrophic escalation in social engineering
 - **Visual Camouflage & Typosquatting:** Homograph attacks, pixelated QR codes (quishing), and forged institutional portals exploit visual trust.
 - **Zero-Hour Ephemeral Infrastructure:** Malicious URLs and payment redirections spin up and tear down within 15 minutes, rendering centralized reactive blacklists ineffective.
 
-### 1.2 The Solution: GhostNet AI
-GhostNet AI is an **autonomous, multimodal cyber-defense shield** designed to detect, deconstruct, and neutralize social engineering threats across every personal communication vector (SMS, email, URLs, QR codes, screenshots, and live audio) within **sub-second latency**.
+### 1.2 The Solution: TrustBreak AI
+TrustBreak AI is an **autonomous, multimodal cyber-defense shield** designed to detect, deconstruct, and neutralize social engineering threats across every personal communication vector (SMS, email, URLs, QR codes, screenshots, and live audio) within **sub-second latency**.
 
-Rather than relying purely on static domain blacklists or unconstrained LLM chat, GhostNet AI couples:
+Rather than relying purely on static domain blacklists or unconstrained LLM chat, TrustBreak AI couples:
 1. **Ultra-fast Groq LPU inference** (`llama-3.3-70b-versatile`) with a strict schema-enforced code defense (`safeParseVerdict`).
 2. **On-device acoustic spectral analysis** (Wiener spectral flatness via Web Audio API & Fast Fourier Transforms).
 3. **Multimodal vision OCR** via Google Gemini 2.5 Flash.
-4. **Zero-latency pre-click browser interception** via a Chrome Manifest V3 extension.
-5. **Decentralized crowd-sourced threat intelligence** synchronized through Supabase PostgreSQL with Row Level Security (RLS).
+4. **Live Web Automation Sandbox** via TinyFish SSE browser agent.
+5. **Zero-latency pre-click browser interception** via a Chrome Manifest V3 extension.
+6. **Senior & Family Safety Mode** with high-contrast accessibility, plain-language threat explanations, and 1-tap trusted contact alerts.
+7. **Decentralized crowd-sourced threat intelligence** synchronized through Supabase PostgreSQL with Row Level Security (RLS).
 
 ```
 +-------------------------------------------------------------------------+
@@ -35,7 +37,7 @@ Rather than relying purely on static domain blacklists or unconstrained LLM chat
         |                  |                   |                 |
         v                  v                   v                 v
 +-------------------------------------------------------------------------+
-|                        GHOSTNET EDGE SHIELD                             |
+|                        TRUSTBREAK EDGE SHIELD                           |
 |  - Offline Heuristic Engine (RegEx / Entropy / Levenshtein / Punycode)  |
 |  - Real-Time Camera QR Decoder (jsQR)                                   |
 |  - In-Memory Acoustic Spectral Engine (Wiener Flatness / FFT)          |
@@ -47,6 +49,7 @@ Rather than relying purely on static domain blacklists or unconstrained LLM chat
 |                       MULTIMODAL AI INFERENCE ENGINE                    |
 |  - Groq LPU (llama-3.3-70b-versatile, <850ms)                           |
 |  - Google Gemini 2.5 Flash Vision (Multimodal OCR)                      |
+|  - TinyFish Live Web Agent (SSE Browser Sandbox)                        |
 |  - safeParseVerdict() & 10 Canonical Reason Codes Whitelist             |
 +------------------------------------+------------------------------------+
                                      |
@@ -71,29 +74,30 @@ To democratize enterprise-grade cognitive cyber defense for every citizen, mobil
 2. **Deterministic Code Defense:** Eliminate LLM hallucinations by enforcing strict schema parsing and a whitelist of 10 standard reason codes.
 3. **Zero-Knowledge Privacy:** Process voice audio ephemerally in volatile memory with zero server-side audio persistence or transcription storage.
 4. **Active Pre-Click Interception:** Prevent users from ever loading a malicious domain via Manifest V3 browser DOM inspection.
-5. **Resilient Dual-Mode Operation:** Provide 100% offline heuristic detection when network connectivity or backend APIs are unavailable.
+5. **Universal Family Accessibility:** Empower elderly non-technical family members through a dedicated 1-click Senior Mode with Web Speech API voice read-aloud.
+6. **Resilient Dual-Mode Operation:** Provide 100% offline heuristic detection when network connectivity or backend APIs are unavailable.
 
-### 2.3 Non-Goals (Hackathon Boundary)
-- **Active Counter-Offensive Hacking:** GhostNet AI will not retaliate, port-scan, or DDOS attacker infrastructure.
-- **Enterprise SIEM Replacement:** GhostNet AI is designed as a frontline user/endpoint perimeter defense, not a heavy enterprise log aggregator (Splunk/Datadog).
-- **Native OS Kernel Drivers:** GhostNet AI operates via Web APIs, Capacitor mobile wrappers, and Chrome Extensions, avoiding invasive kernel-level extensions.
+### 2.3 Non-Goals
+- **Active Counter-Offensive Hacking:** TrustBreak AI will not retaliate, port-scan, or DDOS attacker infrastructure.
+- **Enterprise SIEM Replacement:** TrustBreak AI is designed as a frontline user/endpoint perimeter defense, not a heavy enterprise log aggregator (Splunk/Datadog).
+- **Native OS Kernel Drivers:** TrustBreak AI operates via Web APIs, Capacitor mobile wrappers, and Chrome Extensions, avoiding invasive kernel-level extensions.
 
 ---
 
 ## 3. User Personas & Target Audience
 
-| Persona | Demographics & Context | Primary Pain Points | GhostNet Solution |
+| Persona | Demographics & Context | Primary Pain Points | TrustBreak Solution |
 | :--- | :--- | :--- | :--- |
-| **Margaret (68)**<br>*Non-Technical Senior* | Retired, smartphone user, targets of digital arrest & electricity bill scams. | Fear of financial loss; unable to distinguish spoofed bank SMS from legitimate alerts. | 1-Tap Message Scanner with plain-English explanation, urgent warnings, and safe action checklists. |
+| **Margaret (68)**<br>*Non-Technical Senior* | Retired, smartphone user, targets of digital arrest & electricity bill scams. | Fear of financial loss; unable to distinguish spoofed bank SMS from legitimate alerts. | 1-Click Senior Mode with plain-English explanation, urgent warnings, voice assistance, and trusted contact alert sharing. |
 | **Alex (24)**<br>*Web3 & Crypto Trader* | High-frequency trader, mobile-first, targets of quishing & fake token airdrops. | Malicious QR codes draining crypto wallets; typosquatted dApp URLs. | Real-time Live Camera QR Scanner + Pre-Click Browser Interceptor with zero-latency threat blocking. |
 | **Priya (34)**<br>*Remote Knowledge Worker* | Remote enterprise PM, uses Slack/WhatsApp/Email, targets of CEO deepfakes. | Urgent voice messages requesting wire transfers or credential verification. | Voice Deepfake Analyzer combining acoustic Wiener flatness with LLM contextual intent detection. |
-| **Dev (29)**<br>*Community Defender & Analyst* | Security enthusiast, opensource advocate, monitors regional scam waves. | Fragmented threat reporting tools; lack of transparent crowd-sourced IOC data. | Global Threat Intelligence map with live Supabase telemetry and SHA-256 fingerprint search. |
+| **Dev (29)**<br>*Community Defender & Analyst* | Security enthusiast, open-source advocate, monitors regional scam waves. | Fragmented threat reporting tools; lack of transparent crowd-sourced IOC data. | Global Threat Intelligence map with live Supabase telemetry and SHA-256 fingerprint search. |
 
 ---
 
 ## 4. Functional Specifications (Core Capabilities)
 
-### 4.1 Feature 1: SMS & Text Message Scam Scanner
+### 4.1 Feature 1: Universal Scanner Hub & SMS Scam Scanner
 - **Input:** Raw SMS, WhatsApp, email, or chat text strings up to 5,000 characters.
 - **Processing Pipeline:**
   1. Local regex inspection for high-risk urgency tokens (`urgent`, `immediate`, `arrest`, `police`, `blocked`).
@@ -112,7 +116,7 @@ To democratize enterprise-grade cognitive cyber defense for every citizen, mobil
     actionItems: string[];
     reasonCodes: ReasonCode[];
     attackChain: {
-      stage: 'Lure' | 'Hook' | 'Exploit' | 'Execution' | 'Extraction';
+      stage: '1. Ingress & Contact' | '2. Psychological Coercion' | '3. Phishing Gateway' | '4. Credential Harvesting' | '5. Impact & Loss';
       description: string;
     }[];
     source: 'groq' | 'heuristic-fallback';
@@ -140,12 +144,12 @@ To democratize enterprise-grade cognitive cyber defense for every citizen, mobil
 - **Input:** Live camera feed via HTML5 `MediaDevices.getUserMedia()`.
 - **Processing:**
   1. Canvas-based frame extraction at 30 FPS.
-  2. `jsQR` real-time visual matrix decoding.
-  3. Automated URL sanitization and instant submission to GhostNet URL defense pipeline.
+  2. `jsQR` real-time visual matrix decoding inside sandboxed HTML5 `<canvas>`.
+  3. Automated URL sanitization and instant submission to TrustBreak URL defense pipeline.
   4. Visual HUD overlay with targeting reticle and immediate threat badge.
 
 ### 4.5 Feature 5: Voice Deepfake & Audio Analyzer
-- **Input:** Live microphone recording or uploaded audio file (WAV/MP3, up to 6MB).
+- **Input:** Live microphone recording or uploaded audio file (WAV/MP3/WebM, up to 6MB).
 - **Processing:**
   1. Web Audio API / `fft.js` computation of **Wiener Spectral Flatness**:
      $$\text{Spectral Flatness} = \frac{\exp\left(\frac{1}{N} \sum_{k=0}^{N-1} \ln |X[k]|^2\right)}{\frac{1}{N} \sum_{k=0}^{N-1} |X[k]|^2}$$
@@ -154,14 +158,30 @@ To democratize enterprise-grade cognitive cyber defense for every citizen, mobil
   4. Combined weighted score: $60\%$ acoustic anomaly score $+ 40\%$ conversational urgency score.
 - **Privacy Guarantee:** Ephemeral memory processing only; raw audio buffers discarded immediately upon analysis completion.
 
-### 4.6 Feature 6: Manifest V3 Chrome Browser Shield
+### 4.6 Feature 6: TinyFish Autonomous Live Web Agent
+- **Specification:** Headless server-side browser investigation engine (`/api/tinyfish/investigate`) via SSE stream.
+- **Functionality:**
+  1. Follows redirects and extracts destination URLs safely without exposing client devices.
+  2. Inspects page DOM, login forms, credential harvesting fields, and coercive payment redirects.
+  3. Enriches TrustBreak URL heuristics with live verified sandbox telemetry.
+
+### 4.7 Feature 7: Senior & Family Safety Mode
+- **Specification:** 1-click transformation designed for non-technical family members.
+- **Functionality:**
+  1. High-contrast cards with minimum 48dp touch targets and large typography.
+  2. Plain-language scan explanations (*What We Detected*, *Why We Flagged It*, *What To Do Next*).
+  3. Web Speech API voice read-aloud in English and Hindi.
+  4. Trusted Contact emergency sharing via native share sheet.
+  5. 100% offline emergency response playbooks for compromise recovery.
+
+### 4.8 Feature 8: Manifest V3 Chrome Browser Shield
 - **Architecture:** MV3 Background Service Worker + Content Script.
 - **Functionality:**
   1. Intercepts DOM link hover and click events.
   2. Queries local edge endpoint (`/api/blocklist-lite`) in under 15ms.
   3. Injects warning modal on high-risk link clicks, halting navigation until user confirmation.
 
-### 4.7 Feature 7: Global Threat Intelligence
+### 4.9 Feature 9: Global Threat Intelligence
 - **Data Source:** Supabase PostgreSQL `reports` and `threat_indicators` tables.
 - **Functionality:**
   1. Interactive global heatmap visualizing scam velocity and geographic clusters.
@@ -169,7 +189,7 @@ To democratize enterprise-grade cognitive cyber defense for every citizen, mobil
   3. Searchable database by SHA-256 indicator hash or normalized domain.
   4. Crowd-sourced community validation with upvote/flag capability.
 
-### 4.8 Feature 8: Edge Pre-Click Interceptor (`/api/blocklist-lite`)
+### 4.10 Feature 10: Edge Pre-Click Interceptor (`/api/blocklist-lite`)
 - **Specification:** Lightweight REST endpoint returning compressed array of high-velocity active threat domain hashes.
 - **Performance:** HTTP edge-cached with `Cache-Control: s-maxage=300`, responding in `< 25ms` globally.
 
@@ -229,39 +249,21 @@ To democratize enterprise-grade cognitive cyber defense for every citizen, mobil
 +---------------------+           +------------------------+
 ```
 
-### 6.2 Key Constraints
-- Unique index on `threat_indicators(indicator_hash)` for idempotent PostgREST upsert (`on_conflict=indicator_hash`).
-- Unique index on `public_blocklist(domain_hash)`.
-- Ephemeral audio buffers are **never written** to PostgreSQL or any disk store.
-
 ---
 
-## 7. Success Metrics & Key Performance Indicators (KPIs)
-
-| Metric | Target | Tracking Mechanism |
-| :--- | :--- | :--- |
-| **Detection Speed** | $< 850\text{ ms}$ avg | Vercel Serverless Function telemetry |
-| **Classification Accuracy** | $> 98.5\%$ | Automated test benchmark suite (40 test vectors) |
-| **False Alarm Rate** | $< 2.0\%$ | Legitimate banking SMS benchmark tests |
-| **System Uptime** | $99.95\%$ | Vercel Edge & Supabase Cloud monitoring |
-| **Acoustic FFT Throughput** | $100\%$ client-side | Web Audio API execution metrics |
-| **Offline Resilience** | $100\%$ availability | Automated heuristic fallback tests |
-
----
-
-## 8. Release Roadmap & Milestones
+## 7. Release Roadmap & Milestones
 
 - [x] **Milestone 1: Core Heuristics & Groq Cascade** (Completed)
 - [x] **Milestone 2: Multimodal OCR & Camera QR** (Completed)
 - [x] **Milestone 3: Voice Acoustic FFT Engine** (Completed)
 - [x] **Milestone 4: Supabase Live RLS Integration** (Completed)
 - [x] **Milestone 5: Manifest V3 Browser Extension** (Completed)
-- [x] **Milestone 6: 40/40 Automated Test Suite** (Completed)
-- [x] **Milestone 7: Global Threat Intelligence & Demo Polish** (Completed)
-- [ ] **Phase 2 (Post-Hackathon):** On-device WebGPU Small Language Model (SLM) for 100% offline private inference.
-- [ ] **Phase 3 (Post-Hackathon):** Native Android Telephony Call Interceptor (Capacitor native plugin).
+- [x] **Milestone 6: 51/51 Automated Test Suites** (Completed)
+- [x] **Milestone 7: TinyFish Autonomous Web Investigation Agent** (Completed)
+- [x] **Milestone 8: Senior & Family Safety Mode Complete Release** (Completed)
+- [x] **Milestone 9: Production Vercel Deployment & Domain Lock** (Completed at `https://trust-break-ai.vercel.app`)
 
 ---
 
-## 9. Conclusion
-GhostNet AI represents a paradigm shift in personal cybersecurity. By fusing hardware-accelerated AI, client-side digital signal processing, zero-trust database security, and proactive browser interception, GhostNet AI neutralizes modern social engineering attacks before cognitive exploitation can occur.
+## 8. Conclusion
+TrustBreak AI represents a paradigm shift in personal cybersecurity. By fusing hardware-accelerated AI, client-side digital signal processing, zero-trust database security, and proactive browser interception, TrustBreak AI neutralizes modern social engineering attacks before cognitive exploitation can occur.

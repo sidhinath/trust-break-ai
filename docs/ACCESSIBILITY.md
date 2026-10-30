@@ -1,8 +1,8 @@
-# GhostNet AI — Accessibility & Inclusive Design (WCAG 2.1 AA)
+# TrustBreak AI — Accessibility & Inclusive Design (WCAG 2.1 AA)
 
-**Document Version:** 1.0.0-prod  
-**Status:** Feature-Frozen / Hackathon Release  
-**Target Release:** v1.1.0-prod  
+**Document Version:** 1.7.0-prod  
+**Status:** Production Verified  
+**Target Release:** v1.7.0-prod  
 **Standard:** Web Content Accessibility Guidelines (WCAG) 2.1 Level AA Compliance  
 
 ---
@@ -11,7 +11,7 @@
 
 When an individual encounters a cyber scam, they are often in an **elevated state of anxiety, panic, or urgency**. If an anti-scam application is visually confusing, uses inaccessible color contrasts, or relies on complex technical jargon, the victim is more likely to abandon the tool and fall for the scam.
 
-Accessibility in GhostNet AI is not an afterthought or compliance checkbox—it is a **critical security requirement**. GhostNet AI is architected according to WCAG 2.1 Level AA standards to ensure that elderly individuals, visually impaired users, neurodivergent individuals, and screen-reader users can successfully evaluate threats and protect themselves.
+Accessibility in TrustBreak AI is not an afterthought or compliance checkbox—it is a **critical security requirement**. TrustBreak AI is architected according to WCAG 2.1 Level AA standards to ensure that elderly individuals, visually impaired users, neurodivergent individuals, and screen-reader users can successfully evaluate threats and protect themselves.
 
 ---
 
@@ -19,7 +19,7 @@ Accessibility in GhostNet AI is not an afterthought or compliance checkbox—it 
 
 ```
 +-------------------------------------------------------------------------+
-|                    WCAG 2.1 AA PRINCIPLES IN GHOSTNET                   |
+|                  WCAG 2.1 AA PRINCIPLES IN TRUSTBREAK                   |
 +-------------------------------------------------------------------------+
 | 1. PERCEIVABLE   | Multi-sensory verdicts: color + text + icon badges   |
 |                  | High-contrast dark theme (all text >= 4.5:1 ratio)   |
@@ -39,7 +39,7 @@ Accessibility in GhostNet AI is not an afterthought or compliance checkbox—it 
 
 ## 3. Color Contrast & Visual Design Audit
 
-GhostNet AI uses a dark cyberpunk aesthetic inspired by high-security operations centers. Every palette token was selected and verified against WCAG AA standards:
+TrustBreak AI uses a dark cyberpunk aesthetic inspired by high-security operations centers. Every palette token was selected and verified against WCAG AA standards:
 
 ### 3.1 Color Contrast Ratios Matrix
 
@@ -64,7 +64,7 @@ To ensure users with Deuteranopia (red-green blindness), Protanopia, or Monochro
 
 ## 4. Screen Reader & ARIA Implementation
 
-GhostNet AI provides complete support for assistive technologies, including NVDA, JAWS, and Apple VoiceOver:
+TrustBreak AI provides complete support for assistive technologies, including NVDA, JAWS, and Apple VoiceOver:
 
 ### 4.1 Live Regions & Asynchronous Alerts
 - **Scam Verdict Announcement:**
@@ -100,7 +100,7 @@ GhostNet AI provides complete support for assistive technologies, including NVDA
 
 ## 5. Keyboard Navigability & Focus Management
 
-Every feature in GhostNet AI is fully operable using only a keyboard:
+Every feature in TrustBreak AI is fully operable using only a keyboard:
 
 1. **Logical Tab Sequence:**
    Navigation follows a natural reading order: Header / Brand -> Quick Launch Bar -> Scanner Input Tabs -> Text Area -> Action Buttons -> Result Card -> History Table.
@@ -113,7 +113,7 @@ Every feature in GhostNet AI is fully operable using only a keyboard:
 
 ## 6. Cognitive & Reading Accessibility
 
-Users under threat are cognitively overloaded. GhostNet AI simplifies cognitive processing through structured communication:
+Users under threat are cognitively overloaded. TrustBreak AI simplifies cognitive processing through structured communication:
 
 1. **The 3-Second Rule:**
    A user must be able to understand their safety status within 3 seconds of looking at the screen:

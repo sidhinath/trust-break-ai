@@ -77,7 +77,7 @@ async function readJsonBody(req) {
 
 function localApiPlugin() {
   return {
-    name: 'ghostnet-local-api',
+    name: 'trustbreak-local-api',
     configureServer(server) {
       server.middlewares.use('/api/health', async (req, res) => {
         const mockRes = createMockResponse(res)

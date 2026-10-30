@@ -97,7 +97,7 @@ export default function TinyFishInvestigationCard({
     },
     {
       title: '4. Evidence Normalization & Risk Scoring',
-      detail: 'Compiling observed risk indicators and normalizing findings into GhostNet threat report.',
+      detail: 'Compiling observed risk indicators and normalizing findings into TrustBreak AI threat report.',
       icon: CheckCircle2,
     },
   ]

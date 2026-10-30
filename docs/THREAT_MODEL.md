@@ -1,6 +1,6 @@
 # STRIDE Threat Model & Adversary Analysis
 
-This document provides a formal **STRIDE (Spoofing, Tampering, Repudiation, Information Disclosure, Denial of Service, Elevation of Privilege)** threat modeling analysis for the GhostNet AI platform.
+This document provides a formal **STRIDE (Spoofing, Tampering, Repudiation, Information Disclosure, Denial of Service, Elevation of Privilege)** threat modeling analysis for the TrustBreak AI platform.
 
 ---
 
@@ -33,7 +33,7 @@ This document provides a formal **STRIDE (Spoofing, Tampering, Repudiation, Info
   * *Mitigation:* System prompts enclose untrusted evidence inside bounded JSON envelopes. Output is passed through `safeParseVerdict()` and cross-checked against deterministic offline heuristics and the 10 fixed reason codes whitelist.
 * **Threat 2.2: Malicious QR Code Exploitation**
   * *Vector:* Attacker generates a malformed QR payload designed to exploit canvas or string decoders.
-  * *Mitigation:* GhostNet processes camera frames through `jsQR` inside a sandboxed HTML5 `<canvas>`. Decoded payloads are treated as plain text and defanged before rendering.
+  * *Mitigation:* TrustBreak processes camera frames through `jsQR` inside a sandboxed HTML5 `<canvas>`. Decoded payloads are treated as plain text and defanged before rendering.
 
 ### 3. Repudiation (Audit & Traceability)
 * **Threat 3.1: Untracked Threat Neutralization**

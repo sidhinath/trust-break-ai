@@ -1,4 +1,4 @@
-﻿const DEFAULT_API_BASE = "https://ghost-net-zeta.vercel.app";
+const DEFAULT_API_BASE = "https://trust-break-ai.vercel.app";
 
 async function getApiBase() {
   return new Promise((resolve) => {

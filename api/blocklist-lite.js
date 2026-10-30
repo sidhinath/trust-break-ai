@@ -1,5 +1,5 @@
 /**
- * GhostNet AI — Pre-Click Blocklist Lite Endpoint (Feature 8)
+ * TrustBreak AI — Pre-Click Blocklist Lite Endpoint (Feature 8)
  * Returns plain-text list of high-confidence malicious domains for browser declarativeNetRequest rules.
  * Gated behind ENABLE_PRE_CLICK_INTERCEPTOR=true.
  */

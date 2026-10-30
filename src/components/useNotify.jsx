@@ -16,10 +16,10 @@ export function useNotify() {
 
     new Notification(isScam ? "Scam Detected!" : "Suspicious Content Detected", {
       body: isScam
-        ? `GhostNet flagged your ${typeLabel} scan as a SCAM. Do not interact with it.`
-        : `GhostNet flagged your ${typeLabel} scan as suspicious. Review with caution.`,
+        ? `TrustBreak AI flagged your ${typeLabel} scan as a SCAM. Do not interact with it.`
+        : `TrustBreak AI flagged your ${typeLabel} scan as suspicious. Review with caution.`,
       icon: "/favicon.ico",
-      tag: `ghostnet-${riskLevel}-${Date.now()}`,
+      tag: `trustbreak-${riskLevel}-${Date.now()}`,
     });
   }, []);
 

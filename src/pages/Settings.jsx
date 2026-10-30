@@ -13,16 +13,16 @@ export default function Settings() {
   const [offlineMode, setOfflineMode] = useState(false);
   const [notificationsEnabled, setNotificationsEnabled] = useState(true);
   const [seniorMode, setSeniorMode] = useState(() => {
-    return document.body.classList.contains("family-safety-mode") || localStorage.getItem("ghostnet_senior_mode") === "true";
+    return document.body.classList.contains("family-safety-mode") || localStorage.getItem("trustbreak_senior_mode") === "true";
   });
   const [themeMode, setThemeMode] = useState(() => {
-    return localStorage.getItem("ghostnet_theme") || "light";
+    return localStorage.getItem("trustbreak_theme") || "light";
   });
   const [groqKey, setGroqKey] = useState(() => {
-    return localStorage.getItem("ghostnet_groq_api_key") || import.meta.env?.VITE_GROQ_API_KEY || "";
+    return localStorage.getItem("trustbreak_groq_api_key") || import.meta.env?.VITE_GROQ_API_KEY || "";
   });
   const [geminiKey, setGeminiKey] = useState(() => {
-    return localStorage.getItem("ghostnet_gemini_api_key") || import.meta.env?.VITE_GEMINI_API_KEY || "";
+    return localStorage.getItem("trustbreak_gemini_api_key") || import.meta.env?.VITE_GEMINI_API_KEY || "";
   });
   const [savedKeysNotice, setSavedKeysNotice] = useState(false);
   const [clearedNotice, setClearedNotice] = useState(false);
@@ -30,14 +30,14 @@ export default function Settings() {
 
   const saveAiKeys = () => {
     if (groqKey.trim()) {
-      localStorage.setItem("ghostnet_groq_api_key", groqKey.trim());
+      localStorage.setItem("trustbreak_groq_api_key", groqKey.trim());
     } else {
-      localStorage.removeItem("ghostnet_groq_api_key");
+      localStorage.removeItem("trustbreak_groq_api_key");
     }
     if (geminiKey.trim()) {
-      localStorage.setItem("ghostnet_gemini_api_key", geminiKey.trim());
+      localStorage.setItem("trustbreak_gemini_api_key", geminiKey.trim());
     } else {
-      localStorage.removeItem("ghostnet_gemini_api_key");
+      localStorage.removeItem("trustbreak_gemini_api_key");
     }
     setSavedKeysNotice(true);
     setTimeout(() => setSavedKeysNotice(false), 3000);
@@ -45,14 +45,14 @@ export default function Settings() {
 
   React.useEffect(() => {
     const handleSync = () => {
-      setSeniorMode(document.body.classList.contains("family-safety-mode") || localStorage.getItem("ghostnet_senior_mode") === "true");
-      setThemeMode(localStorage.getItem("ghostnet_theme") || "light");
+      setSeniorMode(document.body.classList.contains("family-safety-mode") || localStorage.getItem("trustbreak_senior_mode") === "true");
+      setThemeMode(localStorage.getItem("trustbreak_theme") || "light");
     };
-    window.addEventListener("ghostnet_senior_mode_change", handleSync);
-    window.addEventListener("ghostnet_theme_change", handleSync);
+    window.addEventListener("trustbreak_senior_mode_change", handleSync);
+    window.addEventListener("trustbreak_theme_change", handleSync);
     return () => {
-      window.removeEventListener("ghostnet_senior_mode_change", handleSync);
-      window.removeEventListener("ghostnet_theme_change", handleSync);
+      window.removeEventListener("trustbreak_senior_mode_change", handleSync);
+      window.removeEventListener("trustbreak_theme_change", handleSync);
     };
   }, []);
 
@@ -72,22 +72,22 @@ export default function Settings() {
       root.classList.add("light");
       body.classList.add("light");
     }
-    localStorage.setItem("ghostnet_theme", next);
-    window.dispatchEvent(new Event("ghostnet_theme_change"));
+    localStorage.setItem("trustbreak_theme", next);
+    window.dispatchEvent(new Event("trustbreak_theme_change"));
   };
 
   const toggleSeniorMode = () => {
     const next = !seniorMode;
     setSeniorMode(next);
     try {
-      localStorage.setItem("ghostnet_senior_mode", next ? "true" : "false");
+      localStorage.setItem("trustbreak_senior_mode", next ? "true" : "false");
     } catch {}
     if (next) {
       document.body.classList.add("family-safety-mode");
     } else {
       document.body.classList.remove("family-safety-mode");
     }
-    window.dispatchEvent(new Event("ghostnet_senior_mode_change"));
+    window.dispatchEvent(new Event("trustbreak_senior_mode_change"));
   };
 
   const clearLocalHistory = () => {
@@ -366,7 +366,7 @@ export default function Settings() {
         <div className="flex items-center gap-2 border-b pb-3" style={{ borderColor: "var(--ghost-border)" }}>
           <Info className="w-4 h-4 text-cyan-400" />
           <h3 className="text-xs font-bold uppercase tracking-wider" style={{ color: "var(--ghost-text)" }}>
-            About GhostNet AI
+            About TrustBreak AI
           </h3>
         </div>
 
@@ -377,7 +377,7 @@ export default function Settings() {
           </div>
           <div className="flex justify-between py-1 border-b" style={{ borderColor: "var(--ghost-border)" }}>
             <span>Package Identifier</span>
-            <span className="font-mono text-slate-400">com.ghostnet.app</span>
+            <span className="font-mono text-slate-400">com.trustbreak.app</span>
           </div>
           <div className="flex justify-between py-1">
             <span>Multi-Modal Engines</span>

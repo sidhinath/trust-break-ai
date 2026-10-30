@@ -22,8 +22,8 @@ We are committed to providing a welcoming, inclusive, and harassment-free enviro
 
 ### 2.2 Clone the Repository
 ```bash
-git clone https://github.com/ImperialCoder01/GhostNet.git
-cd GhostNet
+git clone https://github.com/sidhinath/trust-break-ai.git
+cd "TrustBreak AI"
 ```
 
 ### 2.3 Install Dependencies
@@ -99,7 +99,7 @@ Before modifying code, understand these non-negotiable architectural rules:
 
 We follow a structured Git feature-branch workflow:
 
-1. **Main Branch:** `main` is production-locked and continuously deployed to [Vercel](https://ghost-net-zeta.vercel.app).
+1. **Main Branch:** `main` is production-locked and continuously deployed to [Vercel](https://trust-break-ai.vercel.app).
 2. **Branch Naming Conventions:**
    - `feat/feature-name` — New feature or scanner capability
    - `fix/bug-description` — Bug fix or error resolution

@@ -107,7 +107,7 @@ export default function EmergencyActionCard({ riskLevel = "safe", scanData = {} 
               </h4>
             </div>
             <p className="text-xs font-medium mt-2 leading-relaxed" style={{ color: "var(--ghost-text)" }}>
-              Syndicate this attack pattern to the GhostNet global scam database in one click.
+              Syndicate this attack pattern to the TrustBreak AI global scam database in one click.
             </p>
           </div>
           <Button

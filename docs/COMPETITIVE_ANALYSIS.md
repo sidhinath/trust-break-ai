@@ -1,8 +1,8 @@
-# GhostNet AI — Competitive Analysis & Market Landscape
+# TrustBreak AI — Competitive Analysis & Market Landscape
 
-**Document Version:** 1.0.0-prod  
-**Status:** Feature-Frozen / Hackathon Release  
-**Target Release:** v1.1.0-prod  
+**Document Version:** 1.7.0-prod  
+**Status:** Production Verified  
+**Target Release:** v1.7.0-prod  
 **Market Segment:** Consumer & Enterprise Frontline Cognitive Cyber Defense  
 
 ---
@@ -13,20 +13,22 @@ Traditional cybersecurity architectures were built to protect **network perimete
 
 Incumbent solutions (VirusTotal, PhishTank, Truecaller, Norton) rely heavily on **reactive, centralized reputation databases**. These fail catastrophically against zero-day social engineering where domains live for under 15 minutes and scam messages are uniquely generated per victim.
 
-GhostNet AI bridges this critical vulnerability gap with an **autonomous, multimodal, sub-second edge shield** combining hardware-accelerated LLM reasoning (Groq LPU), on-device acoustic spectral analysis, and zero-trust crowd telemetry.
+TrustBreak AI bridges this critical vulnerability gap with an **autonomous, multimodal, sub-second edge shield** combining hardware-accelerated LLM reasoning (Groq LPU), on-device acoustic spectral analysis, and zero-trust crowd telemetry.
 
 ---
 
 ## 2. Competitive Landscape Comparison Matrix
 
-| Feature / Dimension | GhostNet AI | VirusTotal (Chronicle) | Google Safe Browsing | PhishTank (Cisco) | Truecaller | Norton 360 / McAfee |
+| Feature / Dimension | TrustBreak AI | VirusTotal (Chronicle) | Google Safe Browsing | PhishTank (Cisco) | Truecaller | Norton 360 / McAfee |
 | :--- | :---: | :---: | :---: | :---: | :---: | :---: |
 | **SMS / Social Scam Detection** | **Sub-second LPU (<850ms)** | ❌ None | ❌ None | ❌ None | ⚠️ Simple Keyword Regex | ⚠️ Basic Mobile App |
 | **URL Typosquatting / Entropy** | **Real-time Shannon + Levenshtein** | ⚠️ Multi-engine (Slow, 5-30s) | ⚠️ Centralized Blacklist | ⚠️ Static Blacklist | ❌ None | ⚠️ Blacklist Check |
+| **Live Browser Web Sandbox** | **TinyFish Headless SSE Agent** | ❌ None | ❌ None | ❌ None | ❌ None | ❌ None |
 | **Visual OCR Screenshot Analysis** | **Gemini 2.5 Flash Vision** | ❌ File payload only | ❌ None | ❌ None | ❌ None | ❌ None |
-| **Live Camera QR Matrix Scanner** | **Real-time jsQR HUD** | ❌ None | ❌ None | ❌ None | ❌ None | ⚠️ Separate QR Scanner App |
+| **Live Camera QR Matrix Scanner** | **Real-time jsQR HUD (30 FPS)** | ❌ None | ❌ None | ❌ None | ❌ None | ⚠️ Separate QR Scanner App |
 | **Voice Deepfake Acoustic FFT** | **Wiener Spectral Flatness** | ❌ None | ❌ None | ❌ None | ⚠️ Caller ID only | ❌ None |
 | **Browser Pre-Click Interception** | **MV3 Chrome Isolated World** | ❌ None | ⚠️ Browser Warning (Post-Click) | ❌ None | ❌ None | ⚠️ Heavy Antivirus Extension |
+| **Senior & Family Safety Mode** | **High-contrast, 48dp+, Voice Read-Aloud** | ❌ None | ❌ None | ❌ None | ❌ None | ❌ None |
 | **Crowd Threat Telemetry** | **Supabase RLS + SHA-256 Hashes** | ⚠️ Enterprise Paywalled | ❌ Closed Google Feed | ⚠️ Community Votes (Slow) | ⚠️ Phone Number Reports | ❌ Closed Enterprise Telemetry |
 | **Audio Privacy Guarantee** | **100% In-Memory Ephemeral** | ❌ Files Publicly Stored | N/A | N/A | ❌ Call Records Synced | N/A |
 | **Deterministic Code Defense** | **10 Reason Codes Whitelist** | N/A | N/A | N/A | N/A | N/A |
@@ -74,19 +76,20 @@ Modern generative cybercrime creates **zero-reputation threats**:
 2. **Text Entropy:** Generated on-the-fly by an LLM, ensuring zero exact substring matches with known scam templates.
 3. **Voice Audio:** Real-time cloned voice generated via neural vocoders from a 5-second social media audio scrap.
 
-**How GhostNet AI Solves This:**
-GhostNet AI evaluates **behavioral mechanics, cognitive pressure, and acoustic anomalies** rather than relying solely on historical reputation:
+**How TrustBreak AI Solves This:**
+TrustBreak AI evaluates **behavioral mechanics, cognitive pressure, and acoustic anomalies** rather than relying solely on historical reputation:
 - Evaluates psychological urgency cues (`URGENCY_SCARE_TACTICS`, `REQUEST_OTP_PASSWORD`).
 - Computes Shannon entropy and typosquatting edit distance on domains regardless of domain age.
+- Traces redirects and inspects DOM forms safely with TinyFish autonomous web agents.
 - Measures mathematical acoustic randomness (spectral flatness) to detect neural synthetic vocoders in real time.
 
 ---
 
-## 5. GhostNet AI's 5 Unfair Advantages
+## 5. TrustBreak AI's 6 Unfair Advantages
 
 ```
 +-------------------------------------------------------------------------+
-|                    GHOSTNET AI: 5 UNFAIR ADVANTAGES                     |
+|                   TRUSTBREAK AI: 6 UNFAIR ADVANTAGES                    |
 +-------------------------------------------------------------------------+
 | 1. SUB-SECOND GROQ LPUs   | <850ms LLM classification on 70B parameter  |
 |                           | models without quantization degradation     |
@@ -97,11 +100,14 @@ GhostNet AI evaluates **behavioral mechanics, cognitive pressure, and acoustic a
 | 3. MULTIMODAL UNIFICATION | Single coherent engine for SMS, URL, Vision |
 |                           | OCR, Camera QR, and Voice Deepfakes         |
 +---------------------------+---------------------------------------------+
-| 4. PRE-CLICK INTERCEPTOR  | Manifest V3 Chrome extension blocking       |
+| 4. LIVE WEB BROWSER AGENT | TinyFish SSE headless sandbox tracing       |
+|                           | redirects and DOM credential forms safely   |
++---------------------------+---------------------------------------------+
+| 5. PRE-CLICK INTERCEPTOR  | Manifest V3 Chrome extension blocking       |
 |                           | navigation before HTTP socket creation      |
 +---------------------------+---------------------------------------------+
-| 5. CROWD DEFENSE MESH     | Supabase PostgreSQL with RLS and SHA-256    |
-|                           | indicator hashing for global swarm defense  |
+| 6. SENIOR SAFETY MODE     | 1-click accessible interface with Web Speech|
+|                           | voice read-aloud and trusted contact alerts |
 +-------------------------------------------------------------------------+
 ```
 
@@ -110,14 +116,14 @@ GhostNet AI evaluates **behavioral mechanics, cognitive pressure, and acoustic a
 ## 6. Moat & Defensibility Strategy
 
 1. **Crowd-Sourced Telemetry Data Network Effect:**
-   As more users scan and flag emerging scam campaigns, GhostNet AI's decentralized `threat_indicators` repository expands. Every neutralized scam strengthens the shield for all users in the network.
+   As more users scan and flag emerging scam campaigns, TrustBreak AI's decentralized `threat_indicators` repository expands. Every neutralized scam strengthens the shield for all users in the network.
 2. **Deterministic Guardrails & Trust:**
-   While competing LLM "wrapper" products suffer from hallucinations and security bypasses, GhostNet AI's `safeParseVerdict()` and 10 canonical reason codes provide rock-solid, explainable, and audit-compliant verdicts.
+   While competing LLM "wrapper" products suffer from hallucinations and security bypasses, TrustBreak AI's `safeParseVerdict()` and 10 canonical reason codes provide rock-solid, explainable, and audit-compliant verdicts.
 3. **Edge Optimization & Hardware Advantage:**
-   GhostNet AI's architecture is optimized for low-resource environments (Capacitor mobile, edge serverless, and browser extensions), keeping per-scan infrastructure costs below \$0.0001.
+   TrustBreak AI's architecture is optimized for low-resource environments (Capacitor mobile, edge serverless, and browser extensions), keeping per-scan infrastructure costs below \$0.0001.
 
 ---
 
 ## 7. Strategic Positioning Summary
 
-GhostNet AI does not compete as an antivirus or firewall; it defines a new category: **Autonomous Cognitive Defense**. By neutralizing threats at the cognitive layer before a user clicks, calls, or transfers funds, GhostNet AI provides the missing protective barrier for the modern generative AI era.
+TrustBreak AI does not compete as an antivirus or firewall; it defines a new category: **Autonomous Cognitive Defense**. By neutralizing threats at the cognitive layer before a user clicks, calls, or transfers funds, TrustBreak AI provides the missing protective barrier for the modern generative AI era.

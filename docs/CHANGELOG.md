@@ -1,21 +1,30 @@
 # Changelog
 
-All notable changes to GhostNet AI are documented in this file.
+All notable changes to TrustBreak AI are documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [1.7.0-release] - 2026-10-30 (TrustBreak AI Brand Migration & Production Release)
+
+### Added
+* **Production Live Deployment**: Locked production release at [https://trust-break-ai.vercel.app](https://trust-break-ai.vercel.app) with edge serverless functions, security headers, and daily feed sync.
+* **Comprehensive Documentation Overhaul**: Synchronized all technical specifications, PRD, architecture, security, and demo guides across `README.md` and `docs/` with the current codebase.
+* **Universal Multi-Modal Intake**: Integrated ScanHub with tabbed switching and automatic vector detection across SMS, URLs, visual screenshots, and voice recordings.
+* **Android Capacitor 8.5 App Identity**: Configured package identifier `com.trustbreak.app` with native back button listener, haptics, and Android share sheet intent intake.
+* **Full Automated Test Suite Verification**: Verified 51/51 tests passing across 18 suites covering heuristics, reason codes, failovers, SSRF protection, and TinyFish web agents.
 
 ## [1.6.0-release] - 2026-10-10 (Senior & Family Safety Mode Complete Release)
 
 ### Added
-* **Prominent Mode Switch (Normal Mode ↔ Senior Mode)**: High-visibility labelled toggle control (`NORMAL MODE → SWITCH TO SENIOR MODE` / `SENIOR MODE → SWITCH TO NORMAL MODE`) in application header and navigation with `localStorage` (`ghostnet_senior_mode`) state persistence and real-time tab synchronization.
+* **Prominent Mode Switch (Normal Mode ↔ Senior Mode)**: High-visibility labelled toggle control (`NORMAL MODE → SWITCH TO SENIOR MODE` / `SENIOR MODE → SWITCH TO NORMAL MODE`) in application header and navigation with `localStorage` (`trustbreak_senior_mode`) state persistence and real-time tab synchronization.
 * **Accessible Senior Home View (`SeniorHomeView.jsx`)**: Dedicated Senior Mode home screen with 4 large action cards (`CHECK A MESSAGE`, `CHECK A LINK`, `CHECK A SCREENSHOT`, `GET EMERGENCY HELP`), high contrast, minimum 48dp+ touch targets, and large typography.
-* **Plain-Language Scan Explanations (`SeniorScanExplanation.jsx`)**: Reusable scan result explanation component breaking findings into 3 plain-English sections: 📌 *What GhostNet Detected*, 🔍 *Why We Flagged It*, and 🛡️ *What You Should Do Next*.
+* **Plain-Language Scan Explanations (`SeniorScanExplanation.jsx`)**: Reusable scan result explanation component breaking findings into 3 plain-English sections: 📌 *What TrustBreak AI Detected*, 🔍 *Why We Flagged It*, and 🛡️ *What You Should Do Next*.
 * **Free Web Speech API Voice Assistance (`VoiceAssistance.jsx`)**: Built-in text-to-speech engine (`window.speechSynthesis`) with Read Aloud, Pause, Resume, Stop, Speed adjustment (0.75x–1.25x), language selection (`en-IN` / `hi-IN`), and auto-cancellation on unmount with zero paid API dependencies.
 * **100% Offline Emergency Scam Guidance (`EmergencyGuidanceModal.jsx`)**: Emergency action playbooks for 5 offline scam scenarios: OTP shared, Money transferred (India Helpline 1930 / `cybercrime.gov.in`), Suspicious app installed, Personal info shared, and Extortion/Threats.
 * **User-Initiated Trusted Contact Sharing (`TrustedContactModal.jsx`)**: Workflow allowing senior users to review scan findings and share safety summaries with family members via native Web/Capacitor share sheet or copy-to-clipboard fallback.
 * **Family Impersonation Detector**: Added `FAMILY_IMPERSONATION_RISK` reason code and heuristic rules detecting urgent monetary demands pretending to be family members in distress.
 * **Interactive Scam Simulation ("Can You Spot the Scam?")**: Interactive educational modal with 3 real-world practice scenarios (Electricity Bill SMS, Bank OTP Call, India Post Package Link).
-* **Release-Ready Verified APK (`GhostNet.apk`)**: Updated compiled release APK (13.3 MB) in root directory passing 100% test suite (51/51).
+* **Release-Ready Verified APK (`TrustBreak AI.apk`)**: Updated compiled release APK (13.3 MB) in root directory passing 100% test suite (51/51).
 
 ## [1.5.0-release] - 2026-10-10 (TinyFish AI Web Agent, Android WebView White Screen Elimination & Native In-App Account Flow)
 
@@ -25,7 +34,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 * **Android APK Legacy WebView Target (`es2018` / `chrome75`)**: Configured `build.target: ['chrome75', 'es2018']` and `esbuild.target: 'es2018'` in `vite.config.js`. Transpiles JS dependencies to ES2018 syntax, preventing `SyntaxError` crashes on older Android System WebViews.
 * **Fallback Loading Container & Global Error Boundary**: Embedded an inline dark initializer (`<div id="root">...</div>`) and a global `window.onerror` message box in `index.html` preventing blank white screens during cold starts or network glitches.
 * **Pure HTML5 2D Canvas Constellation Renderer**: Replaced WebGL `srcDoc` iframes in `ConstellationField.tsx` with safe native HTML5 2D Canvas renderer (`ConstellationField.jsx`), eliminating WebGL context loss and GPU freezes on mobile WebViews.
-* **Release-Ready Android APK Bundle (`GhostNet.apk`)**: Updated compiled `GhostNet.apk` (13.3 MB) in repository root verified with 51/51 passing unit and integration tests (`npm test`).
+* **Release-Ready Android APK Bundle (`TrustBreak AI.apk`)**: Updated compiled `TrustBreak AI.apk` (13.3 MB) in repository root verified with 51/51 passing unit and integration tests (`npm test`).
 
 ### Changed
 * **UI Blue/Cyan Gradient Refinement**: Updated `LinkScanner.jsx`, `ScanHub.jsx`, and `QRScannerPage.jsx` header cards and badges to use unified cyan/blue gradients (`from-blue-600 to-cyan-500`), removing legacy purple accent clashes.
@@ -37,9 +46,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ## [1.4.0-release] - 2026-10-03 (Bundled Android Release APK, Real-Time Live Threat Radar Stream & Dual Persistence Layer)
 
 ### Added
-* **Bundled Android Release APK (`GhostNet.apk`)**: Built and bundled `GhostNet.apk` (13.3 MB) directly in the repository root for 1-click mobile download and native Android installation.
-* **Real-Time Live Threat Radar Stream**: Re-engineered Threat Radar stream in `Threats.jsx` and `ScamHeatmap.jsx` featuring local broadcast event listeners (`ghostnet_new_threat`), PostgreSQL realtime subscriptions, and an active 7-second live threat ticker with animated pulsing "LIVE NOW" badges.
-* **Dual Local + Supabase Persistence Layer**: Implemented local-first fallback storage (`ghostnet_recent_scans` and `ghostnet_scam_reports`) pre-seeded with initial benchmark threat indicators. Guarantees 100% offline and guest mode availability for scan history, threat metrics, and scam reports across Home, Profile, Reports, and Threats pages.
+* **Bundled Android Release APK (`TrustBreak AI.apk`)**: Built and bundled `TrustBreak AI.apk` (13.3 MB) directly in the repository root for 1-click mobile download and native Android installation.
+* **Real-Time Live Threat Radar Stream**: Re-engineered Threat Radar stream in `Threats.jsx` and `ScamHeatmap.jsx` featuring local broadcast event listeners (`trustbreak_new_threat`), PostgreSQL realtime subscriptions, and an active 7-second live threat ticker with animated pulsing "LIVE NOW" badges.
+* **Dual Local + Supabase Persistence Layer**: Implemented local-first fallback storage (`trustbreak_recent_scans` and `trustbreak_scam_reports`) pre-seeded with initial benchmark threat indicators. Guarantees 100% offline and guest mode availability for scan history, threat metrics, and scam reports across Home, Profile, Reports, and Threats pages.
 * **Real-Time React Query Invalidation**: Standardized query keys (`['scanHistory']`, `['scamReports']`) across all scanner modules (`MessageScanner`, `LinkScanner`, `ScreenshotScanner`, `VoiceScanner`, `QRScannerPage`), causing scan counts and threat history to update immediately upon scan completion.
 
 ---
@@ -49,7 +58,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ### Added
 * **Account Session Integration**: Migrated the app to a simplified, privacy-first identity flow for web and mobile sessions.
 * **Supabase Session JWT Synergy**: Automated forwarding of authenticated session tokens to the Supabase client (`updateSupabaseAuthToken`), enforcing PostgreSQL Row-Level Security (RLS) while preserving secure session validation.
-* **Native Android In-App Sign-In Flow**: Streamlined Android account selection within the app without leaving the GhostNet experience.
+* **Native Android In-App Sign-In Flow**: Streamlined Android account selection within the app without leaving the TrustBreak AI experience.
 * **Vercel Legacy Peer Dependencies Configuration**: Created `.npmrc` (`legacy-peer-deps=true`) in repository root, eliminating `npm install` ERESOLVE peer dependency build errors on Vercel.
 
 ### Changed
@@ -68,7 +77,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 * **Native HTML5 2D Canvas `ConstellationField`:** Replaced `@designcodeio/threeui` WebGL iframe renderer with a pure 2D Canvas engine (`src/shaders/constellation-field/ConstellationField.jsx`), resolving Brave Shields blank white screen crashes and script blocking.
 
 ### Changed
-* **Right-Side Hero Auth Box:** Redesigned `AuthGate.jsx` landing page with a 2-column hero layout placing the `Access GhostNet Workspace` login card prominently at the top right of the page.
+* **Right-Side Hero Auth Box:** Redesigned `AuthGate.jsx` landing page with a 2-column hero layout placing the `Access TrustBreak AI Workspace` login card prominently at the top right of the page.
 * **Strict Login Credential Validation:** Enforced non-empty credential requirement (`email` + `password`), blocking empty submissions with clear warnings while maintaining 1-click **⚡ Judge Demo Mode**.
 * **High-Contrast Theme Tokens:** Updated card backgrounds, feature badges, and button text across `BusinessModel.jsx`, `AuthGate.jsx`, and global inputs to use high-contrast CSS variable tokens (`var(--ghost-surface)`, `var(--ghost-text)`, `var(--ghost-text-dim)`).
 * **Sidebar Scrollbar Clean Up:** Added `.no-scrollbar` utility to `<aside>` in `Layout.jsx` hiding thick visual scrollbar borders.
@@ -101,7 +110,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ## [1.0.0-hackathon] - 2026-09-02
 
 ### Added
-* **GhostNet Threat Reconstruction™ Engine:** Signature 5-stage interactive attack chain mapper (`Ingress` ➔ `Social Engineering` ➔ `Phishing Gateway` ➔ `Credential Harvesting` ➔ `Financial Loss`).
+* **TrustBreak AI Threat Reconstruction™ Engine:** Signature 5-stage interactive attack chain mapper (`Ingress` ➔ `Social Engineering` ➔ `Phishing Gateway` ➔ `Credential Harvesting` ➔ `Financial Loss`).
 * **Multi-Modal Vision Inspection:** Google Gemini Vision OCR fallback pipeline with screenshot analysis for fake receipts, spoofed banking UIs, and QR code traps.
 * **Sub-Second Groq LPU Integration:** Fast multi-model inference (`llama-3.3-70b-versatile`, `llama-3.1-8b-instant`) for real-time NLP and link classification.
 * **"What Happens If I Click?" Threat Simulator:** Safe educational sandbox modal simulating phishing exploits without executing hostile code.

@@ -2,7 +2,7 @@
 
 ## 1. High-Level Architecture Overview
 
-GhostNet AI is an enterprise-grade, multi-modal cybersecurity and digital fraud prevention platform. Engineered with a defense-in-depth architecture, GhostNet spans web, mobile, and browser extension surfaces, backed by serverless edge microservices, a multi-model AI inference pipeline with acoustic spectral analysis, and a real-time PostgreSQL database with strict Row-Level Security (RLS).
+TrustBreak AI is an enterprise-grade, multi-modal cybersecurity and digital fraud prevention platform. Engineered with a defense-in-depth architecture, TrustBreak spans web, mobile, and browser extension surfaces, backed by serverless edge microservices, a multi-model AI inference pipeline with acoustic spectral analysis, TinyFish autonomous live web investigation, and a real-time PostgreSQL database with strict Row-Level Security (RLS).
 
 ```mermaid
 flowchart TB
@@ -11,11 +11,13 @@ flowchart TB
         Shaders["Ambient Living Particles<br/>ThreeUI ConstellationField"]
         Mobile["Android Mobile Shell<br/>Capacitor 8.5 Native Bridge"]
         Ext["Chromium Extension: MV3<br/>Service Worker + Content Script Interceptor"]
+        SeniorView["Senior & Family Safety Mode<br/>High-Contrast 48dp+ Voice Read-Aloud"]
     end
 
     subgraph EdgeGateways["Edge API Gateways: Vercel Serverless"]
         AnalyzeGW["POST /api/analyze<br/>Multi-Modal Text, URL, Screenshot"]
         VoiceGW["POST /api/analyze-voice<br/>Wiener Flatness FFT + Whisper STT + 6MB Guard"]
+        TinyFishGW["POST /api/tinyfish/investigate<br/>SSE Browser Web Investigation Agent"]
         BlocklistGW["GET /api/blocklist-lite<br/>Low-Latency Plaintext SHA-256 Hash Stream"]
         CronGW["POST /api/cron/sync-feeds<br/>CRON_SECRET Auth + OpenPhish/URLhaus"]
     end
@@ -24,6 +26,7 @@ flowchart TB
         Groq["Groq LPU Acceleration<br/>llama-3.3-70b-versatile"]
         Gemini["Google Gemini 2.5 Flash<br/>Multi-Modal Vision and Logo Extraction"]
         Whisper["Groq Whisper-large-v3<br/>Speech-to-Text Transcription"]
+        TinyFishAgent["TinyFish Headless Agent<br/>Redirect Chain & DOM Extraction"]
         FFT["Acoustic Spectral Engine<br/>Wiener Entropy and Flatness via fft.js"]
         ReasonCodes["Code-Defense Parser<br/>10 Standardized Reason Codes"]
         Heuristics["Deterministic Offline Engine<br/>Regex, Social Engineering NLP, Typosquatting"]
@@ -39,6 +42,7 @@ flowchart TB
 
     Web --> AnalyzeGW
     Web --> VoiceGW
+    Web --> TinyFishGW
     Mobile --> Web
     Ext --> BlocklistGW
     Ext --> AnalyzeGW
@@ -46,6 +50,7 @@ flowchart TB
     AnalyzeGW --> Groq
     AnalyzeGW --> Gemini
     AnalyzeGW --> Heuristics
+    TinyFishGW --> TinyFishAgent
     VoiceGW --> FFT
     VoiceGW --> Whisper
     Groq --> ReasonCodes
@@ -70,11 +75,11 @@ flowchart TB
 
 ### A. Presentation & Ingress Layer
 * **Frontend Architecture:** React 18, Vite 6, Tailwind CSS 3.4, Lucide React, Framer Motion, Recharts.
-* **Ambient Three.js Shaders:** Integrated ThreeUI `ConstellationField` ("particle-drift" mode) provides dynamic living telemetry feedback across both Dark and Light themes.
+* **Ambient Shaders:** Integrated ThreeUI `ConstellationField` provides dynamic living telemetry feedback across both Dark and Light themes.
 * **Accessibility Architecture:**
-  * Instant Dark/Light theme switching with CSS custom properties and persistent localStorage state.
-  * **Senior & Family Safety Mode**: Enlarges typography, magnifies touch targets, and converts technical cyber indicators into clear, actionable advice.
-* **Judge / Guest Access:** One-click `AuthGate` demo bypass (`⚡ Explore as Guest / Judge Demo Mode`) allowing immediate evaluation without requiring active Supabase credentials.
+  * Instant Dark/Light theme switching with CSS custom properties and persistent `localStorage` state.
+  * **Senior & Family Safety Mode**: Enlarges typography, magnifies touch targets to 48dp+, integrates Web Speech API voice assistance, and converts technical cyber indicators into clear, actionable advice.
+* **Judge / Guest Access:** One-click demo bypass (`⚡ Explore as Guest / Judge Demo Mode`) allowing immediate evaluation without requiring active Supabase credentials.
 
 ### B. Edge Serverless Gateways
 Hosted on Vercel Serverless (Node.js runtime) with strict edge security policies:
@@ -83,24 +88,28 @@ Hosted on Vercel Serverless (Node.js runtime) with strict edge security policies
    * Enforces `withTimeout(promise, 9000)` fail-safe execution to eliminate hanging serverless functions.
    * Implements `safeParseVerdict()` to extract and validate JSON responses from LLM markdown code blocks.
    * Sanitizes reason codes against a fixed whitelist of 10 standardized threat codes.
-   * Employs Supabase read/write key separation: uses the public anonymous key for read operations and reserves `SUPABASE_SERVICE_ROLE_KEY` strictly for indicator ingestion.
+   * Employs Supabase read/write key privilege separation.
 2. **`POST /api/analyze-voice`**:
    * Accepts base64-encoded audio payloads with a strict HTTP 413 guard rejecting requests >6MB.
    * Calculates spectral flatness (Wiener entropy), high-frequency energy ratio, zero-crossing rate, and jitter variance.
    * Transcribes audio using Groq Whisper-large-v3 to detect linguistic social engineering vectors.
    * Combines acoustic synthetic anomalies with linguistic risk signals for unified scoring.
-3. **`GET /api/blocklist-lite`**:
+3. **`POST /api/tinyfish/investigate`**:
+   * Autonomous headless browser investigation agent streaming live SSE telemetry.
+   * Traces destination redirects, extracts titles and DOM claims, and checks for credential forms without client exposure.
+4. **`GET /api/blocklist-lite`**:
    * Ultra-low-latency endpoint streaming normalized SHA-256 domain hashes to the browser extension.
    * Operates via public anonymous Supabase client with zero server overhead.
-4. **`GET|POST /api/cron/sync-feeds`**:
+5. **`GET|POST /api/cron/sync-feeds`**:
    * Automated scheduled background worker fetching live malicious URLs from OpenPhish and URLhaus feeds.
    * Protected by HTTP Bearer token validation matching `CRON_SECRET`.
    * Scheduled at `0 0 * * *` (once daily) for 100% compliance with Vercel Hobby plan tier limits.
 
 ### C. Multi-Modal Intelligence Tier
-* **Sub-Second NLP (Groq LPU):** `llama-3.3-70b-versatile` and `llama-3.1-8b-instant` provide structured semantic evaluation in <800ms.
+* **Sub-Second NLP (Groq LPU):** `llama-3.3-70b-versatile` provides structured semantic evaluation in <800ms.
 * **Vision OCR (Google Gemini):** `gemini-2.5-flash` analyzes screenshot evidence, identifying visual brand mimicry, fake payment receipts, and QR code traps.
 * **Acoustic Wiener Entropy (`fft.js`):** In-memory spectral FFT decomposes raw audio waveforms into frequency buckets. Synthetic AI vocoders and cloned voices exhibit distinct spectral flatness and harmonic anomalies compared to human biological speech.
+* **Autonomous Web Agent (TinyFish):** Safe, headless read-only exploration of target links.
 * **Deterministic Offline Fallback:** When external AI APIs or networks are unreachable, an autonomous local regex and NLP heuristic engine computes threat scores and populates reason codes with zero downtime.
 
 ### D. Data & Intelligence Persistence (Supabase)
@@ -120,9 +129,9 @@ Hosted on Vercel Serverless (Node.js runtime) with strict edge security policies
 sequenceDiagram
     autonumber
     actor User as Operator / Judge
-    participant UI as GhostNet Client
+    participant UI as TrustBreak Client
     participant API as /api/analyze Gateway
-    participant AI as AI Cascade (Groq / Gemini)
+    participant AI as AI Cascade (Groq / Gemini / TinyFish)
     participant Heuristic as Local Heuristic Engine
     participant DB as Supabase PostgreSQL
 
@@ -158,7 +167,7 @@ sequenceDiagram
 
 ## 4. Hardware Permissions & Edge Security Posture
 
-GhostNet configures enterprise-grade security headers across all edge responses via `vercel.json`:
+TrustBreak configures enterprise-grade security headers across all edge responses via `vercel.json`:
 
 ```json
 {
