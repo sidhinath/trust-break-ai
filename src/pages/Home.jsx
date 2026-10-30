@@ -59,14 +59,12 @@ export default function Home() {
   const scamRatio = scans.length > 0 ? (scans.filter(s => s.risk_level === 'scam').length / scans.length) : 0;
   const safetyScore = scans.length === 0 ? 100 : Math.max(10, Math.round(100 - (scamRatio * 80)));
 
-  // Render Senior Mode View when Senior Mode is active
   if (seniorModeActive) {
     return <SeniorHomeView onSwitchToNormalMode={handleSwitchToNormalMode} />;
   }
 
   return (
     <div className="space-y-6 pb-6">
-      {/* Main Security Posture Header */}
       {isLoading ? (
         <SkeletonCard className="h-40" />
       ) : (
@@ -77,7 +75,6 @@ export default function Home() {
         />
       )}
 
-      {/* Quick Launchpad for Scanners */}
       <div className="space-y-3">
         <div className="flex items-center justify-between">
           <h2 className="text-xs font-bold uppercase tracking-widest" style={{ color: 'var(--ghost-text-dim)' }}>
@@ -88,7 +85,6 @@ export default function Home() {
         <QuickActions />
       </div>
 
-      {/* Threat Statistics & Telemetry */}
       <div className="space-y-3">
         <div className="flex items-center justify-between">
           <h2 className="text-xs font-bold uppercase tracking-widest" style={{ color: 'var(--ghost-text-dim)' }}>
@@ -105,7 +101,6 @@ export default function Home() {
         )}
       </div>
 
-      {/* Recent Inspection Activity */}
       <div className="space-y-3">
         <div className="flex items-center justify-between">
           <h2 className="text-xs font-bold uppercase tracking-widest" style={{ color: 'var(--ghost-text-dim)' }}>

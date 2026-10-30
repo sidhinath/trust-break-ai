@@ -3,6 +3,7 @@ import { Link, useNavigate, useLocation } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import { useAuth } from "@/lib/AuthContext";
 import UserModal from "@/components/auth/UserModal";
+import SignInModal from "@/components/auth/SignInModal";
 import CookieConsentBanner from "@/components/CookieConsentBanner";
 import { App as CapacitorApp } from "@capacitor/app";
 import { triggerHaptic } from "@/lib/haptics";
@@ -49,6 +50,7 @@ export default function Layout({ children, currentPageName }) {
     }
   });
   const [showUserModal, setShowUserModal] = useState(false);
+  const [showAuthModal, setShowAuthModal] = useState(false);
   const { user } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
@@ -275,11 +277,18 @@ export default function Layout({ children, currentPageName }) {
 
               <SeniorModeToggleSwitch variant="header" />
 
-              <Link
-                to="/"
+              <button
+                type="button"
+                onClick={() => {
+                  if (user) {
+                    setShowUserModal(true);
+                    return;
+                  }
+                  setShowAuthModal(true);
+                }}
                 className="h-9 px-3.5 rounded-xl text-xs font-bold flex items-center justify-center bg-gradient-to-r from-cyan-500 to-cyan-400 text-slate-950 shadow-sm transition-all hover:scale-105">
-                Sign In / Workspace →
-              </Link>
+                {user ? "Workspace →" : "Sign In / Workspace →"}
+              </button>
             </div>
           </div>
         </header>
@@ -796,6 +805,15 @@ export default function Layout({ children, currentPageName }) {
           })}
         </div>
       </nav>
+
+      <SignInModal
+        isOpen={showAuthModal}
+        onClose={() => setShowAuthModal(false)}
+        onSuccess={() => {
+          setShowAuthModal(false);
+          navigate(createPageUrl("Home"));
+        }}
+      />
 
       {/* User Login Details Modal */}
       <UserModal

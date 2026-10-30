@@ -1,4 +1,10 @@
 import React, { createContext, useContext, useMemo, useState } from 'react'
+import {
+  buildUserFromEmail,
+  signInLocalUser,
+  signUpLocalUser,
+  validateCredentials,
+} from '@/lib/authUtils'
 
 const AuthContext = createContext(null)
 
@@ -8,25 +14,6 @@ function getStoredGuestSession() {
     return rawSession ? JSON.parse(rawSession) : null
   } catch {
     return null
-  }
-}
-
-function buildUserFromEmail(email, displayName) {
-  const cleanEmail = (email || 'guest@ghostnet.ai').trim()
-  const baseName = displayName || cleanEmail.split('@')[0] || 'GhostNet User'
-  const idSuffix = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`
-
-  return {
-    uid: `ghostnet-${baseName.toLowerCase().replace(/\s+/g, '-')}-${idSuffix}`,
-    id: `ghostnet-${baseName.toLowerCase().replace(/\s+/g, '-')}-${idSuffix}`,
-    email: cleanEmail,
-    displayName: baseName,
-    emailVerified: true,
-    photoURL: '',
-    user_metadata: {
-      full_name: baseName,
-      avatar_url: '',
-    },
   }
 }
 
@@ -79,22 +66,23 @@ export function AuthProvider({ children }) {
   const continueAsGuest = () => {
     const demoUser = buildUserFromEmail('operator@ghostnet.ai', 'GhostNet Defense Operator')
     persistGuestSession(demoUser)
+    return demoUser
   }
 
   const signUp = async (email, password, name) => {
-    const userObj = buildUserFromEmail(email, name || email.split('@')[0])
+    const { user: userObj } = signUpLocalUser(email, password, name)
     persistGuestSession(userObj)
     return userObj
   }
 
   const signIn = async (email, password) => {
-    const userObj = buildUserFromEmail(email, email.split('@')[0])
+    const { user: userObj } = signInLocalUser(email, password)
     persistGuestSession(userObj)
     return userObj
   }
 
   const signInWithGoogle = async () => {
-    const userObj = buildUserFromEmail('analyst@ghostnet.ai', 'GhostNet User')
+    const userObj = buildUserFromEmail('analyst@trustbreak.ai', 'TrustBreak User')
     persistGuestSession(userObj)
     return userObj
   }
