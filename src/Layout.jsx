@@ -10,7 +10,7 @@ import { triggerHaptic } from "@/lib/haptics";
 import { 
   MessageSquareWarning, Link2, Image, Map, AlertTriangle, User, Home, 
   Menu, X, Cpu, Lock, HeartHandshake, Sun, Moon, Mic, QrCode, Shield,
-  FileText, Settings, ArrowLeft
+  FileText, Settings, ArrowLeft, Zap
 } from "lucide-react";
 import SeniorModeToggleSwitch from "@/components/SeniorModeToggleSwitch";
 import { ConstellationField } from "@/shaders/constellation-field/ConstellationField";
@@ -51,6 +51,7 @@ export default function Layout({ children, currentPageName }) {
   });
   const [showUserModal, setShowUserModal] = useState(false);
   const [showAuthModal, setShowAuthModal] = useState(false);
+  const [policyMenuOpen, setPolicyMenuOpen] = useState(false);
   const { user } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
@@ -151,6 +152,15 @@ export default function Layout({ children, currentPageName }) {
     });
   };
 
+  const handleExitCurrentTab = async () => {
+    await triggerHaptic('light');
+    if (window.history.length > 1 && window.history.state && window.history.state.idx > 0) {
+      navigate(-1);
+      return;
+    }
+    navigate(createPageUrl("Home"));
+  };
+
   // Initialize theme from localStorage or default to light
   const [theme, setTheme] = useState(() => {
     return localStorage.getItem("ghostnet_theme") || "light";
@@ -217,6 +227,26 @@ export default function Layout({ children, currentPageName }) {
     { name: "Settings", page: "Settings", icon: Settings },
   ];
 
+  const securityToolLinks = [
+    { label: "Scan Message", page: "MessageScanner", icon: MessageSquareWarning },
+    { label: "Scan Link / URL", page: "LinkScanner", icon: Link2 },
+    { label: "Scan Screenshot", page: "ScreenshotScanner", icon: Image },
+    { label: "QR Code Inspector", page: "QRScanner", icon: QrCode },
+    { label: "Voice & Audio Scam", page: "VoiceScanner", icon: Mic },
+    { label: "Browser Shield & Ext", page: "BrowserShield", icon: Shield },
+    { label: "Threat Intelligence", page: "ScamHeatmap", icon: Map },
+    { label: "Report Scam Threat", page: "ReportScam", icon: AlertTriangle },
+  ];
+
+  const policyLinks = [
+    { label: "Privacy Policy", page: "PrivacyPolicy" },
+    { label: "Terms of Service", page: "Terms" },
+    { label: "Cookie Policy", page: "CookiePolicy" },
+    { label: "Refund Policy", page: "RefundPolicy" },
+    { label: "Data Sovereignty", page: "PrivacyCenter" },
+    { label: "Pricing & Business", page: "BusinessModel" },
+  ];
+
   if (!user) {
     return (
       <div className="min-h-screen flex flex-col transition-colors duration-300 relative" style={{ background: 'var(--ghost-bg)', color: 'var(--ghost-text)' }}>
@@ -235,36 +265,89 @@ export default function Layout({ children, currentPageName }) {
         <header className="sticky top-0 z-40 h-16 border-b backdrop-blur-xl transition-colors duration-300"
           style={{ background: 'var(--ghost-surface)', borderColor: 'var(--ghost-border)' }}>
           <div className="flex items-center justify-between h-full px-4 sm:px-6 max-w-7xl mx-auto w-full">
-            <Link to="/" className="flex items-center gap-2.5 group">
-              <div className="w-8 h-8 rounded-lg overflow-hidden border border-cyan-500/40 shadow-[0_0_15px_rgba(0,229,255,0.4)] flex items-center justify-center bg-slate-950">
-                <img src="/logo-icon.svg" alt="TrustBreak AI Logo" className="w-full h-full object-cover" />
-              </div>
-              <span className="text-base sm:text-lg font-black tracking-tight font-display" style={{ color: 'var(--ghost-text)' }}>
-                TrustBreak AI
-              </span>
-            </Link>
+            {currentPageName !== "Home" && (
+              <button
+                type="button"
+                onClick={handleExitCurrentTab}
+                className="mr-2 h-8 rounded-lg border px-2.5 text-[10px] font-bold uppercase tracking-[0.14em] transition-all hover:border-cyan-400 hover:text-cyan-400"
+                style={{ background: 'var(--ghost-surface-2)', borderColor: 'var(--ghost-border)', color: 'var(--ghost-text-dim)' }}
+              >
+                Exit
+              </button>
+            )}
 
-            {/* Center Policy Nav Links */}
-            <nav className="hidden lg:flex items-center gap-5 text-xs font-bold">
-              <Link to="/PrivacyPolicy" className={`transition-colors ${currentPageName === 'PrivacyPolicy' ? 'text-cyan-500 font-extrabold' : 'hover:text-cyan-500'}`} style={{ color: currentPageName === 'PrivacyPolicy' ? undefined : 'var(--ghost-text-dim)' }}>
-                Privacy Policy
+            <div className="flex items-center gap-3">
+              <Link to="/" className="flex items-center gap-2.5 group">
+                <div className="w-8 h-8 rounded-lg overflow-hidden border border-cyan-500/40 shadow-[0_0_15px_rgba(0,229,255,0.4)] flex items-center justify-center bg-slate-950">
+                  <img src="/logo-icon.svg" alt="TrustBreak AI Logo" className="w-full h-full object-cover" />
+                </div>
+                <span className="text-base sm:text-lg font-black tracking-tight font-display" style={{ color: 'var(--ghost-text)' }}>
+                  TrustBreak AI
+                </span>
               </Link>
-              <Link to="/Terms" className={`transition-colors ${currentPageName === 'Terms' ? 'text-cyan-500 font-extrabold' : 'hover:text-cyan-500'}`} style={{ color: currentPageName === 'Terms' ? undefined : 'var(--ghost-text-dim)' }}>
-                Terms of Service
+
+              <div className="relative hidden lg:block">
+                <button
+                  type="button"
+                  aria-label="Open policy menu"
+                  onClick={() => setPolicyMenuOpen((prev) => !prev)}
+                  className="flex h-9 w-9 items-center justify-center rounded-xl border transition-all hover:border-cyan-400"
+                  style={{ background: 'var(--ghost-surface-2)', borderColor: 'var(--ghost-border)', color: 'var(--ghost-text)' }}
+                >
+                  <div className="flex flex-col items-center justify-center gap-[3px]">
+                    <span className="block h-0.5 w-4 rounded-full bg-current" />
+                    <span className="block h-0.5 w-4 rounded-full bg-current" />
+                    <span className="block h-0.5 w-4 rounded-full bg-current" />
+                  </div>
+                </button>
+
+                {policyMenuOpen && (
+                  <div className="absolute left-0 top-12 z-50 min-w-[260px] rounded-2xl border p-2 shadow-2xl backdrop-blur-xl"
+                    style={{ background: 'var(--ghost-surface)', borderColor: 'var(--ghost-border)' }}>
+                    <div className="mb-2 px-2 pt-1 pb-1 text-[10px] font-bold uppercase tracking-[0.18em]" style={{ color: 'var(--ghost-text-dim)' }}>
+                      Security Scanners & Tools
+                    </div>
+                    <div className="grid gap-1">
+                      {securityToolLinks.map(({ label, page, icon: Icon }) => (
+                        <Link
+                          key={page}
+                          to={createPageUrl(page)}
+                          onClick={() => setPolicyMenuOpen(false)}
+                          className={`flex items-center gap-2 rounded-xl px-3 py-2 text-left text-xs font-bold transition-colors ${currentPageName === page ? 'text-cyan-500' : 'hover:text-cyan-500'}`}
+                          style={{ color: currentPageName === page ? 'var(--ghost-text)' : 'var(--ghost-text-dim)' }}
+                        >
+                          <Icon className="h-3.5 w-3.5" />
+                          {label}
+                        </Link>
+                      ))}
+                    </div>
+                    <div className="my-2 h-px w-full" style={{ background: 'var(--ghost-border)' }} />
+                    <div className="grid gap-1">
+                      {policyLinks.map(({ label, page }) => (
+                        <Link
+                          key={page}
+                          to={createPageUrl(page)}
+                          onClick={() => setPolicyMenuOpen(false)}
+                          className={`rounded-xl px-3 py-2 text-left text-xs font-bold transition-colors ${currentPageName === page ? 'text-cyan-500' : 'hover:text-cyan-500'}`}
+                          style={{ color: currentPageName === page ? 'var(--ghost-text)' : 'var(--ghost-text-dim)' }}
+                        >
+                          {label}
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              <Link
+                to={createPageUrl("ScanHub")}
+                className="hidden sm:inline-flex items-center gap-2 rounded-xl border px-3 py-2 text-[10px] font-black uppercase tracking-[0.18em] transition-all hover:border-cyan-400 hover:text-cyan-400"
+                style={{ background: 'var(--ghost-surface-2)', borderColor: 'var(--ghost-border)', color: 'var(--ghost-text-dim)' }}
+              >
+                <Zap className="h-3.5 w-3.5 text-cyan-500" />
+                Universal Scanner
               </Link>
-              <Link to="/CookiePolicy" className={`transition-colors ${currentPageName === 'CookiePolicy' ? 'text-cyan-500 font-extrabold' : 'hover:text-cyan-500'}`} style={{ color: currentPageName === 'CookiePolicy' ? undefined : 'var(--ghost-text-dim)' }}>
-                Cookie Policy
-              </Link>
-              <Link to="/RefundPolicy" className={`transition-colors ${currentPageName === 'RefundPolicy' ? 'text-cyan-500 font-extrabold' : 'hover:text-cyan-500'}`} style={{ color: currentPageName === 'RefundPolicy' ? undefined : 'var(--ghost-text-dim)' }}>
-                Refund Policy
-              </Link>
-              <Link to="/PrivacyCenter" className={`transition-colors ${currentPageName === 'PrivacyCenter' ? 'text-cyan-500 font-extrabold' : 'hover:text-cyan-500'}`} style={{ color: currentPageName === 'PrivacyCenter' ? undefined : 'var(--ghost-text-dim)' }}>
-                Data Sovereignty
-              </Link>
-              <Link to="/BusinessModel" className={`transition-colors ${currentPageName === 'BusinessModel' ? 'text-cyan-500 font-extrabold' : 'hover:text-cyan-500'}`} style={{ color: currentPageName === 'BusinessModel' ? undefined : 'var(--ghost-text-dim)' }}>
-                Pricing & Business
-              </Link>
-            </nav>
+            </div>
 
             <div className="flex items-center gap-2 sm:gap-3">
               <button
@@ -355,14 +438,7 @@ export default function Layout({ children, currentPageName }) {
             {currentPageName !== "Home" && (
               <button
                 type="button"
-                onClick={async () => {
-                  await triggerHaptic('light');
-                  if (window.history.length > 1) {
-                    navigate(-1);
-                  } else {
-                    navigate(createPageUrl("Home"));
-                  }
-                }}
+                onClick={handleExitCurrentTab}
                 aria-label="Go Back"
                 title="Go Back"
                 className="h-9 px-2.5 rounded-xl border flex items-center justify-center gap-1.5 transition-all cursor-pointer hover:border-cyan-400 active:scale-95 shrink-0"
@@ -377,38 +453,49 @@ export default function Layout({ children, currentPageName }) {
             )}
 
             {/* Brand Logo with updated logo-icon.svg asset */}
-            <Link to={createPageUrl("Home")} className="flex items-center gap-2.5 group">
-              <div className="w-8 h-8 rounded-lg overflow-hidden border border-cyan-500/40 shadow-[0_0_12px_rgba(0,229,255,0.3)] group-hover:scale-105 transition-transform flex items-center justify-center bg-slate-950">
-                <img src="/logo-icon.svg" alt="TrustBreak AI Logo" className="w-full h-full object-cover" />
-              </div>
-              <div className="flex items-baseline gap-1.5">
-                <span className="text-base sm:text-lg font-black tracking-tight font-display"
-                  style={{ color: 'var(--ghost-text)' }}>
-                  TrustBreak AI
-                </span>
-                <span className="hidden sm:inline-block text-[10px] font-mono font-bold px-1.5 py-0.2 rounded bg-cyan-500/10 text-cyan-500 border border-cyan-500/30">
-                  PRO DEFENSE
-                </span>
-              </div>
-            </Link>
+            <div className="flex items-center gap-2.5 sm:gap-3">
+              <Link to={createPageUrl("Home")} className="flex items-center gap-2.5 group">
+                <div className="w-8 h-8 rounded-lg overflow-hidden border border-cyan-500/40 shadow-[0_0_12px_rgba(0,229,255,0.3)] group-hover:scale-105 transition-transform flex items-center justify-center bg-slate-950">
+                  <img src="/logo-icon.svg" alt="TrustBreak AI Logo" className="w-full h-full object-cover" />
+                </div>
+                <div className="flex items-baseline gap-1.5">
+                  <span className="text-base sm:text-lg font-black tracking-tight font-display"
+                    style={{ color: 'var(--ghost-text)' }}>
+                    TrustBreak AI
+                  </span>
+                  <span className="hidden sm:inline-block text-[10px] font-mono font-bold px-1.5 py-0.2 rounded bg-cyan-500/10 text-cyan-500 border border-cyan-500/30">
+                    PRO DEFENSE
+                  </span>
+                </div>
+              </Link>
 
-            {/* Desktop & Tablet Sidebar Open/Close Toggle Button */}
-            <button
-              type="button"
-              onClick={async () => {
-                await triggerHaptic('light');
-                toggleSidebar();
-              }}
-              aria-label={sidebarOpen ? "Close Sidebar Navigation" : "Open Sidebar Navigation"}
-              title={sidebarOpen ? "Close Sidebar Navigation" : "Open Sidebar Navigation"}
-              className="hidden md:flex w-9 h-9 rounded-xl items-center justify-center border transition-all cursor-pointer hover:border-cyan-400 active:scale-95 shrink-0"
-              style={{
-                background: 'var(--ghost-surface-2)',
-                borderColor: 'var(--ghost-border)',
-                color: 'var(--ghost-text)'
-              }}>
-              <Menu className="w-4 h-4 text-cyan-500 group-hover:scale-110 transition-transform pointer-events-none" />
-            </button>
+              {/* Desktop & Tablet Sidebar Open/Close Toggle Button placed beside the brand */}
+              <button
+                type="button"
+                onClick={async () => {
+                  await triggerHaptic('light');
+                  toggleSidebar();
+                }}
+                aria-label={sidebarOpen ? "Close Sidebar Navigation" : "Open Sidebar Navigation"}
+                title={sidebarOpen ? "Close Sidebar Navigation" : "Open Sidebar Navigation"}
+                className="hidden md:flex w-9 h-9 rounded-xl items-center justify-center border transition-all cursor-pointer hover:border-cyan-400 active:scale-95 shrink-0"
+                style={{
+                  background: 'var(--ghost-surface-2)',
+                  borderColor: 'var(--ghost-border)',
+                  color: 'var(--ghost-text)'
+                }}>
+                <Menu className="w-4 h-4 text-cyan-500 group-hover:scale-110 transition-transform pointer-events-none" />
+              </button>
+
+              <Link
+                to={createPageUrl("ScanHub")}
+                className="hidden xl:inline-flex items-center gap-2 rounded-xl border px-3 py-2 text-[10px] font-black uppercase tracking-[0.18em] transition-all hover:border-cyan-400 hover:text-cyan-400"
+                style={{ background: 'var(--ghost-surface-2)', borderColor: 'var(--ghost-border)', color: 'var(--ghost-text-dim)' }}
+              >
+                <Zap className="h-3.5 w-3.5 text-cyan-500" />
+                Universal Scanner
+              </Link>
+            </div>
           </div>
 
           {/* Right Header Utility Controls */}
