@@ -1,0 +1,26 @@
+<svg width="1200" height="420" viewBox="0 0 1200 420" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="78" y1="52" x2="316" y2="336" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#070E1F"/>
+      <stop offset="1" stop-color="#0F2038"/>
+    </linearGradient>
+    <linearGradient id="ring" x1="122" y1="88" x2="318" y2="316" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#5EE7FF"/>
+      <stop offset="0.5" stop-color="#00C2FF"/>
+      <stop offset="1" stop-color="#7CFFBF"/>
+    </linearGradient>
+  </defs>
+
+  <rect x="32" y="32" width="300" height="300" rx="74" fill="url(#bg)"/>
+  <path d="M182 84C123.6 84 76 131.6 76 190V216.7C76 261.2 100.2 302.4 142.4 328.3L171.8 347.1C179.9 351.9 189.9 351.9 198 347.1L227.4 328.3C269.6 302.4 293.8 261.2 293.8 216.7V190C293.8 131.6 246.2 84 187.8 84H182Z" fill="url(#ring)" fill-opacity="0.12" stroke="url(#ring)" stroke-width="12"/>
+  <path d="M136 136H228V167H197V262H170V167H136V136Z" fill="#EAFEFF"/>
+  <path d="M196 152C196 145.4 201.4 140 208 140H236.5C243.1 140 248.5 145.4 248.5 152V154.5C248.5 161.1 243.1 166.5 236.5 166.5H208C201.4 166.5 196 161.1 196 154.5V152Z" fill="#7CFFBF"/>
+  <path d="M149 168H184C213.8 168 235.5 187.9 235.5 214C235.5 241.6 213.8 260 184 260H149V168ZM176 194V234H182C200.8 234 213.5 223.8 213.5 214C213.5 204.2 200.8 194 182 194H176Z" fill="#F0FEFF"/>
+  <path d="M108 268C122.7 299.5 155.7 320 182 320C208.3 320 241.3 299.5 256 268" stroke="#7CFFBF" stroke-width="12" stroke-linecap="round"/>
+
+  <g transform="translate(380 120)">
+    <text x="0" y="120" font-size="112" font-weight="800" fill="#EAFEFF" font-family="Inter, Segoe UI, Arial, sans-serif" letter-spacing="-3">TrustBreak</text>
+    <text x="6" y="178" font-size="34" font-weight="700" fill="#7BDFF8" font-family="Inter, Segoe UI, Arial, sans-serif" letter-spacing="8">AI SECURITY</text>
+    <rect x="4" y="204" width="250" height="8" rx="4" fill="url(#ring)"/>
+  </g>
+</svg>

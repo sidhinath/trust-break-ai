@@ -1,0 +1,133 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>GhostNet AI</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      width: 340px;
+      margin: 0;
+      padding: 16px;
+      background: #090d16;
+      color: #f1f5f9;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #1e293b;
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 15px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+    }
+    .logo span { color: #06b6d4; }
+    .badge {
+      font-size: 9px;
+      font-family: monospace;
+      padding: 2px 6px;
+      border-radius: 4px;
+      background: rgba(6, 182, 212, 0.15);
+      color: #06b6d4;
+      border: 1px solid rgba(6, 182, 212, 0.3);
+    }
+    .input-box {
+      width: 100%;
+      height: 70px;
+      background: #0f172a;
+      border: 1px solid #1e293b;
+      border-radius: 8px;
+      color: #f1f5f9;
+      padding: 8px 10px;
+      font-size: 12px;
+      resize: none;
+      outline: none;
+      margin-bottom: 10px;
+    }
+    .input-box:focus { border-color: #06b6d4; }
+    .btn {
+      width: 100%;
+      padding: 9px;
+      background: #06b6d4;
+      border: none;
+      border-radius: 8px;
+      color: #041019;
+      font-weight: 700;
+      font-size: 12px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+    .btn:hover { background: #22d3ee; }
+    .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    .result {
+      margin-top: 14px;
+      padding: 12px;
+      border-radius: 8px;
+      background: #0f172a;
+      border: 1px solid #1e293b;
+      display: none;
+    }
+    .result.show { display: block; }
+    .score-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+    .score-val {
+      font-size: 24px;
+      font-weight: 900;
+      font-family: monospace;
+    }
+    .score-safe { color: #10b981; }
+    .score-suspicious { color: #f59e0b; }
+    .score-scam { color: #ef4444; }
+    .reasons {
+      font-size: 11px;
+      color: #94a3b8;
+      line-height: 1.4;
+      margin: 0;
+      padding-left: 14px;
+    }
+    .footer {
+      margin-top: 14px;
+      text-align: center;
+      font-size: 10px;
+      color: #64748b;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="logo">GhostNet<span>.ai</span></div>
+    <span class="badge">PRO SHIELD</span>
+  </div>
+
+  <textarea id="scanInput" class="input-box" placeholder="Paste link or suspicious message to scan..."></textarea>
+  <button id="scanBtn" class="btn">Inspect Threat</button>
+
+  <div id="resultBox" class="result">
+    <div class="score-row">
+      <span id="riskBadge" style="font-size: 11px; font-weight: 700; text-transform: uppercase;"></span>
+      <span id="scoreVal" class="score-val">--</span>
+    </div>
+    <p id="analysisText" style="font-size: 11px; color: #cbd5e1; margin: 0 0 8px 0;"></p>
+    <ul id="reasonsList" class="reasons"></ul>
+  </div>
+
+  <div class="footer">Real-time heuristics & neural defense active</div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

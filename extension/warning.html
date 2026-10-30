@@ -1,0 +1,155 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>GhostNet AI — Pre-Click Threat Intercepted</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: radial-gradient(circle at top, #1e1028 0%, #060a12 100%);
+      color: #f8fafc;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+    .card {
+      max-width: 540px;
+      width: 100%;
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid rgba(239, 68, 68, 0.4);
+      border-radius: 20px;
+      box-shadow: 0 25px 50px -12px rgba(239, 68, 68, 0.25);
+      padding: 36px 32px;
+      text-align: center;
+      backdrop-filter: blur(16px);
+    }
+    .shield-icon {
+      width: 64px;
+      height: 64px;
+      margin: 0 auto 20px;
+      background: rgba(239, 68, 68, 0.15);
+      border: 2px solid #ef4444;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #ef4444;
+      font-size: 32px;
+      font-weight: 900;
+      box-shadow: 0 0 24px rgba(239, 68, 68, 0.4);
+    }
+    .badge {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      background: rgba(239, 68, 68, 0.2);
+      color: #f87171;
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      padding: 4px 12px;
+      border-radius: 9999px;
+      margin-bottom: 12px;
+    }
+    h1 {
+      font-size: 24px;
+      font-weight: 800;
+      margin: 0 0 10px;
+      color: #ffffff;
+      letter-spacing: -0.5px;
+    }
+    p {
+      font-size: 14px;
+      line-height: 1.6;
+      color: #94a3b8;
+      margin: 0 0 24px;
+    }
+    .domain-pill {
+      display: inline-block;
+      font-family: monospace;
+      font-size: 13px;
+      font-weight: 700;
+      background: #020617;
+      border: 1px solid #334155;
+      padding: 6px 14px;
+      border-radius: 8px;
+      color: #f87171;
+      word-break: break-all;
+      margin-bottom: 24px;
+    }
+    .actions {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .btn-safe {
+      background: #06b6d4;
+      color: #041019;
+      font-weight: 700;
+      font-size: 14px;
+      padding: 12px 20px;
+      border-radius: 12px;
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.15s;
+    }
+    .btn-safe:hover { background: #22d3ee; }
+    .btn-bypass {
+      background: transparent;
+      color: #64748b;
+      font-size: 12px;
+      border: none;
+      cursor: pointer;
+      text-decoration: underline;
+      padding: 6px;
+    }
+    .btn-bypass:hover { color: #94a3b8; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="shield-icon">🛡️</div>
+    <span class="badge">Malicious Threat Intercepted</span>
+    <h1>GhostNet AI Blocked This Page</h1>
+    <p>
+      GhostNet Pre-Click Interceptor prevented this connection before page load because the destination domain matches known malicious phishing or credential-harvesting infrastructure.
+    </p>
+
+    <div id="domainBox" class="domain-pill">Malicious Domain</div>
+
+    <div class="actions">
+      <button id="backBtn" class="btn-safe">Back to Safety</button>
+      <button id="bypassBtn" class="btn-bypass">Proceed anyway (unsafe)</button>
+    </div>
+  </div>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const blockedDomain = params.get("blocked_domain") || "Known Malicious Domain";
+    const targetUrl = params.get("target");
+
+    document.getElementById("domainBox").textContent = blockedDomain;
+
+    document.getElementById("backBtn").addEventListener("click", () => {
+      if (window.history.length > 1) {
+        window.history.back();
+      } else {
+        window.close();
+      }
+    });
+
+    document.getElementById("bypassBtn").addEventListener("click", () => {
+      if (targetUrl) {
+        window.location.replace(targetUrl);
+      } else {
+        alert("Original target URL is not specified.");
+      }
+    });
+  </script>
+</body>
+</html>

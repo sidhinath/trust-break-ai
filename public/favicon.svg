@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <defs>
+    <linearGradient id="tb-bg" x1="12" y1="8" x2="54" y2="58" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0A1225"/>
+      <stop offset="1" stop-color="#122A3F"/>
+    </linearGradient>
+    <linearGradient id="tb-ring" x1="16" y1="14" x2="49" y2="52" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#6FE8FF"/>
+      <stop offset="0.5" stop-color="#00BCFF"/>
+      <stop offset="1" stop-color="#7EFFC1"/>
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="18" fill="url(#tb-bg)"/>
+  <path d="M32 8C23.7 8 17 14.7 17 23V26.6C17 34.2 20.5 40.9 27 45.1L30.6 47.6C31.5 48.2 32.9 48.2 33.8 47.6L37.4 45.1C44 40.9 47.5 34.2 47.5 26.6V23C47.5 14.7 40.8 8 32 8Z" fill="url(#tb-ring)" fill-opacity="0.14" stroke="url(#tb-ring)" stroke-width="2.5"/>
+  <path d="M22 20H42V24H35V43H29V24H22V20Z" fill="#EAFDFF"/>
+  <path d="M33.5 22H40.5C43.4 22 45.5 24.1 45.5 27V27.8C45.5 30.7 43.4 32.8 40.5 32.8H33.5V22Z" fill="#7DFFC0"/>
+  <path d="M23 27H29.5C33.7 27 36.5 29.8 36.5 33.5C36.5 37.2 33.7 40 29.5 40H23V27ZM27 30.3V36.7H29.2C31.3 36.7 32.7 35.4 32.7 33.5C32.7 31.6 31.3 30.3 29.2 30.3H27Z" fill="#F1FEFF"/>
+</svg>
