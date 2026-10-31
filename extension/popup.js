@@ -1,11 +1,26 @@
 const DEFAULT_API_BASE = "https://trust-break-ai.vercel.app";
+const REQUEST_TIMEOUT_MS = 20000;
+
+function normalizeApiBase(value) {
+  return String(value || DEFAULT_API_BASE).replace(/\/+$/, "");
+}
 
 async function getApiBase() {
   return new Promise((resolve) => {
     chrome.storage.local.get(["apiBaseUrl"], (result) => {
-      resolve(result.apiBaseUrl || DEFAULT_API_BASE);
+      resolve(normalizeApiBase(result.apiBaseUrl));
     });
   });
+}
+
+function setErrorState(riskBadge, scoreVal, analysisText, reasonsList, resultBox, message) {
+  riskBadge.textContent = "ERROR";
+  riskBadge.style.color = "#ef4444";
+  scoreVal.textContent = "--";
+  scoreVal.className = "score-val";
+  analysisText.textContent = message;
+  reasonsList.innerHTML = "";
+  resultBox.classList.add("show");
 }
 
 document.addEventListener("DOMContentLoaded", async () => {
@@ -38,6 +53,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     const isUrl = /^https?:\/\//i.test(text);
     const type = isUrl ? "link" : "message";
     const payload = isUrl ? { url: text } : { message: text };
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
 
     try {
       const apiBase = await getApiBase();
@@ -45,6 +62,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ type, payload }),
+        signal: controller.signal,
       });
 
       if (!resp.ok) {
@@ -52,30 +70,37 @@ document.addEventListener("DOMContentLoaded", async () => {
       }
 
       const data = await resp.json();
-      const score = data.fraud_score || 0;
+      const numericScore = Number(data.fraud_score);
+      const score = Number.isFinite(numericScore) ? Math.max(0, Math.min(100, Math.round(numericScore))) : 0;
       const risk = data.risk_level || (score >= 70 ? "scam" : score >= 35 ? "suspicious" : "safe");
 
       scoreVal.textContent = `${score}/100`;
       scoreVal.className = `score-val score-${risk}`;
 
-      riskBadge.textContent = `${risk.toUpperCase()} RISK`;
+      riskBadge.textContent = `${String(risk).toUpperCase()} RISK`;
       riskBadge.style.color =
         risk === "scam" ? "#ef4444" : risk === "suspicious" ? "#f59e0b" : "#10b981";
 
-      analysisText.textContent = data.analysis || data.ai_analysis || "Threat analysis complete.";
+      analysisText.textContent =
+        data.explanation || data.analysis || data.ai_analysis || "Threat analysis complete.";
 
       reasonsList.innerHTML = "";
-      const reasons = data.reasons || [];
-      for (const r of reasons.slice(0, 3)) {
+      const reasons = Array.isArray(data.reasons) ? data.reasons : [];
+      for (const reason of reasons.slice(0, 3)) {
         const li = document.createElement("li");
-        li.textContent = r;
+        li.textContent = String(reason);
         reasonsList.appendChild(li);
       }
 
       resultBox.classList.add("show");
     } catch (err) {
-      alert("Analysis error: " + err.message);
+      const message =
+        err.name === "AbortError"
+          ? "Analysis timed out. Check your connection and try again."
+          : `Analysis error: ${err.message}`;
+      setErrorState(riskBadge, scoreVal, analysisText, reasonsList, resultBox, message);
     } finally {
+      clearTimeout(timeout);
       scanBtn.disabled = false;
       scanBtn.textContent = "Inspect Threat";
     }

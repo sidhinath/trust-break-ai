@@ -128,28 +128,6 @@
     </div>
   </div>
 
-  <script>
-    const params = new URLSearchParams(window.location.search);
-    const blockedDomain = params.get("blocked_domain") || "Known Malicious Domain";
-    const targetUrl = params.get("target");
-
-    document.getElementById("domainBox").textContent = blockedDomain;
-
-    document.getElementById("backBtn").addEventListener("click", () => {
-      if (window.history.length > 1) {
-        window.history.back();
-      } else {
-        window.close();
-      }
-    });
-
-    document.getElementById("bypassBtn").addEventListener("click", () => {
-      if (targetUrl) {
-        window.location.replace(targetUrl);
-      } else {
-        alert("Original target URL is not specified.");
-      }
-    });
-  </script>
+  <script src="warning.js"></script>
 </body>
 </html>

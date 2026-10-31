@@ -10,6 +10,25 @@ export default function BrowserShield() {
   const [simulatingBlock, setSimulatingBlock] = useState(false);
   const [blocklistFeed, setBlocklistFeed] = useState([]);
   const [feedLoading, setFeedLoading] = useState(true);
+  const [extensionVersion, setExtensionVersion] = useState(null);
+
+  useEffect(() => {
+    const readVersion = () =>
+      document.documentElement.getAttribute("data-trustbreak-extension");
+    const syncVersion = () => {
+      const version = readVersion();
+      if (version) setExtensionVersion(version);
+    };
+
+    syncVersion();
+    document.addEventListener("trustbreak-extension-ready", syncVersion);
+    const timers = [setTimeout(syncVersion, 600), setTimeout(syncVersion, 1800)];
+
+    return () => {
+      document.removeEventListener("trustbreak-extension-ready", syncVersion);
+      timers.forEach((timer) => clearTimeout(timer));
+    };
+  }, []);
 
   useEffect(() => {
     fetch("/api/blocklist-lite")
@@ -54,6 +73,24 @@ export default function BrowserShield() {
         description="Active Manifest V3 browser protection: background navigation analysis, zero-lag shadow DOM threat overlays, and declarative pre-click domain interception"
         color="#10b981"
       />
+
+      <div className="tb-card p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+        <div className="flex items-center gap-2">
+          <span
+            className={`w-2 h-2 rounded-full ${extensionVersion ? "bg-emerald-400 animate-pulse" : "bg-amber-400"}`}
+          />
+          <span className="text-xs font-bold" style={{ color: "var(--tb-text)" }}>
+            {extensionVersion
+              ? `Browser Shield active · v${extensionVersion}`
+              : "Browser Shield extension not detected in this browser"}
+          </span>
+        </div>
+        <span className="text-[11px] font-mono" style={{ color: "var(--tb-text-dim)" }}>
+          {extensionVersion
+            ? "Connected through the content-script bridge"
+            : "Load the unpacked build from dist-extension/ to activate"}
+        </span>
+      </div>
 
       {/* Feature 7 & 8 Architecture Overview Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -238,7 +275,9 @@ export default function BrowserShield() {
             style={{ background: "var(--tb-surface-2)", borderColor: "var(--tb-border)" }}>
             <span className="text-[11px] font-bold text-cyan-400 block">Step 3</span>
             <p className="text-xs font-medium" style={{ color: "var(--tb-text)" }}>
-              Click <strong>Load unpacked</strong> and select the <code className="text-cyan-400 font-mono">extension/</code> folder!
+              Click <strong>Load unpacked</strong> and select the <code className="text-cyan-400 font-mono">dist-extension/</code> build folder
+              (or <code className="text-cyan-400 font-mono">extension/</code> for source development). Run{" "}
+              <code className="text-cyan-400 font-mono">npm run build:extension</code> first.
             </p>
           </div>
         </div>

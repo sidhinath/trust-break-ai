@@ -235,10 +235,11 @@ npm run preview
 |---|---|
 | `npm run dev` | Start the Vite development server |
 | `npm run build` | Create a production build |
+| `npm run build:extension` | Validate and build the Browser Shield extension into `dist-extension/` |
 | `npm run preview` | Preview the production build locally |
 | `npm run lint` | Run ESLint |
 | `npm run lint:fix` | Auto-fix lint issues |
-| `npm test` | Run the scanner and TinyFish test suites |
+| `npm test` | Run the scanner, TinyFish, and extension test suites |
 | `npm run typecheck` | Run TypeScript checks |
 | `npm run dev:vercel` | Run the project with Vercel CLI (includes `/api` functions) |
 | `npm run supabase:setup` | Apply `supabase/full-setup.sql` |
@@ -259,12 +260,23 @@ npx cap open android
 
 ### Chrome extension
 
-The Manifest V3 extension lives in `extension/`.
+The Manifest V3 Browser Shield extension lives in `extension/`. Build a clean,
+production-ready folder with:
+
+```bash
+npm run build:extension
+```
+
+This creates `dist-extension/` after validating the manifest, referenced files,
+icons, and MV3 CSP constraints.
 
 1. Open `chrome://extensions`
 2. Enable **Developer mode**
 3. Click **Load unpacked**
-4. Select the `extension/` directory
+4. Select the `dist-extension/` directory (or `extension/` for source development)
+
+Full per-browser instructions for Chrome, Brave, Edge, and Opera are in
+[`extension/INSTALL.md`](./extension/INSTALL.md).
 
 ---
 
@@ -297,7 +309,8 @@ TrustBreak AI/
 │   ├── blocklist-lite.js    # Pre-click blocklist endpoint
 │   ├── tinyfish/            # Live web investigation
 │   └── cron/                # Daily threat-feed sync
-├── extension/               # Chrome MV3 Browser Shield extension
+├── extension/               # Chrome MV3 Browser Shield extension (see INSTALL.md)
+├── dist-extension/          # Built, load-unpacked-ready extension (generated)
 ├── src/
 │   ├── components/          # UI, scanners, auth, dashboard components
 │   ├── hooks/               # Reusable hooks, including protected-feature gating

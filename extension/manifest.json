@@ -1,13 +1,14 @@
 {
   "manifest_version": 3,
   "name": "TrustBreak AI — Phishing & Scam Shield",
+  "short_name": "TrustBreak AI",
   "version": "1.0.0",
+  "minimum_chrome_version": "102",
   "description": "Real-time AI-powered phishing, URL typosquatting, and social engineering detector.",
   "permissions": [
     "webNavigation",
     "tabs",
     "storage",
-    "scripting",
     "declarativeNetRequest",
     "alarms"
   ],

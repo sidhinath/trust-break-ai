@@ -8,7 +8,8 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "test": "node --test tests/scanner.test.js tests/tinyfish.test.js",
+    "test": "node --test tests/scanner.test.js tests/tinyfish.test.js tests/extension.test.js",
+    "build:extension": "node scripts/build-extension.mjs",
     "lint": "eslint . --quiet",
     "lint:fix": "eslint . --fix",
     "typecheck": "tsc -p ./jsconfig.json",
