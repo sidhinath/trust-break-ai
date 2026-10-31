@@ -205,6 +205,44 @@ grant select, insert on table public.scam_reports to anon, authenticated;
 grant update, delete on table public.scan_history to authenticated;
 grant update, delete on table public.scam_reports to authenticated;
 
+-- Feature 8: Pre-Click Interceptor blocklist (public threat feeds)
+create table if not exists public.public_blocklist (
+  id bigserial primary key,
+  domain_hash text unique not null,
+  domain text,
+  source text not null default 'unknown',
+  added_at timestamptz not null default now()
+);
+
+alter table public.public_blocklist add column if not exists domain text;
+alter table public.public_blocklist add column if not exists source text not null default 'unknown';
+alter table public.public_blocklist add column if not exists added_at timestamptz not null default now();
+
+create index if not exists idx_public_blocklist_hash on public.public_blocklist (domain_hash);
+create index if not exists idx_public_blocklist_domain on public.public_blocklist (domain);
+
+alter table public.public_blocklist enable row level security;
+
+drop policy if exists public_blocklist_anon_read on public.public_blocklist;
+create policy public_blocklist_anon_read
+on public.public_blocklist
+for select
+to anon, authenticated
+using (true);
+
+drop policy if exists public_blocklist_service_write on public.public_blocklist;
+create policy public_blocklist_service_write
+on public.public_blocklist
+for all
+to service_role
+using (true)
+with check (true);
+
+grant usage on schema public to anon, authenticated;
+grant select on table public.public_blocklist to anon, authenticated;
+grant all on table public.public_blocklist to service_role;
+grant usage, select on sequence public.public_blocklist_id_seq to service_role;
+
 insert into storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
 values (
   'evidence',

@@ -103,19 +103,78 @@ until Developer mode is enabled.
    - Open the browser’s extension manager.
    - Click the reload icon on the TrustBreak AI card.
 
+### Enabling the Pre-Click Interceptor in production
+
+The endpoint is enabled by default. Set `ENABLE_PRE_CLICK_INTERCEPTOR=false` in the
+deployment environment only to disable it (kill switch).
+
+1. Apply the blocklist schema (idempotent):
+
+   ```bash
+   SUPABASE_PAT=... SUPABASE_PROJECT_REF=... \
+     SUPABASE_SQL_FILE=supabase/007-pre-click-interceptor.sql npm run supabase:sql
+   ```
+
+   Or paste `supabase/007-pre-click-interceptor.sql` into the Supabase SQL Editor.
+   `npm run supabase:setup` also creates the table now.
+
+2. Populate the table. The Vercel cron calls `/api/cron/sync-feeds` daily and upserts
+   OpenPhish/URLhaus domains. To populate immediately, call it with your `CRON_SECRET`:
+
+   ```bash
+   curl -H "Authorization: Bearer $CRON_SECRET" \
+     https://trust-break-ai.vercel.app/api/cron/sync-feeds
+   ```
+
+3. Verify the deployed endpoint:
+
+   ```bash
+   npm run verify:blocklist
+   ```
+
+   It must print `PASS` with a non-zero domain count.
+
+4. Reload the extension, then check the service worker console:
+
+   ```js
+   chrome.declarativeNetRequest.getDynamicRules().then(r => console.log(r.length))
+   // expected: one rule per blocklisted domain
+   ```
+
 ### Testing the Pre-Click Interceptor safely
 
-Do **not** visit a real malicious domain. Instead:
+Do **not** visit a real malicious domain. Use a reserved `.test` domain:
 
-1. Enable the endpoint on the server with `ENABLE_PRE_CLICK_INTERCEPTOR=true` and
-   deploy the app.
-2. Make sure the Supabase `public_blocklist` table has at least one test domain
-   (for example `example.test`).
-3. Wait for the extension to sync (on install, on browser startup, and every 30 minutes),
-   or reload the extension to trigger a sync.
-4. Navigate to a URL on that test domain. The extension should redirect to its
-   containment page.
-5. Click **Proceed anyway (unsafe)** to confirm the one-time bypass works.
+1. Add a temporary test row (or use any domain returned by the verifier):
+
+   ```sql
+   insert into public.public_blocklist (domain_hash, domain, source)
+   values ('trustbreak-e2e-test', 'trustbreak-e2e.test', 'manual-e2e')
+   on conflict (domain_hash) do nothing;
+   ```
+
+2. Wait for the extension to sync (install, startup, every 30 minutes, or extension
+   reload), or trigger it in the service worker console:
+
+   ```js
+   chrome.runtime.sendMessage({ action: "TRUSTBREAK_SYNC_BLOCKLIST" }).then(console.log)
+   ```
+
+3. Confirm a redirect rule exists:
+
+   ```js
+   chrome.declarativeNetRequest.getDynamicRules().then(console.log)
+   ```
+
+4. Navigate to `http://trustbreak-e2e.test/login`. The extension redirects to the
+   containment page before DNS resolution.
+5. Click **Proceed anyway (unsafe)** to confirm the one-time bypass works. Navigation
+   then fails DNS (expected for a reserved domain), but the warning loop is gone.
+6. Remove the test row:
+
+   ```sql
+   delete from public.public_blocklist where source = 'manual-e2e';
+   ```
 
 You can also point the extension at a local API during development from the extension
 service-worker console:
@@ -139,7 +198,7 @@ chrome.storage.local.remove("apiBaseUrl");
 | “Manifest file is missing or unreadable” | Select the folder that directly contains `manifest.json` (`dist-extension/`, not the repository root). |
 | “Could not load icon” | Run `npm run build:extension` again; all three PNG icons must exist. |
 | Extension loads but no warning banner | Confirm the page is `http(s)` (not `chrome://`), reload the tab, and check the service-worker console for errors. |
-| Pre-click blocking never triggers | The server must return a blocklist. Set `ENABLE_PRE_CLICK_INTERCEPTOR=true`, apply the Supabase schema, and reload the extension to sync. |
+| Pre-click blocking never triggers | The server must return a blocklist. Confirm `ENABLE_PRE_CLICK_INTERCEPTOR` is not set to `false`, apply `supabase/007-pre-click-interceptor.sql`, run `npm run verify:blocklist`, then reload the extension or send `TRUSTBREAK_SYNC_BLOCKLIST`. |
 | Scans fail with a network error | Check `https://trust-break-ai.vercel.app/api/health` and confirm the deployment has its environment variables configured. |
 | Changes do not appear | Click the reload icon for the extension, then reload the page. |
 

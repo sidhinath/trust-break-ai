@@ -81,6 +81,11 @@ test("Pre-click interceptor is wired to declarativeNetRequest", () => {
   assert.match(background, /priority:\s*100/);
   assert.match(background, /blocklist-lite/);
   assert.match(background, /syncBlocklistAlarm/);
+  assert.match(background, /TRUSTBREAK_SYNC_BLOCKLIST/);
+  assert.match(background, /scheduleBlocklistRetry/);
+  assert.match(background, /escapeRegExp/);
+  assert.match(background, /isValidDomain/);
+  assert.match(background, /resp\.status === 404/);
 });
 
 test("Warning page bypass requests a one-time allow rule", () => {

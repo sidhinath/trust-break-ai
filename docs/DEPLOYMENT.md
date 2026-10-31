@@ -30,7 +30,7 @@ Configure these environment variables in your Vercel Project Dashboard (**Projec
 | `OPENAI_API_KEY` | No | Server-Only Secret | Optional fallback LLM key (`gpt-4.1-mini`). |
 | `CRON_SECRET` | **Yes** | Server-Only Secret | Bearer authentication token protecting `/api/cron/sync-feeds`. |
 | `ENABLE_VOICE_SCANNER` | **Yes** | Server-Only Flag | Feature flag activating `/api/analyze-voice` (`true`). |
-| `ENABLE_PRE_CLICK_INTERCEPTOR`| **Yes** | Server-Only Flag | Feature flag activating `/api/blocklist-lite` (`true`). |
+| `ENABLE_PRE_CLICK_INTERCEPTOR`| No | Server-Only Flag | Kill switch for `/api/blocklist-lite`. Enabled by default; set `false` to disable. |
 
 ---
 

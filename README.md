@@ -236,6 +236,7 @@ npm run preview
 | `npm run dev` | Start the Vite development server |
 | `npm run build` | Create a production build |
 | `npm run build:extension` | Validate and build the Browser Shield extension into `dist-extension/` |
+| `npm run verify:blocklist` | Verify the deployed Pre-Click Interceptor blocklist endpoint |
 | `npm run preview` | Preview the production build locally |
 | `npm run lint` | Run ESLint |
 | `npm run lint:fix` | Auto-fix lint issues |

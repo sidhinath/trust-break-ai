@@ -526,7 +526,7 @@ import blocklistLiteHandler from '../api/blocklist-lite.js'
 describe('Audit Repairs — Pre-Click Blocklist Lite Endpoint', () => {
   it('should return 404 when ENABLE_PRE_CLICK_INTERCEPTOR is disabled', async () => {
     const origFlag = process.env.ENABLE_PRE_CLICK_INTERCEPTOR
-    delete process.env.ENABLE_PRE_CLICK_INTERCEPTOR
+    process.env.ENABLE_PRE_CLICK_INTERCEPTOR = 'false'
 
     const req = { method: 'GET' }
     let status = 200
@@ -548,6 +548,7 @@ describe('Audit Repairs — Pre-Click Blocklist Lite Endpoint', () => {
     assert.ok(text.includes('disabled'))
 
     if (origFlag !== undefined) process.env.ENABLE_PRE_CLICK_INTERCEPTOR = origFlag
+    else delete process.env.ENABLE_PRE_CLICK_INTERCEPTOR
   })
 
   it('should reject non-GET requests with 405 Method Not Allowed', async () => {
