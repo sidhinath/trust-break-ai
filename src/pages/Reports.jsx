@@ -9,6 +9,7 @@ import ScannerHeader from "@/components/scanner/ScannerHeader";
 import SourceBadge from "@/components/scanner/SourceBadge";
 import { ThreatListSkeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
+import ProtectedPage from '@/components/auth/ProtectedPage';
 
 const TYPE_ICONS = {
   message: MessageSquareWarning,
@@ -50,6 +51,7 @@ export default function Reports() {
   });
 
   return (
+    <ProtectedPage feature="Scan History Reports">
     <div className="space-y-6 pb-6">
       <ScannerHeader
         icon={FileText}
@@ -256,5 +258,6 @@ export default function Reports() {
         </div>
       )}
     </div>
+    </ProtectedPage>
   );
 }

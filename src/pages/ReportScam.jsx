@@ -10,6 +10,7 @@ import { createScamReport } from "@/lib/data";
 import { analyzeReport } from "@/lib/api";
 import { useLocation, useNavigate } from "react-router-dom";
 import { createPageUrl } from "@/utils";
+import ProtectedPage from '@/components/auth/ProtectedPage';
 
 const REPORT_TYPES = [
   { value: "message", label: "Phishing SMS / WhatsApp Message" },
@@ -79,6 +80,7 @@ export default function ReportScam() {
   };
 
   return (
+    <ProtectedPage feature="Report a Scam">
     <div className="space-y-6">
       <ScannerHeader
         icon={AlertTriangle}
@@ -224,5 +226,6 @@ export default function ReportScam() {
         </form>
       )}
     </div>
+    </ProtectedPage>
   );
 }

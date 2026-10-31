@@ -9,6 +9,7 @@ import TinyFishInvestigationCard from "../components/scanner/TinyFishInvestigati
 import { useNotify } from "../components/useNotify";
 import { analyzeLink, analyzeMessage, investigateWebsite, extractUrlFromText } from "@/lib/api";
 import { createScanHistory } from "@/lib/data";
+import ProtectedPage from '@/components/auth/ProtectedPage';
 
 export default function QRScannerPage() {
   const queryClient = useQueryClient();
@@ -84,6 +85,7 @@ export default function QRScannerPage() {
   const extractedUrl = extractUrlFromText(qrPayload);
 
   return (
+    <ProtectedPage feature="QR Code Inspector">
     <div className="space-y-6">
       <ScannerHeader
         icon={QrCode}
@@ -177,5 +179,6 @@ export default function QRScannerPage() {
         </div>
       )}
     </div>
+    </ProtectedPage>
   );
 }

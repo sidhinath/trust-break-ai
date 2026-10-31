@@ -1,16 +1,16 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import { useAuth } from "@/lib/AuthContext";
 import UserModal from "@/components/auth/UserModal";
-import SignInModal from "@/components/auth/SignInModal";
+import LoginRequiredModal from "@/components/auth/LoginRequiredModal";
 import CookieConsentBanner from "@/components/CookieConsentBanner";
 import { App as CapacitorApp } from "@capacitor/app";
 import { triggerHaptic } from "@/lib/haptics";
 import { 
   MessageSquareWarning, Link2, Image, Map, AlertTriangle, User, Home, 
   Menu, X, Cpu, Lock, HeartHandshake, Sun, Moon, Mic, QrCode, Shield,
-  FileText, Settings, ArrowLeft, Zap
+  FileText, Settings, ArrowLeft, Zap, UserPlus
 } from "lucide-react";
 import SeniorModeToggleSwitch from "@/components/SeniorModeToggleSwitch";
 import { ConstellationField } from "@/shaders/constellation-field/ConstellationField";
@@ -31,6 +31,24 @@ const intelligenceNav = [
   { name: "Report Threat", page: "ReportScam", icon: AlertTriangle },
 ];
 
+// Pages that require a signed-in Supabase account. Keep this in sync with the
+// pages wrapped in <ProtectedPage>. Guests are intercepted here and prompted
+// before they navigate; direct URL access is still blocked by ProtectedPage.
+const PROTECTED_ROUTES = {
+  MessageScanner: "Message Scanner",
+  LinkScanner: "Link Inspector",
+  ScreenshotScanner: "Vision Screenshot Scanner",
+  QRScanner: "QR Code Inspector",
+  VoiceScanner: "Voice & Audio Scam Detector",
+  BrowserShield: "Browser Shield",
+  ScamHeatmap: "Scam Heatmap",
+  ReportScam: "Report a Scam",
+  Reports: "Scan History Reports",
+  Settings: "Security Settings",
+  Profile: "Security Profile",
+  PrivacyCenter: "Privacy Center",
+};
+
 const governanceNav = [
   { name: "Security & Settings", page: "Settings", icon: Settings },
   { name: "Architecture & Technology", page: "Technology", icon: Cpu },
@@ -50,11 +68,55 @@ export default function Layout({ children, currentPageName }) {
     }
   });
   const [showUserModal, setShowUserModal] = useState(false);
-  const [showAuthModal, setShowAuthModal] = useState(false);
   const [policyMenuOpen, setPolicyMenuOpen] = useState(false);
-  const { user } = useAuth();
+  const [loginPrompt, setLoginPrompt] = useState(null); // { feature } | null
+  const pendingPageRef = useRef(null);
+  const { user, isAuthenticated, openSignIn, openSignUp } = useAuth();
+
+  // Helper: get avatar initials
+  const getInitials = (u) => {
+    const name = u?.user_metadata?.full_name || u?.email || '';
+    const parts = name.trim().split(/\s+/);
+    if (parts.length >= 2) return (parts[0][0] + parts[1][0]).toUpperCase();
+    if (parts[0]) return parts[0].slice(0, 2).toUpperCase();
+    return '?';
+  };
   const navigate = useNavigate();
   const location = useLocation();
+
+  // ── Protected-route gate ───────────────────────────────────────────────────
+  // Guests can browse public pages freely. When they click a link that points
+  // at a protected route we intercept it (capture phase, before react-router
+  // handles the click) and show the login prompt. After a successful sign-in
+  // the pending destination is resumed automatically.
+  const handleProtectedLinkClick = (event) => {
+    if (isAuthenticated) return;
+    const anchor = event.target?.closest?.("a[href]");
+    if (!anchor) return;
+
+    const href = anchor.getAttribute("href") || "";
+    const match = href.match(/^#\/?([^/?#]+)/);
+    if (!match) return;
+
+    const page = decodeURIComponent(match[1]);
+    const feature = PROTECTED_ROUTES[page];
+    if (!feature) return;
+
+    event.preventDefault();
+    event.stopPropagation();
+    setMobileMenuOpen(false);
+    setPolicyMenuOpen(false);
+    pendingPageRef.current = page;
+    setLoginPrompt({ feature });
+  };
+
+  useEffect(() => {
+    if (!isAuthenticated || !pendingPageRef.current) return;
+    const pendingPage = pendingPageRef.current;
+    pendingPageRef.current = null;
+    setLoginPrompt(null);
+    navigate(createPageUrl(pendingPage));
+  }, [isAuthenticated, navigate]);
 
   useEffect(() => {
     const syncSeniorMode = () => {
@@ -249,7 +311,7 @@ export default function Layout({ children, currentPageName }) {
 
   if (!user) {
     return (
-      <div className="min-h-screen flex flex-col transition-colors duration-300 relative" style={{ background: 'var(--ghost-bg)', color: 'var(--ghost-text)' }}>
+      <div className="min-h-screen flex flex-col transition-colors duration-300 relative" onClickCapture={handleProtectedLinkClick} style={{ background: 'var(--ghost-bg)', color: 'var(--ghost-text)' }}>
         {/* ThreeUI Ambient Living Particle Drift Field */}
         <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden opacity-25 dark:opacity-35 transition-opacity">
           <ConstellationField
@@ -360,18 +422,42 @@ export default function Layout({ children, currentPageName }) {
 
               <SeniorModeToggleSwitch variant="header" />
 
-              <button
-                type="button"
-                onClick={() => {
-                  if (user) {
-                    setShowUserModal(true);
-                    return;
-                  }
-                  setShowAuthModal(true);
-                }}
-                className="h-9 px-3.5 rounded-xl text-xs font-bold flex items-center justify-center bg-gradient-to-r from-cyan-500 to-cyan-400 text-slate-950 shadow-sm transition-all hover:scale-105">
-                {user ? "Workspace →" : "Sign In / Workspace →"}
-              </button>
+              {isAuthenticated ? (
+                /* Authenticated — show avatar button */
+                <button
+                  type="button"
+                  onClick={() => setShowUserModal(true)}
+                  title="View account details"
+                  className="h-9 px-2 rounded-xl flex items-center gap-2 border border-cyan-500/30 bg-cyan-500/10 hover:border-cyan-400 transition-all"
+                >
+                  <div className="w-6 h-6 rounded-lg bg-gradient-to-br from-cyan-400 to-blue-500 flex items-center justify-center text-[10px] font-black text-slate-950">
+                    {getInitials(user)}
+                  </div>
+                  <span className="hidden sm:inline text-xs font-bold text-cyan-300 max-w-[120px] truncate">
+                    {user?.user_metadata?.full_name || user?.email?.split('@')[0] || 'Account'}
+                  </span>
+                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shrink-0" />
+                </button>
+              ) : (
+                /* Guest — show Sign In + Sign Up */
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={openSignIn}
+                    className="h-9 px-3 rounded-xl text-xs font-bold border transition-all hover:border-cyan-400 hover:text-cyan-300"
+                    style={{ background: 'var(--ghost-surface-2)', borderColor: 'var(--ghost-border)', color: 'var(--ghost-text-dim)' }}
+                  >
+                    Sign In
+                  </button>
+                  <button
+                    type="button"
+                    onClick={openSignUp}
+                    className="h-9 px-3.5 rounded-xl text-xs font-bold bg-gradient-to-r from-cyan-400 to-blue-500 text-slate-950 shadow-sm transition-all hover:brightness-110"
+                  >
+                    Sign Up
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         </header>
@@ -406,12 +492,35 @@ export default function Layout({ children, currentPageName }) {
         </main>
 
         <CookieConsentBanner />
+
+        <UserModal
+          isOpen={showUserModal}
+          onClose={() => setShowUserModal(false)}
+          user={user}
+        />
+
+        <LoginRequiredModal
+          isOpen={!!loginPrompt}
+          feature={loginPrompt?.feature}
+          onClose={() => {
+            pendingPageRef.current = null;
+            setLoginPrompt(null);
+          }}
+          onSignIn={() => {
+            setLoginPrompt(null);
+            openSignIn();
+          }}
+          onSignUp={() => {
+            setLoginPrompt(null);
+            openSignUp();
+          }}
+        />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen flex flex-col transition-colors duration-300 relative"
+    <div className="min-h-screen flex flex-col transition-colors duration-300 relative" onClickCapture={handleProtectedLinkClick}
       style={{ background: 'var(--ghost-bg)', color: 'var(--ghost-text)' }}>
       
       {/* ThreeUI Ambient Living Particle Drift Field */}
@@ -522,36 +631,43 @@ export default function Layout({ children, currentPageName }) {
             {/* Senior Safety Mode Physical Toggle Switch */}
             <SeniorModeToggleSwitch variant="header" />
 
-            {/* Operator Email Badge */}
-            {user?.email && (
-              <span className="hidden lg:inline-flex text-xs font-mono font-medium px-2.5 py-1 rounded-full border max-w-[170px] truncate"
-                style={{
-                  background: 'var(--ghost-surface-2)',
-                  borderColor: 'var(--ghost-border)',
-                  color: 'var(--ghost-text-dim)'
-                }}>
-                {user.email}
-              </span>
+            {/* Auth controls — authenticated or guest */}
+            {isAuthenticated ? (
+              /* Authenticated: avatar button with email + green pulse */
+              <button
+                type="button"
+                onClick={async () => { await triggerHaptic('light'); setShowUserModal(true); }}
+                title="View account details"
+                className="flex items-center gap-2 h-9 px-2 rounded-xl border border-cyan-500/30 bg-cyan-500/10 hover:border-cyan-400 transition-all cursor-pointer active:scale-95 shrink-0"
+              >
+                <div className="w-6 h-6 rounded-lg bg-gradient-to-br from-cyan-400 to-blue-500 flex items-center justify-center text-[10px] font-black text-slate-950 shrink-0">
+                  {getInitials(user)}
+                </div>
+                <span className="hidden lg:inline text-xs font-mono text-slate-300 max-w-[140px] truncate">
+                  {user?.email}
+                </span>
+                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shrink-0" />
+              </button>
+            ) : (
+              /* Guest: Sign In + Sign Up buttons */
+              <div className="flex items-center gap-1.5">
+                <button
+                  type="button"
+                  onClick={async () => { await triggerHaptic('light'); openSignIn(); }}
+                  className="h-9 px-3 rounded-xl text-xs font-bold border transition-all hover:border-cyan-400 hover:text-cyan-300 active:scale-95 shrink-0"
+                  style={{ background: 'var(--ghost-surface-2)', borderColor: 'var(--ghost-border)', color: 'var(--ghost-text-dim)' }}
+                >
+                  Sign In
+                </button>
+                <button
+                  type="button"
+                  onClick={async () => { await triggerHaptic('light'); openSignUp(); }}
+                  className="h-9 px-3.5 rounded-xl text-xs font-bold bg-gradient-to-r from-cyan-400 to-blue-500 text-slate-950 shadow-sm transition-all hover:brightness-110 active:scale-95 shrink-0"
+                >
+                  Sign Up
+                </button>
+              </div>
             )}
-
-            {/* User Details Icon (Opens User Login Modal) */}
-            <button
-              type="button"
-              onClick={async () => {
-                await triggerHaptic('light');
-                setShowUserModal(true);
-              }}
-              title="Click to view User Login Details & Operator Session"
-              className="w-9 h-9 rounded-xl flex items-center justify-center border transition-all hover:border-cyan-400 group relative cursor-pointer active:scale-95 shrink-0"
-              style={{
-                background: 'var(--ghost-surface-2)',
-                borderColor: 'var(--ghost-border)'
-              }}>
-              <User className="w-4 h-4 text-cyan-500 group-hover:scale-110 transition-transform pointer-events-none" />
-              {user && (
-                <span className="absolute -top-0.5 -right-0.5 w-2 h-2 bg-emerald-400 rounded-full ring-2 ring-slate-900 animate-pulse pointer-events-none" />
-              )}
-            </button>
 
             {/* Mobile Menu Hamburger */}
             <button
@@ -691,14 +807,32 @@ export default function Layout({ children, currentPageName }) {
               );
             })}
 
-            <button
-              onClick={() => {
-                setMobileMenuOpen(false);
-                setShowUserModal(true);
-              }}
-              className="mt-4 w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl font-bold text-xs border border-cyan-500/30 bg-cyan-500/10 text-cyan-600 dark:text-cyan-400">
-              <User className="w-4 h-4" /> View User Login Details
-            </button>
+            {isAuthenticated ? (
+              <button
+                onClick={() => { setMobileMenuOpen(false); setShowUserModal(true); }}
+                className="mt-4 w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl font-bold text-xs border border-cyan-500/30 bg-cyan-500/10 text-cyan-600 dark:text-cyan-400"
+              >
+                <div className="w-5 h-5 rounded-md bg-gradient-to-br from-cyan-400 to-blue-500 flex items-center justify-center text-[9px] font-black text-slate-950">
+                  {getInitials(user)}
+                </div>
+                View Account Details
+              </button>
+            ) : (
+              <div className="mt-4 grid grid-cols-2 gap-2">
+                <button
+                  onClick={() => { setMobileMenuOpen(false); openSignIn(); }}
+                  className="flex items-center justify-center gap-1.5 px-3 py-3 rounded-xl font-bold text-xs border border-slate-600 bg-slate-800 text-slate-200 hover:border-cyan-400 transition-all"
+                >
+                  <User className="w-3.5 h-3.5" /> Sign In
+                </button>
+                <button
+                  onClick={() => { setMobileMenuOpen(false); openSignUp(); }}
+                  className="flex items-center justify-center gap-1.5 px-3 py-3 rounded-xl font-bold text-xs bg-gradient-to-r from-cyan-400 to-blue-500 text-slate-950"
+                >
+                  <UserPlus className="w-3.5 h-3.5" /> Sign Up
+                </button>
+              </div>
+            )}
           </nav>
         </div>
       )}
@@ -893,20 +1027,29 @@ export default function Layout({ children, currentPageName }) {
         </div>
       </nav>
 
-      <SignInModal
-        isOpen={showAuthModal}
-        onClose={() => setShowAuthModal(false)}
-        onSuccess={() => {
-          setShowAuthModal(false);
-          navigate(createPageUrl("Home"));
-        }}
-      />
-
       {/* User Login Details Modal */}
       <UserModal
         isOpen={showUserModal}
         onClose={() => setShowUserModal(false)}
         user={user}
+      />
+
+      {/* Guest → protected route prompt (global auth modal lives in App) */}
+      <LoginRequiredModal
+        isOpen={!!loginPrompt}
+        feature={loginPrompt?.feature}
+        onClose={() => {
+          pendingPageRef.current = null;
+          setLoginPrompt(null);
+        }}
+        onSignIn={() => {
+          setLoginPrompt(null);
+          openSignIn();
+        }}
+        onSignUp={() => {
+          setLoginPrompt(null);
+          openSignUp();
+        }}
       />
 
       {/* Cookie & Storage Consent Banner */}

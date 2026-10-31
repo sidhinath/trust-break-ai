@@ -8,6 +8,7 @@ import { useAuth } from "@/lib/AuthContext";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import { ProfileSkeleton } from "@/components/ui/skeleton";
+import ProtectedPage from '@/components/auth/ProtectedPage';
 
 export default function Profile() {
   const { user: authUser, signOut } = useAuth();
@@ -41,6 +42,7 @@ export default function Profile() {
   ];
 
   return (
+    <ProtectedPage feature="Security Profile">
     <div className="space-y-6">
       
       {/* Profile Header */}
@@ -160,5 +162,6 @@ export default function Profile() {
         Sign Out of TrustBreak AI Console
       </Button>
     </div>
+    </ProtectedPage>
   );
 }

@@ -14,6 +14,7 @@ import { analyzeScreenshot, analyzeLink, analyzeMessage, investigateWebsite, ext
 import { SkeletonScannerResult } from "@/components/ui/skeleton";
 import ScannerAnalysisProgress from "@/components/scanners/ScannerAnalysisProgress";
 import { triggerHaptic } from "@/lib/haptics";
+import ProtectedPage from '@/components/auth/ProtectedPage';
 
 export default function ScreenshotScanner() {
   const queryClient = useQueryClient();
@@ -168,6 +169,7 @@ export default function ScreenshotScanner() {
   const extractedUrl = extractUrlFromText(result?.detected_text || "");
 
   return (
+    <ProtectedPage feature="Vision Screenshot Scanner">
     <div className="space-y-6 pb-6">
       <ScannerHeader
         icon={Image}
@@ -409,5 +411,6 @@ export default function ScreenshotScanner() {
         scanSummary={result || qrResult}
       />
     </div>
+    </ProtectedPage>
   );
 }

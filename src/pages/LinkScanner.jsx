@@ -16,6 +16,7 @@ import { SkeletonScannerResult } from "@/components/ui/skeleton";
 import ScannerAnalysisProgress from "@/components/scanners/ScannerAnalysisProgress";
 import TinyFishInvestigationCard from "../components/scanner/TinyFishInvestigationCard";
 import { triggerHaptic } from "@/lib/haptics";
+import ProtectedPage from '@/components/auth/ProtectedPage';
 
 export default function LinkScanner() {
   const queryClient = useQueryClient();
@@ -103,6 +104,7 @@ export default function LinkScanner() {
   ];
 
   return (
+    <ProtectedPage feature="Link Inspector">
     <div className="space-y-6 pb-6">
       <ScannerHeader
         icon={Link2}
@@ -275,5 +277,6 @@ export default function LinkScanner() {
         scanSummary={result}
       />
     </div>
+    </ProtectedPage>
   );
 }

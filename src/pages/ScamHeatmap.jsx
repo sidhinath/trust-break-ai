@@ -8,6 +8,7 @@ import { supabase } from "@/lib/supabase";
 import { MetricCardSkeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
+import ProtectedPage from '@/components/auth/ProtectedPage';
 
 export default function ScamHeatmap() {
   const queryClient = useQueryClient();
@@ -188,6 +189,7 @@ export default function ScamHeatmap() {
   };
 
   return (
+    <ProtectedPage feature="Scam Heatmap">
     <div className="space-y-6">
       <ScannerHeader
         icon={Map}
@@ -321,5 +323,6 @@ export default function ScamHeatmap() {
         )}
       </section>
     </div>
+    </ProtectedPage>
   );
 }

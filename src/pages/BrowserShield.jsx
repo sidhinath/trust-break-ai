@@ -3,6 +3,7 @@ import { Shield, ShieldAlert, Terminal, CheckCircle2, X } from "lucide-react";
 import ScannerHeader from "../components/scanner/ScannerHeader";
 import { Button } from "@/components/ui/button";
 import { TableSkeleton } from "@/components/ui/skeleton";
+import ProtectedPage from '@/components/auth/ProtectedPage';
 
 export default function BrowserShield() {
   const [testDomain, setTestDomain] = useState("sbi-kyc-verification-portal.online");
@@ -45,6 +46,7 @@ export default function BrowserShield() {
   }, []);
 
   return (
+    <ProtectedPage feature="Browser Shield">
     <div className="space-y-6">
       <ScannerHeader
         icon={Shield}
@@ -271,5 +273,6 @@ export default function BrowserShield() {
         </div>
       </div>
     </div>
+    </ProtectedPage>
   );
 }

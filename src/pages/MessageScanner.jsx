@@ -16,6 +16,7 @@ import { useLocation } from "react-router-dom";
 import { SkeletonScannerResult } from "@/components/ui/skeleton";
 import ScannerAnalysisProgress from "@/components/scanners/ScannerAnalysisProgress";
 import { triggerHaptic } from "@/lib/haptics";
+import ProtectedPage from '@/components/auth/ProtectedPage';
 
 export default function MessageScanner() {
   const queryClient = useQueryClient();
@@ -120,6 +121,7 @@ export default function MessageScanner() {
   const extractedUrl = extractUrlFromText(message);
 
   return (
+    <ProtectedPage feature="Message Scanner">
     <div className="space-y-6 pb-6">
       <ScannerHeader
         icon={MessageSquareWarning}
@@ -265,5 +267,6 @@ export default function MessageScanner() {
         scanSummary={result}
       />
     </div>
+    </ProtectedPage>
   );
 }

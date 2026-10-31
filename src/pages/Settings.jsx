@@ -7,6 +7,7 @@ import {
 } from "lucide-react";
 import ScannerHeader from "@/components/scanner/ScannerHeader";
 import { Button } from "@/components/ui/button";
+import ProtectedPage from '@/components/auth/ProtectedPage';
 
 export default function Settings() {
   const { user, signOut, resetOnboarding } = useAuth();
@@ -97,6 +98,7 @@ export default function Settings() {
   };
 
   return (
+    <ProtectedPage feature="Security Settings">
     <div className="space-y-6 pb-6">
       <ScannerHeader
         icon={SettingsIcon}
@@ -386,5 +388,6 @@ export default function Settings() {
         </div>
       </div>
     </div>
+    </ProtectedPage>
   );
 }

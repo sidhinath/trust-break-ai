@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import ScannerHeader from "../components/scanner/ScannerHeader";
 import { supabase } from "@/lib/supabase";
 import { useAuth } from "@/lib/AuthContext";
+import ProtectedPage from '@/components/auth/ProtectedPage';
 
 export default function PrivacyCenter() {
   const { user } = useAuth();
@@ -24,6 +25,7 @@ export default function PrivacyCenter() {
   };
 
   return (
+    <ProtectedPage feature="Privacy Center">
     <div className="space-y-6">
       <ScannerHeader
         icon={Lock}
@@ -83,5 +85,6 @@ export default function PrivacyCenter() {
         )}
       </div>
     </div>
+    </ProtectedPage>
   );
 }
