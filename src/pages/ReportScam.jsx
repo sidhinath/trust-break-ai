@@ -90,13 +90,13 @@ export default function ReportScam() {
       />
 
       {success ? (
-        <div className="ghost-card p-8 text-center space-y-4 border-emerald-500/30">
+        <div className="tb-card p-8 text-center space-y-4 border-emerald-500/30">
           <div className="w-16 h-16 rounded-2xl bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center mx-auto text-emerald-500">
             <CheckCircle2 className="w-8 h-8" />
           </div>
           <div className="space-y-1">
-            <h3 className="text-lg font-bold" style={{ color: 'var(--ghost-text)' }}>Threat Reported Successfully</h3>
-            <p className="text-xs max-w-md mx-auto" style={{ color: 'var(--ghost-text-dim)' }}>
+            <h3 className="text-lg font-bold" style={{ color: 'var(--tb-text)' }}>Threat Reported Successfully</h3>
+            <p className="text-xs max-w-md mx-auto" style={{ color: 'var(--tb-text-dim)' }}>
               Your report has been analyzed and syndicated to the TrustBreak AI community threat intelligence database.
             </p>
           </div>
@@ -118,20 +118,20 @@ export default function ReportScam() {
           </div>
         </div>
       ) : (
-        <form onSubmit={handleSubmit} className="ghost-card p-6 space-y-4">
+        <form onSubmit={handleSubmit} className="tb-card p-6 space-y-4">
           
           {/* Vector Selector */}
           <div className="space-y-1.5">
-            <label className="text-xs font-bold uppercase tracking-wider" style={{ color: 'var(--ghost-text-dim)' }}>
+            <label className="text-xs font-bold uppercase tracking-wider" style={{ color: 'var(--tb-text-dim)' }}>
               Scam Vector Category
             </label>
             <Select
               value={form.report_type}
               onValueChange={(val) => setForm({ ...form, report_type: val })}>
-              <SelectTrigger className="w-full" style={{ background: 'var(--ghost-surface-2)', borderColor: 'var(--ghost-border)', color: 'var(--ghost-text)' }}>
+              <SelectTrigger className="w-full" style={{ background: 'var(--tb-surface-2)', borderColor: 'var(--tb-border)', color: 'var(--tb-text)' }}>
                 <SelectValue placeholder="Select vector category" />
               </SelectTrigger>
-              <SelectContent style={{ background: 'var(--ghost-surface)', borderColor: 'var(--ghost-border)', color: 'var(--ghost-text)' }}>
+              <SelectContent style={{ background: 'var(--tb-surface)', borderColor: 'var(--tb-border)', color: 'var(--tb-text)' }}>
                 {REPORT_TYPES.map((t) => (
                   <SelectItem key={t.value} value={t.value}>
                     {t.label}
@@ -143,18 +143,18 @@ export default function ReportScam() {
 
           {/* Scam Content */}
           <div className="space-y-1.5">
-            <label className="text-xs font-bold uppercase tracking-wider" style={{ color: 'var(--ghost-text-dim)' }}>
+            <label className="text-xs font-bold uppercase tracking-wider" style={{ color: 'var(--tb-text-dim)' }}>
               Scam Content & Details *
             </label>
             <div className="rounded-xl border focus-within:border-amber-500/50 transition-colors p-2"
-              style={{ background: 'var(--ghost-surface-2)', borderColor: 'var(--ghost-border)' }}>
+              style={{ background: 'var(--tb-surface-2)', borderColor: 'var(--tb-border)' }}>
               <Textarea
                 required
                 value={form.scam_content}
                 onChange={(e) => setForm({ ...form, scam_content: e.target.value })}
                 placeholder="Paste the scam message, script, caller claims, or payment demand..."
                 className="min-h-[110px] bg-transparent border-0 resize-none text-sm font-medium focus-visible:ring-0 placeholder:text-slate-400"
-                style={{ color: 'var(--ghost-text)' }}
+                style={{ color: 'var(--tb-text)' }}
               />
             </div>
           </div>
@@ -162,7 +162,7 @@ export default function ReportScam() {
           {/* Optional Phone and URL */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div className="space-y-1.5">
-              <label className="text-xs font-bold uppercase tracking-wider flex items-center gap-1.5" style={{ color: 'var(--ghost-text-dim)' }}>
+              <label className="text-xs font-bold uppercase tracking-wider flex items-center gap-1.5" style={{ color: 'var(--tb-text-dim)' }}>
                 <Phone className="w-3.5 h-3.5 text-amber-500" /> Fraudster Phone / Sender ID (Optional)
               </label>
               <Input
@@ -170,12 +170,12 @@ export default function ReportScam() {
                 onChange={(e) => setForm({ ...form, phone_number: e.target.value })}
                 placeholder="+91 98765 43210 or VM-SBINB"
                 className="text-xs h-10"
-                style={{ background: 'var(--ghost-surface-2)', borderColor: 'var(--ghost-border)', color: 'var(--ghost-text)' }}
+                style={{ background: 'var(--tb-surface-2)', borderColor: 'var(--tb-border)', color: 'var(--tb-text)' }}
               />
             </div>
 
             <div className="space-y-1.5">
-              <label className="text-xs font-bold uppercase tracking-wider flex items-center gap-1.5" style={{ color: 'var(--ghost-text-dim)' }}>
+              <label className="text-xs font-bold uppercase tracking-wider flex items-center gap-1.5" style={{ color: 'var(--tb-text-dim)' }}>
                 <Globe className="w-3.5 h-3.5 text-cyan-400" /> Phishing URL (Optional)
               </label>
               <Input
@@ -183,14 +183,14 @@ export default function ReportScam() {
                 onChange={(e) => setForm({ ...form, url: e.target.value })}
                 placeholder="https://fake-login.xyz"
                 className="text-xs h-10"
-                style={{ background: 'var(--ghost-surface-2)', borderColor: 'var(--ghost-border)', color: 'var(--ghost-text)' }}
+                style={{ background: 'var(--tb-surface-2)', borderColor: 'var(--tb-border)', color: 'var(--tb-text)' }}
               />
             </div>
           </div>
 
           {/* Region */}
           <div className="space-y-1.5">
-            <label className="text-xs font-bold uppercase tracking-wider" style={{ color: 'var(--ghost-text-dim)' }}>
+            <label className="text-xs font-bold uppercase tracking-wider" style={{ color: 'var(--tb-text-dim)' }}>
               Target Geographic Region
             </label>
             <Input
@@ -198,7 +198,7 @@ export default function ReportScam() {
               onChange={(e) => setForm({ ...form, region: e.target.value })}
               placeholder="e.g. India, USA, UK, Global"
               className="text-xs h-10"
-              style={{ background: 'var(--ghost-surface-2)', borderColor: 'var(--ghost-border)', color: 'var(--ghost-text)' }}
+              style={{ background: 'var(--tb-surface-2)', borderColor: 'var(--tb-border)', color: 'var(--tb-text)' }}
             />
           </div>
 
@@ -211,7 +211,7 @@ export default function ReportScam() {
               onChange={(e) => setAgreedConsent(e.target.checked)}
               className="mt-0.5 w-4 h-4 rounded border-slate-300 text-amber-500 focus:ring-amber-500 accent-amber-500 cursor-pointer"
             />
-            <label htmlFor="scam-report-consent" className="text-xs font-medium cursor-pointer" style={{ color: 'var(--ghost-text-dim)' }}>
+            <label htmlFor="scam-report-consent" className="text-xs font-medium cursor-pointer" style={{ color: 'var(--tb-text-dim)' }}>
               I consent to submit this scam telemetry for automated threat analysis under the <a href="/PrivacyPolicy" className="text-amber-600 dark:text-amber-400 underline font-semibold">TrustBreak AI Privacy Policy</a>.
             </label>
           </div>

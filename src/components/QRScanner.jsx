@@ -202,7 +202,7 @@ export default function QRScanner({ onDecoded, onError }) {
   return (
     <div className="space-y-4">
       {/* Mode Switch Tabs */}
-      <div className="flex items-center gap-2 border-b pb-3" style={{ borderColor: "var(--ghost-border)" }}>
+      <div className="flex items-center gap-2 border-b pb-3" style={{ borderColor: "var(--tb-border)" }}>
         <button
           type="button"
           onClick={() => { setMode("camera"); setLocalError(""); }}
@@ -233,7 +233,7 @@ export default function QRScanner({ onDecoded, onError }) {
         <div className="space-y-3">
           <div
             className="relative rounded-2xl overflow-hidden border bg-black aspect-video sm:aspect-[4/3] max-h-[380px] mx-auto flex items-center justify-center"
-            style={{ borderColor: "var(--ghost-border)" }}
+            style={{ borderColor: "var(--tb-border)" }}
           >
             <video
               ref={videoRef}
@@ -301,10 +301,10 @@ export default function QRScanner({ onDecoded, onError }) {
           </div>
 
           {cameraError && (
-            <div className="ghost-card p-4 border-rose-500/30 flex items-start justify-between gap-3">
+            <div className="tb-card p-4 border-rose-500/30 flex items-start justify-between gap-3">
               <div className="flex items-start gap-3">
                 <AlertCircle className="w-4 h-4 text-rose-500 mt-0.5 shrink-0" />
-                <span className="text-xs font-medium" style={{ color: "var(--ghost-text-dim)" }}>
+                <span className="text-xs font-medium" style={{ color: "var(--tb-text-dim)" }}>
                   {cameraError}
                 </span>
               </div>
@@ -330,16 +330,16 @@ export default function QRScanner({ onDecoded, onError }) {
               type="button"
               onClick={() => fileRef.current?.click()}
               className="w-full h-52 rounded-2xl border-2 border-dashed flex flex-col items-center justify-center gap-3 transition-all hover:border-violet-500 hover:bg-violet-500/5 group"
-              style={{ borderColor: "var(--ghost-border)", background: "var(--ghost-surface-2)" }}
+              style={{ borderColor: "var(--tb-border)", background: "var(--tb-surface-2)" }}
             >
               <div className="w-12 h-12 rounded-xl bg-violet-500/10 border border-violet-500/20 flex items-center justify-center group-hover:scale-110 transition-transform">
                 <QrCode className="w-6 h-6 text-violet-400" />
               </div>
               <div className="text-center space-y-1">
-                <span className="text-sm font-bold block" style={{ color: "var(--ghost-text)" }}>
+                <span className="text-sm font-bold block" style={{ color: "var(--tb-text)" }}>
                   Upload an image containing a QR code
                 </span>
-                <span className="text-xs block" style={{ color: "var(--ghost-text-dim)" }}>
+                <span className="text-xs block" style={{ color: "var(--tb-text-dim)" }}>
                   PNG, JPG, WebP up to 10MB · Auto-decoded + Threat Analysis
                 </span>
               </div>
@@ -347,7 +347,7 @@ export default function QRScanner({ onDecoded, onError }) {
           ) : (
             <div
               className="relative rounded-2xl overflow-hidden border p-2"
-              style={{ background: "var(--ghost-surface-2)", borderColor: "var(--ghost-border)" }}
+              style={{ background: "var(--tb-surface-2)", borderColor: "var(--tb-border)" }}
             >
               <img
                 src={preview}
@@ -374,9 +374,9 @@ export default function QRScanner({ onDecoded, onError }) {
           )}
 
           {localError && !decoding && (
-            <div className="ghost-card p-4 border-rose-500/30 flex items-start gap-3">
+            <div className="tb-card p-4 border-rose-500/30 flex items-start gap-3">
               <AlertCircle className="w-4 h-4 text-rose-500 mt-0.5 shrink-0" />
-              <span className="text-xs font-medium" style={{ color: "var(--ghost-text-dim)" }}>
+              <span className="text-xs font-medium" style={{ color: "var(--tb-text-dim)" }}>
                 {localError}
               </span>
             </div>

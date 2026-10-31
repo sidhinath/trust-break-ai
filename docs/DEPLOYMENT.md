@@ -27,7 +27,7 @@ Configure these environment variables in your Vercel Project Dashboard (**Projec
 | `GROQ_API_KEY` | **Yes** | Server-Only Secret | Groq LPU inference key (`llama-3.3-70b-versatile` & `whisper-large-v3`). |
 | `GEMINI_API_KEY` | **Yes** | Server-Only Secret | Google Gemini 2.5 Flash key for visual OCR and multimodal analysis. |
 | `TINYFISH_API_KEY` | No | Server-Only Secret | TinyFish API key for live headless browser web investigation. |
-| `OPENAI_API_KEY` | No | Server-Only Secret | Optional fallback LLM key (`gpt-4o-mini`). |
+| `OPENAI_API_KEY` | No | Server-Only Secret | Optional fallback LLM key (`gpt-4.1-mini`). |
 | `CRON_SECRET` | **Yes** | Server-Only Secret | Bearer authentication token protecting `/api/cron/sync-feeds`. |
 | `ENABLE_VOICE_SCANNER` | **Yes** | Server-Only Flag | Feature flag activating `/api/analyze-voice` (`true`). |
 | `ENABLE_PRE_CLICK_INTERCEPTOR`| **Yes** | Server-Only Flag | Feature flag activating `/api/blocklist-lite` (`true`). |

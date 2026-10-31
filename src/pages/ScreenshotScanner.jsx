@@ -180,7 +180,7 @@ export default function ScreenshotScanner() {
 
       {/* Mode Navigation Tabs */}
       <div className="flex rounded-xl p-1 border gap-1"
-        style={{ background: 'var(--ghost-surface-2)', borderColor: 'var(--ghost-border)' }}>
+        style={{ background: 'var(--tb-surface-2)', borderColor: 'var(--tb-border)' }}>
         <button
           onClick={() => { setActiveTab("screenshot"); setResult(null); setQrResult(null); }}
           className={`flex-1 py-2 rounded-lg text-xs font-bold transition-all flex items-center justify-center gap-2 cursor-pointer ${
@@ -216,7 +216,7 @@ export default function ScreenshotScanner() {
           )}
 
           {qrError && (
-            <div className="ghost-card p-4 border-rose-500/30 text-xs text-rose-500 font-bold">
+            <div className="tb-card p-4 border-rose-500/30 text-xs text-rose-500 font-bold">
               {qrError}
             </div>
           )}
@@ -265,27 +265,27 @@ export default function ScreenshotScanner() {
       {/* Screenshot Analysis Tab */}
       {activeTab === "screenshot" && (
         <>
-          <div className="ghost-card p-5 space-y-4">
+          <div className="tb-card p-5 space-y-4">
             {!preview ? (
               <button
                 onClick={() => fileRef.current?.click()}
                 className="w-full h-52 rounded-2xl border-2 border-dashed flex flex-col items-center justify-center gap-3 transition-all hover:border-pink-500 hover:bg-pink-500/5 group cursor-pointer"
-                style={{ borderColor: 'var(--ghost-border)', background: 'var(--ghost-surface-2)' }}>
+                style={{ borderColor: 'var(--tb-border)', background: 'var(--tb-surface-2)' }}>
                 <div className="w-12 h-12 rounded-xl bg-pink-500/10 border border-pink-500/20 flex items-center justify-center group-hover:scale-110 transition-transform">
                   <Upload className="w-6 h-6 text-pink-500" />
                 </div>
                 <div className="text-center space-y-1">
-                  <span className="text-sm font-bold block" style={{ color: 'var(--ghost-text)' }}>
+                  <span className="text-sm font-bold block" style={{ color: 'var(--tb-text)' }}>
                     Tap or drag & drop a screenshot here
                   </span>
-                  <span className="text-xs block" style={{ color: 'var(--ghost-text-dim)' }}>
+                  <span className="text-xs block" style={{ color: 'var(--tb-text-dim)' }}>
                     PNG, JPG, WebP up to 10MB • Auto-OCR & Vision Analysis
                   </span>
                 </div>
               </button>
             ) : (
               <div className="relative rounded-2xl overflow-hidden border p-2"
-                style={{ background: 'var(--ghost-surface-2)', borderColor: 'var(--ghost-border)' }}>
+                style={{ background: 'var(--tb-surface-2)', borderColor: 'var(--tb-border)' }}>
                 <img
                   src={preview}
                   alt="Screenshot Preview"
@@ -326,9 +326,9 @@ export default function ScreenshotScanner() {
           )}
 
           {scanError && (
-            <div className="ghost-card p-4 border-rose-500/30 flex items-start gap-3">
+            <div className="tb-card p-4 border-rose-500/30 flex items-start gap-3">
               <Info className="w-4 h-4 text-rose-500 mt-0.5 shrink-0" />
-              <div className="text-xs" style={{ color: 'var(--ghost-text-dim)' }}>
+              <div className="text-xs" style={{ color: 'var(--tb-text-dim)' }}>
                 <p className="font-bold text-rose-500">{scanError}</p>
                 <p className="mt-1">Fallback analysis will evaluate extracted signals automatically.</p>
               </div>
@@ -355,16 +355,16 @@ export default function ScreenshotScanner() {
 
               {/* Extracted OCR text box */}
               {result.detected_text && (
-                <div className="ghost-card p-4 space-y-3">
+                <div className="tb-card p-4 space-y-3">
                   <div className="flex items-center justify-between">
                     <span className="text-xs font-bold uppercase tracking-wider flex items-center gap-1.5"
-                      style={{ color: 'var(--ghost-text-dim)' }}>
+                      style={{ color: 'var(--tb-text-dim)' }}>
                       <FileSearch className="w-3.5 h-3.5 text-pink-500" /> Extracted OCR Text from Image
                     </span>
                     <span className="text-[10px] font-mono text-cyan-600 dark:text-cyan-400">Gemini Vision OCR</span>
                   </div>
                   <div className="p-3 rounded-xl border text-xs font-mono max-h-36 overflow-y-auto whitespace-pre-wrap leading-relaxed"
-                    style={{ background: 'var(--ghost-surface-2)', borderColor: 'var(--ghost-border)', color: 'var(--ghost-text)' }}>
+                    style={{ background: 'var(--tb-surface-2)', borderColor: 'var(--tb-border)', color: 'var(--tb-text)' }}>
                     {result.detected_text}
                   </div>
 

@@ -83,9 +83,9 @@ export default function ScanHub() {
       />
 
       {/* Vector Selector Pills / Cards */}
-      <div className="ghost-card p-3 space-y-3">
+      <div className="tb-card p-3 space-y-3">
         <div className="flex items-center justify-between px-1">
-          <span className="text-xs font-bold uppercase tracking-wider flex items-center gap-1.5" style={{ color: "var(--ghost-text-dim)" }}>
+          <span className="text-xs font-bold uppercase tracking-wider flex items-center gap-1.5" style={{ color: "var(--tb-text-dim)" }}>
             <Sparkles className="w-3.5 h-3.5 text-cyan-400" /> Select Scan Vector
           </span>
           <span className="text-[11px] font-mono font-medium text-cyan-500">
@@ -107,8 +107,8 @@ export default function ScanHub() {
                     : "hover:border-cyan-500/30"
                 }`}
                 style={{
-                  background: isSelected ? undefined : "var(--ghost-surface-2)",
-                  borderColor: isSelected ? undefined : "var(--ghost-border)",
+                  background: isSelected ? undefined : "var(--tb-surface-2)",
+                  borderColor: isSelected ? undefined : "var(--tb-border)",
                 }}>
                 {isSelected && (
                   <motion.div
@@ -120,16 +120,16 @@ export default function ScanHub() {
                 <div className="flex items-center justify-between w-full mb-1">
                   <div
                     className="w-7 h-7 rounded-lg flex items-center justify-center"
-                    style={{ background: isSelected ? "rgba(0,229,255,0.2)" : "var(--ghost-surface)" }}>
-                    <Icon className="w-4 h-4" style={{ color: isSelected ? "#00e5ff" : "var(--ghost-text-dim)" }} />
+                    style={{ background: isSelected ? "rgba(0,229,255,0.2)" : "var(--tb-surface)" }}>
+                    <Icon className="w-4 h-4" style={{ color: isSelected ? "#00e5ff" : "var(--tb-text-dim)" }} />
                   </div>
                   {isSelected && <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />}
                 </div>
                 <div>
-                  <span className="text-xs font-bold block" style={{ color: isSelected ? "#00e5ff" : "var(--ghost-text)" }}>
+                  <span className="text-xs font-bold block" style={{ color: isSelected ? "#00e5ff" : "var(--tb-text)" }}>
                     {s.label}
                   </span>
-                  <span className="text-[10px] line-clamp-1 mt-0.5 block" style={{ color: "var(--ghost-text-dim)" }}>
+                  <span className="text-[10px] line-clamp-1 mt-0.5 block" style={{ color: "var(--tb-text-dim)" }}>
                     {s.title}
                   </span>
                 </div>

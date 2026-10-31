@@ -51,10 +51,10 @@ export default function TrustedContactModal({ isOpen, onClose, scanSummary }) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md animate-in fade-in duration-200">
       <div className="relative w-full max-w-lg border-2 border-slate-300 dark:border-slate-700 rounded-3xl shadow-2xl p-5 space-y-5"
-        style={{ background: 'var(--ghost-surface)', color: 'var(--ghost-text)' }}>
+        style={{ background: 'var(--tb-surface)', color: 'var(--tb-text)' }}>
         
         {/* Header */}
-        <div className="flex items-center justify-between border-b pb-3" style={{ borderColor: 'var(--ghost-border)' }}>
+        <div className="flex items-center justify-between border-b pb-3" style={{ borderColor: 'var(--tb-border)' }}>
           <div className="flex items-center gap-2.5 pointer-events-none">
             <div className="w-10 h-10 rounded-xl bg-cyan-500/20 border border-cyan-500/40 flex items-center justify-center text-cyan-600 dark:text-cyan-400 pointer-events-none">
               <Users className="w-5 h-5 pointer-events-none" />
@@ -63,7 +63,7 @@ export default function TrustedContactModal({ isOpen, onClose, scanSummary }) {
               <h3 className="font-extrabold text-base sm:text-lg tracking-tight font-display pointer-events-none">
                 ASK A TRUSTED CONTACT
               </h3>
-              <p className="text-xs font-bold pointer-events-none" style={{ color: 'var(--ghost-text-dim)' }}>Family & Guardian Safety Verification</p>
+              <p className="text-xs font-bold pointer-events-none" style={{ color: 'var(--tb-text-dim)' }}>Family & Guardian Safety Verification</p>
             </div>
           </div>
           <button

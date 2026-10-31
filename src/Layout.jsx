@@ -311,7 +311,7 @@ export default function Layout({ children, currentPageName }) {
 
   if (!user) {
     return (
-      <div className="min-h-screen flex flex-col transition-colors duration-300 relative" onClickCapture={handleProtectedLinkClick} style={{ background: 'var(--ghost-bg)', color: 'var(--ghost-text)' }}>
+      <div className="min-h-screen flex flex-col transition-colors duration-300 relative" onClickCapture={handleProtectedLinkClick} style={{ background: 'var(--tb-bg)', color: 'var(--tb-text)' }}>
         {/* ThreeUI Ambient Living Particle Drift Field */}
         <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden opacity-25 dark:opacity-35 transition-opacity">
           <ConstellationField
@@ -325,14 +325,14 @@ export default function Layout({ children, currentPageName }) {
 
         {/* Public Page Header */}
         <header className="sticky top-0 z-40 h-16 border-b backdrop-blur-xl transition-colors duration-300"
-          style={{ background: 'var(--ghost-surface)', borderColor: 'var(--ghost-border)' }}>
+          style={{ background: 'var(--tb-surface)', borderColor: 'var(--tb-border)' }}>
           <div className="flex items-center justify-between h-full px-4 sm:px-6 max-w-7xl mx-auto w-full">
             {currentPageName !== "Home" && (
               <button
                 type="button"
                 onClick={handleExitCurrentTab}
                 className="mr-2 h-8 rounded-lg border px-2.5 text-[10px] font-bold uppercase tracking-[0.14em] transition-all hover:border-cyan-400 hover:text-cyan-400"
-                style={{ background: 'var(--ghost-surface-2)', borderColor: 'var(--ghost-border)', color: 'var(--ghost-text-dim)' }}
+                style={{ background: 'var(--tb-surface-2)', borderColor: 'var(--tb-border)', color: 'var(--tb-text-dim)' }}
               >
                 Exit
               </button>
@@ -343,7 +343,7 @@ export default function Layout({ children, currentPageName }) {
                 <div className="w-8 h-8 rounded-lg overflow-hidden border border-cyan-500/40 shadow-[0_0_15px_rgba(0,229,255,0.4)] flex items-center justify-center bg-slate-950">
                   <img src="/logo-icon.svg" alt="TrustBreak AI Logo" className="w-full h-full object-cover" />
                 </div>
-                <span className="text-base sm:text-lg font-black tracking-tight font-display" style={{ color: 'var(--ghost-text)' }}>
+                <span className="text-base sm:text-lg font-black tracking-tight font-display" style={{ color: 'var(--tb-text)' }}>
                   TrustBreak AI
                 </span>
               </Link>
@@ -354,7 +354,7 @@ export default function Layout({ children, currentPageName }) {
                   aria-label="Open policy menu"
                   onClick={() => setPolicyMenuOpen((prev) => !prev)}
                   className="flex h-9 w-9 items-center justify-center rounded-xl border transition-all hover:border-cyan-400"
-                  style={{ background: 'var(--ghost-surface-2)', borderColor: 'var(--ghost-border)', color: 'var(--ghost-text)' }}
+                  style={{ background: 'var(--tb-surface-2)', borderColor: 'var(--tb-border)', color: 'var(--tb-text)' }}
                 >
                   <div className="flex flex-col items-center justify-center gap-[3px]">
                     <span className="block h-0.5 w-4 rounded-full bg-current" />
@@ -365,8 +365,8 @@ export default function Layout({ children, currentPageName }) {
 
                 {policyMenuOpen && (
                   <div className="absolute left-0 top-12 z-50 min-w-[260px] rounded-2xl border p-2 shadow-2xl backdrop-blur-xl"
-                    style={{ background: 'var(--ghost-surface)', borderColor: 'var(--ghost-border)' }}>
-                    <div className="mb-2 px-2 pt-1 pb-1 text-[10px] font-bold uppercase tracking-[0.18em]" style={{ color: 'var(--ghost-text-dim)' }}>
+                    style={{ background: 'var(--tb-surface)', borderColor: 'var(--tb-border)' }}>
+                    <div className="mb-2 px-2 pt-1 pb-1 text-[10px] font-bold uppercase tracking-[0.18em]" style={{ color: 'var(--tb-text-dim)' }}>
                       Security Scanners & Tools
                     </div>
                     <div className="grid gap-1">
@@ -376,14 +376,14 @@ export default function Layout({ children, currentPageName }) {
                           to={createPageUrl(page)}
                           onClick={() => setPolicyMenuOpen(false)}
                           className={`flex items-center gap-2 rounded-xl px-3 py-2 text-left text-xs font-bold transition-colors ${currentPageName === page ? 'text-cyan-500' : 'hover:text-cyan-500'}`}
-                          style={{ color: currentPageName === page ? 'var(--ghost-text)' : 'var(--ghost-text-dim)' }}
+                          style={{ color: currentPageName === page ? 'var(--tb-text)' : 'var(--tb-text-dim)' }}
                         >
                           <Icon className="h-3.5 w-3.5" />
                           {label}
                         </Link>
                       ))}
                     </div>
-                    <div className="my-2 h-px w-full" style={{ background: 'var(--ghost-border)' }} />
+                    <div className="my-2 h-px w-full" style={{ background: 'var(--tb-border)' }} />
                     <div className="grid gap-1">
                       {policyLinks.map(({ label, page }) => (
                         <Link
@@ -391,7 +391,7 @@ export default function Layout({ children, currentPageName }) {
                           to={createPageUrl(page)}
                           onClick={() => setPolicyMenuOpen(false)}
                           className={`rounded-xl px-3 py-2 text-left text-xs font-bold transition-colors ${currentPageName === page ? 'text-cyan-500' : 'hover:text-cyan-500'}`}
-                          style={{ color: currentPageName === page ? 'var(--ghost-text)' : 'var(--ghost-text-dim)' }}
+                          style={{ color: currentPageName === page ? 'var(--tb-text)' : 'var(--tb-text-dim)' }}
                         >
                           {label}
                         </Link>
@@ -404,7 +404,7 @@ export default function Layout({ children, currentPageName }) {
               <Link
                 to={createPageUrl("ScanHub")}
                 className="hidden sm:inline-flex items-center gap-2 rounded-xl border px-3 py-2 text-[10px] font-black uppercase tracking-[0.18em] transition-all hover:border-cyan-400 hover:text-cyan-400"
-                style={{ background: 'var(--ghost-surface-2)', borderColor: 'var(--ghost-border)', color: 'var(--ghost-text-dim)' }}
+                style={{ background: 'var(--tb-surface-2)', borderColor: 'var(--tb-border)', color: 'var(--tb-text-dim)' }}
               >
                 <Zap className="h-3.5 w-3.5 text-cyan-500" />
                 Universal Scanner
@@ -416,7 +416,7 @@ export default function Layout({ children, currentPageName }) {
                 onClick={toggleTheme}
                 title={`Switch to ${theme === 'dark' ? 'Light' : 'Dark'} Mode`}
                 className="w-8 h-8 rounded-lg flex items-center justify-center border transition-all"
-                style={{ background: 'var(--ghost-surface-2)', borderColor: 'var(--ghost-border)', color: 'var(--ghost-text)' }}>
+                style={{ background: 'var(--tb-surface-2)', borderColor: 'var(--tb-border)', color: 'var(--tb-text)' }}>
                 {theme === "dark" ? <Sun className="w-4 h-4 text-amber-400" /> : <Moon className="w-4 h-4 text-cyan-600" />}
               </button>
 
@@ -445,7 +445,7 @@ export default function Layout({ children, currentPageName }) {
                     type="button"
                     onClick={openSignIn}
                     className="h-9 px-3 rounded-xl text-xs font-bold border transition-all hover:border-cyan-400 hover:text-cyan-300"
-                    style={{ background: 'var(--ghost-surface-2)', borderColor: 'var(--ghost-border)', color: 'var(--ghost-text-dim)' }}
+                    style={{ background: 'var(--tb-surface-2)', borderColor: 'var(--tb-border)', color: 'var(--tb-text-dim)' }}
                   >
                     Sign In
                   </button>
@@ -467,7 +467,7 @@ export default function Layout({ children, currentPageName }) {
           {children}
 
           {/* Footer */}
-          <footer className="mt-16 pt-8 pb-12 border-t text-xs space-y-4" style={{ borderColor: 'var(--ghost-border)', color: 'var(--ghost-text-dim)' }}>
+          <footer className="mt-16 pt-8 pb-12 border-t text-xs space-y-4" style={{ borderColor: 'var(--tb-border)', color: 'var(--tb-text-dim)' }}>
             <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
               <div className="flex items-center gap-2 font-bold font-display text-sm text-cyan-600 dark:text-cyan-400">
                 <div className="w-5 h-5 rounded overflow-hidden bg-slate-950 border border-cyan-500/30">
@@ -484,8 +484,8 @@ export default function Layout({ children, currentPageName }) {
                 <Link to="/BusinessModel" className="hover:text-cyan-500 transition-colors">Pricing</Link>
               </div>
             </div>
-            <div className="flex flex-col sm:flex-row items-center justify-between gap-2 text-[10px] font-mono border-t pt-4" style={{ borderColor: 'var(--ghost-border)' }}>
-              <p>© 2026 TrustBreak.ai. India DPDP Act 2023 & GDPR Compliant Data Fiduciary.</p>
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-2 text-[10px] font-mono border-t pt-4" style={{ borderColor: 'var(--tb-border)' }}>
+              <p>© 2026 TrustBreak AI. India DPDP Act 2023 & GDPR Compliant Data Fiduciary.</p>
               <p>Grievance Officer: dpo@trustbreak.ai | Bengaluru, KA, India</p>
             </div>
           </footer>
@@ -521,7 +521,7 @@ export default function Layout({ children, currentPageName }) {
 
   return (
     <div className="min-h-screen flex flex-col transition-colors duration-300 relative" onClickCapture={handleProtectedLinkClick}
-      style={{ background: 'var(--ghost-bg)', color: 'var(--ghost-text)' }}>
+      style={{ background: 'var(--tb-bg)', color: 'var(--tb-text)' }}>
       
       {/* ThreeUI Ambient Living Particle Drift Field */}
       <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden opacity-25 dark:opacity-35 transition-opacity">
@@ -537,8 +537,8 @@ export default function Layout({ children, currentPageName }) {
       {/* Top Command Bar */}
       <header className="fixed top-0 left-0 right-0 z-40 h-14 border-b backdrop-blur-xl transition-colors duration-300"
         style={{
-          background: 'var(--ghost-surface)',
-          borderColor: 'var(--ghost-border)'
+          background: 'var(--tb-surface)',
+          borderColor: 'var(--tb-border)'
         }}>
         <div className="flex items-center justify-between h-full px-3 sm:px-6 max-w-7xl mx-auto w-full">
           
@@ -552,9 +552,9 @@ export default function Layout({ children, currentPageName }) {
                 title="Go Back"
                 className="h-9 px-2.5 rounded-xl border flex items-center justify-center gap-1.5 transition-all cursor-pointer hover:border-cyan-400 active:scale-95 shrink-0"
                 style={{
-                  background: 'var(--ghost-surface-2)',
-                  borderColor: 'var(--ghost-border)',
-                  color: 'var(--ghost-text)'
+                  background: 'var(--tb-surface-2)',
+                  borderColor: 'var(--tb-border)',
+                  color: 'var(--tb-text)'
                 }}>
                 <ArrowLeft className="w-4 h-4 text-cyan-500 group-hover:-translate-x-0.5 transition-transform pointer-events-none" />
                 <span className="text-xs font-bold hidden sm:inline pointer-events-none">Back</span>
@@ -569,7 +569,7 @@ export default function Layout({ children, currentPageName }) {
                 </div>
                 <div className="flex items-baseline gap-1.5">
                   <span className="text-base sm:text-lg font-black tracking-tight font-display"
-                    style={{ color: 'var(--ghost-text)' }}>
+                    style={{ color: 'var(--tb-text)' }}>
                     TrustBreak AI
                   </span>
                   <span className="hidden sm:inline-block text-[10px] font-mono font-bold px-1.5 py-0.2 rounded bg-cyan-500/10 text-cyan-500 border border-cyan-500/30">
@@ -589,9 +589,9 @@ export default function Layout({ children, currentPageName }) {
                 title={sidebarOpen ? "Close Sidebar Navigation" : "Open Sidebar Navigation"}
                 className="hidden md:flex w-9 h-9 rounded-xl items-center justify-center border transition-all cursor-pointer hover:border-cyan-400 active:scale-95 shrink-0"
                 style={{
-                  background: 'var(--ghost-surface-2)',
-                  borderColor: 'var(--ghost-border)',
-                  color: 'var(--ghost-text)'
+                  background: 'var(--tb-surface-2)',
+                  borderColor: 'var(--tb-border)',
+                  color: 'var(--tb-text)'
                 }}>
                 <Menu className="w-4 h-4 text-cyan-500 group-hover:scale-110 transition-transform pointer-events-none" />
               </button>
@@ -599,7 +599,7 @@ export default function Layout({ children, currentPageName }) {
               <Link
                 to={createPageUrl("ScanHub")}
                 className="hidden xl:inline-flex items-center gap-2 rounded-xl border px-3 py-2 text-[10px] font-black uppercase tracking-[0.18em] transition-all hover:border-cyan-400 hover:text-cyan-400"
-                style={{ background: 'var(--ghost-surface-2)', borderColor: 'var(--ghost-border)', color: 'var(--ghost-text-dim)' }}
+                style={{ background: 'var(--tb-surface-2)', borderColor: 'var(--tb-border)', color: 'var(--tb-text-dim)' }}
               >
                 <Zap className="h-3.5 w-3.5 text-cyan-500" />
                 Universal Scanner
@@ -617,9 +617,9 @@ export default function Layout({ children, currentPageName }) {
               title={`Switch to ${theme === 'dark' ? 'Light' : 'Dark'} Mode`}
               className="w-9 h-9 rounded-xl flex items-center justify-center border transition-all cursor-pointer hover:border-cyan-400 active:scale-95 shrink-0"
               style={{
-                background: 'var(--ghost-surface-2)',
-                borderColor: 'var(--ghost-border)',
-                color: 'var(--ghost-text)'
+                background: 'var(--tb-surface-2)',
+                borderColor: 'var(--tb-border)',
+                color: 'var(--tb-text)'
               }}>
               {theme === "dark" ? (
                 <Sun className="w-4 h-4 text-amber-400 pointer-events-none" />
@@ -655,7 +655,7 @@ export default function Layout({ children, currentPageName }) {
                   type="button"
                   onClick={async () => { await triggerHaptic('light'); openSignIn(); }}
                   className="h-9 px-3 rounded-xl text-xs font-bold border transition-all hover:border-cyan-400 hover:text-cyan-300 active:scale-95 shrink-0"
-                  style={{ background: 'var(--ghost-surface-2)', borderColor: 'var(--ghost-border)', color: 'var(--ghost-text-dim)' }}
+                  style={{ background: 'var(--tb-surface-2)', borderColor: 'var(--tb-border)', color: 'var(--tb-text-dim)' }}
                 >
                   Sign In
                 </button>
@@ -679,9 +679,9 @@ export default function Layout({ children, currentPageName }) {
               className="md:hidden w-9 h-9 rounded-xl flex items-center justify-center border cursor-pointer active:scale-95 shrink-0"
               aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
               style={{
-                background: 'var(--ghost-surface-2)',
-                borderColor: 'var(--ghost-border)',
-                color: 'var(--ghost-text)'
+                background: 'var(--tb-surface-2)',
+                borderColor: 'var(--tb-border)',
+                color: 'var(--tb-text)'
               }}>
               {mobileMenuOpen ? (
                 <X className="w-4 h-4 pointer-events-none" />
@@ -699,12 +699,12 @@ export default function Layout({ children, currentPageName }) {
           style={{ background: theme === 'dark' ? 'rgba(6,11,20,0.98)' : 'rgba(248,250,252,0.98)' }}>
           
           {/* Mobile Drawer Header */}
-          <div className="flex items-center justify-between p-4 border-b shrink-0" style={{ borderColor: 'var(--ghost-border)' }}>
+          <div className="flex items-center justify-between p-4 border-b shrink-0" style={{ borderColor: 'var(--tb-border)' }}>
             <div className="flex items-center gap-2.5">
               <div className="w-8 h-8 rounded-lg overflow-hidden border border-cyan-500/40 shadow-sm flex items-center justify-center bg-slate-950">
                 <img src="/logo-icon.svg" alt="TrustBreak AI Logo" className="w-full h-full object-cover" />
               </div>
-              <span className="font-black text-base font-display" style={{ color: 'var(--ghost-text)' }}>
+              <span className="font-black text-base font-display" style={{ color: 'var(--tb-text)' }}>
                 TrustBreak AI Navigation
               </span>
             </div>
@@ -713,7 +713,7 @@ export default function Layout({ children, currentPageName }) {
               onClick={() => setMobileMenuOpen(false)}
               aria-label="Close menu"
               className="w-9 h-9 rounded-xl border flex items-center justify-center transition-all hover:bg-slate-500/20"
-              style={{ background: 'var(--ghost-surface-2)', borderColor: 'var(--ghost-border)', color: 'var(--ghost-text)' }}>
+              style={{ background: 'var(--tb-surface-2)', borderColor: 'var(--tb-border)', color: 'var(--tb-text)' }}>
               <X className="w-5 h-5 text-cyan-400" />
             </button>
           </div>
@@ -721,11 +721,11 @@ export default function Layout({ children, currentPageName }) {
           <nav className="flex-1 overflow-y-auto p-4 space-y-4">
             
             {/* Senior Mode Toggle Inside Drawer */}
-            <div className="p-3 rounded-2xl border space-y-2" style={{ background: 'var(--ghost-surface-2)', borderColor: 'var(--ghost-border)' }}>
+            <div className="p-3 rounded-2xl border space-y-2" style={{ background: 'var(--tb-surface-2)', borderColor: 'var(--tb-border)' }}>
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <HeartHandshake className="w-4 h-4 text-emerald-400" />
-                  <span className="text-xs font-bold" style={{ color: 'var(--ghost-text)' }}>
+                  <span className="text-xs font-bold" style={{ color: 'var(--tb-text)' }}>
                     Senior & Family Safety Mode
                   </span>
                 </div>
@@ -739,12 +739,12 @@ export default function Layout({ children, currentPageName }) {
                   {familyMode ? "ENABLED" : "DISABLED"}
                 </button>
               </div>
-              <p className="text-[11px]" style={{ color: 'var(--ghost-text-dim)' }}>
+              <p className="text-[11px]" style={{ color: 'var(--tb-text-dim)' }}>
                 Enlarges touch targets and converts risk analysis into simplified plain English.
               </p>
             </div>
 
-            <span className="text-[10px] font-bold uppercase tracking-wider px-2 block" style={{ color: 'var(--ghost-text-muted)' }}>
+            <span className="text-[10px] font-bold uppercase tracking-wider px-2 block" style={{ color: 'var(--tb-text-muted)' }}>
               Detection Suites
             </span>
             {detectionNav.map(item => {
@@ -758,14 +758,14 @@ export default function Layout({ children, currentPageName }) {
                   className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${
                     active ? 'bg-cyan-500/15 text-cyan-500 border border-cyan-500/30' : 'hover:bg-slate-500/10'
                   }`}
-                  style={{ color: active ? undefined : 'var(--ghost-text)' }}>
+                  style={{ color: active ? undefined : 'var(--tb-text)' }}>
                   <Icon className="w-4 h-4" />
                   <span className="font-bold text-sm">{item.name}</span>
                 </Link>
               );
             })}
 
-            <span className="text-[10px] font-bold uppercase tracking-wider px-2 pt-2 block" style={{ color: 'var(--ghost-text-muted)' }}>
+            <span className="text-[10px] font-bold uppercase tracking-wider px-2 pt-2 block" style={{ color: 'var(--tb-text-muted)' }}>
               Intelligence & Radar
             </span>
             {intelligenceNav.map(item => {
@@ -779,14 +779,14 @@ export default function Layout({ children, currentPageName }) {
                   className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${
                     active ? 'bg-cyan-500/15 text-cyan-500 border border-cyan-500/30' : 'hover:bg-slate-500/10'
                   }`}
-                  style={{ color: active ? undefined : 'var(--ghost-text)' }}>
+                  style={{ color: active ? undefined : 'var(--tb-text)' }}>
                   <Icon className="w-4 h-4" />
                   <span className="font-bold text-sm">{item.name}</span>
                 </Link>
               );
             })}
 
-            <span className="text-[10px] font-bold uppercase tracking-wider px-2 pt-2 block" style={{ color: 'var(--ghost-text-muted)' }}>
+            <span className="text-[10px] font-bold uppercase tracking-wider px-2 pt-2 block" style={{ color: 'var(--tb-text-muted)' }}>
               Governance & Architecture
             </span>
             {governanceNav.map(item => {
@@ -800,7 +800,7 @@ export default function Layout({ children, currentPageName }) {
                   className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${
                     active ? 'bg-cyan-500/15 text-cyan-500 border border-cyan-500/30' : 'hover:bg-slate-500/10'
                   }`}
-                  style={{ color: active ? undefined : 'var(--ghost-text)' }}>
+                  style={{ color: active ? undefined : 'var(--tb-text)' }}>
                   <Icon className="w-4 h-4" />
                   <span className="font-bold text-sm">{item.name}</span>
                 </Link>
@@ -842,8 +842,8 @@ export default function Layout({ children, currentPageName }) {
         sidebarOpen ? 'w-64 px-3' : 'w-16 px-2'
       }`}
         style={{
-          background: 'var(--ghost-surface)',
-          borderColor: 'var(--ghost-border)'
+          background: 'var(--tb-surface)',
+          borderColor: 'var(--tb-border)'
         }}>
         
         <nav className="flex flex-col gap-4">
@@ -852,7 +852,7 @@ export default function Layout({ children, currentPageName }) {
           <div className="space-y-1">
             {sidebarOpen && (
               <span className="text-[10px] font-bold uppercase tracking-wider px-3 block mb-1"
-                style={{ color: 'var(--ghost-text-muted)' }}>
+                style={{ color: 'var(--tb-text-muted)' }}>
                 Detection Suites
               </span>
             )}
@@ -871,7 +871,7 @@ export default function Layout({ children, currentPageName }) {
                       ? 'bg-cyan-500/10 text-cyan-500 border border-cyan-500/30 shadow-[0_0_12px_rgba(0,229,255,0.12)]'
                       : 'hover:bg-slate-500/10'
                   }`}
-                  style={{ color: active ? undefined : 'var(--ghost-text-dim)' }}>
+                  style={{ color: active ? undefined : 'var(--tb-text-dim)' }}>
                   <Icon className="w-4 h-4 shrink-0" />
                   {sidebarOpen && <span className="truncate">{item.name}</span>}
                 </Link>
@@ -883,7 +883,7 @@ export default function Layout({ children, currentPageName }) {
           <div className="space-y-1 pt-1">
             {sidebarOpen && (
               <span className="text-[10px] font-bold uppercase tracking-wider px-3 block mb-1"
-                style={{ color: 'var(--ghost-text-muted)' }}>
+                style={{ color: 'var(--tb-text-muted)' }}>
                 Intelligence & Business
               </span>
             )}
@@ -902,7 +902,7 @@ export default function Layout({ children, currentPageName }) {
                       ? 'bg-cyan-500/10 text-cyan-500 border border-cyan-500/30 shadow-[0_0_12px_rgba(0,229,255,0.12)]'
                       : 'hover:bg-slate-500/10'
                   }`}
-                  style={{ color: active ? undefined : 'var(--ghost-text-dim)' }}>
+                  style={{ color: active ? undefined : 'var(--tb-text-dim)' }}>
                   <Icon className="w-4 h-4 shrink-0" />
                   {sidebarOpen && <span className="truncate">{item.name}</span>}
                 </Link>
@@ -914,7 +914,7 @@ export default function Layout({ children, currentPageName }) {
           <div className="space-y-1 pt-1">
             {sidebarOpen && (
               <span className="text-[10px] font-bold uppercase tracking-wider px-3 block mb-1"
-                style={{ color: 'var(--ghost-text-muted)' }}>
+                style={{ color: 'var(--tb-text-muted)' }}>
                 Architecture & Trust
               </span>
             )}
@@ -933,7 +933,7 @@ export default function Layout({ children, currentPageName }) {
                       ? 'bg-cyan-500/10 text-cyan-500 border border-cyan-500/30 shadow-[0_0_12px_rgba(0,229,255,0.12)]'
                       : 'hover:bg-slate-500/10'
                   }`}
-                  style={{ color: active ? undefined : 'var(--ghost-text-dim)' }}>
+                  style={{ color: active ? undefined : 'var(--tb-text-dim)' }}>
                   <Icon className="w-4 h-4 shrink-0" />
                   {sidebarOpen && <span className="truncate">{item.name}</span>}
                 </Link>
@@ -952,7 +952,7 @@ export default function Layout({ children, currentPageName }) {
                 Autonomous Defense
               </span>
             </div>
-            <p className="text-[11px] leading-normal" style={{ color: 'var(--ghost-text-dim)' }}>
+            <p className="text-[11px] leading-normal" style={{ color: 'var(--tb-text-dim)' }}>
               Groq LPU + Gemini Vision telemetry active
             </p>
           </div>
@@ -971,7 +971,7 @@ export default function Layout({ children, currentPageName }) {
           {children}
 
           {/* Transparent Legal Footer */}
-          <footer className="mt-16 pt-8 pb-12 border-t text-xs space-y-4" style={{ borderColor: 'var(--ghost-border)', color: 'var(--ghost-text-dim)' }}>
+          <footer className="mt-16 pt-8 pb-12 border-t text-xs space-y-4" style={{ borderColor: 'var(--tb-border)', color: 'var(--tb-text-dim)' }}>
             <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
               <div className="flex items-center gap-2 font-bold font-display text-sm text-cyan-600 dark:text-cyan-400">
                 <div className="w-5 h-5 rounded overflow-hidden bg-slate-950 border border-cyan-500/30">
@@ -989,9 +989,9 @@ export default function Layout({ children, currentPageName }) {
               </div>
             </div>
 
-            <div className="flex flex-col sm:flex-row items-center justify-between gap-2 text-[10px] font-mono border-t pt-4" style={{ borderColor: 'var(--ghost-border)' }}>
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-2 text-[10px] font-mono border-t pt-4" style={{ borderColor: 'var(--tb-border)' }}>
               <p>
-                © 2026 TrustBreak.ai. India DPDP Act 2023 & GDPR Compliant Data Fiduciary.
+                © 2026 TrustBreak AI. India DPDP Act 2023 & GDPR Compliant Data Fiduciary.
               </p>
               <p>
                 Grievance Officer: dpo@trustbreak.ai | Bengaluru, KA, India
@@ -1005,7 +1005,7 @@ export default function Layout({ children, currentPageName }) {
       <nav className="md:hidden fixed bottom-0 left-0 right-0 z-40 border-t backdrop-blur-xl transition-colors duration-300"
         style={{
           background: theme === 'dark' ? 'rgba(6,11,20,0.95)' : 'rgba(255,255,255,0.95)',
-          borderColor: 'var(--ghost-border)'
+          borderColor: 'var(--tb-border)'
         }}>
         <div className="flex items-center justify-around py-2 px-1">
           {bottomNavItems.map(item => {
@@ -1018,7 +1018,7 @@ export default function Layout({ children, currentPageName }) {
                 className={`flex flex-col items-center gap-0.5 py-1 px-2.5 rounded-lg transition-all ${
                   active ? 'text-cyan-500 font-bold' : 'font-medium'
                 }`}
-                style={{ color: active ? undefined : 'var(--ghost-text-dim)' }}>
+                style={{ color: active ? undefined : 'var(--tb-text-dim)' }}>
                 <Icon className="w-4 h-4" />
                 <span className="text-[10px] tracking-tight">{item.name}</span>
               </Link>

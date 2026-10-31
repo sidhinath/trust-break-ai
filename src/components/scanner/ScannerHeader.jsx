@@ -17,11 +17,11 @@ export default function ScannerHeader({ icon: Icon, title, description, color = 
       </div>
       <div className="space-y-0.5">
         <h1 className="text-xl sm:text-2xl font-black tracking-tight font-display"
-          style={{ color: 'var(--ghost-text)' }}>
+          style={{ color: 'var(--tb-text)' }}>
           {title}
         </h1>
         <p className="text-xs sm:text-sm font-medium leading-relaxed max-w-2xl"
-          style={{ color: 'var(--ghost-text-dim)' }}>
+          style={{ color: 'var(--tb-text-dim)' }}>
           {description}
         </p>
       </div>

@@ -108,17 +108,17 @@ export default function Settings() {
       />
 
       {/* ACCOUNT SECTION */}
-      <div className="ghost-card p-5 space-y-4">
-        <div className="flex items-center gap-2 border-b pb-3" style={{ borderColor: "var(--ghost-border)" }}>
+      <div className="tb-card p-5 space-y-4">
+        <div className="flex items-center gap-2 border-b pb-3" style={{ borderColor: "var(--tb-border)" }}>
           <User className="w-4 h-4 text-cyan-400" />
-          <h3 className="text-xs font-bold uppercase tracking-wider" style={{ color: "var(--ghost-text)" }}>
+          <h3 className="text-xs font-bold uppercase tracking-wider" style={{ color: "var(--tb-text)" }}>
             Account & Security Profile
           </h3>
         </div>
 
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
           <div className="space-y-1">
-            <span className="text-xs font-bold block" style={{ color: "var(--ghost-text)" }}>
+            <span className="text-xs font-bold block" style={{ color: "var(--tb-text)" }}>
               {user?.email || "Operator Account"}
             </span>
             <span className="text-[11px] font-mono text-emerald-500 flex items-center gap-1">
@@ -138,11 +138,11 @@ export default function Settings() {
       </div>
 
       {/* AI ENGINE & CREDENTIALS SECTION */}
-      <div className="ghost-card p-5 space-y-4">
-        <div className="flex items-center justify-between border-b pb-3" style={{ borderColor: "var(--ghost-border)" }}>
+      <div className="tb-card p-5 space-y-4">
+        <div className="flex items-center justify-between border-b pb-3" style={{ borderColor: "var(--tb-border)" }}>
           <div className="flex items-center gap-2">
             <ShieldCheck className="w-4 h-4 text-cyan-400" />
-            <h3 className="text-xs font-bold uppercase tracking-wider" style={{ color: "var(--ghost-text)" }}>
+            <h3 className="text-xs font-bold uppercase tracking-wider" style={{ color: "var(--tb-text)" }}>
               AI Engine & API Credentials
             </h3>
           </div>
@@ -198,21 +198,21 @@ export default function Settings() {
       </div>
 
       {/* PROTECTION PREFERENCES */}
-      <div className="ghost-card p-5 space-y-4">
-        <div className="flex items-center gap-2 border-b pb-3" style={{ borderColor: "var(--ghost-border)" }}>
+      <div className="tb-card p-5 space-y-4">
+        <div className="flex items-center gap-2 border-b pb-3" style={{ borderColor: "var(--tb-border)" }}>
           <Shield className="w-4 h-4 text-cyan-400" />
-          <h3 className="text-xs font-bold uppercase tracking-wider" style={{ color: "var(--ghost-text)" }}>
+          <h3 className="text-xs font-bold uppercase tracking-wider" style={{ color: "var(--tb-text)" }}>
             Protection Preferences
           </h3>
         </div>
 
         <div className="space-y-3">
-          <div className="flex items-center justify-between p-3 rounded-xl border" style={{ background: "var(--ghost-surface-2)", borderColor: "var(--ghost-border)" }}>
+          <div className="flex items-center justify-between p-3 rounded-xl border" style={{ background: "var(--tb-surface-2)", borderColor: "var(--tb-border)" }}>
             <div className="space-y-0.5">
-              <span className="text-xs font-bold block" style={{ color: "var(--ghost-text)" }}>
+              <span className="text-xs font-bold block" style={{ color: "var(--tb-text)" }}>
                 Offline Deterministic Heuristics
               </span>
-              <span className="text-[11px] block" style={{ color: "var(--ghost-text-dim)" }}>
+              <span className="text-[11px] block" style={{ color: "var(--tb-text-dim)" }}>
                 Use local rule engine when internet is disconnected.
               </span>
             </div>
@@ -224,12 +224,12 @@ export default function Settings() {
             />
           </div>
 
-          <div className="flex items-center justify-between p-3 rounded-xl border" style={{ background: "var(--ghost-surface-2)", borderColor: "var(--ghost-border)" }}>
+          <div className="flex items-center justify-between p-3 rounded-xl border" style={{ background: "var(--tb-surface-2)", borderColor: "var(--tb-border)" }}>
             <div className="space-y-0.5">
-              <span className="text-xs font-bold block" style={{ color: "var(--ghost-text)" }}>
+              <span className="text-xs font-bold block" style={{ color: "var(--tb-text)" }}>
                 Threat Detection Notifications
               </span>
-              <span className="text-[11px] block" style={{ color: "var(--ghost-text-dim)" }}>
+              <span className="text-[11px] block" style={{ color: "var(--tb-text-dim)" }}>
                 Trigger system alerts when high-risk content is flagged.
               </span>
             </div>
@@ -241,12 +241,12 @@ export default function Settings() {
             />
           </div>
 
-          <div className="flex items-center justify-between p-3 rounded-xl border" style={{ background: "var(--ghost-surface-2)", borderColor: "var(--ghost-border)" }}>
+          <div className="flex items-center justify-between p-3 rounded-xl border" style={{ background: "var(--tb-surface-2)", borderColor: "var(--tb-border)" }}>
             <div className="space-y-0.5">
-              <span className="text-xs font-bold flex items-center gap-1.5" style={{ color: "var(--ghost-text)" }}>
+              <span className="text-xs font-bold flex items-center gap-1.5" style={{ color: "var(--tb-text)" }}>
                 <HeartHandshake className="w-4 h-4 text-emerald-400" /> Senior & Family Safety Mode
               </span>
-              <span className="text-[11px] block" style={{ color: "var(--ghost-text-dim)" }}>
+              <span className="text-[11px] block" style={{ color: "var(--tb-text-dim)" }}>
                 Enlarge touch targets and simplify risk explanations into plain English.
               </span>
             </div>
@@ -258,12 +258,12 @@ export default function Settings() {
             />
           </div>
 
-          <div className="flex items-center justify-between p-3 rounded-xl border" style={{ background: "var(--ghost-surface-2)", borderColor: "var(--ghost-border)" }}>
+          <div className="flex items-center justify-between p-3 rounded-xl border" style={{ background: "var(--tb-surface-2)", borderColor: "var(--tb-border)" }}>
             <div className="space-y-0.5">
-              <span className="text-xs font-bold flex items-center gap-1.5" style={{ color: "var(--ghost-text)" }}>
+              <span className="text-xs font-bold flex items-center gap-1.5" style={{ color: "var(--tb-text)" }}>
                 {themeMode === "dark" ? <Moon className="w-4 h-4 text-cyan-400" /> : <Sun className="w-4 h-4 text-amber-400" />} Theme Interface ({themeMode === "dark" ? "Dark Mode" : "Light Mode"})
               </span>
-              <span className="text-[11px] block" style={{ color: "var(--ghost-text-dim)" }}>
+              <span className="text-[11px] block" style={{ color: "var(--tb-text-dim)" }}>
                 Switch between high-contrast dark cybersecurity mode and clean light theme.
               </span>
             </div>
@@ -278,30 +278,30 @@ export default function Settings() {
       </div>
 
       {/* PRIVACY & PERMISSIONS */}
-      <div className="ghost-card p-5 space-y-4">
-        <div className="flex items-center gap-2 border-b pb-3" style={{ borderColor: "var(--ghost-border)" }}>
+      <div className="tb-card p-5 space-y-4">
+        <div className="flex items-center gap-2 border-b pb-3" style={{ borderColor: "var(--tb-border)" }}>
           <Lock className="w-4 h-4 text-cyan-400" />
-          <h3 className="text-xs font-bold uppercase tracking-wider" style={{ color: "var(--ghost-text)" }}>
+          <h3 className="text-xs font-bold uppercase tracking-wider" style={{ color: "var(--tb-text)" }}>
             Privacy & Permissions
           </h3>
         </div>
 
         <div className="space-y-3">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <div className="p-3 rounded-xl border flex items-center justify-between" style={{ background: "var(--ghost-surface-2)", borderColor: "var(--ghost-border)" }}>
+            <div className="p-3 rounded-xl border flex items-center justify-between" style={{ background: "var(--tb-surface-2)", borderColor: "var(--tb-border)" }}>
               <div className="flex items-center gap-2">
                 <Camera className="w-4 h-4 text-cyan-400" />
-                <span className="text-xs font-bold" style={{ color: "var(--ghost-text)" }}>Camera Access</span>
+                <span className="text-xs font-bold" style={{ color: "var(--tb-text)" }}>Camera Access</span>
               </div>
               <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">
                 Granted / Ready
               </span>
             </div>
 
-            <div className="p-3 rounded-xl border flex items-center justify-between" style={{ background: "var(--ghost-surface-2)", borderColor: "var(--ghost-border)" }}>
+            <div className="p-3 rounded-xl border flex items-center justify-between" style={{ background: "var(--tb-surface-2)", borderColor: "var(--tb-border)" }}>
               <div className="flex items-center gap-2">
                 <Mic className="w-4 h-4 text-cyan-400" />
-                <span className="text-xs font-bold" style={{ color: "var(--ghost-text)" }}>Microphone Access</span>
+                <span className="text-xs font-bold" style={{ color: "var(--tb-text)" }}>Microphone Access</span>
               </div>
               <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">
                 Granted / Ready
@@ -309,12 +309,12 @@ export default function Settings() {
             </div>
           </div>
 
-          <div className="pt-1 flex items-center justify-between border-t" style={{ borderColor: "var(--ghost-border)" }}>
+          <div className="pt-1 flex items-center justify-between border-t" style={{ borderColor: "var(--tb-border)" }}>
             <div className="space-y-0.5">
-              <span className="text-xs font-bold block" style={{ color: "var(--ghost-text)" }}>
+              <span className="text-xs font-bold block" style={{ color: "var(--tb-text)" }}>
                 Clear Local Scan History
               </span>
-              <span className="text-[11px] block" style={{ color: "var(--ghost-text-dim)" }}>
+              <span className="text-[11px] block" style={{ color: "var(--tb-text-dim)" }}>
                 Purge cached scan results stored locally on this device.
               </span>
             </div>
@@ -333,12 +333,12 @@ export default function Settings() {
             </p>
           )}
 
-          <div className="pt-2 flex items-center justify-between border-t" style={{ borderColor: "var(--ghost-border)" }}>
+          <div className="pt-2 flex items-center justify-between border-t" style={{ borderColor: "var(--tb-border)" }}>
             <div className="space-y-0.5">
-              <span className="text-xs font-bold block" style={{ color: "var(--ghost-text)" }}>
+              <span className="text-xs font-bold block" style={{ color: "var(--tb-text)" }}>
                 Replay Application Introduction
               </span>
-              <span className="text-[11px] block" style={{ color: "var(--ghost-text-dim)" }}>
+              <span className="text-[11px] block" style={{ color: "var(--tb-text-dim)" }}>
                 Show the first-launch onboarding sequence on next launch.
               </span>
             </div>
@@ -364,20 +364,20 @@ export default function Settings() {
       </div>
 
       {/* APP INFO */}
-      <div className="ghost-card p-5 space-y-3">
-        <div className="flex items-center gap-2 border-b pb-3" style={{ borderColor: "var(--ghost-border)" }}>
+      <div className="tb-card p-5 space-y-3">
+        <div className="flex items-center gap-2 border-b pb-3" style={{ borderColor: "var(--tb-border)" }}>
           <Info className="w-4 h-4 text-cyan-400" />
-          <h3 className="text-xs font-bold uppercase tracking-wider" style={{ color: "var(--ghost-text)" }}>
+          <h3 className="text-xs font-bold uppercase tracking-wider" style={{ color: "var(--tb-text)" }}>
             About TrustBreak AI
           </h3>
         </div>
 
-        <div className="space-y-2 text-xs" style={{ color: "var(--ghost-text-dim)" }}>
-          <div className="flex justify-between py-1 border-b" style={{ borderColor: "var(--ghost-border)" }}>
+        <div className="space-y-2 text-xs" style={{ color: "var(--tb-text-dim)" }}>
+          <div className="flex justify-between py-1 border-b" style={{ borderColor: "var(--tb-border)" }}>
             <span>Application Version</span>
             <span className="font-mono text-cyan-400 font-bold">1.0.0 (Capacitor Android)</span>
           </div>
-          <div className="flex justify-between py-1 border-b" style={{ borderColor: "var(--ghost-border)" }}>
+          <div className="flex justify-between py-1 border-b" style={{ borderColor: "var(--tb-border)" }}>
             <span>Package Identifier</span>
             <span className="font-mono text-slate-400">com.trustbreak.app</span>
           </div>

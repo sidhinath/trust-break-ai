@@ -4,6 +4,16 @@ All notable changes to TrustBreak AI are documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased] - 2026-10-31 (Branding & Repository Cleanup)
+
+### Changed
+* **Design Token Normalization:** Renamed all legacy pre-rebrand CSS custom properties to the `--tb-*` namespace and the legacy card class to `.tb-card` across `src/`, including the high-contrast theme tokens and skeleton styles.
+* **Android Application Identity:** Migrated the Android `namespace`, `applicationId`, and URL scheme to `com.trustbreak.app`, matching `capacitor.config.ts`, and relocated `MainActivity.java` to `com/trustbreak/app/`.
+* **Retired API Fallback Removed:** Removed the decommissioned legacy API fallback host from `src/lib/api.js`; the canonical TrustBreak AI API host remains the primary remote fallback.
+* **Brand Copy Corrections:** Fixed all `TrustBreak AI.ai` typos in policy pages and standardized footer copyright text to `TrustBreak AI`.
+* **Model Documentation Alignment:** Updated the Technology page to reference the Groq `llama-3.3-70b-versatile` fallback chain actually implemented in `api/analyze.js`.
+* **SEO & Metadata:** Added description, theme-color, Open Graph, and Twitter card metadata to `index.html`.
+
 ## [1.7.0-release] - 2026-10-30 (TrustBreak AI Brand Migration & Production Release)
 
 ### Added
@@ -79,7 +89,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ### Changed
 * **Right-Side Hero Auth Box:** Redesigned `AuthGate.jsx` landing page with a 2-column hero layout placing the `Access TrustBreak AI Workspace` login card prominently at the top right of the page.
 * **Strict Login Credential Validation:** Enforced non-empty credential requirement (`email` + `password`), blocking empty submissions with clear warnings while maintaining 1-click **⚡ Judge Demo Mode**.
-* **High-Contrast Theme Tokens:** Updated card backgrounds, feature badges, and button text across `BusinessModel.jsx`, `AuthGate.jsx`, and global inputs to use high-contrast CSS variable tokens (`var(--ghost-surface)`, `var(--ghost-text)`, `var(--ghost-text-dim)`).
+* **High-Contrast Theme Tokens:** Updated card backgrounds, feature badges, and button text across `BusinessModel.jsx`, `AuthGate.jsx`, and global inputs to use high-contrast CSS variable tokens (`var(--tb-surface)`, `var(--tb-text)`, `var(--tb-text-dim)`).
 * **Sidebar Scrollbar Clean Up:** Added `.no-scrollbar` utility to `<aside>` in `Layout.jsx` hiding thick visual scrollbar borders.
 
 ---

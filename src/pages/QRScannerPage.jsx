@@ -95,23 +95,23 @@ export default function QRScannerPage() {
       />
 
       {/* Main Upload / Decoder */}
-      <div className="ghost-card p-5">
+      <div className="tb-card p-5">
         <QRScanner onDecoded={handleDecoded} onError={(msg) => setScanError(msg)} />
       </div>
 
       {scanning && (
-        <div className="ghost-card p-4 flex items-center gap-3">
+        <div className="tb-card p-4 flex items-center gap-3">
           <QrCode className="w-5 h-5 text-violet-400 animate-pulse" />
-          <span className="text-xs font-medium" style={{ color: "var(--ghost-text-dim)" }}>
+          <span className="text-xs font-medium" style={{ color: "var(--tb-text-dim)" }}>
             Analyzing decoded QR destination with neural threat pipeline...
           </span>
         </div>
       )}
 
       {scanError && !scanning && (
-        <div className="ghost-card p-4 border-rose-500/30 flex items-start gap-3">
+        <div className="tb-card p-4 border-rose-500/30 flex items-start gap-3">
           <AlertCircle className="w-4 h-4 text-rose-500 mt-0.5 shrink-0" />
-          <span className="text-xs font-medium" style={{ color: "var(--ghost-text-dim)" }}>
+          <span className="text-xs font-medium" style={{ color: "var(--tb-text-dim)" }}>
             {scanError}
           </span>
         </div>
@@ -129,9 +129,9 @@ export default function QRScannerPage() {
 
       {result && !scanning && (
         <div className="space-y-4">
-          <div className="ghost-card p-4 space-y-3">
+          <div className="tb-card p-4 space-y-3">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-bold uppercase tracking-wider block" style={{ color: "var(--ghost-text-dim)" }}>
+              <span className="text-xs font-bold uppercase tracking-wider block" style={{ color: "var(--tb-text-dim)" }}>
                 Decoded Raw QR Content
               </span>
               {extractedUrl && (
@@ -141,7 +141,7 @@ export default function QRScannerPage() {
               )}
             </div>
             <p className="text-xs font-mono break-all p-2.5 rounded-lg border leading-relaxed"
-              style={{ background: "var(--ghost-surface-2)", borderColor: "var(--ghost-border)", color: "var(--ghost-text)" }}>
+              style={{ background: "var(--tb-surface-2)", borderColor: "var(--tb-border)", color: "var(--tb-text)" }}>
               {qrPayload}
             </p>
 

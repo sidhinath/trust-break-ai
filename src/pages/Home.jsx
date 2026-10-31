@@ -77,7 +77,7 @@ export default function Home() {
 
       <div className="space-y-3">
         <div className="flex items-center justify-between">
-          <h2 className="text-xs font-bold uppercase tracking-widest" style={{ color: 'var(--ghost-text-dim)' }}>
+          <h2 className="text-xs font-bold uppercase tracking-widest" style={{ color: 'var(--tb-text-dim)' }}>
             Security Scanners & Tools
           </h2>
           <span className="text-[11px] font-mono font-bold text-cyan-600 dark:text-cyan-400">Multi-Modal Protection Engines</span>
@@ -87,7 +87,7 @@ export default function Home() {
 
       <div className="space-y-3">
         <div className="flex items-center justify-between">
-          <h2 className="text-xs font-bold uppercase tracking-widest" style={{ color: 'var(--ghost-text-dim)' }}>
+          <h2 className="text-xs font-bold uppercase tracking-widest" style={{ color: 'var(--tb-text-dim)' }}>
             Global & Local Intelligence
           </h2>
           <Link to={createPageUrl("Threats")} className="text-[11px] font-bold text-cyan-600 dark:text-cyan-400 hover:underline flex items-center gap-1">
@@ -103,7 +103,7 @@ export default function Home() {
 
       <div className="space-y-3">
         <div className="flex items-center justify-between">
-          <h2 className="text-xs font-bold uppercase tracking-widest" style={{ color: 'var(--ghost-text-dim)' }}>
+          <h2 className="text-xs font-bold uppercase tracking-widest" style={{ color: 'var(--tb-text-dim)' }}>
             Recent Inspections
           </h2>
           <Link to={createPageUrl("Reports")} className="text-[11px] font-bold text-cyan-600 dark:text-cyan-400 hover:underline">

@@ -84,7 +84,7 @@ export default function QuickActions() {
             transition={{ duration: 0.15 }}>
             <Link
               to={createPageUrl(action.page)}
-              className="ghost-card p-4 flex items-center justify-between group transition-all block h-full">
+              className="tb-card p-4 flex items-center justify-between group transition-all block h-full">
               <div className="flex items-center gap-3">
                 <div
                   className="w-11 h-11 rounded-xl flex items-center justify-center shrink-0 transition-transform group-hover:scale-105"
@@ -93,11 +93,11 @@ export default function QuickActions() {
                 </div>
                 <div>
                   <h3 className="text-sm font-bold transition-colors group-hover:text-cyan-500"
-                    style={{ color: 'var(--ghost-text)' }}>
+                    style={{ color: 'var(--tb-text)' }}>
                     {action.title}
                   </h3>
                   <p className="text-[11px] font-medium mt-0.5"
-                    style={{ color: 'var(--ghost-text-dim)' }}>
+                    style={{ color: 'var(--tb-text-dim)' }}>
                     {action.subtitle}
                   </p>
                 </div>

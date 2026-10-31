@@ -131,13 +131,13 @@ export default function MessageScanner() {
       />
 
       {/* Main Input Card */}
-      <div className="ghost-card p-5 space-y-4">
+      <div className="tb-card p-5 space-y-4">
         
         {/* Sample Quick Selector */}
         <div className="space-y-2">
           <div className="flex items-center justify-between">
             <span className="text-xs font-bold uppercase tracking-wider flex items-center gap-1.5"
-              style={{ color: 'var(--ghost-text-dim)' }}>
+              style={{ color: 'var(--tb-text-dim)' }}>
               <Sparkles className="w-3.5 h-3.5 text-cyan-500" /> Benchmark Test Scenarios
             </span>
             {message && (
@@ -156,9 +156,9 @@ export default function MessageScanner() {
                 onClick={() => handleSelectSample(threat.sampleInput)}
                 className="text-[11px] font-bold px-3 py-1.5 rounded-lg border hover:border-cyan-400/50 transition-all text-left cursor-pointer"
                 style={{
-                  background: 'var(--ghost-surface-2)',
-                  borderColor: 'var(--ghost-border)',
-                  color: 'var(--ghost-text)'
+                  background: 'var(--tb-surface-2)',
+                  borderColor: 'var(--tb-border)',
+                  color: 'var(--tb-text)'
                 }}>
                 <span className="text-cyan-600 dark:text-cyan-400 font-mono mr-1">{threat.category}:</span>
                 {threat.title}
@@ -169,13 +169,13 @@ export default function MessageScanner() {
 
         {/* Text Input Area */}
         <div className="rounded-xl border focus-within:border-cyan-500/50 transition-colors p-2"
-          style={{ background: 'var(--ghost-surface-2)', borderColor: 'var(--ghost-border)' }}>
+          style={{ background: 'var(--tb-surface-2)', borderColor: 'var(--tb-border)' }}>
           <Textarea
             value={message}
             onChange={(e) => setMessage(e.target.value)}
             placeholder="Paste suspicious message text here... e.g. 'DEAR CUSTOMER, YOUR ACCOUNT IS BLOCKED DUE TO KYC...'"
             className="min-h-[130px] bg-transparent border-0 resize-none text-sm font-medium focus-visible:ring-0 placeholder:text-slate-400"
-            style={{ color: 'var(--ghost-text)' }}
+            style={{ color: 'var(--tb-text)' }}
           />
         </div>
 

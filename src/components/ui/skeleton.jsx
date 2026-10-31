@@ -10,10 +10,10 @@ function Skeleton({ className, style, ...props }) {
       role="status"
       aria-busy="true"
       aria-label="Loading element..."
-      className={cn("ghost-skeleton-glow border border-cyan-500/10", className)}
+      className={cn("tb-skeleton-glow border border-cyan-500/10", className)}
       style={{
-        background: 'var(--ghost-surface-2)',
-        borderColor: 'var(--ghost-skeleton-border)',
+        background: 'var(--tb-surface-2)',
+        borderColor: 'var(--tb-skeleton-border)',
         ...style
       }}
       {...props}
@@ -46,7 +46,7 @@ function HeaderSkeleton() {
   return (
     <header
       className="fixed top-0 left-0 right-0 z-40 h-14 border-b backdrop-blur-xl transition-colors"
-      style={{ background: 'var(--ghost-surface)', borderColor: 'var(--ghost-border)' }}
+      style={{ background: 'var(--tb-surface)', borderColor: 'var(--tb-border)' }}
       role="status"
       aria-label="Loading top navigation bar">
       <div className="flex items-center justify-between h-full px-4 max-w-7xl mx-auto w-full">
@@ -72,7 +72,7 @@ function SidebarSkeleton() {
   return (
     <aside
       className="hidden md:flex flex-col w-64 fixed top-14 left-0 bottom-0 border-r z-30 p-4 space-y-6 overflow-y-auto"
-      style={{ background: 'var(--ghost-surface)', borderColor: 'var(--ghost-border)' }}
+      style={{ background: 'var(--tb-surface)', borderColor: 'var(--tb-border)' }}
       role="status"
       aria-label="Loading navigation sidebar">
       <div className="space-y-2 pt-2">
@@ -109,8 +109,8 @@ function MetricCardSkeleton({ count = 3, className }) {
       {Array.from({ length: count }).map((_, i) => (
         <div
           key={i}
-          className="ghost-card p-5 space-y-3 min-h-[120px] flex flex-col justify-between"
-          style={{ background: 'var(--ghost-surface)' }}>
+          className="tb-card p-5 space-y-3 min-h-[120px] flex flex-col justify-between"
+          style={{ background: 'var(--tb-surface)' }}>
           <div className="flex items-center justify-between">
             <Skeleton className="h-4 w-28 rounded-md" />
             <Skeleton className="w-6 h-6 rounded-md" />
@@ -135,8 +135,8 @@ function ScannerCardSkeleton({ count = 6, className }) {
       {Array.from({ length: count }).map((_, i) => (
         <div
           key={i}
-          className="ghost-card p-4 flex items-center justify-between min-h-[76px]"
-          style={{ background: 'var(--ghost-surface)' }}>
+          className="tb-card p-4 flex items-center justify-between min-h-[76px]"
+          style={{ background: 'var(--tb-surface)' }}>
           <div className="flex items-center gap-3 flex-1">
             <Skeleton className="w-11 h-11 rounded-xl shrink-0" />
             <div className="space-y-1.5 flex-1">
@@ -157,7 +157,7 @@ function ScannerCardSkeleton({ count = 6, className }) {
 function ThreatRowSkeleton() {
   return (
     <div className="flex items-center justify-between gap-4 p-3.5 rounded-xl border"
-      style={{ background: 'var(--ghost-surface-2)', borderColor: 'var(--ghost-border)' }}>
+      style={{ background: 'var(--tb-surface-2)', borderColor: 'var(--tb-border)' }}>
       <div className="flex items-center gap-3 flex-1">
         <Skeleton className="w-9 h-9 rounded-lg shrink-0" />
         <div className="space-y-1.5 flex-1">
@@ -175,7 +175,7 @@ function ThreatRowSkeleton() {
 
 function ThreatListSkeleton({ count = 5, className }) {
   return (
-    <div className={cn("ghost-card p-4 space-y-3", className)} role="status" aria-label="Loading recent threat activity">
+    <div className={cn("tb-card p-4 space-y-3", className)} role="status" aria-label="Loading recent threat activity">
       {Array.from({ length: count }).map((_, i) => (
         <ThreatRowSkeleton key={i} />
       ))}
@@ -189,8 +189,8 @@ function ThreatListSkeleton({ count = 5, className }) {
 function ChartSkeleton({ height = 280, className }) {
   return (
     <div
-      className={cn("ghost-card p-5 space-y-4 flex flex-col justify-between", className)}
-      style={{ minHeight: `${height}px`, background: 'var(--ghost-surface)' }}
+      className={cn("tb-card p-5 space-y-4 flex flex-col justify-between", className)}
+      style={{ minHeight: `${height}px`, background: 'var(--tb-surface)' }}
       role="status"
       aria-label="Loading chart data">
       <div className="flex items-center justify-between">
@@ -205,7 +205,7 @@ function ChartSkeleton({ height = 280, className }) {
           );
         })}
       </div>
-      <div className="flex justify-between pt-2 border-t" style={{ borderColor: 'var(--ghost-border)' }}>
+      <div className="flex justify-between pt-2 border-t" style={{ borderColor: 'var(--tb-border)' }}>
         <Skeleton className="h-3 w-12 rounded" />
         <Skeleton className="h-3 w-12 rounded" />
         <Skeleton className="h-3 w-12 rounded" />
@@ -220,7 +220,7 @@ function ChartSkeleton({ height = 280, className }) {
  */
 function FormSkeleton({ hasUpload = false, className }) {
   return (
-    <div className={cn("ghost-card p-6 space-y-5", className)} style={{ background: 'var(--ghost-surface)' }} role="status" aria-label="Loading form">
+    <div className={cn("tb-card p-6 space-y-5", className)} style={{ background: 'var(--tb-surface)' }} role="status" aria-label="Loading form">
       <div className="space-y-2">
         <Skeleton className="h-4 w-28 rounded" />
         <Skeleton className="h-11 w-full rounded-xl" />
@@ -266,7 +266,7 @@ function ProfileSkeleton({ className }) {
   return (
     <div className={cn("space-y-6", className)} role="status" aria-label="Loading security profile">
       <PageHeaderSkeleton />
-      <div className="ghost-card p-6 flex items-center gap-5" style={{ background: 'var(--ghost-surface)' }}>
+      <div className="tb-card p-6 flex items-center gap-5" style={{ background: 'var(--tb-surface)' }}>
         <Skeleton className="w-16 h-16 rounded-full shrink-0" />
         <div className="space-y-2 flex-1">
           <Skeleton className="h-5 w-48 rounded-md" />
@@ -285,13 +285,13 @@ function ProfileSkeleton({ className }) {
  */
 function TableSkeleton({ rows = 5, className }) {
   return (
-    <div className={cn("ghost-card p-5 space-y-4", className)} style={{ background: 'var(--ghost-surface)' }} role="status" aria-label="Loading table">
-      <div className="flex items-center justify-between pb-2 border-b" style={{ borderColor: 'var(--ghost-border)' }}>
+    <div className={cn("tb-card p-5 space-y-4", className)} style={{ background: 'var(--tb-surface)' }} role="status" aria-label="Loading table">
+      <div className="flex items-center justify-between pb-2 border-b" style={{ borderColor: 'var(--tb-border)' }}>
         <Skeleton className="h-4 w-32 rounded" />
         <Skeleton className="h-8 w-24 rounded-lg" />
       </div>
       {Array.from({ length: rows }).map((_, i) => (
-        <div key={i} className="flex items-center justify-between gap-4 py-3 border-b" style={{ borderColor: 'var(--ghost-border)' }}>
+        <div key={i} className="flex items-center justify-between gap-4 py-3 border-b" style={{ borderColor: 'var(--tb-border)' }}>
           <Skeleton className="h-4 w-1/4 rounded" />
           <Skeleton className="h-4 w-1/3 rounded" />
           <Skeleton className="h-6 w-20 rounded-full" />
@@ -309,7 +309,7 @@ function DashboardSkeleton() {
   return (
     <div className="space-y-6 pb-6" role="status" aria-label="Loading TrustBreak AI Command Center">
       {/* 1-Click Judge & Presentation Demo Bar Placeholder */}
-      <div className="ghost-card p-3 flex items-center justify-between gap-3 overflow-x-auto" style={{ background: 'var(--ghost-surface)' }}>
+      <div className="tb-card p-3 flex items-center justify-between gap-3 overflow-x-auto" style={{ background: 'var(--tb-surface)' }}>
         <Skeleton className="h-4 w-36 rounded" />
         <div className="flex gap-2">
           <Skeleton className="h-8 w-28 rounded-lg" />
@@ -319,7 +319,7 @@ function DashboardSkeleton() {
       </div>
 
       {/* Security Score Header Card Placeholder */}
-      <div className="ghost-card p-6 flex flex-col md:flex-row items-center justify-between gap-6 min-h-[160px]" style={{ background: 'var(--ghost-surface)' }}>
+      <div className="tb-card p-6 flex flex-col md:flex-row items-center justify-between gap-6 min-h-[160px]" style={{ background: 'var(--tb-surface)' }}>
         <div className="space-y-3 flex-1">
           <Skeleton className="h-4 w-32 rounded-full" />
           <Skeleton className="h-8 w-72 rounded-lg" />
@@ -360,7 +360,7 @@ function DashboardSkeleton() {
  */
 function AppShellSkeleton() {
   return (
-    <div className="min-h-screen flex flex-col relative" style={{ background: 'var(--ghost-bg)', color: 'var(--ghost-text)' }}>
+    <div className="min-h-screen flex flex-col relative" style={{ background: 'var(--tb-bg)', color: 'var(--tb-text)' }}>
       <HeaderSkeleton />
       <div className="flex flex-1 pt-14">
         <SidebarSkeleton />
@@ -377,7 +377,7 @@ function AppShellSkeleton() {
  */
 function SkeletonCard({ className, children }) {
   return (
-    <div className={cn("ghost-card p-5 space-y-3 min-h-[140px]", className)} style={{ background: 'var(--ghost-surface)' }}>
+    <div className={cn("tb-card p-5 space-y-3 min-h-[140px]", className)} style={{ background: 'var(--tb-surface)' }}>
       <Skeleton className="h-4 w-1/3 rounded" />
       <Skeleton className="h-8 w-2/3 rounded" />
       <Skeleton className="h-3 w-full rounded" />
@@ -396,7 +396,7 @@ function SkeletonStats() {
 
 function SkeletonScannerResult() {
   return (
-    <div className="ghost-card p-6 space-y-5" style={{ background: 'var(--ghost-surface)' }} role="status" aria-label="Loading analysis result">
+    <div className="tb-card p-6 space-y-5" style={{ background: 'var(--tb-surface)' }} role="status" aria-label="Loading analysis result">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
           <Skeleton className="w-10 h-10 rounded-xl shrink-0" />

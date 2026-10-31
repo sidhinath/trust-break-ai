@@ -18,9 +18,9 @@ export default function ThreatReconstruction({ attackChain = [], attackerIntent 
   const isSafe = riskLevel === "safe" || attackChain.every((s) => s.severity === "low" || s.severity === "safe");
 
   return (
-    <div className="ghost-card p-5 space-y-4">
+    <div className="tb-card p-5 space-y-4">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 border-b pb-3"
-        style={{ borderColor: "var(--ghost-border)" }}>
+        style={{ borderColor: "var(--tb-border)" }}>
         <div className="flex items-center gap-2">
           <div className="w-8 h-8 rounded-lg flex items-center justify-center border"
             style={{
@@ -34,10 +34,10 @@ export default function ThreatReconstruction({ attackChain = [], attackerIntent 
             )}
           </div>
           <div>
-            <h3 className="text-sm font-bold tracking-tight" style={{ color: "var(--ghost-text)" }}>
+            <h3 className="text-sm font-bold tracking-tight" style={{ color: "var(--tb-text)" }}>
               {isSafe ? "TrustBreak AI Security Chain Verification™" : "TrustBreak AI Threat Reconstruction™"}
             </h3>
-            <p className="text-xs" style={{ color: "var(--ghost-text-dim)" }}>
+            <p className="text-xs" style={{ color: "var(--tb-text-dim)" }}>
               {isSafe
                 ? "Stepwise verification of authentic domain infrastructure & security signals"
                 : "Probable attack sequence mapped from extracted digital evidence"}
@@ -63,10 +63,10 @@ export default function ThreatReconstruction({ attackChain = [], attackerIntent 
           )}
           <div>
             <span className="text-[11px] font-bold uppercase tracking-wider block"
-              style={{ color: isSafe ? "var(--ghost-green)" : "var(--ghost-red)" }}>
+              style={{ color: isSafe ? "var(--tb-green)" : "var(--tb-red)" }}>
               {isSafe ? "Assessed Connection Objective" : "Attacker Objective"}
             </span>
-            <p className="text-xs font-medium mt-0.5 leading-relaxed" style={{ color: "var(--ghost-text)" }}>
+            <p className="text-xs font-medium mt-0.5 leading-relaxed" style={{ color: "var(--tb-text)" }}>
               {attackerIntent}
             </p>
           </div>
@@ -75,7 +75,7 @@ export default function ThreatReconstruction({ attackChain = [], attackerIntent 
 
       {/* Interactive Horizontal Flow / Stepper */}
       <div className="space-y-2 pt-1">
-        <p className="text-xs font-bold uppercase tracking-wider" style={{ color: "var(--ghost-text-dim)" }}>
+        <p className="text-xs font-bold uppercase tracking-wider" style={{ color: "var(--tb-text-dim)" }}>
           {isSafe ? "Security Verification Progression" : "Attack Flow Progression"}
         </p>
 
@@ -86,8 +86,8 @@ export default function ThreatReconstruction({ attackChain = [], attackerIntent 
             const isItemSafe = item.severity === 'low' || item.severity === 'safe';
             
             const severityColor = isItemSafe
-              ? 'var(--ghost-green)'
-              : item.severity === 'critical' ? 'var(--ghost-red)' : item.severity === 'high' ? 'var(--ghost-orange)' : 'var(--ghost-neon)';
+              ? 'var(--tb-green)'
+              : item.severity === 'critical' ? 'var(--tb-red)' : item.severity === 'high' ? 'var(--tb-orange)' : 'var(--tb-neon)';
             const severityBg = isItemSafe
               ? 'rgba(16,185,129,0.14)'
               : item.severity === 'critical' ? 'rgba(239,68,68,0.14)' : item.severity === 'high' ? 'rgba(245,158,11,0.12)' : 'rgba(0,229,255,0.1)';
@@ -99,24 +99,24 @@ export default function ThreatReconstruction({ attackChain = [], attackerIntent 
                 whileTap={{ scale: 0.98 }}
                 onClick={() => setSelectedStage(isSelected ? null : index)}
                 className={`text-left p-3 rounded-xl border transition-all flex flex-col justify-between ${
-                  isSelected ? 'ghost-card-highlight ring-1 ring-cyan-400' : ''
+                  isSelected ? 'tb-card-highlight ring-1 ring-cyan-400' : ''
                 }`}
                 style={{
-                  background: isSelected ? undefined : 'var(--ghost-surface-2)',
-                  borderColor: isSelected ? undefined : 'var(--ghost-border)'
+                  background: isSelected ? undefined : 'var(--tb-surface-2)',
+                  borderColor: isSelected ? undefined : 'var(--tb-border)'
                 }}>
                 <div className="flex items-center justify-between w-full mb-2">
                   <div className="w-6 h-6 rounded-md flex items-center justify-center"
                     style={{ background: severityBg, color: severityColor }}>
                     <Icon className="w-3.5 h-3.5" />
                   </div>
-                  <span className="text-[10px] font-mono font-bold" style={{ color: "var(--ghost-text-dim)" }}>
+                  <span className="text-[10px] font-mono font-bold" style={{ color: "var(--tb-text-dim)" }}>
                     0{index + 1}
                   </span>
                 </div>
 
                 <div>
-                  <p className="text-xs font-bold leading-tight line-clamp-1" style={{ color: "var(--ghost-text)" }}>
+                  <p className="text-xs font-bold leading-tight line-clamp-1" style={{ color: "var(--tb-text)" }}>
                     {item.title || item.stage}
                   </p>
                   <span className="text-[10px] font-semibold mt-1 inline-block capitalize px-1.5 py-0.5 rounded"
@@ -137,16 +137,16 @@ export default function ThreatReconstruction({ attackChain = [], attackerIntent 
               animate={{ opacity: 1, height: "auto" }}
               exit={{ opacity: 0, height: 0 }}
               className="mt-3 p-4 rounded-xl border"
-              style={{ background: "var(--ghost-surface-2)", borderColor: "var(--ghost-border)" }}>
+              style={{ background: "var(--tb-surface-2)", borderColor: "var(--tb-border)" }}>
               <div className="flex items-center gap-2 mb-1.5">
                 <span className="text-xs font-mono font-bold text-cyan-600 dark:text-cyan-400">
                   Stage {selectedStage + 1} Detail:
                 </span>
-                <span className="text-xs font-bold" style={{ color: "var(--ghost-text)" }}>
+                <span className="text-xs font-bold" style={{ color: "var(--tb-text)" }}>
                   {attackChain[selectedStage].title || attackChain[selectedStage].stage}
                 </span>
               </div>
-              <p className="text-xs font-medium leading-relaxed" style={{ color: "var(--ghost-text-dim)" }}>
+              <p className="text-xs font-medium leading-relaxed" style={{ color: "var(--tb-text-dim)" }}>
                 {attackChain[selectedStage].detail}
               </p>
             </motion.div>

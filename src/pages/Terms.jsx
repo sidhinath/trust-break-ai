@@ -12,16 +12,16 @@ export default function Terms() {
         color="#06b6d4"
       />
 
-      <div className="ghost-card p-6 sm:p-8 space-y-6 text-xs leading-relaxed" style={{ color: 'var(--ghost-text)' }}>
+      <div className="tb-card p-6 sm:p-8 space-y-6 text-xs leading-relaxed" style={{ color: 'var(--tb-text)' }}>
         
         {/* Effective Date & Entity Header */}
         <div className="p-4 rounded-xl border flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3"
-          style={{ background: 'var(--ghost-surface-2)', borderColor: 'var(--ghost-border)' }}>
+          style={{ background: 'var(--tb-surface-2)', borderColor: 'var(--tb-border)' }}>
           <div>
-            <span className="font-bold text-sm block" style={{ color: 'var(--ghost-text)' }}>
+            <span className="font-bold text-sm block" style={{ color: 'var(--tb-text)' }}>
               TrustBreak AI Cyber Defense Platform Terms of Use
             </span>
-            <span style={{ color: 'var(--ghost-text-dim)' }}>
+            <span style={{ color: 'var(--tb-text-dim)' }}>
               Effective Date: September 26, 2026 | Version 2.1
             </span>
           </div>
@@ -35,7 +35,7 @@ export default function Terms() {
           <h2 className="text-sm font-bold uppercase tracking-wider text-cyan-600 dark:text-cyan-400">
             1. Acceptance of Terms
           </h2>
-          <p style={{ color: 'var(--ghost-text-dim)' }}>
+          <p style={{ color: 'var(--tb-text-dim)' }}>
             By accessing, browsing, or utilizing the TrustBreak AI application, APIs, or browser extensions, you agree to be bound by these Terms & Conditions. If you do not agree to all terms, you must immediately cease accessing the platform.
           </p>
         </section>
@@ -45,10 +45,10 @@ export default function Terms() {
           <h2 className="text-sm font-bold uppercase tracking-wider text-amber-600 dark:text-amber-400 flex items-center gap-2">
             <AlertTriangle className="w-4 h-4" /> 2. Probabilistic Risk Scoring Disclaimer
           </h2>
-          <p style={{ color: 'var(--ghost-text-dim)' }}>
+          <p style={{ color: 'var(--tb-text-dim)' }}>
             TrustBreak AI provides probabilistic threat assessments powered by deep neural heuristics, pattern recognition, and community threat intelligence. 
           </p>
-          <ul className="list-disc pl-5 space-y-1 font-medium" style={{ color: 'var(--ghost-text-dim)' }}>
+          <ul className="list-disc pl-5 space-y-1 font-medium" style={{ color: 'var(--tb-text-dim)' }}>
             <li>Threat scores reflect statistical risk probabilities (0% to 100%) rather than deterministic legal or mathematical absolutes.</li>
             <li>No threat scanner guarantees zero false positives or false negatives. Users must exercise independent judgment when inspecting URLs, audio calls, or financial requests.</li>
             <li>TrustBreak AI shall not be held liable for security decisions, transactions, or actions taken based on automated threat ratings.</li>
@@ -60,10 +60,10 @@ export default function Terms() {
           <h2 className="text-sm font-bold uppercase tracking-wider text-cyan-600 dark:text-cyan-400">
             3. Acceptable Use Policy
           </h2>
-          <p style={{ color: 'var(--ghost-text-dim)' }}>
-            You agree to use TrustBreak AI.ai strictly for legitimate cybersecurity inspection, educational research, and threat prevention. You MUST NOT:
+          <p style={{ color: 'var(--tb-text-dim)' }}>
+            You agree to use TrustBreak AI strictly for legitimate cybersecurity inspection, educational research, and threat prevention. You MUST NOT:
           </p>
-          <ul className="list-disc pl-5 space-y-1" style={{ color: 'var(--ghost-text-dim)' }}>
+          <ul className="list-disc pl-5 space-y-1" style={{ color: 'var(--tb-text-dim)' }}>
             <li>Submit illegal, defamatory, or harmful content unrelated to scam detection.</li>
             <li>Attempt to reverse-engineer, exploit, or disrupt TrustBreak AI’s serverless infrastructure.</li>
             <li>Automate mass scanning for malicious domain validation or evasion tuning.</li>
@@ -75,7 +75,7 @@ export default function Terms() {
           <h2 className="text-sm font-bold uppercase tracking-wider text-cyan-600 dark:text-cyan-400">
             4. Intellectual Property Rights
           </h2>
-          <p style={{ color: 'var(--ghost-text-dim)' }}>
+          <p style={{ color: 'var(--tb-text-dim)' }}>
             All platform visual designs, underlying code, heuristic logic, logo branding, and user interface components are the exclusive property of TrustBreak AI Cyber Defense Systems.
           </p>
         </section>
@@ -85,17 +85,17 @@ export default function Terms() {
           <h2 className="text-sm font-bold uppercase tracking-wider text-cyan-600 dark:text-cyan-400 flex items-center gap-2">
             <Scale className="w-4 h-4" /> 5. Limitation of Liability
           </h2>
-          <p style={{ color: 'var(--ghost-text-dim)' }}>
+          <p style={{ color: 'var(--tb-text-dim)' }}>
             To the maximum extent permitted by applicable law in India and international jurisdictions, TrustBreak AI Cyber Defense Systems and its officers, developers, and affiliates shall not be liable for any indirect, incidental, or consequential damages resulting from platform use.
           </p>
         </section>
 
         {/* Section 6: Governance & Jurisdiction */}
-        <section className="space-y-2 border-t pt-4" style={{ borderColor: 'var(--ghost-border)' }}>
+        <section className="space-y-2 border-t pt-4" style={{ borderColor: 'var(--tb-border)' }}>
           <h2 className="text-sm font-bold uppercase tracking-wider text-cyan-600 dark:text-cyan-400">
             6. Governing Law & Jurisdiction
           </h2>
-          <p style={{ color: 'var(--ghost-text-dim)' }}>
+          <p style={{ color: 'var(--tb-text-dim)' }}>
             These Terms shall be governed by and construed in accordance with the laws of India. Any legal disputes arising out of these terms shall be subject to the exclusive jurisdiction of courts located in Bengaluru, Karnataka, India.
           </p>
         </section>

@@ -22,7 +22,7 @@ export default function ScanningAnimation({ label = "Analyzing threat vectors...
   const CurrentIcon = stages[stage]?.icon || Sparkles;
 
   return (
-    <div className="ghost-card p-6 flex flex-col items-center justify-center space-y-4 text-center border-cyan-500/30 overflow-hidden relative">
+    <div className="tb-card p-6 flex flex-col items-center justify-center space-y-4 text-center border-cyan-500/30 overflow-hidden relative">
       <div className="relative w-20 h-20 flex items-center justify-center">
         <motion.div
           animate={{ scale: [1, 1.8, 1], opacity: [0.6, 0, 0.6] }}
@@ -35,16 +35,16 @@ export default function ScanningAnimation({ label = "Analyzing threat vectors...
           className="absolute inset-0 rounded-full border-t-2 border-cyan-400"
         />
         <div className="w-12 h-12 rounded-xl border border-cyan-500/40 flex items-center justify-center z-10"
-          style={{ background: 'var(--ghost-surface-2)' }}>
+          style={{ background: 'var(--tb-surface-2)' }}>
           <CurrentIcon className="w-6 h-6 text-cyan-500 animate-pulse" />
         </div>
       </div>
 
       <div className="space-y-1 z-10 max-w-sm">
-        <h3 className="text-sm font-bold tracking-tight font-display" style={{ color: 'var(--ghost-text)' }}>
+        <h3 className="text-sm font-bold tracking-tight font-display" style={{ color: 'var(--tb-text)' }}>
           {stages[stage]?.title || label}
         </h3>
-        <p className="text-xs" style={{ color: 'var(--ghost-text-dim)' }}>
+        <p className="text-xs" style={{ color: 'var(--tb-text-dim)' }}>
           Running deep heuristic and automated cyber threat verification
         </p>
       </div>

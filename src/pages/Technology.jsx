@@ -18,7 +18,7 @@ const ARCHITECTURE_STEPS = [
   {
     layer: "Multi-Modal Routing",
     title: "Groq LPU + Google Gemini Vision + OpenAI",
-    description: "Sub-second LPU inference for NLP/links (`openai/gpt-oss-120b`, `qwen3.8-27b`) paired with Gemini Vision multi-model fallback chain for screenshots.",
+    description: "Sub-second LPU inference for NLP and link analysis (`llama-3.3-70b-versatile` with automatic fallbacks) paired with a Gemini Vision multi-model fallback chain for screenshots.",
     color: "#f472b6"
   },
   {
@@ -69,8 +69,8 @@ export default function Technology() {
       />
 
       {/* Architecture Stepper */}
-      <div className="ghost-card p-6 space-y-4">
-        <h3 className="text-xs font-bold uppercase tracking-wider flex items-center gap-2" style={{ color: 'var(--ghost-text-dim)' }}>
+      <div className="tb-card p-6 space-y-4">
+        <h3 className="text-xs font-bold uppercase tracking-wider flex items-center gap-2" style={{ color: 'var(--tb-text-dim)' }}>
           <Layers className="w-4 h-4 text-cyan-500" /> End-to-End Processing Architecture
         </h3>
 
@@ -79,18 +79,18 @@ export default function Technology() {
             <div
               key={idx}
               className="p-4 rounded-xl border flex flex-col sm:flex-row sm:items-center justify-between gap-3"
-              style={{ background: 'var(--ghost-surface-2)', borderColor: 'var(--ghost-border)' }}>
+              style={{ background: 'var(--tb-surface-2)', borderColor: 'var(--tb-border)' }}>
               <div className="flex items-start gap-3">
                 <span className="w-6 h-6 rounded-md font-mono text-xs font-bold text-cyan-600 dark:text-cyan-400 flex items-center justify-center border shrink-0 mt-0.5"
-                  style={{ background: 'var(--ghost-surface-3)', borderColor: 'var(--ghost-border)' }}>
+                  style={{ background: 'var(--tb-surface-3)', borderColor: 'var(--tb-border)' }}>
                   0{idx + 1}
                 </span>
                 <div>
                   <span className="text-[10px] font-mono uppercase tracking-wider block" style={{ color: step.color }}>
                     {step.layer}
                   </span>
-                  <h4 className="text-sm font-bold mt-0.5" style={{ color: 'var(--ghost-text)' }}>{step.title}</h4>
-                  <p className="text-xs mt-1 leading-relaxed max-w-xl" style={{ color: 'var(--ghost-text-dim)' }}>{step.description}</p>
+                  <h4 className="text-sm font-bold mt-0.5" style={{ color: 'var(--tb-text)' }}>{step.title}</h4>
+                  <p className="text-xs mt-1 leading-relaxed max-w-xl" style={{ color: 'var(--tb-text-dim)' }}>{step.description}</p>
                 </div>
               </div>
             </div>
@@ -99,10 +99,10 @@ export default function Technology() {
       </div>
 
       {/* Competitive Differentiation */}
-      <div className="ghost-card p-6 space-y-4 border-cyan-500/30">
+      <div className="tb-card p-6 space-y-4 border-cyan-500/30">
         <div className="flex items-center gap-2">
           <Sparkles className="w-4 h-4 text-cyan-500" />
-          <h3 className="text-xs font-bold uppercase tracking-wider" style={{ color: 'var(--ghost-text)' }}>
+          <h3 className="text-xs font-bold uppercase tracking-wider" style={{ color: 'var(--tb-text)' }}>
             Why TrustBreak AI? Key Technical Differentiators
           </h3>
         </div>
@@ -112,14 +112,14 @@ export default function Technology() {
             const Icon = item.icon;
             return (
               <div key={i} className="p-4 rounded-xl border space-y-2"
-                style={{ background: 'var(--ghost-surface-2)', borderColor: 'var(--ghost-border)' }}>
+                style={{ background: 'var(--tb-surface-2)', borderColor: 'var(--tb-border)' }}>
                 <div className="flex items-center gap-2">
                   <div className="w-7 h-7 rounded-lg bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center">
                     <Icon className="w-3.5 h-3.5 text-cyan-500" />
                   </div>
-                  <h4 className="text-xs font-bold" style={{ color: 'var(--ghost-text)' }}>{item.title}</h4>
+                  <h4 className="text-xs font-bold" style={{ color: 'var(--tb-text)' }}>{item.title}</h4>
                 </div>
-                <p className="text-xs leading-relaxed" style={{ color: 'var(--ghost-text-dim)' }}>{item.description}</p>
+                <p className="text-xs leading-relaxed" style={{ color: 'var(--tb-text-dim)' }}>{item.description}</p>
               </div>
             );
           })}

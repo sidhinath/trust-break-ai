@@ -9,10 +9,10 @@ export default function ThreatStats({ reports = [], scans = [] }) {
   const totalSafe = scans.filter(s => s.risk_level === 'safe').length;
 
   const stats = [
-    { label: "Scans Performed", value: scans.length, icon: Eye, color: "var(--ghost-neon)", bg: "rgba(0,229,255,0.12)" },
-    { label: "Scams Neutralized", value: totalScams, icon: AlertTriangle, color: "var(--ghost-red)", bg: "rgba(239,68,68,0.12)" },
-    { label: "Suspicious Flags", value: totalSuspicious, icon: TrendingUp, color: "var(--ghost-orange)", bg: "rgba(245,158,11,0.12)" },
-    { label: "Verified Safe", value: totalSafe, icon: ShieldCheck, color: "var(--ghost-green)", bg: "rgba(16,185,129,0.12)" },
+    { label: "Scans Performed", value: scans.length, icon: Eye, color: "var(--tb-neon)", bg: "rgba(0,229,255,0.12)" },
+    { label: "Scams Neutralized", value: totalScams, icon: AlertTriangle, color: "var(--tb-red)", bg: "rgba(239,68,68,0.12)" },
+    { label: "Suspicious Flags", value: totalSuspicious, icon: TrendingUp, color: "var(--tb-orange)", bg: "rgba(245,158,11,0.12)" },
+    { label: "Verified Safe", value: totalSafe, icon: ShieldCheck, color: "var(--tb-green)", bg: "rgba(16,185,129,0.12)" },
   ];
 
   const typeCounts = {
@@ -51,9 +51,9 @@ export default function ThreatStats({ reports = [], scans = [] }) {
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.05 }}
-              className="ghost-card p-4 flex flex-col justify-between">
+              className="tb-card p-4 flex flex-col justify-between">
               <div className="flex items-center justify-between">
-                <span className="text-[11px] font-bold" style={{ color: 'var(--ghost-text-dim)' }}>
+                <span className="text-[11px] font-bold" style={{ color: 'var(--tb-text-dim)' }}>
                   {stat.label}
                 </span>
                 <div className="w-7 h-7 rounded-lg flex items-center justify-center"
@@ -62,7 +62,7 @@ export default function ThreatStats({ reports = [], scans = [] }) {
                 </div>
               </div>
               <div className="mt-2.5">
-                <span className="text-2xl sm:text-3xl font-black font-display" style={{ color: 'var(--ghost-text)' }}>
+                <span className="text-2xl sm:text-3xl font-black font-display" style={{ color: 'var(--tb-text)' }}>
                   {stat.value}
                 </span>
               </div>
@@ -75,13 +75,13 @@ export default function ThreatStats({ reports = [], scans = [] }) {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         
         {/* Vectors Scanned Bar Chart */}
-        <div className="ghost-card p-5 space-y-3">
+        <div className="tb-card p-5 space-y-3">
           <div className="flex items-center justify-between">
             <h3 className="text-xs font-bold uppercase tracking-wider flex items-center gap-1.5"
-              style={{ color: 'var(--ghost-text-dim)' }}>
+              style={{ color: 'var(--tb-text-dim)' }}>
               <BarChart2 className="w-3.5 h-3.5 text-cyan-500" /> Vectors Scanned By Channel
             </h3>
-            <span className="text-[10px] font-mono" style={{ color: 'var(--ghost-text-muted)' }}>Live Telemetry</span>
+            <span className="text-[10px] font-mono" style={{ color: 'var(--tb-text-muted)' }}>Live Telemetry</span>
           </div>
 
           <div className="h-44 w-full">
@@ -91,11 +91,11 @@ export default function ThreatStats({ reports = [], scans = [] }) {
                 <YAxis stroke="#64748b" fontSize={11} tickLine={false} allowDecimals={false} />
                 <Tooltip
                   contentStyle={{
-                    background: 'var(--ghost-surface)',
-                    borderColor: 'var(--ghost-border)',
+                    background: 'var(--tb-surface)',
+                    borderColor: 'var(--tb-border)',
                     borderRadius: 8,
                     fontSize: 12,
-                    color: 'var(--ghost-text)'
+                    color: 'var(--tb-text)'
                   }}
                   cursor={{ fill: 'rgba(100,140,200,0.06)' }}
                 />
@@ -110,13 +110,13 @@ export default function ThreatStats({ reports = [], scans = [] }) {
         </div>
 
         {/* 7-Day Activity Trend */}
-        <div className="ghost-card p-5 space-y-3">
+        <div className="tb-card p-5 space-y-3">
           <div className="flex items-center justify-between">
             <h3 className="text-xs font-bold uppercase tracking-wider flex items-center gap-1.5"
-              style={{ color: 'var(--ghost-text-dim)' }}>
+              style={{ color: 'var(--tb-text-dim)' }}>
               <Activity className="w-3.5 h-3.5 text-emerald-500" /> Detection Activity Trend
             </h3>
-            <span className="text-[10px] font-mono" style={{ color: 'var(--ghost-text-muted)' }}>Weekly Curve</span>
+            <span className="text-[10px] font-mono" style={{ color: 'var(--tb-text-muted)' }}>Weekly Curve</span>
           </div>
 
           <div className="h-44 w-full">
@@ -132,11 +132,11 @@ export default function ThreatStats({ reports = [], scans = [] }) {
                 <YAxis stroke="#64748b" fontSize={11} tickLine={false} allowDecimals={false} />
                 <Tooltip
                   contentStyle={{
-                    background: 'var(--ghost-surface)',
-                    borderColor: 'var(--ghost-border)',
+                    background: 'var(--tb-surface)',
+                    borderColor: 'var(--tb-border)',
                     borderRadius: 8,
                     fontSize: 12,
-                    color: 'var(--ghost-text)'
+                    color: 'var(--tb-text)'
                   }}
                 />
                 <Area type="monotone" dataKey="scans" stroke="#00e5ff" strokeWidth={2} fillOpacity={1} fill="url(#scansGrad)" />

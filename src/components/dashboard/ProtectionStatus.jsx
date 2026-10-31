@@ -8,7 +8,7 @@ export default function ProtectionStatus({ threatsBlocked = 0, safetyScore = 100
   const isHealthy = safetyScore >= 75;
 
   return (
-    <div className="ghost-card p-5 sm:p-6 relative overflow-hidden border border-cyan-500/20 shadow-[0_0_35px_rgba(0,229,255,0.08)]">
+    <div className="tb-card p-5 sm:p-6 relative overflow-hidden border border-cyan-500/20 shadow-[0_0_35px_rgba(0,229,255,0.08)]">
       {/* ThreeUI Living Constellation / Particle Drift Background Field */}
       <div className="absolute inset-0 z-0 opacity-30 dark:opacity-40 pointer-events-none dark:mix-blend-screen">
         <ConstellationField
@@ -40,12 +40,12 @@ export default function ProtectionStatus({ threatsBlocked = 0, safetyScore = 100
           </div>
 
           <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight font-display"
-            style={{ color: 'var(--ghost-text)' }}>
+            style={{ color: 'var(--tb-text)' }}>
             Your Digital Safety Layer
           </h1>
 
           <p className="text-xs sm:text-sm font-medium leading-relaxed"
-            style={{ color: 'var(--ghost-text-dim)' }}>
+            style={{ color: 'var(--tb-text-dim)' }}>
             TrustBreak AI protects users before they trust, click, scan, pay or respond.
           </p>
 
@@ -86,9 +86,9 @@ export default function ProtectionStatus({ threatsBlocked = 0, safetyScore = 100
           
           {/* Security Score */}
           <div className="p-4 rounded-xl border flex flex-col justify-between"
-            style={{ background: 'var(--ghost-surface-2)', borderColor: 'var(--ghost-border)' }}>
+            style={{ background: 'var(--tb-surface-2)', borderColor: 'var(--tb-border)' }}>
             <div className="flex items-center justify-between">
-              <span className="text-[10px] font-bold uppercase tracking-wider" style={{ color: 'var(--ghost-text-dim)' }}>
+              <span className="text-[10px] font-bold uppercase tracking-wider" style={{ color: 'var(--tb-text-dim)' }}>
                 Security Score
               </span>
               <Activity className="w-3.5 h-3.5 text-cyan-500" />
@@ -97,18 +97,18 @@ export default function ProtectionStatus({ threatsBlocked = 0, safetyScore = 100
               <span className={`text-3xl font-black font-display ${isHealthy ? 'score-safe' : 'score-suspicious'}`}>
                 {safetyScore}
               </span>
-              <span className="text-xs font-bold ml-1" style={{ color: 'var(--ghost-text-muted)' }}>/100</span>
+              <span className="text-xs font-bold ml-1" style={{ color: 'var(--tb-text-muted)' }}>/100</span>
             </div>
-            <span className="text-[10px] truncate" style={{ color: 'var(--ghost-text-dim)' }}>
+            <span className="text-[10px] truncate" style={{ color: 'var(--tb-text-dim)' }}>
               {isHealthy ? "Strong Awareness" : "Review Alerts"}
             </span>
           </div>
 
           {/* Threats Blocked */}
           <div className="p-4 rounded-xl border flex flex-col justify-between"
-            style={{ background: 'var(--ghost-surface-2)', borderColor: 'var(--ghost-border)' }}>
+            style={{ background: 'var(--tb-surface-2)', borderColor: 'var(--tb-border)' }}>
             <div className="flex items-center justify-between">
-              <span className="text-[10px] font-bold uppercase tracking-wider" style={{ color: 'var(--ghost-text-dim)' }}>
+              <span className="text-[10px] font-bold uppercase tracking-wider" style={{ color: 'var(--tb-text-dim)' }}>
                 Threats Flagged
               </span>
               <ShieldAlert className="w-3.5 h-3.5 text-rose-500" />
@@ -118,26 +118,26 @@ export default function ProtectionStatus({ threatsBlocked = 0, safetyScore = 100
                 {threatsBlocked}
               </span>
             </div>
-            <span className="text-[10px] truncate" style={{ color: 'var(--ghost-text-dim)' }}>
+            <span className="text-[10px] truncate" style={{ color: 'var(--tb-text-dim)' }}>
               High-risk attacks
             </span>
           </div>
 
           {/* Total Inspections */}
           <div className="p-4 rounded-xl border flex flex-col justify-between col-span-2 sm:col-span-1"
-            style={{ background: 'var(--ghost-surface-2)', borderColor: 'var(--ghost-border)' }}>
+            style={{ background: 'var(--tb-surface-2)', borderColor: 'var(--tb-border)' }}>
             <div className="flex items-center justify-between">
-              <span className="text-[10px] font-bold uppercase tracking-wider" style={{ color: 'var(--ghost-text-dim)' }}>
+              <span className="text-[10px] font-bold uppercase tracking-wider" style={{ color: 'var(--tb-text-dim)' }}>
                 Total Scans
               </span>
               <Zap className="w-3.5 h-3.5 text-amber-500" />
             </div>
             <div className="my-1.5">
-              <span className="text-3xl font-black font-display" style={{ color: 'var(--ghost-text)' }}>
+              <span className="text-3xl font-black font-display" style={{ color: 'var(--tb-text)' }}>
                 {totalScans}
               </span>
             </div>
-            <span className="text-[10px] truncate" style={{ color: 'var(--ghost-text-dim)' }}>
+            <span className="text-[10px] truncate" style={{ color: 'var(--tb-text-dim)' }}>
               Multi-modal runs
             </span>
           </div>

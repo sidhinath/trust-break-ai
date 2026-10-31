@@ -32,9 +32,9 @@ export default function CookieConsentBanner() {
       aria-label="Cookie Consent Notice"
       className="fixed bottom-4 left-4 right-4 md:left-auto md:right-6 md:max-w-md z-50 p-4 sm:p-5 rounded-2xl border shadow-2xl backdrop-blur-xl transition-all animate-in slide-in-from-bottom-5 duration-300"
       style={{
-        background: 'var(--ghost-surface)',
-        borderColor: 'var(--ghost-border)',
-        color: 'var(--ghost-text)'
+        background: 'var(--tb-surface)',
+        borderColor: 'var(--tb-border)',
+        color: 'var(--tb-text)'
       }}>
       
       <div className="space-y-3">
@@ -44,10 +44,10 @@ export default function CookieConsentBanner() {
               <Cookie className="w-4 h-4 text-amber-500" />
             </div>
             <div>
-              <h4 className="text-xs font-bold uppercase tracking-wider" style={{ color: 'var(--ghost-text)' }}>
+              <h4 className="text-xs font-bold uppercase tracking-wider" style={{ color: 'var(--tb-text)' }}>
                 Cookie & Storage Preferences
               </h4>
-              <p className="text-[10px] font-medium" style={{ color: 'var(--ghost-text-dim)' }}>
+              <p className="text-[10px] font-medium" style={{ color: 'var(--tb-text-dim)' }}>
                 DPDP Act 2023 & GDPR Notice
               </p>
             </div>
@@ -60,7 +60,7 @@ export default function CookieConsentBanner() {
           </button>
         </div>
 
-        <p className="text-xs leading-relaxed" style={{ color: 'var(--ghost-text-dim)' }}>
+        <p className="text-xs leading-relaxed" style={{ color: 'var(--tb-text-dim)' }}>
           TrustBreak AI uses essential functional storage tokens (session auth, theme preferences) to operate securely. We do <strong>NOT</strong> use third-party advertising or cross-site tracking cookies.
         </p>
 
@@ -77,7 +77,7 @@ export default function CookieConsentBanner() {
               variant="outline"
               onClick={handleEssentialOnly}
               className="text-xs font-bold px-3 h-8 rounded-lg"
-              style={{ background: 'var(--ghost-surface-2)', borderColor: 'var(--ghost-border)', color: 'var(--ghost-text)' }}>
+              style={{ background: 'var(--tb-surface-2)', borderColor: 'var(--tb-border)', color: 'var(--tb-text)' }}>
               Essential Only
             </Button>
             <Button

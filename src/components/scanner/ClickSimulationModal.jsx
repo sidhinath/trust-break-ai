@@ -82,13 +82,13 @@ export default function ClickSimulationModal({ isOpen, onClose, url = "", steps 
         initial={{ opacity: 0, scale: 0.95, y: 10 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.95 }}
-        className={`ghost-card w-full max-w-xl p-6 relative overflow-hidden space-y-5 ${
+        className={`tb-card w-full max-w-xl p-6 relative overflow-hidden space-y-5 ${
           isSafeMode ? 'border-emerald-500/30' : 'border-cyan-500/30'
         }`}>
         
         {/* Header */}
         <div className="flex items-center justify-between border-b pb-4"
-          style={{ borderColor: "var(--ghost-border)" }}>
+          style={{ borderColor: "var(--tb-border)" }}>
           <div className="flex items-center gap-3">
             <div className={`w-10 h-10 rounded-xl flex items-center justify-center border ${
               isSafeMode ? 'bg-emerald-500/15 border-emerald-500/30' : 'bg-amber-500/15 border-amber-500/30'
@@ -100,10 +100,10 @@ export default function ClickSimulationModal({ isOpen, onClose, url = "", steps 
               )}
             </div>
             <div>
-              <h2 className="text-base font-bold tracking-tight" style={{ color: 'var(--ghost-text)' }}>
+              <h2 className="text-base font-bold tracking-tight" style={{ color: 'var(--tb-text)' }}>
                 {isSafeMode ? '"What Happens If I Click?" Safe Walkthrough' : '"What Happens If I Click?" Safe Simulator'}
               </h2>
-              <p className="text-xs" style={{ color: "var(--ghost-text-dim)" }}>
+              <p className="text-xs" style={{ color: "var(--tb-text-dim)" }}>
                 {isSafeMode
                   ? "Zero-execution educational walkthrough of authentic domain security"
                   : "Zero-execution educational walkthrough of the phishing trap"}
@@ -113,7 +113,7 @@ export default function ClickSimulationModal({ isOpen, onClose, url = "", steps 
           <button
             onClick={onClose}
             className="w-8 h-8 rounded-full flex items-center justify-center hover:bg-slate-500/20 transition-colors"
-            style={{ color: 'var(--ghost-text-dim)' }}>
+            style={{ color: 'var(--tb-text-dim)' }}>
             <X className="w-4 h-4" />
           </button>
         </div>
@@ -121,7 +121,7 @@ export default function ClickSimulationModal({ isOpen, onClose, url = "", steps 
         {/* URL Inspected banner */}
         {url && (
           <div className="p-2.5 rounded-lg font-mono text-xs truncate"
-            style={{ background: "var(--ghost-surface-2)", border: "1px solid var(--ghost-border)", color: isSafeMode ? "var(--ghost-green)" : "var(--ghost-neon)" }}>
+            style={{ background: "var(--tb-surface-2)", border: "1px solid var(--tb-border)", color: isSafeMode ? "var(--tb-green)" : "var(--tb-neon)" }}>
             Target: {url}
           </div>
         )}
@@ -129,7 +129,7 @@ export default function ClickSimulationModal({ isOpen, onClose, url = "", steps 
         {/* Step Progression */}
         <div className="space-y-3">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-bold uppercase tracking-wider" style={{ color: "var(--ghost-text-dim)" }}>
+            <span className="text-xs font-bold uppercase tracking-wider" style={{ color: "var(--tb-text-dim)" }}>
               {isSafeMode ? "Security Phase" : "Threat Phase"} {currentStep + 1} of {activeSteps.length}
             </span>
             <div className="flex gap-1.5">
@@ -154,11 +154,11 @@ export default function ClickSimulationModal({ isOpen, onClose, url = "", steps 
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -20 }}
               className="p-4 rounded-xl border space-y-3"
-              style={{ background: "var(--ghost-surface-2)", borderColor: "var(--ghost-border)" }}>
-              <h4 className="text-sm font-bold" style={{ color: 'var(--ghost-text)' }}>
+              style={{ background: "var(--tb-surface-2)", borderColor: "var(--tb-border)" }}>
+              <h4 className="text-sm font-bold" style={{ color: 'var(--tb-text)' }}>
                 {currentStepData.title}
               </h4>
-              <p className="text-xs font-medium leading-relaxed" style={{ color: 'var(--ghost-text-dim)' }}>
+              <p className="text-xs font-medium leading-relaxed" style={{ color: 'var(--tb-text-dim)' }}>
                 {currentStepData.description}
               </p>
               <div className={`p-2.5 rounded-lg flex items-start gap-2 border ${
@@ -182,7 +182,7 @@ export default function ClickSimulationModal({ isOpen, onClose, url = "", steps 
         </div>
 
         {/* Controls */}
-        <div className="flex items-center justify-between pt-2 border-t" style={{ borderColor: "var(--ghost-border)" }}>
+        <div className="flex items-center justify-between pt-2 border-t" style={{ borderColor: "var(--tb-border)" }}>
           <Button
             variant="ghost"
             onClick={() => setCurrentStep(Math.max(0, currentStep - 1))}

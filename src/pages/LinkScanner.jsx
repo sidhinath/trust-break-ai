@@ -114,11 +114,11 @@ export default function LinkScanner() {
       />
 
       {/* Main Input Card */}
-      <div className="ghost-card p-5 space-y-4">
+      <div className="tb-card p-5 space-y-4">
         {/* Sample Links Quick Select */}
         <div className="space-y-2">
           <span className="text-xs font-bold uppercase tracking-wider flex items-center gap-1.5"
-            style={{ color: 'var(--ghost-text-dim)' }}>
+            style={{ color: 'var(--tb-text-dim)' }}>
             <Sparkles className="w-3.5 h-3.5 text-cyan-500" /> Benchmark Test Targets
           </span>
           <div className="flex flex-wrap gap-2">
@@ -128,9 +128,9 @@ export default function LinkScanner() {
                 onClick={() => { setUrl(sample.url); handleScan(sample.url); }}
                 className="text-[11px] font-bold px-3 py-1.5 rounded-lg border hover:border-cyan-400/50 transition-all text-left cursor-pointer"
                 style={{
-                  background: 'var(--ghost-surface-2)',
-                  borderColor: 'var(--ghost-border)',
-                  color: 'var(--ghost-text)'
+                  background: 'var(--tb-surface-2)',
+                  borderColor: 'var(--tb-border)',
+                  color: 'var(--tb-text)'
                 }}>
                 <span className="text-cyan-600 dark:text-cyan-400 font-mono mr-1">Target:</span>
                 {sample.name}
@@ -146,7 +146,7 @@ export default function LinkScanner() {
             onChange={(e) => setUrl(e.target.value)}
             placeholder="Enter web address or URL... e.g. https://sbi-kyc-update-portal.online"
             className="h-12 bg-transparent text-sm font-mono font-medium focus-visible:ring-1 focus-visible:ring-cyan-500/50"
-            style={{ color: 'var(--ghost-text)', borderColor: 'var(--ghost-border)' }}
+            style={{ color: 'var(--tb-text)', borderColor: 'var(--tb-border)' }}
           />
           <Button
             onClick={() => handleScan()}
@@ -219,10 +219,10 @@ export default function LinkScanner() {
                 )}
               </div>
               <div>
-                <h4 className="text-sm font-bold" style={{ color: 'var(--ghost-text)' }}>
+                <h4 className="text-sm font-bold" style={{ color: 'var(--tb-text)' }}>
                   {result.risk_level === 'safe' ? "Safe Domain Security Walkthrough" : "Safe Threat Simulation Sandbox"}
                 </h4>
-                <p className="text-xs" style={{ color: 'var(--ghost-text-dim)' }}>
+                <p className="text-xs" style={{ color: 'var(--tb-text-dim)' }}>
                   {result.risk_level === 'safe'
                     ? "Explore how standard HTTPS encryption and authentic domain identity protect your connection."
                     : "Curious what would happen if you opened this link? Walk through a safe educational simulation."}

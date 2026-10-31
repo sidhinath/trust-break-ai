@@ -34,40 +34,40 @@ export default function PrivacyCenter() {
         color="#10b981"
       />
 
-      <div className="ghost-card p-6 space-y-4">
-        <h3 className="text-xs font-bold uppercase tracking-wider flex items-center gap-2" style={{ color: 'var(--ghost-text-dim)' }}>
+      <div className="tb-card p-6 space-y-4">
+        <h3 className="text-xs font-bold uppercase tracking-wider flex items-center gap-2" style={{ color: 'var(--tb-text-dim)' }}>
           <ShieldCheck className="w-4 h-4 text-emerald-500" /> TrustBreak AI Privacy Guarantees
         </h3>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
-          <div className="p-3.5 rounded-xl border space-y-1" style={{ background: 'var(--ghost-surface-2)', borderColor: 'var(--ghost-border)' }}>
-            <span className="font-bold block" style={{ color: 'var(--ghost-text)' }}>No Ad Tracking or Data Brokering</span>
-            <p style={{ color: 'var(--ghost-text-dim)' }}>We do not sell, monetize, or track your browsing habits across third-party networks.</p>
+          <div className="p-3.5 rounded-xl border space-y-1" style={{ background: 'var(--tb-surface-2)', borderColor: 'var(--tb-border)' }}>
+            <span className="font-bold block" style={{ color: 'var(--tb-text)' }}>No Ad Tracking or Data Brokering</span>
+            <p style={{ color: 'var(--tb-text-dim)' }}>We do not sell, monetize, or track your browsing habits across third-party networks.</p>
           </div>
 
-          <div className="p-3.5 rounded-xl border space-y-1" style={{ background: 'var(--ghost-surface-2)', borderColor: 'var(--ghost-border)' }}>
-            <span className="font-bold block" style={{ color: 'var(--ghost-text)' }}>Serverless Stateless Processing</span>
-            <p style={{ color: 'var(--ghost-text-dim)' }}>Scans are evaluated in ephemeral memory on Vercel and sanitized before response delivery.</p>
+          <div className="p-3.5 rounded-xl border space-y-1" style={{ background: 'var(--tb-surface-2)', borderColor: 'var(--tb-border)' }}>
+            <span className="font-bold block" style={{ color: 'var(--tb-text)' }}>Serverless Stateless Processing</span>
+            <p style={{ color: 'var(--tb-text-dim)' }}>Scans are evaluated in ephemeral memory on Vercel and sanitized before response delivery.</p>
           </div>
 
-          <div className="p-3.5 rounded-xl border space-y-1" style={{ background: 'var(--ghost-surface-2)', borderColor: 'var(--ghost-border)' }}>
-            <span className="font-bold block" style={{ color: 'var(--ghost-text)' }}>PostgreSQL Row-Level Security</span>
-            <p style={{ color: 'var(--ghost-text-dim)' }}>All saved scan logs are partitioned by your unique cryptographic user ID via strict RLS.</p>
+          <div className="p-3.5 rounded-xl border space-y-1" style={{ background: 'var(--tb-surface-2)', borderColor: 'var(--tb-border)' }}>
+            <span className="font-bold block" style={{ color: 'var(--tb-text)' }}>PostgreSQL Row-Level Security</span>
+            <p style={{ color: 'var(--tb-text-dim)' }}>All saved scan logs are partitioned by your unique cryptographic user ID via strict RLS.</p>
           </div>
 
-          <div className="p-3.5 rounded-xl border space-y-1" style={{ background: 'var(--ghost-surface-2)', borderColor: 'var(--ghost-border)' }}>
-            <span className="font-bold block" style={{ color: 'var(--ghost-text)' }}>Transparent Threat Disclosures</span>
-            <p style={{ color: 'var(--ghost-text-dim)' }}>Probabilistic threat ratings are clearly stated as probability risk scores, not absolute mathematical truth.</p>
+          <div className="p-3.5 rounded-xl border space-y-1" style={{ background: 'var(--tb-surface-2)', borderColor: 'var(--tb-border)' }}>
+            <span className="font-bold block" style={{ color: 'var(--tb-text)' }}>Transparent Threat Disclosures</span>
+            <p style={{ color: 'var(--tb-text-dim)' }}>Probabilistic threat ratings are clearly stated as probability risk scores, not absolute mathematical truth.</p>
           </div>
         </div>
       </div>
 
       {/* User Data Controls */}
-      <div className="ghost-card p-6 space-y-4 border-rose-500/20">
+      <div className="tb-card p-6 space-y-4 border-rose-500/20">
         <h3 className="text-xs font-bold uppercase tracking-wider text-rose-500 flex items-center gap-2">
           <Trash2 className="w-4 h-4" /> Personal Data Purge
         </h3>
-        <p className="text-xs" style={{ color: 'var(--ghost-text-dim)' }}>
+        <p className="text-xs" style={{ color: 'var(--tb-text-dim)' }}>
           You have full sovereignty over your scan records. Purging will immediately and permanently delete all your past inspection records from the Supabase database.
         </p>
 

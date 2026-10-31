@@ -33,18 +33,18 @@ export default function EmergencyActionCard({ riskLevel = "safe", scanData = {} 
   };
 
   return (
-    <div className="ghost-card p-5 space-y-4 border-rose-500/30">
+    <div className="tb-card p-5 space-y-4 border-rose-500/30">
       <div className="flex items-center justify-between border-b pb-3"
-        style={{ borderColor: "var(--ghost-border)" }}>
+        style={{ borderColor: "var(--tb-border)" }}>
         <div className="flex items-center gap-2.5">
           <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-rose-500/15 border border-rose-500/30">
             <OctagonAlert className="w-4 h-4 text-rose-500" />
           </div>
           <div>
-            <h3 className="text-sm font-bold tracking-tight" style={{ color: "var(--ghost-text)" }}>
+            <h3 className="text-sm font-bold tracking-tight" style={{ color: "var(--tb-text)" }}>
               One-Tap Incident Response Protocol
             </h3>
-            <p className="text-xs" style={{ color: "var(--ghost-text-dim)" }}>
+            <p className="text-xs" style={{ color: "var(--tb-text-dim)" }}>
               Recommended containment steps to avoid financial and credential compromise
             </p>
           </div>
@@ -64,7 +64,7 @@ export default function EmergencyActionCard({ riskLevel = "safe", scanData = {} 
                 STOP & DISENGAGE
               </h4>
             </div>
-            <p className="text-xs font-medium mt-2 leading-relaxed" style={{ color: "var(--ghost-text)" }}>
+            <p className="text-xs font-medium mt-2 leading-relaxed" style={{ color: "var(--tb-text)" }}>
               Do NOT click links, call telephone numbers inside the message, or share any OTP/UPI PIN.
             </p>
           </div>
@@ -72,7 +72,7 @@ export default function EmergencyActionCard({ riskLevel = "safe", scanData = {} 
 
         {/* Step 2: VERIFY */}
         <div className="p-3.5 rounded-xl border flex flex-col justify-between space-y-2"
-          style={{ background: "var(--ghost-surface-2)", borderColor: "var(--ghost-border)" }}>
+          style={{ background: "var(--tb-surface-2)", borderColor: "var(--tb-border)" }}>
           <div>
             <div className="flex items-center gap-2">
               <span className="w-5 h-5 rounded-full bg-cyan-500 text-slate-950 font-black text-xs flex items-center justify-center">
@@ -82,7 +82,7 @@ export default function EmergencyActionCard({ riskLevel = "safe", scanData = {} 
                 VERIFY AUTHENTICITY
               </h4>
             </div>
-            <p className="text-xs font-medium mt-2 leading-relaxed" style={{ color: "var(--ghost-text)" }}>
+            <p className="text-xs font-medium mt-2 leading-relaxed" style={{ color: "var(--tb-text)" }}>
               Open the authentic mobile app or contact your bank directly via the back of your payment card.
             </p>
           </div>
@@ -96,7 +96,7 @@ export default function EmergencyActionCard({ riskLevel = "safe", scanData = {} 
 
         {/* Step 3: REPORT */}
         <div className="p-3.5 rounded-xl border flex flex-col justify-between space-y-2"
-          style={{ background: "var(--ghost-surface-2)", borderColor: "var(--ghost-border)" }}>
+          style={{ background: "var(--tb-surface-2)", borderColor: "var(--tb-border)" }}>
           <div>
             <div className="flex items-center gap-2">
               <span className="w-5 h-5 rounded-full bg-amber-500 text-slate-950 font-black text-xs flex items-center justify-center">
@@ -106,7 +106,7 @@ export default function EmergencyActionCard({ riskLevel = "safe", scanData = {} 
                 COMMUNITY WARNING
               </h4>
             </div>
-            <p className="text-xs font-medium mt-2 leading-relaxed" style={{ color: "var(--ghost-text)" }}>
+            <p className="text-xs font-medium mt-2 leading-relaxed" style={{ color: "var(--tb-text)" }}>
               Syndicate this attack pattern to the TrustBreak AI global scam database in one click.
             </p>
           </div>
@@ -120,7 +120,7 @@ export default function EmergencyActionCard({ riskLevel = "safe", scanData = {} 
 
         {/* Step 4: SECURE */}
         <div className="p-3.5 rounded-xl border flex flex-col justify-between space-y-2"
-          style={{ background: "var(--ghost-surface-2)", borderColor: "var(--ghost-border)" }}>
+          style={{ background: "var(--tb-surface-2)", borderColor: "var(--tb-border)" }}>
           <div>
             <div className="flex items-center gap-2">
               <span className="w-5 h-5 rounded-full bg-emerald-500 text-white font-black text-xs flex items-center justify-center">
@@ -130,7 +130,7 @@ export default function EmergencyActionCard({ riskLevel = "safe", scanData = {} 
                 SECURE ACCOUNTS
               </h4>
             </div>
-            <p className="text-xs font-medium mt-2 leading-relaxed" style={{ color: "var(--ghost-text)" }}>
+            <p className="text-xs font-medium mt-2 leading-relaxed" style={{ color: "var(--tb-text)" }}>
               If credentials were entered: freeze NetBanking, enable 2FA with an authenticator app, and reset passwords.
             </p>
           </div>

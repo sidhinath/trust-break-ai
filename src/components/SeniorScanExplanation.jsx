@@ -93,7 +93,7 @@ export default function SeniorScanExplanation({ result, rawInput = "", scanType 
 
   return (
     <div className="space-y-4 p-4 sm:p-6 rounded-3xl border-2 border-slate-300 dark:border-slate-800 shadow-xl transition-all"
-      style={{ background: 'var(--ghost-surface)', color: 'var(--ghost-text)' }}>
+      style={{ background: 'var(--tb-surface)', color: 'var(--tb-text)' }}>
       
       {/* Header Banner */}
       <div className={`p-4 rounded-2xl flex items-center gap-3 ${headlineColorClass}`}>

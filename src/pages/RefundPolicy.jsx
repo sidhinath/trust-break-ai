@@ -12,16 +12,16 @@ export default function RefundPolicy() {
         color="#3b82f6"
       />
 
-      <div className="ghost-card p-6 sm:p-8 space-y-6 text-xs leading-relaxed" style={{ color: 'var(--ghost-text)' }}>
+      <div className="tb-card p-6 sm:p-8 space-y-6 text-xs leading-relaxed" style={{ color: 'var(--tb-text)' }}>
         
         {/* Effective Date & Entity Header */}
         <div className="p-4 rounded-xl border flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3"
-          style={{ background: 'var(--ghost-surface-2)', borderColor: 'var(--ghost-border)' }}>
+          style={{ background: 'var(--tb-surface-2)', borderColor: 'var(--tb-border)' }}>
           <div>
-            <span className="font-bold text-sm block" style={{ color: 'var(--ghost-text)' }}>
+            <span className="font-bold text-sm block" style={{ color: 'var(--tb-text)' }}>
               Consumer Guarantee & Subscription Terms
             </span>
-            <span style={{ color: 'var(--ghost-text-dim)' }}>
+            <span style={{ color: 'var(--tb-text-dim)' }}>
               Effective Date: September 26, 2026 | Version 1.2
             </span>
           </div>
@@ -35,8 +35,8 @@ export default function RefundPolicy() {
           <h2 className="text-sm font-bold uppercase tracking-wider text-cyan-600 dark:text-cyan-400">
             1. Free Tier & Evaluation Plan
           </h2>
-          <p style={{ color: 'var(--ghost-text-dim)' }}>
-            TrustBreak AI.ai provides a 100% free community tier for individual consumers, senior citizens, and hackathon evaluation. No credit card is required, and zero charges will ever be applied to free evaluation accounts.
+          <p style={{ color: 'var(--tb-text-dim)' }}>
+            TrustBreak AI provides a 100% free community tier for individual consumers, senior citizens, and hackathon evaluation. No credit card is required, and zero charges will ever be applied to free evaluation accounts.
           </p>
         </section>
 
@@ -45,25 +45,25 @@ export default function RefundPolicy() {
           <h2 className="text-sm font-bold uppercase tracking-wider text-cyan-600 dark:text-cyan-400">
             2. 14-Day Money-Back Guarantee for Paid API & Enterprise Tiers
           </h2>
-          <p style={{ color: 'var(--ghost-text-dim)' }}>
+          <p style={{ color: 'var(--tb-text-dim)' }}>
             For commercial organizations and enterprise developers subscribing to TrustBreak AI Pro or Enterprise API credit allocations:
           </p>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
-            <div className="p-3.5 rounded-xl border space-y-1.5" style={{ background: 'var(--ghost-surface-2)', borderColor: 'var(--ghost-border)' }}>
+            <div className="p-3.5 rounded-xl border space-y-1.5" style={{ background: 'var(--tb-surface-2)', borderColor: 'var(--tb-border)' }}>
               <span className="font-bold flex items-center gap-1.5 text-blue-600 dark:text-blue-400">
                 <RefreshCw className="w-4 h-4 text-blue-500" /> 14-Day Full Refund Window
               </span>
-              <p style={{ color: 'var(--ghost-text-dim)' }}>
+              <p style={{ color: 'var(--tb-text-dim)' }}>
                 If you are dissatisfied with TrustBreak AI API accuracy or integration performance within 14 calendar days of your initial purchase, you are eligible for a 100% full refund with no questions asked.
               </p>
             </div>
 
-            <div className="p-3.5 rounded-xl border space-y-1.5" style={{ background: 'var(--ghost-surface-2)', borderColor: 'var(--ghost-border)' }}>
+            <div className="p-3.5 rounded-xl border space-y-1.5" style={{ background: 'var(--tb-surface-2)', borderColor: 'var(--tb-border)' }}>
               <span className="font-bold flex items-center gap-1.5 text-blue-600 dark:text-blue-400">
                 <ShieldCheck className="w-4 h-4 text-blue-500" /> Pro-Rata Unused Credit Refunds
               </span>
-              <p style={{ color: 'var(--ghost-text-dim)' }}>
+              <p style={{ color: 'var(--tb-text-dim)' }}>
                 After 14 days, cancellation of annual enterprise agreements entitles you to a pro-rata refund for all unused API credit balances remaining in your billing cycle.
               </p>
             </div>
@@ -75,7 +75,7 @@ export default function RefundPolicy() {
           <h2 className="text-sm font-bold uppercase tracking-wider text-cyan-600 dark:text-cyan-400">
             3. Self-Service Cancellation
           </h2>
-          <p style={{ color: 'var(--ghost-text-dim)' }}>
+          <p style={{ color: 'var(--tb-text-dim)' }}>
             Subscriptions can be canceled at any time via your account billing dashboard. Upon cancellation, your paid plan features will remain active until the conclusion of the current billing cycle.
           </p>
         </section>
@@ -85,13 +85,13 @@ export default function RefundPolicy() {
           <h2 className="text-sm font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400 flex items-center gap-2">
             <Mail className="w-4 h-4" /> How to Request a Refund
           </h2>
-          <p style={{ color: 'var(--ghost-text-dim)' }}>
+          <p style={{ color: 'var(--tb-text-dim)' }}>
             To initiate a refund request, email our billing support team with your account email address and transaction reference:
           </p>
           <div className="font-mono text-xs text-blue-600 dark:text-blue-400 font-bold">
             Email: billing@trustbreak.ai / support@trustbreak.ai
           </div>
-          <p className="text-[11px]" style={{ color: 'var(--ghost-text-dim)' }}>
+          <p className="text-[11px]" style={{ color: 'var(--tb-text-dim)' }}>
             Refund requests are processed within 2 to 5 business days to the original payment method (UPI, Netbanking, Credit Card, or Wire Transfer).
           </p>
         </section>

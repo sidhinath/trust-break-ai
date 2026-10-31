@@ -271,13 +271,13 @@ export default function VoiceScanner() {
   return (
     <div className="space-y-6">
 
-      <div className="ghost-card p-6 space-y-5">
+      <div className="tb-card p-6 space-y-5">
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="space-y-1 text-center sm:text-left">
-            <h3 className="text-base font-bold" style={{ color: "var(--ghost-text)" }}>
+            <h3 className="text-base font-bold" style={{ color: "var(--tb-text)" }}>
               Voice & Audio Threat Recorder
             </h3>
-            <p className="text-xs" style={{ color: "var(--ghost-text-dim)" }}>
+            <p className="text-xs" style={{ color: "var(--tb-text-dim)" }}>
               Record or upload suspicious phone calls, voice notes, or synthetic deepfakes.
             </p>
           </div>
@@ -304,7 +304,7 @@ export default function VoiceScanner() {
               variant="outline"
               onClick={() => fileInputRef.current?.click()}
               className="gap-2"
-              style={{ borderColor: "var(--ghost-border)" }}
+              style={{ borderColor: "var(--tb-border)" }}
             >
               <Upload className="w-4 h-4" /> Upload Audio
             </Button>
@@ -320,7 +320,7 @@ export default function VoiceScanner() {
 
         {audioUrl && (
           <div className="p-4 rounded-xl border flex flex-col sm:flex-row items-center justify-between gap-4"
-            style={{ background: "var(--ghost-surface-2)", borderColor: "var(--ghost-border)" }}>
+            style={{ background: "var(--tb-surface-2)", borderColor: "var(--tb-border)" }}>
             <div className="flex items-center gap-3 w-full sm:w-auto">
               <FileAudio className="w-6 h-6 text-cyan-400" />
               <audio controls src={audioUrl} className="max-w-xs h-9" />
@@ -344,7 +344,7 @@ export default function VoiceScanner() {
         )}
 
         {errorMsg && (
-          <div className="ghost-card p-4 border-rose-500/30 flex items-start gap-3">
+          <div className="tb-card p-4 border-rose-500/30 flex items-start gap-3">
             <AlertCircle className="w-4 h-4 text-rose-500 mt-0.5 shrink-0" />
             <span className="text-xs font-medium text-rose-400">{errorMsg}</span>
           </div>
@@ -364,9 +364,9 @@ export default function VoiceScanner() {
       {result && (
         <div className="space-y-4">
           {result.transcript && (
-            <div className="ghost-card p-4 space-y-3">
+            <div className="tb-card p-4 space-y-3">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-bold uppercase tracking-wider block" style={{ color: "var(--ghost-text-dim)" }}>
+                <span className="text-xs font-bold uppercase tracking-wider block" style={{ color: "var(--tb-text-dim)" }}>
                   Transcribed Audio Content
                 </span>
                 {extractUrlFromText(result.transcript) && (
@@ -376,7 +376,7 @@ export default function VoiceScanner() {
                 )}
               </div>
               <p className="text-xs font-mono p-3 rounded-lg border leading-relaxed"
-                style={{ background: "var(--ghost-surface-2)", borderColor: "var(--ghost-border)", color: "var(--ghost-text)" }}>
+                style={{ background: "var(--tb-surface-2)", borderColor: "var(--tb-border)", color: "var(--tb-text)" }}>
                 {result.transcript}
               </p>
 
@@ -395,27 +395,27 @@ export default function VoiceScanner() {
           {spectralScore !== null && (() => {
             let label = "No strong synthetic indicators detected";
             let subtext = "Frequency distribution is consistent with natural human vocal resonance.";
-            let color = "var(--ghost-green)";
+            let color = "var(--tb-green)";
             let badgeClass = "badge-safe";
 
             if (spectralScore < 0.12) {
               label = "Suspicious synthetic-voice indicators detected";
               subtext = "High harmonic compression & unnaturally flat spectral distribution observed.";
-              color = "var(--ghost-red)";
+              color = "var(--tb-red)";
               badgeClass = "badge-scam";
             } else if (spectralScore > 0.65) {
               label = "Potential manipulation detected";
               subtext = "Unusual high-frequency energy ratio or vocoder artifact distribution observed.";
-              color = "var(--ghost-orange)";
+              color = "var(--tb-orange)";
               badgeClass = "badge-suspicious";
             }
 
             return (
-              <div className="ghost-card p-4 space-y-2 border" style={{ borderColor: "var(--ghost-border)" }}>
+              <div className="tb-card p-4 space-y-2 border" style={{ borderColor: "var(--tb-border)" }}>
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                   <div className="flex items-center gap-2">
                     <Activity className="w-4 h-4" style={{ color }} />
-                    <span className="text-xs font-bold" style={{ color: "var(--ghost-text)" }}>
+                    <span className="text-xs font-bold" style={{ color: "var(--tb-text)" }}>
                       Acoustic Spectral Analysis (Wiener Entropy)
                     </span>
                   </div>
@@ -423,8 +423,8 @@ export default function VoiceScanner() {
                     {label}
                   </span>
                 </div>
-                <div className="flex items-center justify-between pt-1 border-t text-xs" style={{ borderColor: "var(--ghost-border)" }}>
-                  <span className="text-[11px]" style={{ color: "var(--ghost-text-dim)" }}>
+                <div className="flex items-center justify-between pt-1 border-t text-xs" style={{ borderColor: "var(--tb-border)" }}>
+                  <span className="text-[11px]" style={{ color: "var(--tb-text-dim)" }}>
                     {subtext}
                   </span>
                   <span className="font-mono font-bold shrink-0 ml-2" style={{ color }}>

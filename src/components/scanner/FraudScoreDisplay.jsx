@@ -26,7 +26,7 @@ export default function FraudScoreDisplay({
       label: "SAFE / LOW RISK",
       badgeClass: "badge-safe",
       scoreClass: "score-safe",
-      color: "var(--ghost-green)",
+      color: "var(--tb-green)",
       description: "No recognized social engineering, malware, or phishing indicators detected."
     },
     suspicious: {
@@ -34,7 +34,7 @@ export default function FraudScoreDisplay({
       label: "SUSPICIOUS / ELEVATED RISK",
       badgeClass: "badge-suspicious",
       scoreClass: "score-suspicious",
-      color: "var(--ghost-orange)",
+      color: "var(--tb-orange)",
       description: "Potential scam or coercion patterns found. Exercise strict caution before proceeding."
     },
     scam: {
@@ -42,7 +42,7 @@ export default function FraudScoreDisplay({
       label: "HIGH THREAT SCAM DETECTED",
       badgeClass: "badge-scam",
       scoreClass: "score-scam",
-      color: "var(--ghost-red)",
+      color: "var(--tb-red)",
       description: "Strong evidence of malicious deception, credential harvesting, or financial fraud."
     },
   };
@@ -57,7 +57,7 @@ export default function FraudScoreDisplay({
       className="space-y-4">
       
       {/* Main Score Hero Card */}
-      <div className="ghost-card p-6 relative overflow-hidden">
+      <div className="tb-card p-6 relative overflow-hidden">
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
           
           <div className="flex items-start gap-4">
@@ -72,14 +72,14 @@ export default function FraudScoreDisplay({
                   {c.label}
                 </span>
                 <span className="text-[11px] font-mono px-2 py-0.5 rounded-full badge-neutral">
-                  Engine Confidence: <strong className="capitalize" style={{ color: 'var(--ghost-text)' }}>{confidence}</strong>
+                  Engine Confidence: <strong className="capitalize" style={{ color: 'var(--tb-text)' }}>{confidence}</strong>
                 </span>
                 <SourceBadge source={source} />
               </div>
-              <h2 className="text-lg font-bold tracking-tight font-display" style={{ color: 'var(--ghost-text)' }}>
+              <h2 className="text-lg font-bold tracking-tight font-display" style={{ color: 'var(--tb-text)' }}>
                 Threat Assessment Verdict
               </h2>
-              <p className="text-xs font-medium max-w-md leading-relaxed" style={{ color: 'var(--ghost-text-dim)' }}>
+              <p className="text-xs font-medium max-w-md leading-relaxed" style={{ color: 'var(--tb-text-dim)' }}>
                 {c.description}
               </p>
             </div>
@@ -87,12 +87,12 @@ export default function FraudScoreDisplay({
 
           {/* Calibrated Risk Score Gauge */}
           <div className="flex items-center gap-4 p-4 rounded-2xl border self-start md:self-auto"
-            style={{ background: 'var(--ghost-surface-2)', borderColor: 'var(--ghost-border)' }}>
+            style={{ background: 'var(--tb-surface-2)', borderColor: 'var(--tb-border)' }}>
             <div className="text-right">
-              <span className="text-[10px] font-bold uppercase tracking-widest block" style={{ color: 'var(--ghost-text-muted)' }}>
+              <span className="text-[10px] font-bold uppercase tracking-widest block" style={{ color: 'var(--tb-text-muted)' }}>
                 Risk Score
               </span>
-              <span className="text-xs font-mono" style={{ color: 'var(--ghost-text-dim)' }}>
+              <span className="text-xs font-mono" style={{ color: 'var(--tb-text-dim)' }}>
                 0 (Safe) — 100 (Critical)
               </span>
             </div>
@@ -100,13 +100,13 @@ export default function FraudScoreDisplay({
               <span className={`text-4xl sm:text-5xl font-black font-display ${c.scoreClass}`}>
                 {score}
               </span>
-              <span className="text-sm font-bold ml-1" style={{ color: 'var(--ghost-text-muted)' }}>/100</span>
+              <span className="text-sm font-bold ml-1" style={{ color: 'var(--tb-text-muted)' }}>/100</span>
             </div>
           </div>
         </div>
 
         {/* Linear Progress Bar */}
-        <div className="w-full h-2 rounded-full overflow-hidden mt-6" style={{ background: 'var(--ghost-surface-3)' }}>
+        <div className="w-full h-2 rounded-full overflow-hidden mt-6" style={{ background: 'var(--tb-surface-3)' }}>
           <motion.div
             initial={{ width: 0 }}
             animate={{ width: `${score}%` }}
@@ -123,8 +123,8 @@ export default function FraudScoreDisplay({
           Clock, Globe, AlertTriangle, QrCode, UserX, Banknote, CalendarX, ShieldOff, KeyRound, ShieldX: ShieldX,
         };
         return (
-          <div className="ghost-card p-5 space-y-3">
-            <h3 className="text-xs font-bold uppercase tracking-wider flex items-center gap-2" style={{ color: 'var(--ghost-text-dim)' }}>
+          <div className="tb-card p-5 space-y-3">
+            <h3 className="text-xs font-bold uppercase tracking-wider flex items-center gap-2" style={{ color: 'var(--tb-text-dim)' }}>
               <Sparkles className="w-3.5 h-3.5 text-cyan-500" />
               Structured Risk Indicators ({reasonCodes.length})
             </h3>
@@ -164,49 +164,49 @@ export default function FraudScoreDisplay({
 
       {/* Signals Matrix */}
       {signals && Object.values(signals).some(Boolean) && (
-        <div className="ghost-card p-5 space-y-3">
-          <h3 className="text-xs font-bold uppercase tracking-wider flex items-center gap-2" style={{ color: 'var(--ghost-text-dim)' }}>
+        <div className="tb-card p-5 space-y-3">
+          <h3 className="text-xs font-bold uppercase tracking-wider flex items-center gap-2" style={{ color: 'var(--tb-text-dim)' }}>
             <Sparkles className="w-3.5 h-3.5 text-cyan-500" />
             Detected Manipulation Signals
           </h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
             {signals.urgency && (
               <div className="p-3 rounded-xl border flex items-start gap-2.5"
-                style={{ background: 'var(--ghost-surface-2)', borderColor: 'var(--ghost-border)' }}>
+                style={{ background: 'var(--tb-surface-2)', borderColor: 'var(--tb-border)' }}>
                 <Clock className="w-4 h-4 text-amber-500 shrink-0 mt-0.5" />
                 <div>
                   <span className="text-xs font-bold text-amber-600 dark:text-amber-400 block">Urgency / Time Pressure</span>
-                  <p className="text-xs mt-0.5" style={{ color: 'var(--ghost-text)' }}>{signals.urgency}</p>
+                  <p className="text-xs mt-0.5" style={{ color: 'var(--tb-text)' }}>{signals.urgency}</p>
                 </div>
               </div>
             )}
             {signals.credential && (
               <div className="p-3 rounded-xl border flex items-start gap-2.5"
-                style={{ background: 'var(--ghost-surface-2)', borderColor: 'var(--ghost-border)' }}>
+                style={{ background: 'var(--tb-surface-2)', borderColor: 'var(--tb-border)' }}>
                 <Key className="w-4 h-4 text-rose-500 shrink-0 mt-0.5" />
                 <div>
                   <span className="text-xs font-bold text-rose-600 dark:text-rose-400 block">Credential Harvesting</span>
-                  <p className="text-xs mt-0.5" style={{ color: 'var(--ghost-text)' }}>{signals.credential}</p>
+                  <p className="text-xs mt-0.5" style={{ color: 'var(--tb-text)' }}>{signals.credential}</p>
                 </div>
               </div>
             )}
             {signals.financial && (
               <div className="p-3 rounded-xl border flex items-start gap-2.5"
-                style={{ background: 'var(--ghost-surface-2)', borderColor: 'var(--ghost-border)' }}>
+                style={{ background: 'var(--tb-surface-2)', borderColor: 'var(--tb-border)' }}>
                 <DollarSign className="w-4 h-4 text-emerald-500 shrink-0 mt-0.5" />
                 <div>
                   <span className="text-xs font-bold text-emerald-600 dark:text-emerald-400 block">Financial / Payment Trap</span>
-                  <p className="text-xs mt-0.5" style={{ color: 'var(--ghost-text)' }}>{signals.financial}</p>
+                  <p className="text-xs mt-0.5" style={{ color: 'var(--tb-text)' }}>{signals.financial}</p>
                 </div>
               </div>
             )}
             {signals.impersonation && (
               <div className="p-3 rounded-xl border flex items-start gap-2.5"
-                style={{ background: 'var(--ghost-surface-2)', borderColor: 'var(--ghost-border)' }}>
+                style={{ background: 'var(--tb-surface-2)', borderColor: 'var(--tb-border)' }}>
                 <Users className="w-4 h-4 text-cyan-500 shrink-0 mt-0.5" />
                 <div>
                   <span className="text-xs font-bold text-cyan-600 dark:text-cyan-400 block">Brand Impersonation</span>
-                  <p className="text-xs mt-0.5" style={{ color: 'var(--ghost-text)' }}>{signals.impersonation}</p>
+                  <p className="text-xs mt-0.5" style={{ color: 'var(--tb-text)' }}>{signals.impersonation}</p>
                 </div>
               </div>
             )}
@@ -215,8 +215,8 @@ export default function FraudScoreDisplay({
       )}
 
       {/* Detailed Evidence Points */}
-      <div className="ghost-card p-5 space-y-3">
-        <h3 className="text-xs font-bold uppercase tracking-wider flex items-center gap-2" style={{ color: 'var(--ghost-text-dim)' }}>
+      <div className="tb-card p-5 space-y-3">
+        <h3 className="text-xs font-bold uppercase tracking-wider flex items-center gap-2" style={{ color: 'var(--tb-text-dim)' }}>
           <Sparkles className="w-3.5 h-3.5 text-cyan-500" />
           Extracted Technical Evidence & Security Findings ({(reasons && reasons.length) || 4})
         </h3>
@@ -229,36 +229,36 @@ export default function FraudScoreDisplay({
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: i * 0.05 }}
                 className="flex items-start gap-2.5 p-2.5 rounded-lg border"
-                style={{ background: 'var(--ghost-surface-2)', borderColor: 'var(--ghost-border)' }}>
+                style={{ background: 'var(--tb-surface-2)', borderColor: 'var(--tb-border)' }}>
                 <span className={riskLevel === 'safe' ? 'text-emerald-500 font-bold text-sm' : 'text-cyan-500 font-bold text-sm'}>
                   {riskLevel === 'safe' ? '✓' : '›'}
                 </span>
-                <span className="text-xs font-medium leading-relaxed" style={{ color: 'var(--ghost-text)' }}>{reason}</span>
+                <span className="text-xs font-medium leading-relaxed" style={{ color: 'var(--tb-text)' }}>{reason}</span>
               </motion.div>
             ))
           ) : (
             <>
-              <div className="flex items-start gap-2.5 p-2.5 rounded-lg border" style={{ background: 'var(--ghost-surface-2)', borderColor: 'var(--ghost-border)' }}>
+              <div className="flex items-start gap-2.5 p-2.5 rounded-lg border" style={{ background: 'var(--tb-surface-2)', borderColor: 'var(--tb-border)' }}>
                 <span className="text-emerald-500 font-bold text-sm">✓</span>
-                <span className="text-xs font-medium leading-relaxed" style={{ color: 'var(--ghost-text)' }}>
+                <span className="text-xs font-medium leading-relaxed" style={{ color: 'var(--tb-text)' }}>
                   <strong>Transport Layer Security:</strong> Valid HTTPS protocol active with standard TLS encryption.
                 </span>
               </div>
-              <div className="flex items-start gap-2.5 p-2.5 rounded-lg border" style={{ background: 'var(--ghost-surface-2)', borderColor: 'var(--ghost-border)' }}>
+              <div className="flex items-start gap-2.5 p-2.5 rounded-lg border" style={{ background: 'var(--tb-surface-2)', borderColor: 'var(--tb-border)' }}>
                 <span className="text-emerald-500 font-bold text-sm">✓</span>
-                <span className="text-xs font-medium leading-relaxed" style={{ color: 'var(--ghost-text)' }}>
+                <span className="text-xs font-medium leading-relaxed" style={{ color: 'var(--tb-text)' }}>
                   <strong>Hostname Syntax:</strong> Hostname structure validated without DNS cloaking, IP literals, or deep subdomain nesting.
                 </span>
               </div>
-              <div className="flex items-start gap-2.5 p-2.5 rounded-lg border" style={{ background: 'var(--ghost-surface-2)', borderColor: 'var(--ghost-border)' }}>
+              <div className="flex items-start gap-2.5 p-2.5 rounded-lg border" style={{ background: 'var(--tb-surface-2)', borderColor: 'var(--tb-border)' }}>
                 <span className="text-emerald-500 font-bold text-sm">✓</span>
-                <span className="text-xs font-medium leading-relaxed" style={{ color: 'var(--ghost-text)' }}>
+                <span className="text-xs font-medium leading-relaxed" style={{ color: 'var(--tb-text)' }}>
                   <strong>Brand Mimicry & Homograph Audit:</strong> Passed homograph character analysis and typosquatting pattern detection.
                 </span>
               </div>
-              <div className="flex items-start gap-2.5 p-2.5 rounded-lg border" style={{ background: 'var(--ghost-surface-2)', borderColor: 'var(--ghost-border)' }}>
+              <div className="flex items-start gap-2.5 p-2.5 rounded-lg border" style={{ background: 'var(--tb-surface-2)', borderColor: 'var(--tb-border)' }}>
                 <span className="text-emerald-500 font-bold text-sm">✓</span>
-                <span className="text-xs font-medium leading-relaxed" style={{ color: 'var(--ghost-text)' }}>
+                <span className="text-xs font-medium leading-relaxed" style={{ color: 'var(--tb-text)' }}>
                   <strong>Threat Intelligence Check:</strong> Zero malicious flags or active scam reports recorded across threat feeds.
                 </span>
               </div>
@@ -269,11 +269,11 @@ export default function FraudScoreDisplay({
 
       {/* AI Explanation */}
       {analysis && (
-        <div className="ghost-card p-5 space-y-2">
-          <h3 className="text-xs font-bold uppercase tracking-wider" style={{ color: 'var(--ghost-text-dim)' }}>
+        <div className="tb-card p-5 space-y-2">
+          <h3 className="text-xs font-bold uppercase tracking-wider" style={{ color: 'var(--tb-text-dim)' }}>
             Deep Threat Intelligence Summary
           </h3>
-          <p className="text-xs font-medium leading-relaxed" style={{ color: 'var(--ghost-text-dim)' }}>
+          <p className="text-xs font-medium leading-relaxed" style={{ color: 'var(--tb-text-dim)' }}>
             {analysis}
           </p>
         </div>

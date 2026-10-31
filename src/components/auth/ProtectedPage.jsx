@@ -48,10 +48,10 @@ export default function ProtectedPage({ children, feature }) {
 
         {/* Text */}
         <div className="space-y-2">
-          <h2 className="text-2xl font-black tracking-tight" style={{ color: 'var(--ghost-text)' }}>
+          <h2 className="text-2xl font-black tracking-tight" style={{ color: 'var(--tb-text)' }}>
             Authentication Required
           </h2>
-          <p className="text-sm leading-relaxed" style={{ color: 'var(--ghost-text-dim)' }}>
+          <p className="text-sm leading-relaxed" style={{ color: 'var(--tb-text-dim)' }}>
             {feature
               ? `The ${feature} is only available to signed-in users.`
               : 'This feature is only available to signed-in users.'}
@@ -88,7 +88,7 @@ export default function ProtectedPage({ children, feature }) {
           </button>
         </div>
 
-        <p className="text-xs" style={{ color: 'var(--ghost-text-muted)' }}>
+        <p className="text-xs" style={{ color: 'var(--tb-text-muted)' }}>
           Free forever · No credit card required
         </p>
       </motion.div>

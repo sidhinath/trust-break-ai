@@ -2,6 +2,6 @@
 <resources>
     <string name="app_name">TrustBreak AI</string>
     <string name="title_activity_main">TrustBreak AI</string>
-    <string name="package_name">com.ghostnet.app</string>
-    <string name="custom_url_scheme">com.ghostnet.app</string>
+    <string name="package_name">com.trustbreak.app</string>
+    <string name="custom_url_scheme">com.trustbreak.app</string>
 </resources>

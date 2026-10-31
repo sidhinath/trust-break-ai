@@ -78,10 +78,10 @@ export default function UserModal({ isOpen, onClose, user }) {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95 }}
             transition={{ duration: 0.2, ease: "easeOut" }}
-            className="ghost-card w-full max-w-md p-6 relative overflow-hidden space-y-5 border-cyan-500/30"
+            className="tb-card w-full max-w-md p-6 relative overflow-hidden space-y-5 border-cyan-500/30"
           >
             {/* Header */}
-            <div className="flex items-center justify-between border-b pb-4" style={{ borderColor: "var(--ghost-border)" }}>
+            <div className="flex items-center justify-between border-b pb-4" style={{ borderColor: "var(--tb-border)" }}>
               <div className="flex items-center gap-3">
                 {/* Avatar */}
                 <div className={`w-11 h-11 rounded-xl bg-gradient-to-br ${avatarGradient} flex items-center justify-center text-white font-black text-base shadow-lg shrink-0`}>
@@ -91,7 +91,7 @@ export default function UserModal({ isOpen, onClose, user }) {
                   <h3 className="text-base font-bold text-white tracking-tight">
                     {isGuest ? "Guest Session" : (user?.user_metadata?.full_name || "TrustBreak Operator")}
                   </h3>
-                  <p className="text-xs" style={{ color: "var(--ghost-text-dim)" }}>
+                  <p className="text-xs" style={{ color: "var(--tb-text-dim)" }}>
                     {isGuest ? "Limited access · Sign in for full features" : "Verified TrustBreak AI Security Session"}
                   </p>
                 </div>
@@ -111,7 +111,7 @@ export default function UserModal({ isOpen, onClose, user }) {
                   <Sparkles className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
                   <div>
                     <p className="text-sm font-bold text-white">You're browsing as a guest</p>
-                    <p className="text-xs mt-0.5" style={{ color: "var(--ghost-text-dim)" }}>
+                    <p className="text-xs mt-0.5" style={{ color: "var(--tb-text-dim)" }}>
                       Sign in or create a free account to unlock all scanners, reports, and threat intelligence.
                     </p>
                   </div>
@@ -136,9 +136,9 @@ export default function UserModal({ isOpen, onClose, user }) {
             {/* Authenticated user details */}
             {!isGuest && (
               <>
-                <div className="p-4 rounded-xl border space-y-3" style={{ background: "var(--ghost-surface-2)", borderColor: "var(--ghost-border)" }}>
+                <div className="p-4 rounded-xl border space-y-3" style={{ background: "var(--tb-surface-2)", borderColor: "var(--tb-border)" }}>
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-bold uppercase tracking-wider" style={{ color: "var(--ghost-text-dim)" }}>
+                    <span className="text-xs font-bold uppercase tracking-wider" style={{ color: "var(--tb-text-dim)" }}>
                       Authenticated User
                     </span>
                     <span className="text-[10px] font-bold px-2 py-0.5 rounded-full badge-safe uppercase flex items-center gap-1">
@@ -151,7 +151,7 @@ export default function UserModal({ isOpen, onClose, user }) {
                     <div className="flex items-start gap-2.5">
                       <Mail className="w-4 h-4 text-cyan-400 mt-0.5 shrink-0" />
                       <div className="min-w-0">
-                        <span className="text-[10px] font-bold uppercase tracking-wider block" style={{ color: "var(--ghost-text-dim)" }}>
+                        <span className="text-[10px] font-bold uppercase tracking-wider block" style={{ color: "var(--tb-text-dim)" }}>
                           Email Address
                         </span>
                         <p className="text-xs font-bold text-white truncate">{user?.email || "—"}</p>
@@ -161,7 +161,7 @@ export default function UserModal({ isOpen, onClose, user }) {
                     <div className="flex items-start gap-2.5">
                       <Key className="w-4 h-4 text-purple-400 mt-0.5 shrink-0" />
                       <div className="min-w-0">
-                        <span className="text-[10px] font-bold uppercase tracking-wider block" style={{ color: "var(--ghost-text-dim)" }}>
+                        <span className="text-[10px] font-bold uppercase tracking-wider block" style={{ color: "var(--tb-text-dim)" }}>
                           User ID
                         </span>
                         <p className="text-[11px] font-mono text-slate-300 truncate">{user?.id || "—"}</p>
@@ -171,7 +171,7 @@ export default function UserModal({ isOpen, onClose, user }) {
                     <div className="flex items-start gap-2.5">
                       <Calendar className="w-4 h-4 text-amber-400 mt-0.5 shrink-0" />
                       <div>
-                        <span className="text-[10px] font-bold uppercase tracking-wider block" style={{ color: "var(--ghost-text-dim)" }}>
+                        <span className="text-[10px] font-bold uppercase tracking-wider block" style={{ color: "var(--tb-text-dim)" }}>
                           Account Created
                         </span>
                         <p className="text-xs font-medium text-slate-200">{createdDate}</p>

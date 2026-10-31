@@ -8,20 +8,20 @@ export default function CookiePolicy() {
       <ScannerHeader
         icon={Cookie}
         title="Cookie & Local Storage Policy"
-        description="Detailed breakdown of essential cookies and browser storage tokens used on TrustBreak AI.ai with zero ad tracking"
+        description="Detailed breakdown of essential cookies and browser storage tokens used on TrustBreak AI with zero ad tracking"
         color="#eab308"
       />
 
-      <div className="ghost-card p-6 sm:p-8 space-y-6 text-xs leading-relaxed" style={{ color: 'var(--ghost-text)' }}>
+      <div className="tb-card p-6 sm:p-8 space-y-6 text-xs leading-relaxed" style={{ color: 'var(--tb-text)' }}>
         
         {/* Effective Date & Entity Header */}
         <div className="p-4 rounded-xl border flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3"
-          style={{ background: 'var(--ghost-surface-2)', borderColor: 'var(--ghost-border)' }}>
+          style={{ background: 'var(--tb-surface-2)', borderColor: 'var(--tb-border)' }}>
           <div>
-            <span className="font-bold text-sm block" style={{ color: 'var(--ghost-text)' }}>
+            <span className="font-bold text-sm block" style={{ color: 'var(--tb-text)' }}>
               Zero Advertising & Third-Party Cookie Policy
             </span>
-            <span style={{ color: 'var(--ghost-text-dim)' }}>
+            <span style={{ color: 'var(--tb-text-dim)' }}>
               Effective Date: September 26, 2026 | Version 1.3
             </span>
           </div>
@@ -35,7 +35,7 @@ export default function CookiePolicy() {
           <h2 className="text-sm font-bold uppercase tracking-wider text-cyan-600 dark:text-cyan-400">
             1. What Are Cookies & Local Storage Tokens?
           </h2>
-          <p style={{ color: 'var(--ghost-text-dim)' }}>
+          <p style={{ color: 'var(--tb-text-dim)' }}>
             Cookies and browser Local Storage (`localStorage`) are small data files or key-value pairs stored on your device by your web browser when visiting web applications. They allow apps to remember session authentication states, UI theme choices, and security preferences across page navigation.
           </p>
         </section>
@@ -45,41 +45,41 @@ export default function CookiePolicy() {
           <h2 className="text-sm font-bold uppercase tracking-wider text-cyan-600 dark:text-cyan-400">
             2. Essential Cookies & Local Storage Inventory
           </h2>
-          <p style={{ color: 'var(--ghost-text-dim)' }}>
-            TrustBreak AI.ai utilizes ONLY essential functional tokens necessary to deliver platform capabilities. We store the following items:
+          <p style={{ color: 'var(--tb-text-dim)' }}>
+            TrustBreak AI utilizes ONLY essential functional tokens necessary to deliver platform capabilities. We store the following items:
           </p>
 
           <div className="space-y-2.5">
-            <div className="p-3.5 rounded-xl border space-y-1" style={{ background: 'var(--ghost-surface-2)', borderColor: 'var(--ghost-border)' }}>
+            <div className="p-3.5 rounded-xl border space-y-1" style={{ background: 'var(--tb-surface-2)', borderColor: 'var(--tb-border)' }}>
               <div className="flex justify-between items-center font-bold">
                 <span className="font-mono text-cyan-600 dark:text-cyan-400">trustbreak_theme</span>
                 <span className="text-[10px] px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-500 border border-emerald-500/30">Functional</span>
               </div>
-              <p style={{ color: 'var(--ghost-text-dim)' }}>Stores your active visual theme preference (Light or Dark mode). Duration: Permanent until cleared.</p>
+              <p style={{ color: 'var(--tb-text-dim)' }}>Stores your active visual theme preference (Light or Dark mode). Duration: Permanent until cleared.</p>
             </div>
 
-            <div className="p-3.5 rounded-xl border space-y-1" style={{ background: 'var(--ghost-surface-2)', borderColor: 'var(--ghost-border)' }}>
+            <div className="p-3.5 rounded-xl border space-y-1" style={{ background: 'var(--tb-surface-2)', borderColor: 'var(--tb-border)' }}>
               <div className="flex justify-between items-center font-bold">
                 <span className="font-mono text-cyan-600 dark:text-cyan-400">trustbreak_sidebar_open</span>
                 <span className="text-[10px] px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-500 border border-emerald-500/30">Functional</span>
               </div>
-              <p style={{ color: 'var(--ghost-text-dim)' }}>Remembers whether you preferred the desktop navigation sidebar open or collapsed. Duration: Permanent until cleared.</p>
+              <p style={{ color: 'var(--tb-text-dim)' }}>Remembers whether you preferred the desktop navigation sidebar open or collapsed. Duration: Permanent until cleared.</p>
             </div>
 
-            <div className="p-3.5 rounded-xl border space-y-1" style={{ background: 'var(--ghost-surface-2)', borderColor: 'var(--ghost-border)' }}>
+            <div className="p-3.5 rounded-xl border space-y-1" style={{ background: 'var(--tb-surface-2)', borderColor: 'var(--tb-border)' }}>
               <div className="flex justify-between items-center font-bold">
                 <span className="font-mono text-cyan-600 dark:text-cyan-400">trustbreak_cookie_consent</span>
                 <span className="text-[10px] px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-500 border border-emerald-500/30">Consent</span>
               </div>
-              <p style={{ color: 'var(--ghost-text-dim)' }}>Stores your cookie consent choice ("accepted" or "essential_only") to suppress repeated cookie notifications. Duration: 365 Days.</p>
+              <p style={{ color: 'var(--tb-text-dim)' }}>Stores your cookie consent choice ("accepted" or "essential_only") to suppress repeated cookie notifications. Duration: 365 Days.</p>
             </div>
 
-            <div className="p-3.5 rounded-xl border space-y-1" style={{ background: 'var(--ghost-surface-2)', borderColor: 'var(--ghost-border)' }}>
+            <div className="p-3.5 rounded-xl border space-y-1" style={{ background: 'var(--tb-surface-2)', borderColor: 'var(--tb-border)' }}>
               <div className="flex justify-between items-center font-bold">
                 <span className="font-mono text-cyan-600 dark:text-cyan-400">sb-[id]-auth-token</span>
                 <span className="text-[10px] px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-500 border border-emerald-500/30">Authentication</span>
               </div>
-              <p style={{ color: 'var(--ghost-text-dim)' }}>Encrypted JWT authentication token generated by Supabase Auth to maintain secure signed-in sessions. Duration: Session / 7 Days.</p>
+              <p style={{ color: 'var(--tb-text-dim)' }}>Encrypted JWT authentication token generated by Supabase Auth to maintain secure signed-in sessions. Duration: Session / 7 Days.</p>
             </div>
           </div>
         </section>
@@ -114,7 +114,7 @@ export default function CookiePolicy() {
           <h2 className="text-sm font-bold uppercase tracking-wider text-cyan-600 dark:text-cyan-400">
             4. Managing & Clearing Cookies
           </h2>
-          <p style={{ color: 'var(--ghost-text-dim)' }}>
+          <p style={{ color: 'var(--tb-text-dim)' }}>
             You can clear or block cookies at any time via your browser settings (Chrome, Firefox, Safari, Edge, Brave). Clearing `localStorage` will reset your theme preference and log you out of your current session.
           </p>
         </section>

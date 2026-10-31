@@ -206,7 +206,7 @@ export default function Threats() {
       />
 
       {/* Sub-Navigation Tabs */}
-      <div className="ghost-card p-2">
+      <div className="tb-card p-2">
         <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-1 px-1">
           {THREAT_SUB_TABS.map((tab) => {
             const Icon = tab.icon;
@@ -235,25 +235,25 @@ export default function Threats() {
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
           <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
-            className="ghost-card p-4 relative overflow-hidden">
+            className="tb-card p-4 relative overflow-hidden">
             <div className="flex items-center justify-between">
-              <span className="text-[11px] font-bold" style={{ color: 'var(--ghost-text-dim)' }}>Syndicated Threat Reports</span>
+              <span className="text-[11px] font-bold" style={{ color: 'var(--tb-text-dim)' }}>Syndicated Threat Reports</span>
               <span className="w-2 h-2 rounded-full bg-cyan-400 animate-ping" />
             </div>
-            <p className="text-2xl sm:text-3xl font-black mt-1" style={{ color: 'var(--ghost-text)' }}>{totalReportsCount}</p>
+            <p className="text-2xl sm:text-3xl font-black mt-1" style={{ color: 'var(--tb-text)' }}>{totalReportsCount}</p>
             <span className="text-[10px] font-mono text-cyan-600 dark:text-cyan-400">Database & Live Telemetry</span>
           </motion.div>
 
           <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.05 }}
-            className="ghost-card p-4">
-            <span className="text-[11px] font-bold" style={{ color: 'var(--ghost-text-dim)' }}>Active Threat Indicators</span>
+            className="tb-card p-4">
+            <span className="text-[11px] font-bold" style={{ color: 'var(--tb-text-dim)' }}>Active Threat Indicators</span>
             <p className="text-2xl sm:text-3xl font-black score-scam mt-1">{liveIndicatorCount}</p>
             <span className="text-[10px] text-rose-500 font-mono">Verified Malicious Hashes</span>
           </motion.div>
 
           <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}
-            className="ghost-card p-4">
-            <span className="text-[11px] font-bold" style={{ color: 'var(--ghost-text-dim)' }}>Protection Status</span>
+            className="tb-card p-4">
+            <span className="text-[11px] font-bold" style={{ color: 'var(--tb-text-dim)' }}>Protection Status</span>
             <p className="text-2xl sm:text-3xl font-black score-safe mt-1">Active</p>
             <span className="text-[10px] text-emerald-500 font-mono">Zero-Trust Inspection Active</span>
           </motion.div>
@@ -262,17 +262,17 @@ export default function Threats() {
 
       {/* TAB 1: THREAT RADAR */}
       {activeTab === "radar" && (
-        <section className="ghost-card p-5 sm:p-6 space-y-4 border-cyan-500/30">
+        <section className="tb-card p-5 sm:p-6 space-y-4 border-cyan-500/30">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div className="flex items-center gap-2">
               <div className="w-8 h-8 rounded-xl bg-cyan-500/15 border border-cyan-500/30 flex items-center justify-center text-cyan-500">
                 <Radio className="w-4 h-4 animate-pulse" />
               </div>
               <div>
-                <h2 className="text-base font-bold font-display" style={{ color: 'var(--ghost-text)' }}>
+                <h2 className="text-base font-bold font-display" style={{ color: 'var(--tb-text)' }}>
                   Real-Time Live Threat Radar Stream
                 </h2>
-                <p className="text-xs" style={{ color: 'var(--ghost-text-dim)' }}>
+                <p className="text-xs" style={{ color: 'var(--tb-text-dim)' }}>
                   Continuous live feed of flagged scam messages, malicious URLs, and voice indicators
                 </p>
               </div>
@@ -305,10 +305,10 @@ export default function Threats() {
 
           {/* Radar Stream Item List */}
           {liveStream.length === 0 ? (
-            <div className="ghost-card p-8 text-center space-y-3 border-dashed">
+            <div className="tb-card p-8 text-center space-y-3 border-dashed">
               <Radio className="w-8 h-8 mx-auto text-slate-400 animate-pulse" />
-              <h3 className="text-sm font-bold" style={{ color: 'var(--ghost-text)' }}>NO RECENT THREAT REPORTS</h3>
-              <p className="text-xs max-w-sm mx-auto" style={{ color: 'var(--ghost-text-dim)' }}>
+              <h3 className="text-sm font-bold" style={{ color: 'var(--tb-text)' }}>NO RECENT THREAT REPORTS</h3>
+              <p className="text-xs max-w-sm mx-auto" style={{ color: 'var(--tb-text-dim)' }}>
                 No community threat reports recorded yet.
               </p>
             </div>
@@ -326,14 +326,14 @@ export default function Threats() {
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, height: 0 }}
                         className="p-3.5 rounded-xl border flex flex-col sm:flex-row sm:items-center justify-between gap-3 transition-all hover:border-cyan-400/50"
-                        style={{ background: 'var(--ghost-surface-2)', borderColor: 'var(--ghost-border)' }}>
+                        style={{ background: 'var(--tb-surface-2)', borderColor: 'var(--tb-border)' }}>
                         <div className="flex items-start gap-3 min-w-0">
                           <div className="w-9 h-9 rounded-xl bg-rose-500/15 border border-rose-500/30 flex items-center justify-center shrink-0 text-rose-500 mt-0.5 sm:mt-0">
                             <Icon className="w-4 h-4" />
                           </div>
                           <div className="min-w-0 space-y-1">
                             <div className="flex flex-wrap items-center gap-2">
-                              <span className="text-xs font-bold" style={{ color: 'var(--ghost-text)' }}>
+                              <span className="text-xs font-bold" style={{ color: 'var(--tb-text)' }}>
                                 {item.threat_category || 'Scam Incident'}
                               </span>
                               <span className="text-[10px] font-mono px-2 py-0.2 rounded-full badge-scam font-bold">
@@ -343,13 +343,13 @@ export default function Threats() {
                                 {item.region}
                               </span>
                             </div>
-                            <p className="text-xs font-mono line-clamp-2" style={{ color: 'var(--ghost-text-dim)' }}>
+                            <p className="text-xs font-mono line-clamp-2" style={{ color: 'var(--tb-text-dim)' }}>
                               "{item.scam_content}"
                             </p>
                           </div>
                         </div>
 
-                        <div className="flex sm:flex-col items-center sm:items-end justify-between text-right shrink-0 text-[10px] font-mono" style={{ color: 'var(--ghost-text-muted)' }}>
+                        <div className="flex sm:flex-col items-center sm:items-end justify-between text-right shrink-0 text-[10px] font-mono" style={{ color: 'var(--tb-text-muted)' }}>
                           <span className={`flex items-center gap-1 font-bold ${item.is_live ? 'text-rose-500 animate-pulse' : 'text-cyan-600 dark:text-cyan-400'}`}>
                             {item.is_live && <span className="w-1.5 h-1.5 rounded-full bg-rose-500 animate-ping mr-0.5" />}
                             <Clock className="w-3 h-3" /> {item.timestamp}
@@ -370,14 +370,14 @@ export default function Threats() {
       {/* TAB 2: SCAM TELEMETRY */}
       {activeTab === "heatmap" && (
         <div className="space-y-4">
-          <div className="ghost-card p-5 space-y-4 border-cyan-500/30">
+          <div className="tb-card p-5 space-y-4 border-cyan-500/30">
             <div className="flex items-center gap-2">
               <Map className="w-5 h-5 text-cyan-400" />
               <div>
-                <h2 className="text-base font-bold font-display" style={{ color: 'var(--ghost-text)' }}>
+                <h2 className="text-base font-bold font-display" style={{ color: 'var(--tb-text)' }}>
                   Scam Telemetry & Vector Breakdown
                 </h2>
-                <p className="text-xs" style={{ color: 'var(--ghost-text-dim)' }}>
+                <p className="text-xs" style={{ color: 'var(--tb-text-dim)' }}>
                   Regional fraud distribution metrics and threat vector analysis
                 </p>
               </div>
@@ -391,16 +391,16 @@ export default function Threats() {
                 { title: "Fake APK & Delivery SMS", percent: "8%", count: "210 incidents", risk: "MEDIUM", color: "emerald" },
                 { title: "Crypto & Gift Card Scams", percent: "4%", count: "120 incidents", risk: "ELEVATED", color: "blue" },
               ].map((item, idx) => (
-                <div key={idx} className="p-4 rounded-xl border space-y-2" style={{ background: 'var(--ghost-surface-2)', borderColor: 'var(--ghost-border)' }}>
+                <div key={idx} className="p-4 rounded-xl border space-y-2" style={{ background: 'var(--tb-surface-2)', borderColor: 'var(--tb-border)' }}>
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-bold" style={{ color: 'var(--ghost-text)' }}>{item.title}</span>
+                    <span className="text-xs font-bold" style={{ color: 'var(--tb-text)' }}>{item.title}</span>
                     <span className={`text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-${item.color}-500/10 text-${item.color}-400 border border-${item.color}-500/30`}>
                       {item.risk}
                     </span>
                   </div>
                   <div className="flex items-baseline justify-between">
                     <span className="text-xl font-black font-mono text-cyan-400">{item.percent}</span>
-                    <span className="text-[11px] font-mono" style={{ color: 'var(--ghost-text-dim)' }}>{item.count}</span>
+                    <span className="text-[11px] font-mono" style={{ color: 'var(--tb-text-dim)' }}>{item.count}</span>
                   </div>
                   <div className="w-full bg-slate-800 h-1.5 rounded-full overflow-hidden">
                     <div className="bg-cyan-400 h-full rounded-full" style={{ width: item.percent }} />
@@ -410,7 +410,7 @@ export default function Threats() {
             </div>
           </div>
 
-          <div className="ghost-card p-5 space-y-3">
+          <div className="tb-card p-5 space-y-3">
             <h3 className="text-xs font-bold uppercase tracking-wider text-cyan-400">Regional Incident Hotspots</h3>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs font-mono">
               <div className="p-3 rounded-lg border bg-slate-900/50 border-slate-700/50">
@@ -437,54 +437,54 @@ export default function Threats() {
       {/* TAB 3: THREAT INTELLIGENCE */}
       {activeTab === "intelligence" && (
         <div className="space-y-4">
-          <div className="ghost-card p-5 space-y-4 border-cyan-500/30">
-            <div className="flex items-center gap-2 border-b pb-3" style={{ borderColor: 'var(--ghost-border)' }}>
+          <div className="tb-card p-5 space-y-4 border-cyan-500/30">
+            <div className="flex items-center gap-2 border-b pb-3" style={{ borderColor: 'var(--tb-border)' }}>
               <Globe className="w-5 h-5 text-cyan-400" />
               <div>
-                <h2 className="text-base font-bold font-display" style={{ color: 'var(--ghost-text)' }}>
+                <h2 className="text-base font-bold font-display" style={{ color: 'var(--tb-text)' }}>
                   Syndicated Threat Feeds & Rule Engine
                 </h2>
-                <p className="text-xs" style={{ color: 'var(--ghost-text-dim)' }}>
+                <p className="text-xs" style={{ color: 'var(--tb-text-dim)' }}>
                   Automated ingest streams from OpenPhish, URLhaus, and TrustBreak AI's 10 Local Heuristics
                 </p>
               </div>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-              <div className="p-4 rounded-xl border space-y-2" style={{ background: 'var(--ghost-surface-2)', borderColor: 'var(--ghost-border)' }}>
+              <div className="p-4 rounded-xl border space-y-2" style={{ background: 'var(--tb-surface-2)', borderColor: 'var(--tb-border)' }}>
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-bold" style={{ color: 'var(--ghost-text)' }}>OpenPhish Live Feed</span>
+                  <span className="text-xs font-bold" style={{ color: 'var(--tb-text)' }}>OpenPhish Live Feed</span>
                   <span className="w-2 h-2 rounded-full bg-emerald-400" />
                 </div>
                 <p className="text-xl font-black font-mono text-emerald-400">ACTIVE</p>
-                <span className="text-[10px] block" style={{ color: 'var(--ghost-text-dim)' }}>Verified phishing domain signatures updated hourly</span>
+                <span className="text-[10px] block" style={{ color: 'var(--tb-text-dim)' }}>Verified phishing domain signatures updated hourly</span>
               </div>
 
-              <div className="p-4 rounded-xl border space-y-2" style={{ background: 'var(--ghost-surface-2)', borderColor: 'var(--ghost-border)' }}>
+              <div className="p-4 rounded-xl border space-y-2" style={{ background: 'var(--tb-surface-2)', borderColor: 'var(--tb-border)' }}>
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-bold" style={{ color: 'var(--ghost-text)' }}>URLhaus Malware Feed</span>
+                  <span className="text-xs font-bold" style={{ color: 'var(--tb-text)' }}>URLhaus Malware Feed</span>
                   <span className="w-2 h-2 rounded-full bg-emerald-400" />
                 </div>
                 <p className="text-xl font-black font-mono text-emerald-400">ACTIVE</p>
-                <span className="text-[10px] block" style={{ color: 'var(--ghost-text-dim)' }}>Malicious payload URL blacklist synced via cron</span>
+                <span className="text-[10px] block" style={{ color: 'var(--tb-text-dim)' }}>Malicious payload URL blacklist synced via cron</span>
               </div>
 
-              <div className="p-4 rounded-xl border space-y-2" style={{ background: 'var(--ghost-surface-2)', borderColor: 'var(--ghost-border)' }}>
+              <div className="p-4 rounded-xl border space-y-2" style={{ background: 'var(--tb-surface-2)', borderColor: 'var(--tb-border)' }}>
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-bold" style={{ color: 'var(--ghost-text)' }}>Deterministic Rules</span>
+                  <span className="text-xs font-bold" style={{ color: 'var(--tb-text)' }}>Deterministic Rules</span>
                   <span className="w-2 h-2 rounded-full bg-cyan-400" />
                 </div>
                 <p className="text-xl font-black font-mono text-cyan-400">10 ENGINES</p>
-                <span className="text-[10px] block" style={{ color: 'var(--ghost-text-dim)' }}>Zero-latency offline regex and acoustic heuristic checkers</span>
+                <span className="text-[10px] block" style={{ color: 'var(--tb-text-dim)' }}>Zero-latency offline regex and acoustic heuristic checkers</span>
               </div>
             </div>
           </div>
 
-          <div className="ghost-card p-5 space-y-3">
+          <div className="tb-card p-5 space-y-3">
             <h3 className="text-xs font-bold uppercase tracking-wider text-cyan-400">Typosquatting & Lookalike Domain Rules</h3>
             <div className="space-y-2 text-xs font-mono">
               {["sbi-kyc-verify-online.com", "hdfc-security-update.net", "icici-reward-claim.info", "paytm-cashback-auth.top"].map((domain, i) => (
-                <div key={i} className="p-2.5 rounded-lg border flex items-center justify-between" style={{ background: 'var(--ghost-surface-2)', borderColor: 'var(--ghost-border)' }}>
+                <div key={i} className="p-2.5 rounded-lg border flex items-center justify-between" style={{ background: 'var(--tb-surface-2)', borderColor: 'var(--tb-border)' }}>
                   <span className="text-rose-400 font-bold">{domain}</span>
                   <span className="text-[10px] px-2 py-0.5 rounded bg-rose-500/10 text-rose-400 border border-rose-500/30">FLAGGED LOOKALIKE</span>
                 </div>
@@ -497,15 +497,15 @@ export default function Threats() {
       {/* TAB 4: COMMUNITY INTELLIGENCE */}
       {activeTab === "community" && (
         <div className="space-y-4">
-          <div className="ghost-card p-5 space-y-4 border-cyan-500/30">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b pb-3" style={{ borderColor: 'var(--ghost-border)' }}>
+          <div className="tb-card p-5 space-y-4 border-cyan-500/30">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b pb-3" style={{ borderColor: 'var(--tb-border)' }}>
               <div className="flex items-center gap-2">
                 <Users className="w-5 h-5 text-cyan-400" />
                 <div>
-                  <h2 className="text-base font-bold font-display" style={{ color: 'var(--ghost-text)' }}>
+                  <h2 className="text-base font-bold font-display" style={{ color: 'var(--tb-text)' }}>
                     Community Intelligence & Verified Submissions
                   </h2>
-                  <p className="text-xs" style={{ color: 'var(--ghost-text-dim)' }}>
+                  <p className="text-xs" style={{ color: 'var(--tb-text-dim)' }}>
                     User-submitted fraud reports verified by TrustBreak AI multi-modal engines
                   </p>
                 </div>
@@ -520,24 +520,24 @@ export default function Threats() {
 
             {/* Community Feed */}
             {liveStream.length === 0 ? (
-              <div className="ghost-card p-8 text-center space-y-3 border-dashed">
+              <div className="tb-card p-8 text-center space-y-3 border-dashed">
                 <Users className="w-8 h-8 mx-auto text-slate-400 animate-pulse" />
-                <h3 className="text-sm font-bold" style={{ color: 'var(--ghost-text)' }}>NO COMMUNITY REPORTS YET</h3>
-                <p className="text-xs max-w-sm mx-auto" style={{ color: 'var(--ghost-text-dim)' }}>
+                <h3 className="text-sm font-bold" style={{ color: 'var(--tb-text)' }}>NO COMMUNITY REPORTS YET</h3>
+                <p className="text-xs max-w-sm mx-auto" style={{ color: 'var(--tb-text-dim)' }}>
                   Be the first operator to report a scam message or phishing link to protect the TrustBreak AI network.
                 </p>
               </div>
             ) : (
               <div className="space-y-3">
                 {liveStream.map((item) => (
-                  <div key={item.id} className="p-4 rounded-xl border space-y-2" style={{ background: 'var(--ghost-surface-2)', borderColor: 'var(--ghost-border)' }}>
+                  <div key={item.id} className="p-4 rounded-xl border space-y-2" style={{ background: 'var(--tb-surface-2)', borderColor: 'var(--tb-border)' }}>
                     <div className="flex items-center justify-between text-xs">
                       <span className="font-bold text-cyan-400">{item.threat_category}</span>
                       <span className="text-[10px] font-mono text-emerald-400 flex items-center gap-1">
                         <ShieldCheck className="w-3 h-3" /> Community Verified
                       </span>
                     </div>
-                    <p className="text-xs font-mono" style={{ color: 'var(--ghost-text-dim)' }}>
+                    <p className="text-xs font-mono" style={{ color: 'var(--tb-text-dim)' }}>
                       "{item.scam_content}"
                     </p>
                     <div className="flex items-center justify-between text-[10px] font-mono pt-1 text-slate-400">

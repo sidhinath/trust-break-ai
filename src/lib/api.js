@@ -386,7 +386,6 @@ async function postAnalyze(type, payload) {
       endpoints.push(`${window.location.origin}/api/analyze`)
     }
     endpoints.push('https://trust-break-ai.vercel.app/api/analyze')
-    endpoints.push('https://ghost-net-zeta.vercel.app/api/analyze')
     endpoints.push('https://trustbreak-app.vercel.app/api/analyze')
   }
 
@@ -459,7 +458,6 @@ export async function investigateWebsite(url) {
       endpoints.push(`${window.location.origin}/api/tinyfish/investigate`)
     }
     endpoints.push('https://trust-break-ai.vercel.app/api/tinyfish/investigate')
-    endpoints.push('https://ghost-net-zeta.vercel.app/api/tinyfish/investigate')
     endpoints.push('https://trustbreak-app.vercel.app/api/tinyfish/investigate')
   }
 
@@ -518,7 +516,6 @@ export async function analyzeVoice(payload = {}) {
       endpoints.push(`${window.location.origin}/api/analyze-voice`)
     }
     endpoints.push('https://trust-break-ai.vercel.app/api/analyze-voice')
-    endpoints.push('https://ghost-net-zeta.vercel.app/api/analyze-voice')
     endpoints.push('https://trustbreak-app.vercel.app/api/analyze-voice')
   }
 

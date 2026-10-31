@@ -61,7 +61,7 @@ export default function Reports() {
       />
 
       {/* Filter & Search Bar */}
-      <div className="ghost-card p-4 space-y-3">
+      <div className="tb-card p-4 space-y-3">
         <div className="flex flex-col sm:flex-row gap-3">
           <div className="relative flex-1">
             <Search className="w-4 h-4 text-slate-400 absolute left-3 top-3" />
@@ -72,9 +72,9 @@ export default function Reports() {
               placeholder="Search by URL, keyword, or threat type..."
               className="w-full pl-9 pr-3 py-2 rounded-xl border text-xs outline-none transition-colors focus:border-cyan-500"
               style={{
-                background: "var(--ghost-surface-2)",
-                borderColor: "var(--ghost-border)",
-                color: "var(--ghost-text)",
+                background: "var(--tb-surface-2)",
+                borderColor: "var(--tb-border)",
+                color: "var(--tb-text)",
               }}
             />
           </div>
@@ -99,8 +99,8 @@ export default function Reports() {
                     : "hover:border-slate-500 text-slate-400"
                 }`}
                 style={{
-                  background: filterType === f.id ? undefined : "var(--ghost-surface-2)",
-                  borderColor: filterType === f.id ? undefined : "var(--ghost-border)",
+                  background: filterType === f.id ? undefined : "var(--tb-surface-2)",
+                  borderColor: filterType === f.id ? undefined : "var(--tb-border)",
                 }}>
                 {f.label}
               </button>
@@ -113,12 +113,12 @@ export default function Reports() {
       {isLoading ? (
         <ThreatListSkeleton count={6} />
       ) : filteredScans.length === 0 ? (
-        <div className="ghost-card p-12 text-center space-y-3">
+        <div className="tb-card p-12 text-center space-y-3">
           <ShieldAlert className="w-10 h-10 text-cyan-400 mx-auto opacity-50" />
-          <h3 className="text-base font-bold" style={{ color: "var(--ghost-text)" }}>
+          <h3 className="text-base font-bold" style={{ color: "var(--tb-text)" }}>
             No Scan Records Found
           </h3>
-          <p className="text-xs max-w-sm mx-auto" style={{ color: "var(--ghost-text-dim)" }}>
+          <p className="text-xs max-w-sm mx-auto" style={{ color: "var(--tb-text-dim)" }}>
             {search || filterType !== "all"
               ? "No scan logs match your search filter criteria."
               : "Perform a scan using any of TrustBreak AI's 5 scanners to populate your history log."}
@@ -143,7 +143,7 @@ export default function Reports() {
               <div
                 key={scan.id || idx}
                 onClick={() => setSelectedReport(scan)}
-                className="ghost-card p-4 hover:border-cyan-500/40 transition-all cursor-pointer flex items-center justify-between gap-3 group">
+                className="tb-card p-4 hover:border-cyan-500/40 transition-all cursor-pointer flex items-center justify-between gap-3 group">
                 <div className="flex items-center gap-3 min-w-0 flex-1">
                   <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 border ${
                     isScam ? "bg-rose-500/10 border-rose-500/30 text-rose-500" :
@@ -164,7 +164,7 @@ export default function Reports() {
                       {scan.source && <SourceBadge source={scan.source} />}
                     </div>
 
-                    <p className="text-xs font-bold truncate group-hover:text-cyan-400 transition-colors" style={{ color: "var(--ghost-text)" }}>
+                    <p className="text-xs font-bold truncate group-hover:text-cyan-400 transition-colors" style={{ color: "var(--tb-text)" }}>
                       {scan.input_content || scan.analysis || "Scan Report Entry"}
                     </p>
 
@@ -195,7 +195,7 @@ export default function Reports() {
       {/* Report Detail Modal */}
       {selectedReport && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fadeIn">
-          <div className="max-w-xl w-full ghost-card p-6 space-y-4 max-h-[85vh] overflow-y-auto relative border-cyan-500/40">
+          <div className="max-w-xl w-full tb-card p-6 space-y-4 max-h-[85vh] overflow-y-auto relative border-cyan-500/40">
             <button
               onClick={() => setSelectedReport(null)}
               className="absolute top-4 right-4 p-1 rounded-lg hover:bg-slate-800 text-slate-400 hover:text-white">
@@ -211,7 +211,7 @@ export default function Reports() {
                 </span>
                 {selectedReport.source && <SourceBadge source={selectedReport.source} />}
               </div>
-              <h3 className="text-lg font-bold font-display pt-1" style={{ color: "var(--ghost-text)" }}>
+              <h3 className="text-lg font-bold font-display pt-1" style={{ color: "var(--tb-text)" }}>
                 Inspection Audit Report
               </h3>
               <p className="text-xs font-mono text-slate-400">
@@ -219,9 +219,9 @@ export default function Reports() {
               </p>
             </div>
 
-            <div className="p-3 rounded-xl border space-y-1" style={{ background: "var(--ghost-surface-2)", borderColor: "var(--ghost-border)" }}>
+            <div className="p-3 rounded-xl border space-y-1" style={{ background: "var(--tb-surface-2)", borderColor: "var(--tb-border)" }}>
               <span className="text-[10px] font-bold uppercase tracking-wider block text-slate-400">Inspected Content Payload</span>
-              <p className="text-xs font-mono break-all" style={{ color: "var(--ghost-text)" }}>
+              <p className="text-xs font-mono break-all" style={{ color: "var(--tb-text)" }}>
                 "{selectedReport.input_content || "N/A"}"
               </p>
             </div>
@@ -229,7 +229,7 @@ export default function Reports() {
             {selectedReport.analysis && (
               <div className="space-y-1">
                 <h4 className="text-xs font-bold uppercase tracking-wider text-cyan-400">Threat Verdict & Analysis</h4>
-                <p className="text-xs leading-relaxed" style={{ color: "var(--ghost-text-dim)" }}>
+                <p className="text-xs leading-relaxed" style={{ color: "var(--tb-text-dim)" }}>
                   {selectedReport.analysis}
                 </p>
               </div>

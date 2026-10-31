@@ -74,10 +74,10 @@ export default function EmergencyGuidanceModal({ isOpen, onClose }) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md animate-in fade-in duration-200">
       <div className="relative w-full max-w-2xl border-2 border-slate-300 dark:border-slate-700 rounded-3xl shadow-2xl p-4 sm:p-6 space-y-5 max-h-[90vh] overflow-y-auto"
-        style={{ background: 'var(--ghost-surface)', color: 'var(--ghost-text)' }}>
+        style={{ background: 'var(--tb-surface)', color: 'var(--tb-text)' }}>
         
         {/* Top Header */}
-        <div className="flex items-center justify-between border-b pb-4" style={{ borderColor: 'var(--ghost-border)' }}>
+        <div className="flex items-center justify-between border-b pb-4" style={{ borderColor: 'var(--tb-border)' }}>
           <div className="flex items-center gap-3 pointer-events-none">
             <div className="w-12 h-12 rounded-2xl bg-rose-500/20 border border-rose-500/40 flex items-center justify-center text-rose-500 shrink-0 pointer-events-none">
               <ShieldAlert className="w-7 h-7 pointer-events-none" />
@@ -86,7 +86,7 @@ export default function EmergencyGuidanceModal({ isOpen, onClose }) {
               <h2 className="text-lg sm:text-xl font-black font-display tracking-tight text-rose-600 dark:text-rose-400 pointer-events-none">
                 EMERGENCY SCAM HELP & GUIDE
               </h2>
-              <p className="text-xs font-bold pointer-events-none" style={{ color: 'var(--ghost-text-dim)' }}>100% Offline Emergency Action Playbook</p>
+              <p className="text-xs font-bold pointer-events-none" style={{ color: 'var(--tb-text-dim)' }}>100% Offline Emergency Action Playbook</p>
             </div>
           </div>
           <button
@@ -125,7 +125,7 @@ export default function EmergencyGuidanceModal({ isOpen, onClose }) {
 
         {/* Scenario Selector Tabs */}
         <div className="space-y-2">
-          <label className="text-xs font-black uppercase tracking-widest pointer-events-none" style={{ color: 'var(--ghost-text-dim)' }}>Select What Happened:</label>
+          <label className="text-xs font-black uppercase tracking-widest pointer-events-none" style={{ color: 'var(--tb-text-dim)' }}>Select What Happened:</label>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
             {scenarios.map((s) => (
               <button
