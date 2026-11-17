@@ -110,6 +110,120 @@ const HIGH_RISK_FILE_EXTENSIONS = [
   '.zip', '.rar', '.7z', '.iso', '.img'
 ]
 
+// ---------------------------------------------------------------------------
+// Risk bands — single source of truth for the whole product.
+//   Safe       0 – 25
+//   Medium    26 – 60  (reported as "suspicious")
+//   High      61 – 100 (reported as "scam")
+// ---------------------------------------------------------------------------
+export const RISK_BANDS = {
+  safeMax: 25,
+  mediumMax: 60,
+}
+
+/**
+ * Deliberate phishing / malware demonstration sites. These pages exist to
+ * *simulate* an attack, so they must never be presented as a clean "safe"
+ * destination even though they are not hostile infrastructure themselves.
+ */
+export const SECURITY_TEST_HOSTS = [
+  { host: 'itisatrap.org', name: 'Mozilla Firefox "It\'s a Trap" phishing demo page' },
+  { host: 'testsafebrowsing.appspot.com', name: 'Google Safe Browsing test page' },
+  { host: 'malware.testing.google.test', name: 'Google malware test domain' },
+  { host: 'amtso.org', name: 'Microsoft attack-simulation / phishing test domain' },
+  { host: 'badssl.com', name: 'TLS misconfiguration test site' },
+  { host: 'phishing.test', name: 'Reserved phishing test domain' },
+]
+
+// URL paths that belong to phishing/security demonstrations.
+const SECURITY_TEST_PATH_PATTERNS = [
+  { re: /its[-_]?a[-_]?trap/i, name: 'URL path references the "It\'s a Trap" phishing demo' },
+  { re: /phishing[-_]?(test|demo|simulation|example)/i, name: 'URL path references a phishing test/demo page' },
+  { re: /(test|demo|simulation)[-_]?phish/i, name: 'URL path references a phishing test/demo page' },
+  { re: /(^|[/_.-])phishing([/_.-]|$)/i, name: 'URL path references a phishing demonstration page' },
+  { re: /malware[-_]?test/i, name: 'URL path references a malware test page' },
+  { re: /safe[-_]?browsing[-_]?test/i, name: 'URL path references a Safe Browsing test page' },
+]
+
+// Page title / body text that self-identifies as a phishing simulation.
+const SECURITY_TEST_TEXT_PATTERNS = [
+  { re: /this is (a |an )?(phishing|malware|security) (test|demo|simulation)/i, name: 'Page self-identifies as a phishing/security test page' },
+  { re: /it'?s a trap/i, name: 'Page displays the "It\'s a trap" phishing demo banner' },
+  { re: /(you('ve| have)? been|you were) (phished|hacked|pwned)/i, name: 'Page states that the visitor has been phished' },
+  { re: /(phishing|malware) (test|simulation|demo) page/i, name: 'Page self-identifies as a phishing simulation' },
+  { re: /this page is (a |an )?(test|simulation|demo)/i, name: 'Page self-identifies as a test page' },
+  { re: /security (test|testing) (page|site)/i, name: 'Page self-identifies as a security test page' },
+  { re: /simulated (phishing|attack)/i, name: 'Page self-identifies as a simulated attack' },
+]
+
+// Phishing lures found in page titles and body copy (credential harvesting,
+// account threats, prize bait, wallet drainers).
+const PAGE_CONTEXT_SIGNALS = [
+  { re: /\b(enter|re-?enter|confirm|verify)\b[^.]{0,40}\b(password|passcode|pin|otp|one[- ]time code|verification code)\b/i, points: 18, label: 'Page asks visitors for a password / OTP' },
+  { re: /\b(credit card|debit card|cvv|card number|netbanking|internet banking|upi pin|aadhaar|pan card|social security)\b/i, points: 15, label: 'Page collects payment or identity credentials' },
+  { re: /\b(account|card|wallet|profile)\b[^.]{0,30}\b(suspend|block|lock|freeze|deactivat|terminat)\w*/i, points: 15, label: 'Page threatens account suspension/blocking' },
+  { re: /\b(seed phrase|recovery phrase|private key|wallet connect|connect wallet|airdrop)\b/i, points: 20, label: 'Page requests crypto wallet secrets' },
+  { re: /\b(congratulations|you (have )?won|claim (your )?(prize|reward|bonus)|free gift|lottery)\b/i, points: 12, label: 'Page contains a prize / lottery lure' },
+  { re: /\b(urgent|immediately|within \d+ (hours?|minutes?)|last chance|final warning|act now)\b/i, points: 12, label: 'Page uses urgency pressure' },
+  { re: /\b(login|sign in|verify your account|update your (billing|payment|kyc))\b/i, points: 10, label: 'Page contains a credential-login call to action' },
+]
+
+// Credential-capture tokens that commonly appear in phishing URL paths.
+const PHISHING_PATH_TOKENS = [
+  'login', 'signin', 'sign-in', 'verify', 'verification', 'secure', 'security',
+  'update', 'account', 'banking', 'wallet', 'kyc', 'password', 'otp', 'card',
+  'payment', 'billing', 'refund', 'claim', 'reward', 'gift', 'airdrop',
+  'metamask', 'seed', 'connect', 'unlock', 'confirm', 'recovery', 'suspended',
+  'invoice', 'netbanking', 'auth', 'session',
+]
+
+/**
+ * Scores human-readable page context (title + visible body text).
+ * Exported so the API, tests and the extension can reason about it directly.
+ * @returns {{ points: number, reasons: string[], signals: string[], matched: string[] }}
+ */
+export function analyzePageContext({ title = '', text = '' } = {}) {
+  const haystack = `${title} ${text}`.slice(0, 6000)
+  const reasons = []
+  const signals = []
+  const matched = []
+  let points = 0
+
+  if (!haystack.trim()) return { points, reasons, signals, matched }
+
+  for (const rule of PAGE_CONTEXT_SIGNALS) {
+    if (!rule.re.test(haystack)) continue
+    points += rule.points
+    matched.push(rule.label)
+    reasons.push(rule.label)
+    signals.push(rule.label)
+  }
+
+  // A page cannot stack unlimited context penalties; keep one page from
+  // out-ranking confirmed threat-feed intelligence on noise alone.
+  points = Math.min(points, 35)
+  return { points, reasons, signals, matched }
+}
+
+export function isSecurityTestPage(host, path = '', pageText = '') {
+  const normalizedHost = String(host || '').toLowerCase()
+  const normalizedPath = String(path || '')
+  const normalizedText = String(pageText || '').slice(0, 6000)
+
+  const hostMatch = SECURITY_TEST_HOSTS.find(
+    (entry) => normalizedHost === entry.host || normalizedHost.endsWith(`.${entry.host}`)
+  )
+  if (hostMatch) return { matched: true, name: hostMatch.name, source: 'host' }
+
+  const pathMatch = SECURITY_TEST_PATH_PATTERNS.find((entry) => entry.re.test(normalizedPath))
+  if (pathMatch) return { matched: true, name: pathMatch.name, source: 'path' }
+
+  const textMatch = SECURITY_TEST_TEXT_PATTERNS.find((entry) => entry.re.test(normalizedText))
+  if (textMatch) return { matched: true, name: textMatch.name, source: 'page-content' }
+
+  return { matched: false, name: null, source: null }
+}
+
 function isTrustedHost(host) {
   if (host === 'localhost' || host === '127.0.0.1' || host === '::1') return true
   if (TRUSTED_DOMAINS.some((domain) => host === domain || host.endsWith(`.${domain}`))) return true
@@ -135,8 +249,19 @@ export function normalize(text) {
 }
 
 export function scoreToRisk(score) {
-  if (score >= 70) return 'scam'
-  if (score >= 35) return 'suspicious'
+  const value = Number(score) || 0
+  if (value > RISK_BANDS.mediumMax) return 'scam'
+  if (value > RISK_BANDS.safeMax) return 'suspicious'
+  return 'safe'
+}
+
+/**
+ * Human-readable band for a numeric score (Safe / Medium / High).
+ */
+export function scoreToBand(score) {
+  const value = Number(score) || 0
+  if (value > RISK_BANDS.mediumMax) return 'high'
+  if (value > RISK_BANDS.safeMax) return 'medium'
   return 'safe'
 }
 
@@ -380,7 +505,21 @@ export function inferReasonCodes(text, url = '', signals = {}, riskLevel = 'safe
   if (/^\d{1,3}(\.\d{1,3}){3}$/.test(normUrl) || /https?:\/\/\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}/i.test(norm)) {
     codes.push('KNOWN_MALICIOUS_DOMAIN')
   }
-  if (SHORTENER_DOMAINS.some(d => (normUrl || norm).includes(d)) || /login|verify|secure|update|banking/i.test(normUrl)) {
+  // Host-boundary shortener match: a bare `.includes()` previously matched
+  // "t.co" inside legitimate hosts such as appspot.com.
+  const linkText = normUrl || norm
+  let reasonHost = ''
+  try {
+    reasonHost = normUrl ? new URL(normUrl).hostname : ''
+  } catch {
+    reasonHost = ''
+  }
+  const hasShortener = reasonHost
+    ? SHORTENER_DOMAINS.some((d) => reasonHost === d || reasonHost.endsWith(`.${d}`))
+    : SHORTENER_DOMAINS.some((d) =>
+        new RegExp(`(^|[\\s/])${d.replace(/\./g, '\\.')}(/|\\s|$)`).test(linkText)
+      )
+  if (hasShortener || /login|verify|secure|update|banking/i.test(linkText)) {
     codes.push('LOOKALIKE_DOMAIN')
   }
   if (/qr|barcode|scan/i.test(norm)) {
@@ -452,6 +591,8 @@ export function analyzeMessageContent(message) {
     similar_patterns: similar,
     reasonCodes,
     source: 'offline-heuristic',
+    engine: 'heuristic',
+    degraded: true,
     emergency_actions: {
       stop: 'Do NOT click any links, call unverified numbers, or enter any PIN/OTP.',
       verify: 'Contact the organization directly via official apps or verified phone directories (e.g. 1930 for cybercrime in India).',
@@ -470,6 +611,18 @@ export function analyzeUrlContent(rawUrl, intel = {}) {
   const trustSignals = []
   const warningSignals = []
   const criticalSignals = []
+  const scoreBreakdown = []
+  const debug = intel?.debug === true
+
+  // Every point added to the score is recorded so the final verdict can always
+  // be explained. This is what powers the debug output and the API logs.
+  let score = 0
+  const applyScore = (delta, signal) => {
+    score += delta
+    const clamped = Math.max(0, Math.min(100, Math.round(score)))
+    scoreBreakdown.push({ signal, delta, score: clamped })
+    return clamped
+  }
 
   try {
     url = new URL(rawUrl)
@@ -477,6 +630,7 @@ export function analyzeUrlContent(rawUrl, intel = {}) {
     return {
       fraud_score: 95,
       risk_level: 'scam',
+      risk_band: 'high',
       confidence: 'high',
       reasons: ['Invalid or malformed URL syntax — commonly used in obfuscated payloads.'],
       analysis: 'The URL structure is malformed and unsafe to inspect or browse.',
@@ -484,9 +638,14 @@ export function analyzeUrlContent(rawUrl, intel = {}) {
       ssl_status: 'Invalid',
       community_reports: Number.isFinite(Number(intel?.community_reports)) ? Number(intel.community_reports) : 0,
       is_known_brand_impersonation: false,
+      is_security_test_page: false,
       trust_profile: { trust: 0, warnings: 2, critical: 3, trustSignals: [], warningSignals: [], criticalSignals: [] },
       threat_reconstruction: reconstructAttackChain(rawUrl, rawUrl, 'scam'),
-      attack_intent: 'Redirect browser to an invalid, obfuscated, or malicious exploit destination.'
+      attack_intent: 'Redirect browser to an invalid, obfuscated, or malicious exploit destination.',
+      score_breakdown: [{ signal: 'Malformed URL', delta: 95, score: 95 }],
+      source: 'offline-heuristic',
+      engine: 'heuristic',
+      degraded: true,
     }
   }
 
@@ -499,31 +658,58 @@ export function analyzeUrlContent(rawUrl, intel = {}) {
   const trustedHost = !isIpLiteral && isTrustedHost(host)
   const hyphenCount = (host.match(/-/g) || []).length
 
-  let score = 0
+  const pageTitle = String(intel?.page_title || '')
+  const pageText = String(intel?.page_text || intel?.page_content || '')
+  const pageContext = analyzePageContext({ title: pageTitle, text: pageText })
+
+  // Security-test pages are never "safe", even on a trusted host or over HTTPS.
+  const testPage = trustedHost
+    ? { matched: false, name: null, source: null }
+    : isSecurityTestPage(host, path, `${pageTitle} ${pageText}`)
+
+  // Baseline: HTTPS is transport hygiene, NOT a trust signal. Every URL starts
+  // with a small non-zero floor so a valid certificate alone can never produce
+  // a perfect 0/100 "safe" result.
+  const baseline = trustedHost ? 4 : 10
+  applyScore(
+    baseline,
+    trustedHost
+      ? 'Baseline 4: high-reputation domain (no phishing structure detected)'
+      : 'Baseline 10: unverified domain inspected over HTTPS'
+  )
 
   if (trustedHost) {
     trustSignals.push('Domain matches verified high-reputation registry')
   }
 
-  // Transport layer
+  if (testPage.matched) {
+    applyScore(65, `Security test page: ${testPage.name}`)
+    reasons.push(
+      `Security test page detected — ${testPage.name}. This URL deliberately simulates a phishing/malware attack and must never be trusted.`
+    )
+    criticalSignals.push('Known phishing/security test page')
+  }
+
+  // Transport layer — lack of HTTPS is a penalty, presence is NOT a credit.
   if (url.protocol !== 'https:') {
-    score += 25
+    applyScore(25, 'Insecure HTTP transport')
     reasons.push('Insecure protocol (HTTP) — lack of SSL encryption')
     criticalSignals.push('Unencrypted HTTP protocol')
   } else {
-    trustSignals.push('Standard HTTPS encryption active')
+    trustSignals.push('HTTPS/TLS present — encryption alone does not certify legitimacy')
+    scoreBreakdown.push({ signal: 'HTTPS/TLS present (0 points — not a trust signal)', delta: 0, score: Math.max(0, Math.min(100, Math.round(score))) })
   }
 
   // Raw IP host
   if (isIpLiteral) {
-    score += 50
+    applyScore(50, 'Raw IP address instead of a domain name')
     reasons.push('URL uses a raw IP address instead of a domain name — strong indicator of malicious infrastructure')
     criticalSignals.push('IP-literal address (no domain)')
   }
 
   // Credentials embedded before the hostname
   if (url.username || url.password) {
-    score += 30
+    applyScore(30, 'Credentials embedded before the hostname')
     reasons.push('URL embeds credentials before the hostname — classic obfuscation trick')
     criticalSignals.push('Credentials embedded in URL')
   }
@@ -531,7 +717,7 @@ export function analyzeUrlContent(rawUrl, intel = {}) {
   // Shorteners — exact host match so "microsof[t.co]m" no longer matches "t.co".
   const shortener = SHORTENER_DOMAINS.find((domain) => host === domain || host.endsWith(`.${domain}`))
   if (shortener) {
-    score += 40
+    applyScore(40, `URL shortener used (${shortener})`)
     reasons.push(`Uses URL shortening service (${shortener}) to conceal the true destination`)
     warningSignals.push('URL shortener destination mask')
   }
@@ -539,34 +725,35 @@ export function analyzeUrlContent(rawUrl, intel = {}) {
   // Brand impersonation
   const matchedBrand = KNOWN_BRANDS.find((brand) => brand.match.test(host) && !host.endsWith(brand.legitimate))
   if (matchedBrand) {
-    score += 70
+    applyScore(70, `Brand impersonation of ${matchedBrand.name}`)
     reasons.push(`Brand Impersonation: Domain mimics ${matchedBrand.name} but is NOT hosted on official ${matchedBrand.legitimate}`)
     criticalSignals.push(`Typosquatting / Brand Mimicry (${matchedBrand.name})`)
   }
 
   // Homograph domains
   if (/xn--/.test(host)) {
-    score += 40
+    applyScore(40, 'Punycode / homograph hostname')
     reasons.push('Punycode / Homograph domain detected — uses visually identical Unicode glyphs')
     criticalSignals.push('Homograph / Punycode character spoofing')
   }
 
   // TLD reputation
   if (!trustedHost && SUSPICIOUS_TLDS.has(tld)) {
-    score += 35
+    applyScore(35, `High-abuse TLD (.${tld})`)
     reasons.push(`High-abuse TLD (.${tld}) is widely used for disposable phishing infrastructure`)
     warningSignals.push('High-risk top-level domain')
   }
 
   // Hostname structure
   if (!trustedHost && labels.length > 3) {
-    score += 12
+    applyScore(12, `Excessive subdomain nesting (${labels.length} levels)`)
     reasons.push(`Excessive subdomains (${labels.length} levels) indicative of DNS cloaking`)
     warningSignals.push('Deep subdomain nesting')
   }
 
   if (!trustedHost && hyphenCount >= 2) {
-    score += hyphenCount >= 4 ? 15 : 10
+    const points = hyphenCount >= 4 ? 15 : 10
+    applyScore(points, `Hyphenated lookalike hostname (${hyphenCount} hyphens)`)
     reasons.push(`Multiple hyphens in hostname (${hyphenCount}) — common in lookalike domains`)
     warningSignals.push('Hyphenated lookalike hostname')
   }
@@ -575,78 +762,115 @@ export function analyzeUrlContent(rawUrl, intel = {}) {
     // Phishing lure tokens in the hostname itself
     const hostTokens = PHISHING_HOST_TOKENS.filter((token) => host.includes(token))
     if (hostTokens.length >= 2) {
-      score += hostTokens.length >= 3 ? 25 : 15
+      applyScore(hostTokens.length >= 3 ? 25 : 15, `Phishing lure tokens in hostname: ${hostTokens.join(', ')}`)
       reasons.push(`Phishing lure keywords in hostname: ${hostTokens.join(', ')}`)
       warningSignals.push('Phishing lure keywords in hostname')
     }
 
-    if (/login|verify|secure|update|payment|wallet|kyc|auth|banking|signin|account/.test(path)) {
-      score += 10
-      reasons.push('High-risk action keywords present in URL path')
+    // Credential-capture tokens in the URL path
+    const pathTokens = PHISHING_PATH_TOKENS.filter((token) => path.includes(token))
+    if (pathTokens.length >= 1) {
+      const points = pathTokens.length >= 3 ? 22 : pathTokens.length === 2 ? 15 : 10
+      applyScore(points, `Credential-capture path tokens: ${pathTokens.join(', ')}`)
+      reasons.push(`High-risk action keywords present in URL path${pathTokens.length > 1 ? ` (${pathTokens.join(', ')})` : ''}`)
       warningSignals.push('Sensitive action keyword in path')
     }
 
     if (HIGH_RISK_FILE_EXTENSIONS.some((extension) => path.endsWith(extension))) {
-      score += 25
+      applyScore(25, 'Direct executable / archive download in path')
       reasons.push('URL points directly to a downloadable executable or archive payload')
       criticalSignals.push('Direct executable/archive download')
     }
 
     if (/(?:redirect|url|next|target|continue)=https?%3a|(?:redirect|url|next|target|continue)=https?:\/\//.test(search)) {
-      score += 10
+      applyScore(10, 'Open-redirect parameter')
       reasons.push('URL carries an open-redirect parameter pointing at another destination')
       warningSignals.push('Open redirect parameter')
     }
 
     if (rawUrl.length > 200) {
-      score += 8
+      applyScore(8, 'Abnormally long URL')
       reasons.push('Abnormally long URL used to hide the real destination')
       warningSignals.push('Abnormally long URL')
     }
+
+    // Phishing indicators in the page title / body.
+    if (pageContext.points > 0) {
+      applyScore(pageContext.points, `Page content indicators: ${pageContext.matched.join('; ')}`)
+      reasons.push(...pageContext.reasons)
+      warningSignals.push('Phishing indicators in page content')
+    }
+  } else if (pageContext.points > 0) {
+    // Trusted domains still get content signals recorded, but they cannot push
+    // a verified registry domain into an alarm state on keywords alone.
+    applyScore(Math.min(pageContext.points, 6), `Minor page content signals: ${pageContext.matched.join('; ')}`)
   }
 
   // Domain age / reputation supplied by a live intelligence lookup.
-  const domainAgeDays = Number(intel?.domain_age_days)
+  const rawDomainAge = intel?.domain_age_days
+  const domainAgeDays = rawDomainAge === null || rawDomainAge === undefined || rawDomainAge === ''
+    ? NaN
+    : Number(rawDomainAge)
   if (Number.isFinite(domainAgeDays)) {
     if (domainAgeDays <= 30) {
-      score += 20
+      applyScore(20, `Newly registered domain (${Math.max(0, Math.round(domainAgeDays))} days old)`)
       reasons.push(`Domain is only ${Math.max(0, Math.round(domainAgeDays))} days old — newly registered infrastructure`)
       warningSignals.push('Newly registered domain')
     } else if (domainAgeDays <= 90) {
-      score += 10
+      applyScore(10, `Recently registered domain (${Math.round(domainAgeDays)} days old)`)
       reasons.push(`Domain is ${Math.round(domainAgeDays)} days old — recent registration`)
       warningSignals.push('Recently registered domain')
     } else if (domainAgeDays >= 730) {
-      score -= 8
+      applyScore(-8, 'Long-standing domain registration history')
       trustSignals.push('Long-standing domain registration history')
     }
   }
 
-  const communityReports = Number(intel?.community_reports)
+  const rawCommunityReports = intel?.community_reports
+  const communityReports = rawCommunityReports === null || rawCommunityReports === undefined || rawCommunityReports === ''
+    ? NaN
+    : Number(rawCommunityReports)
   if (Number.isFinite(communityReports) && communityReports > 0) {
-    score += Math.min(25, Math.round(communityReports))
+    applyScore(Math.min(25, Math.round(communityReports)), `${Math.round(communityReports)} community threat report(s)`)
     reasons.push(`${Math.round(communityReports)} community threat report(s) recorded for this domain`)
     criticalSignals.push('Community threat reports')
   }
 
   const knownMalicious = intel?.known_malicious === true
   if (knownMalicious) {
-    score = Math.max(score, 95)
+    const floorDelta = Math.max(0, 95 - Math.max(0, Math.round(score)))
+    if (floorDelta > 0) applyScore(floorDelta, 'Verified malicious-domain feed match (floor 95)')
     reasons.push('Domain is listed in a verified malicious-domain threat feed')
     criticalSignals.push('Known malicious domain')
   }
 
   let finalScore = Math.max(0, Math.min(100, Math.round(score)))
-  if (trustedHost && !knownMalicious) {
+  if (trustedHost && !knownMalicious && !testPage.matched) {
     finalScore = Math.min(finalScore, 8)
   }
+  // Hard guarantee: a phishing/security test page is never reported as safe.
+  if (testPage.matched) {
+    finalScore = Math.max(finalScore, RISK_BANDS.mediumMax + 5)
+  }
+
   const riskLevel = scoreToRisk(finalScore)
+  const riskBand = scoreToBand(finalScore)
+
+  if (debug) {
+    console.debug('[TrustBreak AI][score] URL:', rawUrl)
+    console.debug('[TrustBreak AI][score] breakdown:', scoreBreakdown)
+    console.debug('[TrustBreak AI][score] final:', {
+      finalScore,
+      riskLevel,
+      riskBand,
+      securityTestPage: testPage.matched ? testPage : null,
+      pageContextPoints: pageContext.points,
+    })
+  }
 
   if (reasons.length === 0) {
-    if (url.protocol === 'https:') {
-      reasons.push('Transport Security: Valid HTTPS protocol active with standard TLS encryption.')
-    }
-    reasons.push(`Hostname Structure: Hostname (${host}) contains no high-risk phishing tokens or DNS obfuscation patterns.`)
+    reasons.push(`No phishing indicators detected on ${host}. Valid HTTPS only proves the connection is encrypted — it does not prove the site is legitimate.`)
+    reasons.push(`Hostname Structure: (${host}) contains no high-risk phishing tokens or DNS obfuscation patterns.`)
     reasons.push('Brand Impersonation Audit: Domain does not mimic any monitored brand.')
     reasons.push('Reputation: No structural phishing indicators detected in this URL.')
   }
@@ -654,21 +878,32 @@ export function analyzeUrlContent(rawUrl, intel = {}) {
   const attackChain = reconstructAttackChain(`Phishing link inspection: ${rawUrl}`, rawUrl, riskLevel)
   const intent = inferAttackerIntent(rawUrl, rawUrl, riskLevel)
   const reasonCodes = inferReasonCodes(rawUrl, rawUrl, { impersonation: matchedBrand?.name }, riskLevel)
+  if (testPage.matched && !reasonCodes.includes('SECURITY_TEST_PAGE')) {
+    reasonCodes.unshift('SECURITY_TEST_PAGE')
+  }
 
   return {
     fraud_score: finalScore,
     risk_level: riskLevel,
+    risk_band: riskBand,
     confidence: 'high',
     reasons,
     analysis:
-      riskLevel === 'safe'
-        ? 'Domain structure passes standard security checks. Always verify authenticity before submitting passwords.'
-        : `High-risk indicators identified on domain ${host}. Potential phishing infrastructure.`,
+      testPage.matched
+        ? `This is a known phishing/security demonstration page (${testPage.name}). It deliberately imitates an attack, so treat it as HIGH RISK and never enter real credentials.`
+        : riskLevel === 'safe'
+          ? 'No phishing indicators found. Note that a valid HTTPS certificate only encrypts the connection — it does not prove the site is trustworthy.'
+          : `High-risk indicators identified on domain ${host}. Potential phishing infrastructure.`,
     domain_age_days: Number.isFinite(domainAgeDays) ? Math.round(domainAgeDays) : null,
     ssl_status: url.protocol === 'https:' ? 'Valid Certificate' : 'Missing / Insecure',
     community_reports: Number.isFinite(communityReports) && communityReports > 0 ? Math.round(communityReports) : 0,
     is_known_brand_impersonation: Boolean(matchedBrand),
     impersonated_brand: matchedBrand ? matchedBrand.name : null,
+    is_security_test_page: Boolean(testPage.matched),
+    security_test_page: testPage.matched ? testPage.name : null,
+    security_test_source: testPage.matched ? testPage.source : null,
+    page_context_used: pageContext.points > 0,
+    score_breakdown: scoreBreakdown,
     trust_profile: {
       trust: trustSignals.length,
       warnings: warningSignals.length,

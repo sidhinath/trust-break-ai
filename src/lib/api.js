@@ -435,7 +435,15 @@ async function postAnalyze(type, payload) {
 
   // 3. Fallback to instant local deterministic heuristic engine
   if (type === 'message') return analyzeMessageContent(payload?.message || '')
-  if (type === 'link') return analyzeUrlContent(payload?.url || '')
+  if (type === 'link') {
+    return analyzeUrlContent(payload?.url || '', {
+      page_title: payload?.title || payload?.page_title,
+      page_text: payload?.page_text || payload?.content,
+      domain_age_days: payload?.domain_age_days,
+      community_reports: payload?.community_reports,
+      known_malicious: payload?.known_malicious,
+    })
+  }
   if (type === 'report') return analyzeScamReportContent(payload || {})
   if (type === 'screenshot') return analyzeScreenshotFallback(payload?.detected_text || '')
   throw new Error('Analysis request failed')

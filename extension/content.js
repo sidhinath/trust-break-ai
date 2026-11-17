@@ -44,10 +44,69 @@
   publishExtensionStatus();
   [1500, 5000].forEach((delay) => setTimeout(publishExtensionStatus, delay));
 
+  // ---------------------------------------------------------------------------
+  // Page context (title + visible text) so the scanner can score phishing
+  // cues in the page itself, not just the URL string.
+  // ---------------------------------------------------------------------------
+  function readPageContext() {
+    try {
+      const title = document.title || "";
+      let text = "";
+      if (document.body) {
+        text = String(document.body.innerText || "").replace(/\s+/g, " ").trim();
+      }
+      const fieldHints = Array.from(
+        document.querySelectorAll(
+          'input[type="password"], input[type="email"], input[name*="card" i], input[name*="otp" i]'
+        )
+      )
+        .slice(0, 6)
+        .map(
+          (input) =>
+            input.getAttribute("name") ||
+            input.getAttribute("placeholder") ||
+            input.getAttribute("type") ||
+            ""
+        )
+        .filter(Boolean)
+        .join(" ");
+
+      if (fieldHints) text = `${text} ${fieldHints}`;
+      return { title, text: text.slice(0, 4000) };
+    } catch {
+      return { title: "", text: "" };
+    }
+  }
+
+  function publishPageContext() {
+    try {
+      const { title, text } = readPageContext();
+      if (!title && !text) return;
+      chrome.runtime.sendMessage(
+        {
+          action: "TRUSTBREAK_PAGE_CONTEXT",
+          url: location.href,
+          title,
+          text,
+        },
+        () => void chrome.runtime.lastError
+      );
+    } catch {
+      // Context is optional; the URL-only scan still runs.
+    }
+  }
+
+  setTimeout(publishPageContext, 900);
+
   chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
     if (request.action === "TRUSTBREAK_SHOW_OVERLAY" && request.threat) {
       showThreatBanner(request.threat);
       sendResponse({ ok: true });
+      return;
+    }
+
+    if (request.action === "TRUSTBREAK_GET_PAGE_CONTEXT") {
+      sendResponse({ ok: true, url: location.href, ...readPageContext() });
     }
   });
 
@@ -81,6 +140,12 @@
     const rawScore = Number(threat.fraud_score);
     const score = Number.isFinite(rawScore) ? Math.max(0, Math.min(100, Math.round(rawScore))) : 85;
     const degraded = threat.degraded === true;
+    const isTestPage = threat.is_security_test_page === true || typeof threat.security_test_page === "string";
+    const badgeText = isTestPage
+      ? "Phishing Test Page"
+      : degraded
+        ? "AI unavailable — heuristic match"
+        : "Potential Scam / Phishing";
     const rawReasons = Array.isArray(threat.reasons) && threat.reasons.length > 0
       ? threat.reasons
       : ["Phishing and social engineering cues detected"];
@@ -186,7 +251,7 @@
           <div class="info">
             <h4>
               TrustBreak AI Warning
-              <span class="badge">${degraded ? "Heuristic Threat Match" : "Potential Scam / Phishing"}</span>
+              <span class="badge">${badgeText}</span>
             </h4>
             <p>${reasons}</p>
           </div>

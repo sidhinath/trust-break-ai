@@ -100,6 +100,23 @@
       margin: 0;
       padding-left: 14px;
     }
+    .debug {
+      display: none;
+      margin-top: 10px;
+      padding: 8px 10px;
+      border-radius: 6px;
+      background: #050910;
+      border: 1px solid #1e293b;
+      color: #94a3b8;
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      font-size: 9.5px;
+      line-height: 1.5;
+      white-space: pre-wrap;
+      word-break: break-word;
+      max-height: 220px;
+      overflow-y: auto;
+    }
+    .debug.show { display: block; }
     .footer {
       margin-top: 14px;
       text-align: center;
@@ -124,6 +141,7 @@
     </div>
     <p id="analysisText" style="font-size: 11px; color: #cbd5e1; margin: 0 0 8px 0;"></p>
     <ul id="reasonsList" class="reasons"></ul>
+    <pre id="debugBox" class="debug"></pre>
   </div>
 
   <div class="footer">Real-time heuristics & neural defense active</div>

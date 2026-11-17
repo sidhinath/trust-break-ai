@@ -10,6 +10,7 @@ import SourceBadge from "@/components/scanner/SourceBadge";
 import { ThreatListSkeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 import ProtectedPage from '@/components/auth/ProtectedPage';
+import { scoreToRisk } from '@/lib/scanner';
 
 const TYPE_ICONS = {
   message: MessageSquareWarning,
@@ -42,7 +43,7 @@ export default function Reports() {
     if (!matchesSearch) return false;
 
     if (filterType === "high_risk") {
-      return s.risk_level === "scam" || s.fraud_score >= 70;
+      return s.risk_level === "scam" || scoreToRisk(s.fraud_score) === "scam";
     }
     if (filterType !== "all") {
       return (s.scan_type || "").toLowerCase().includes(filterType.toLowerCase());
@@ -128,8 +129,8 @@ export default function Reports() {
         <div className="space-y-3">
           {filteredScans.map((scan, idx) => {
             const Icon = TYPE_ICONS[scan.scan_type] || MessageSquareWarning;
-            const isScam = scan.risk_level === "scam" || scan.fraud_score >= 70;
-            const isSuspicious = scan.risk_level === "suspicious" || (scan.fraud_score >= 35 && scan.fraud_score < 70);
+            const isScam = scan.risk_level === "scam" || scoreToRisk(scan.fraud_score) === "scam";
+            const isSuspicious = scan.risk_level === "suspicious" || scoreToRisk(scan.fraud_score) === "suspicious";
 
             const badgeClass = isScam
               ? "badge-scam"
@@ -205,7 +206,7 @@ export default function Reports() {
             <div className="space-y-1">
               <div className="flex items-center gap-2">
                 <span className={`text-xs font-bold px-2.5 py-1 rounded-full ${
-                  selectedReport.risk_level === "scam" || selectedReport.fraud_score >= 70 ? "badge-scam" : "badge-safe"
+                  selectedReport.risk_level === "scam" || scoreToRisk(selectedReport.fraud_score) === "scam" ? "badge-scam" : "badge-safe"
                 }`}>
                   Score: {selectedReport.fraud_score || 0}/100 Risk Rating
                 </span>

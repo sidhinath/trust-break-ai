@@ -18,6 +18,26 @@ const BYPASS_ALARM = "trustbreakBypassExpiry";
 const urlScanCache = new Map(); // url -> scan result
 const pendingBypass = new Set(); // hostnames allowed once by the user
 
+// Mirrors RISK_BANDS in src/lib/scanner.js — keep these in sync.
+// Safe 0–25 · Medium 26–60 · High 61–100
+const RISK_BANDS = { safeMax: 25, mediumMax: 60 };
+
+function shouldWarn(result) {
+  const score = Number(result?.fraud_score);
+  if (Number.isFinite(score) && score > RISK_BANDS.mediumMax) return true;
+  return result?.risk_level === "scam";
+}
+
+function riskLabel(result) {
+  const score = Number(result?.fraud_score);
+  if (Number.isFinite(score)) {
+    if (score > RISK_BANDS.mediumMax) return "high";
+    if (score > RISK_BANDS.safeMax) return "medium";
+    return "safe";
+  }
+  return result?.risk_level || "unknown";
+}
+
 function normalizeApiBase(value) {
   return String(value || DEFAULT_API_BASE).replace(/\/+$/, "");
 }
@@ -53,6 +73,57 @@ function isScannableUrl(rawUrl) {
 // ---------------------------------------------------------------------------
 // Real-time Navigation Inspection (Feature 7)
 // ---------------------------------------------------------------------------
+
+/**
+ * Sends a URL (plus optional page title / text) to /api/analyze and logs the
+ * full decision trail so a "safe" verdict can always be explained.
+ */
+async function scanUrl(targetUrl, context = {}) {
+  const apiBase = await getApiBase();
+  const startedAt = Date.now();
+  const payload = { url: targetUrl, debug: true };
+
+  if (context.title) payload.title = String(context.title).slice(0, 300);
+  if (context.text) payload.page_text = String(context.text).slice(0, 4000);
+
+  console.log("[TrustBreak AI Ext] Scanning", targetUrl, {
+    hasTitle: Boolean(payload.title),
+    hasPageText: Boolean(payload.page_text),
+    textLength: payload.page_text ? payload.page_text.length : 0,
+  });
+
+  const resp = await fetch(`${apiBase}/api/analyze`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ type: "link", payload }),
+  });
+
+  if (!resp.ok) {
+    console.warn(
+      `[TrustBreak AI Ext] Scan failed (HTTP ${resp.status}) for ${targetUrl} after ${Date.now() - startedAt}ms`
+    );
+    return null;
+  }
+
+  const data = await resp.json();
+  cacheScanResult(targetUrl, { ...data, hasContext: Boolean(context.text) });
+
+  console.log("[TrustBreak AI Ext] Verdict", {
+    url: targetUrl,
+    score: data.fraud_score,
+    band: riskLabel(data),
+    engine: data.engine || data.source || "unknown",
+    degraded: data.degraded === true,
+    degradedReason: data.degraded_reason || null,
+    securityTestPage: data.security_test_page || false,
+    durationMs: Date.now() - startedAt,
+    breakdown: data.score_breakdown || [],
+    aiDiagnostics: data.ai_diagnostics || null,
+  });
+
+  return data;
+}
+
 chrome.webNavigation.onCommitted.addListener(async (details) => {
   // Only inspect top-level frame navigations
   if (details.frameId !== 0) return;
@@ -67,34 +138,24 @@ chrome.webNavigation.onCommitted.addListener(async (details) => {
   }
 
   // Check cache
-  if (urlScanCache.has(details.url)) {
-    const cached = urlScanCache.get(details.url);
-    if (cached.fraud_score >= 70 || cached.risk_level === "scam") {
-      sendOverlayWithRetry(details.tabId, cached);
-    }
+  const cached = urlScanCache.get(details.url);
+  if (cached) {
+    if (shouldWarn(cached)) sendOverlayWithRetry(details.tabId, cached);
+    else console.log("[TrustBreak AI Ext] Cached verdict", { url: details.url, score: cached.fraud_score });
     return;
   }
 
   try {
-    const apiBase = await getApiBase();
-    const resp = await fetch(`${apiBase}/api/analyze`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        type: "link",
-        payload: { url: details.url },
-      }),
-    });
-
-    if (!resp.ok) {
-      console.warn(`[TrustBreak AI Ext] Navigation scan failed (HTTP ${resp.status}) for ${details.url}`);
-      return;
+    let title = "";
+    try {
+      const tab = await chrome.tabs.get(details.tabId);
+      title = tab?.title || "";
+    } catch {
+      // Title is optional context.
     }
 
-    const data = await resp.json();
-    cacheScanResult(details.url, data);
-
-    if (data.fraud_score >= 70 || data.risk_level === "scam") {
+    const data = await scanUrl(details.url, { title });
+    if (data && shouldWarn(data)) {
       sendOverlayWithRetry(details.tabId, data);
     }
   } catch (err) {
@@ -292,11 +353,47 @@ async function clearBypassRule() {
   });
 }
 
-chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message?.action === ALLOW_ONCE_ACTION && typeof message.targetUrl === "string") {
     allowOnce(message.targetUrl)
       .then((ok) => sendResponse({ ok }))
       .catch(() => sendResponse({ ok: false }));
+    return true;
+  }
+
+  // The content script reports the page title + visible text after load. This
+  // lets the scanner score page-content phishing cues, not just the URL.
+  if (message?.action === "TRUSTBREAK_PAGE_CONTEXT" && typeof message.url === "string") {
+    const tabId = sender?.tab?.id;
+    (async () => {
+      const parsed = isScannableUrl(message.url);
+      if (!parsed) {
+        sendResponse({ ok: false, error: "not-scannable" });
+        return;
+      }
+
+      const cached = urlScanCache.get(message.url);
+      if (cached?.hasContext) {
+        sendResponse({ ok: true, cached: true, score: cached.fraud_score });
+        return;
+      }
+
+      try {
+        const data = await scanUrl(message.url, { title: message.title, text: message.text });
+        if (data && shouldWarn(data) && typeof tabId === "number") {
+          sendOverlayWithRetry(tabId, data);
+        }
+        sendResponse({
+          ok: Boolean(data),
+          score: data?.fraud_score,
+          risk: data?.risk_level,
+          band: data ? riskLabel(data) : "unknown",
+        });
+      } catch (err) {
+        console.warn("[TrustBreak AI Ext] Page-context scan failed:", err?.message);
+        sendResponse({ ok: false, error: err?.message || "scan-failed" });
+      }
+    })();
     return true;
   }
 

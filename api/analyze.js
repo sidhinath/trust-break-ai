@@ -366,14 +366,70 @@ const REASON_CODES_INSTRUCTION = `
   NEWLY_REGISTERED_DOMAIN, REQUESTS_PAYMENT, KNOWN_MALICIOUS_DOMAIN, SUSPICIOUS_ATTACHMENT_QR, GENERIC_GREETING
 - explanation (concise 1-2 sentence plain-English summary of the top threat factor)`
 
-function getValidGroqKey(req = null) {
-  const headerKey = req?.headers?.['x-groq-api-key']
-  if (headerKey && typeof headerKey === 'string' && !headerKey.includes('placeholder') && !headerKey.includes('your_groq')) {
-    return headerKey.trim()
+const KEY_PLACEHOLDER_MARKERS = ['placeholder', 'your_groq', 'your-key', 'changeme', 'xxxx']
+
+function inspectApiKey(value) {
+  if (value === undefined || value === null || value === '') return { key: null, problem: 'is not set' }
+  if (typeof value !== 'string') return { key: null, problem: 'is not a string' }
+  const trimmed = value.trim()
+  if (!trimmed) return { key: null, problem: 'is empty' }
+  const lower = trimmed.toLowerCase()
+  if (KEY_PLACEHOLDER_MARKERS.some((marker) => lower.includes(marker))) {
+    return { key: null, problem: 'is a placeholder value' }
   }
-  const key = process.env.GROQ_API_KEY || process.env.VITE_GROQ_API_KEY
-  if (!key || typeof key !== 'string' || key.includes('placeholder') || key.includes('your_groq')) return null
-  return key.trim()
+  if (trimmed.length < 20) return { key: null, problem: `looks truncated (${trimmed.length} chars)` }
+  return { key: trimmed, problem: null }
+}
+
+/**
+ * Resolves the Groq key and explains *why* it is missing when it cannot be
+ * resolved. This is the root-cause fix for silent AI fallbacks.
+ */
+function resolveGroqKey(req = null) {
+  const headerValue = req?.headers?.['x-groq-api-key']
+  const fromHeader = inspectApiKey(headerValue)
+  if (fromHeader.key) {
+    return { key: fromHeader.key, source: 'x-groq-api-key header', reason: null }
+  }
+
+  const envValue = process.env.GROQ_API_KEY || process.env.VITE_GROQ_API_KEY
+  const fromEnv = inspectApiKey(envValue)
+  if (fromEnv.key) {
+    return { key: fromEnv.key, source: 'server env (GROQ_API_KEY)', reason: null }
+  }
+
+  const headerNote = typeof headerValue === 'string'
+    ? `x-groq-api-key header ${fromHeader.problem}`
+    : 'no x-groq-api-key header sent'
+  const envNote = envValue !== undefined
+    ? `GROQ_API_KEY ${fromEnv.problem}`
+    : 'GROQ_API_KEY is not set on the server'
+
+  return { key: null, source: 'none', reason: `${headerNote}; ${envNote}` }
+}
+
+function getValidGroqKey(req = null) {
+  return resolveGroqKey(req).key
+}
+
+export function getGroqConfigurationStatus() {
+  const envValue = process.env.GROQ_API_KEY || process.env.VITE_GROQ_API_KEY
+  const status = inspectApiKey(envValue)
+  return {
+    configured: Boolean(status.key),
+    source: 'GROQ_API_KEY',
+    problem: status.problem,
+  }
+}
+
+export function getGeminiConfigurationStatus() {
+  const envValue = process.env.GEMINI_API_KEY || process.env.VITE_GEMINI_API_KEY
+  const status = inspectApiKey(envValue)
+  return {
+    configured: Boolean(status.key),
+    source: 'GEMINI_API_KEY',
+    problem: status.problem,
+  }
 }
 
 function getValidGeminiKey(req = null) {
@@ -386,9 +442,18 @@ function getValidGeminiKey(req = null) {
   return key.trim()
 }
 
-async function analyzeWithGroq(type, payload, req = null) {
-  const apiKey = getValidGroqKey(req)
-  if (!apiKey) return null
+async function analyzeWithGroq(type, payload, req = null, diag = null) {
+  const keyInfo = resolveGroqKey(req)
+  if (diag) {
+    diag.keySource = keyInfo.source
+    diag.keyReason = keyInfo.reason
+    diag.attempts = diag.attempts || []
+  }
+  if (!keyInfo.key) {
+    console.warn('[TrustBreak AI] AI analysis skipped —', keyInfo.reason)
+    if (diag) diag.status = 'no-key'
+    return null
+  }
 
   let prompt = ''
   if (type === 'message') {
@@ -408,11 +473,21 @@ Return STRICT JSON only with keys:
 - signals (object with keys: urgency, financial, credential, impersonation, coercion - short string or null for each)
 ${REASON_CODES_INSTRUCTION}`
   } else if (type === 'link') {
+    const pageTitle = String(payload?.title || payload?.page_title || '').slice(0, 300)
+    const pageText = String(payload?.page_text || payload?.content || '').slice(0, 1500)
     prompt = `You are TrustBreak AI, an elite cybersecurity URL and domain inspection engine.
 Analyze this URL for phishing, typosquatting, lookalike domains, credential harvesting, or deceptive redirects.
 
 URL:
 """${payload?.url || ''}"""
+
+Page title (from the live tab, may be empty):
+"""${pageTitle}"""
+
+Visible page text snippet (may be empty):
+"""${pageText}"""
+
+If this is a known phishing/security demonstration page (for example itisatrap.org or a Safe Browsing test page), state that explicitly and score it as HIGH RISK — never as safe.
 
 Return STRICT JSON only with keys:
 - fraud_score (number 0-100)
@@ -440,11 +515,12 @@ ${REASON_CODES_INSTRUCTION}`
   }
 
   for (const model of GROQ_MODELS) {
+    const startedAt = Date.now()
     try {
       const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
         method: 'POST',
         headers: {
-          Authorization: `Bearer ${apiKey}`,
+          Authorization: `Bearer ${keyInfo.key}`,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
@@ -464,7 +540,21 @@ ${REASON_CODES_INSTRUCTION}`
         }),
       })
 
-      if (!response.ok) continue
+      if (!response.ok) {
+        const errorBody = await response.text().catch(() => '')
+        const detail = {
+          model,
+          status: response.status,
+          ok: false,
+          durationMs: Date.now() - startedAt,
+          error: errorBody.slice(0, 300),
+        }
+        if (diag) diag.attempts.push(detail)
+        console.warn(
+          `[TrustBreak AI] Groq model ${model} failed: HTTP ${detail.status} in ${detail.durationMs}ms — ${detail.error || 'no body'}`
+        )
+        continue
+      }
       const data = await response.json()
       const text = data?.choices?.[0]?.message?.content
       const parsed = parseJsonFromText(text)
@@ -473,7 +563,12 @@ ${REASON_CODES_INSTRUCTION}`
         const risk = ['safe', 'suspicious', 'scam'].includes(parsed.risk_level) ? parsed.risk_level : scoreToRisk(score)
         const contentStr = type === 'message' ? payload.message : (payload.url || '')
         const verdict = safeParseVerdict(text)
-        
+
+        if (diag) {
+          diag.status = 'ok'
+          diag.attempts.push({ model, status: 200, ok: true, durationMs: Date.now() - startedAt })
+        }
+
         return {
           fraud_score: score,
           risk_level: risk,
@@ -490,6 +585,8 @@ ${REASON_CODES_INSTRUCTION}`
             : inferReasonCodes(contentStr, type === 'link' ? payload.url : '', parsed.signals || extractAttackSignals(contentStr), risk),
           explanation: verdict?.explanation || null,
           source: 'groq',
+          engine: 'groq',
+          degraded: false,
           emergency_actions: {
             stop: 'Do NOT click any links, enter PINs, or share verification codes.',
             verify: 'Call the organization using their known official hotline.',
@@ -498,11 +595,31 @@ ${REASON_CODES_INSTRUCTION}`
           }
         }
       }
-    } catch {
+      if (diag) {
+        diag.attempts.push({
+          model,
+          status: 200,
+          ok: false,
+          durationMs: Date.now() - startedAt,
+          error: 'model returned no parseable JSON verdict',
+        })
+      }
+      console.warn(`[TrustBreak AI] Groq model ${model} returned an unparseable verdict`)
+    } catch (err) {
+      if (diag) {
+        diag.attempts.push({
+          model,
+          ok: false,
+          durationMs: Date.now() - startedAt,
+          error: err?.message || 'request failed',
+        })
+      }
+      console.warn(`[TrustBreak AI] Groq model ${model} request failed: ${err?.message || err}`)
       continue
     }
   }
 
+  if (diag) diag.status = 'all-models-failed'
   return null
 }
 
@@ -645,7 +762,7 @@ export default async function handler(req, res) {
   // CORS headers — required for browser extension (Feature 7)
   res.setHeader('Access-Control-Allow-Origin', '*')
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS')
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization')
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, x-groq-api-key, x-gemini-api-key, x-trustbreak-debug')
 
   if (req.method === 'OPTIONS') {
     res.status(204).end()
@@ -664,6 +781,17 @@ export default async function handler(req, res) {
     return
   }
 
+  const debug = payload?.debug === true || req.headers?.['x-trustbreak-debug'] === '1'
+  const requestStartedAt = Date.now()
+
+  console.log('[TrustBreak AI] /api/analyze start', {
+    type,
+    debug,
+    hasGroqHeader: Boolean(req.headers?.['x-groq-api-key']),
+    groqEnv: getGroqConfigurationStatus(),
+    target: type === 'link' ? payload?.url : undefined,
+  })
+
   try {
     if (type === 'message') {
       // Community feed pre-check for messages
@@ -675,24 +803,47 @@ export default async function handler(req, res) {
         return
       }
 
+      const aiDiagnostics = { status: 'not-attempted', attempts: [] }
       let groq = null
+      const aiStartedAt = Date.now()
       try {
-        groq = await withTimeout(analyzeWithGroq(type, payload, req), AI_TIMEOUT_MS)
+        groq = await withTimeout(analyzeWithGroq(type, payload, req, aiDiagnostics), AI_TIMEOUT_MS)
+        if (!groq && aiDiagnostics.status === 'not-attempted') aiDiagnostics.status = 'no-verdict'
       } catch (err) {
-        console.warn('[TrustBreak AI] Groq timed out or failed for message:', err.message)
+        aiDiagnostics.status = /timed out/i.test(err?.message || '') ? 'timeout' : 'error'
+        aiDiagnostics.error = err?.message
+        console.warn('[TrustBreak AI] Groq call for message failed:', err?.message)
       }
+      console.log(`[TrustBreak AI][ai] message analysis finished in ${Date.now() - aiStartedAt}ms`, aiDiagnostics)
 
       if (groq) {
         // Record high-risk indicator (fire-and-forget)
-        if (groq.fraud_score >= 60) {
+        if (groq.fraud_score >= 61) {
           recordThreatIndicator(msgHash, 'message', groq.fraud_score, groq.reasonCodes || [])
         }
+        if (debug) groq.ai_diagnostics = aiDiagnostics
         res.status(200).json(groq)
         return
       }
 
-      // Fallback to heuristic
-      const fallback = { ...analyzeMessageContent(payload?.message || ''), source: 'offline-heuristic' }
+      // Fallback to heuristic — labelled so it is never mistaken for AI output.
+      const fallback = {
+        ...analyzeMessageContent(payload?.message || ''),
+        source: 'offline-heuristic',
+        engine: 'heuristic',
+        degraded: true,
+        degraded_reason: aiDiagnostics.status === 'no-key' ? 'ai-unavailable: no API key' : `ai-unavailable (${aiDiagnostics.status})`,
+      }
+      if (debug) fallback.ai_diagnostics = aiDiagnostics
+      console.warn('[TrustBreak AI][verdict]', {
+        type,
+        engine: 'heuristic',
+        degraded: true,
+        score: fallback.fraud_score,
+        risk: fallback.risk_level,
+        reason: fallback.degraded_reason,
+        elapsedMs: Date.now() - requestStartedAt,
+      })
       res.status(200).json(fallback)
       return
     }
@@ -725,16 +876,25 @@ export default async function handler(req, res) {
       }
 
       let groq = null
+      const aiDiagnostics = { status: 'not-attempted', attempts: [] }
+      const aiStartedAt = Date.now()
       try {
-        groq = await withTimeout(analyzeWithGroq(type, payload, req), AI_TIMEOUT_MS)
+        groq = await withTimeout(analyzeWithGroq(type, payload, req, aiDiagnostics), AI_TIMEOUT_MS)
+        if (!groq && aiDiagnostics.status === 'not-attempted') aiDiagnostics.status = 'no-verdict'
       } catch (err) {
-        console.warn('[TrustBreak AI] Groq timed out or failed for link:', err.message)
+        aiDiagnostics.status = /timed out/i.test(err?.message || '') ? 'timeout' : 'error'
+        aiDiagnostics.error = err?.message
+        console.warn('[TrustBreak AI] Groq call for link failed:', err?.message)
       }
+      console.log(`[TrustBreak AI][ai] link analysis finished in ${Date.now() - aiStartedAt}ms`, aiDiagnostics)
 
       const base = analyzeUrlContent(payload?.url || '', {
         domain_age_days: payload?.domain_age_days,
         community_reports: payload?.community_reports,
         known_malicious: payload?.known_malicious,
+        page_title: payload?.title || payload?.page_title,
+        page_text: payload?.page_text || payload?.content,
+        debug,
       })
       if (groq) {
         const combined = {
@@ -746,23 +906,43 @@ export default async function handler(req, res) {
           degraded: false,
         }
         // Record high-risk indicator (fire-and-forget)
-        if (combined.fraud_score >= 60 && domain) {
+        if (combined.fraud_score >= 61 && domain) {
           recordThreatIndicator(hashDomain(domain), 'link', combined.fraud_score, combined.reasonCodes || [])
         }
+        if (debug) combined.ai_diagnostics = aiDiagnostics
+        console.log('[TrustBreak AI][verdict]', {
+          type,
+          engine: 'groq',
+          degraded: false,
+          score: combined.fraud_score,
+          risk: combined.risk_level,
+          elapsedMs: Date.now() - requestStartedAt,
+        })
         res.status(200).json(combined)
         return
       }
 
       // Fallback to heuristic — explicitly labelled so clients never present a
       // degraded result as a full AI/threat-intel verdict.
-      console.warn('[TrustBreak AI] AI engine unavailable; serving heuristic result for', payload?.url)
       const fallback = {
         ...base,
         source: 'offline-heuristic',
         engine: 'heuristic',
         degraded: true,
-        degraded_reason: 'ai-unavailable',
+        degraded_reason: aiDiagnostics.status === 'no-key' ? 'ai-unavailable: no API key' : `ai-unavailable (${aiDiagnostics.status})`,
       }
+      if (debug) fallback.ai_diagnostics = aiDiagnostics
+      console.warn('[TrustBreak AI][verdict]', {
+        type,
+        engine: 'heuristic',
+        degraded: true,
+        score: fallback.fraud_score,
+        risk: fallback.risk_level,
+        testPage: fallback.is_security_test_page ? fallback.security_test_page : false,
+        reason: fallback.degraded_reason,
+        breakdown: fallback.score_breakdown,
+        elapsedMs: Date.now() - requestStartedAt,
+      })
       res.status(200).json(fallback)
       return
     }
@@ -779,7 +959,15 @@ export default async function handler(req, res) {
         res.status(200).json({ ...groq, source: 'groq' })
         return
       }
-      res.status(200).json({ ...analyzeScamReportContent(payload || {}), source: 'offline-heuristic', reasonCodes: [], explanation: null })
+      res.status(200).json({
+        ...analyzeScamReportContent(payload || {}),
+        source: 'offline-heuristic',
+        engine: 'heuristic',
+        degraded: true,
+        degraded_reason: 'ai-unavailable',
+        reasonCodes: [],
+        explanation: null,
+      })
       return
     }
 

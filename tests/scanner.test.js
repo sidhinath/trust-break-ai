@@ -7,6 +7,10 @@ import {
   findSimilarScams,
   analyzeMessageContent,
   analyzeUrlContent,
+  analyzePageContext,
+  scoreToRisk,
+  scoreToBand,
+  RISK_BANDS,
 } from '../src/lib/scanner.js'
 import { SAMPLE_THREATS } from '../src/lib/threatLibrary.js'
 import { filterValidReasonCodes, VALID_REASON_CODES } from '../src/lib/reasonCodes.js'
@@ -88,12 +92,13 @@ describe('TrustBreak AI Scanner Engine Tests', () => {
 // Feature 1 — Reason Code Filtering
 // ============================================================
 describe('Feature 1 — Reason Code Filtering', () => {
-  it('should pass all 11 known reason codes through the filter', () => {
+  it('should pass all 12 known reason codes through the filter', () => {
     const allCodes = [...VALID_REASON_CODES]
-    assert.strictEqual(allCodes.length, 11, 'Expected exactly 11 valid reason codes')
+    assert.strictEqual(allCodes.length, 12, 'Expected exactly 12 valid reason codes')
     const filtered = filterValidReasonCodes(allCodes)
-    assert.strictEqual(filtered.length, 11, 'All valid codes should pass through')
+    assert.strictEqual(filtered.length, 12, 'All valid codes should pass through')
     assert.ok(filtered.includes('FAMILY_IMPERSONATION_RISK'), 'Expected FAMILY_IMPERSONATION_RISK in valid codes')
+    assert.ok(filtered.includes('SECURITY_TEST_PAGE'), 'Expected SECURITY_TEST_PAGE in valid codes')
   })
 
   it('should filter out unknown / hallucinated reason codes', () => {
@@ -141,6 +146,92 @@ describe('Feature 2 — Extended Heuristic Patterns', () => {
     const result = analyzeUrlContent('https://ow.ly/suspicious-redirect')
     assert.ok(result.fraud_score >= 40, `Expected elevated score for URL shortener, got ${result.fraud_score}`)
     assert.ok(result.reasons.some(r => r.toLowerCase().includes('shortening') || r.toLowerCase().includes('shortener')), 'Expected shortener warning in reasons')
+  })
+})
+
+// ============================================================
+// Feature 9 — Security test pages & honest scoring bands
+// ============================================================
+describe('Feature 9 — Security test pages & risk bands', () => {
+  it('should map scores onto Safe 0-25 / Medium 26-60 / High 61-100', () => {
+    assert.strictEqual(RISK_BANDS.safeMax, 25)
+    assert.strictEqual(RISK_BANDS.mediumMax, 60)
+
+    assert.strictEqual(scoreToBand(0), 'safe')
+    assert.strictEqual(scoreToBand(25), 'safe')
+    assert.strictEqual(scoreToBand(26), 'medium')
+    assert.strictEqual(scoreToBand(60), 'medium')
+    assert.strictEqual(scoreToBand(61), 'high')
+    assert.strictEqual(scoreToBand(100), 'high')
+
+    assert.strictEqual(scoreToRisk(25), 'safe')
+    assert.strictEqual(scoreToRisk(26), 'suspicious')
+    assert.strictEqual(scoreToRisk(60), 'suspicious')
+    assert.strictEqual(scoreToRisk(61), 'scam')
+  })
+
+  it('should flag itisatrap.org as a security test page, never as safe', () => {
+    const result = analyzeUrlContent('https://www.itisatrap.org/firefox/its-a-trap.html')
+
+    assert.strictEqual(result.is_security_test_page, true, 'Expected security test page detection')
+    assert.ok(result.fraud_score > RISK_BANDS.mediumMax, `Expected high risk, got ${result.fraud_score}`)
+    assert.strictEqual(result.risk_level, 'scam')
+    assert.ok(result.reasonCodes.includes('SECURITY_TEST_PAGE'), 'Expected SECURITY_TEST_PAGE reason code')
+    assert.ok(
+      result.reasons.some((reason) => /security test page/i.test(reason)),
+      'Expected a human-readable security-test-page reason'
+    )
+  })
+
+  it('should flag testsafebrowsing.appspot.com/phishing as a security test page', () => {
+    const result = analyzeUrlContent('https://testsafebrowsing.appspot.com/phishing')
+
+    assert.strictEqual(result.is_security_test_page, true)
+    assert.ok(result.fraud_score > RISK_BANDS.mediumMax, `Expected high risk, got ${result.fraud_score}`)
+    assert.ok(result.reasonCodes.includes('SECURITY_TEST_PAGE'))
+  })
+
+  it('should never return 0/100 just because HTTPS is valid', () => {
+    const result = analyzeUrlContent('https://random-unknown-domain-abc123.com/')
+
+    assert.ok(result.fraud_score > 0, 'A bare HTTPS URL must not score a perfect zero')
+    assert.ok(result.fraud_score <= RISK_BANDS.safeMax, 'An unknown but clean domain should stay in the safe band')
+    assert.strictEqual(scoreToBand(result.fraud_score), 'safe')
+  })
+
+  it('should keep google.com in the safe band while still explaining the score', () => {
+    const result = analyzeUrlContent('https://www.google.com/search?q=antigravity+ide')
+
+    assert.strictEqual(result.risk_level, 'safe')
+    assert.ok(result.fraud_score > 0 && result.fraud_score <= RISK_BANDS.safeMax)
+    assert.ok(Array.isArray(result.score_breakdown) && result.score_breakdown.length > 0, 'Expected a score breakdown')
+    assert.ok(result.reasons.length > 0, 'Expected explanatory reasons')
+  })
+
+  it('should penalise credential-harvesting cues in the page title and body', () => {
+    const result = analyzeUrlContent('https://account-verify-secure.example/', {
+      page_title: 'Sign in to your account',
+      page_text: 'Your account has been suspended. Enter your password to verify your identity immediately.',
+    })
+
+    assert.strictEqual(result.page_context_used, true)
+    assert.ok(result.fraud_score > RISK_BANDS.safeMax, `Expected elevated score, got ${result.fraud_score}`)
+    assert.ok(
+      result.reasons.some((reason) => /password|suspended|urgency|credential/i.test(reason)),
+      'Expected page-content evidence in reasons'
+    )
+  })
+
+  it('should score page context signals deterministically', () => {
+    const clean = analyzePageContext({ title: 'Weekly newsletter', text: 'Here are this week\'s articles.' })
+    assert.strictEqual(clean.points, 0)
+
+    const phishing = analyzePageContext({
+      title: 'Verify your account',
+      text: 'Your account will be blocked. Enter your password and OTP immediately.',
+    })
+    assert.ok(phishing.points > 0)
+    assert.ok(phishing.points <= 35, 'Page-context penalties must be capped')
   })
 })
 

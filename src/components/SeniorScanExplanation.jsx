@@ -2,6 +2,7 @@ import React from "react";
 import { AlertTriangle, ShieldAlert, ShieldCheck, CheckCircle2, HelpCircle } from "lucide-react";
 import VoiceAssistance from "./VoiceAssistance";
 import { REASON_CODE_DICT } from "@/lib/reasonCodes";
+import { scoreToRisk } from "@/lib/scanner";
 
 /**
  * SeniorScanExplanation Component
@@ -14,7 +15,7 @@ import { REASON_CODE_DICT } from "@/lib/reasonCodes";
 export default function SeniorScanExplanation({ result, rawInput = "", scanType = "message" }) {
   if (!result) return null;
 
-  const riskLevel = result.risk_level || (result.fraud_score >= 70 ? "scam" : result.fraud_score >= 35 ? "suspicious" : "safe");
+  const riskLevel = result.risk_level || scoreToRisk(result.fraud_score);
 
   let headlineText = "";
   let headlineColorClass = "";

@@ -62,6 +62,11 @@ export const REASON_CODE_DICT = {
     icon: 'Users',
     color: '#e11d48',
   },
+  SECURITY_TEST_PAGE: {
+    label: 'Phishing / Security Test Page',
+    icon: 'FlaskConical',
+    color: '#f97316',
+  },
 }
 
 /**

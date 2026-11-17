@@ -9,6 +9,7 @@ import { SkeletonScannerResult } from "@/components/ui/skeleton";
 import ScannerAnalysisProgress from "@/components/scanners/ScannerAnalysisProgress";
 import { analyzeVoice, investigateWebsite, extractUrlFromText } from "@/lib/api";
 import { createScanHistory } from "@/lib/data";
+import { scoreToRisk } from "@/lib/scanner";
 
 export default function VoiceScanner() {
   const queryClient = useQueryClient();
@@ -167,7 +168,7 @@ export default function VoiceScanner() {
         scan_type: "voice",
         input_content: (finalResult.transcript || finalResult.explanation || "Recorded Voice Audio").substring(0, 240),
         fraud_score: finalResult.fraud_score,
-        risk_level: finalResult.risk_level || (finalResult.fraud_score > 70 ? "scam" : finalResult.fraud_score > 40 ? "suspicious" : "safe"),
+        risk_level: finalResult.risk_level || scoreToRisk(finalResult.fraud_score),
         ai_analysis: finalResult.explanation || finalResult.analysis || "Voice threat analysis",
         reasons: finalResult.reasons || [],
       });
@@ -177,7 +178,7 @@ export default function VoiceScanner() {
       // Fallback local spectral acoustic verdict
       const fallbackScore = combineVoiceThreatScore(45, flatness || 0.5);
       const fallbackResult = {
-        risk_level: fallbackScore > 70 ? "scam" : fallbackScore > 40 ? "suspicious" : "safe",
+        risk_level: scoreToRisk(fallbackScore),
         fraud_score: fallbackScore,
         explanation: "Voice recording analyzed via local DSP acoustic engine. High spectral flatness and vocal pressure signals processed.",
         reconstructedChain: [
@@ -231,7 +232,7 @@ export default function VoiceScanner() {
         scan_type: "voice",
         input_content: (finalResult.transcript || sample.sampleTranscript).substring(0, 240),
         fraud_score: finalResult.fraud_score,
-        risk_level: finalResult.risk_level || (finalResult.fraud_score > 70 ? "scam" : finalResult.fraud_score > 40 ? "suspicious" : "safe"),
+        risk_level: finalResult.risk_level || scoreToRisk(finalResult.fraud_score),
         ai_analysis: finalResult.explanation || finalResult.analysis || "Voice sample benchmark threat analysis",
         reasons: finalResult.reasons || [],
       });
