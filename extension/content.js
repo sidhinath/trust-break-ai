@@ -18,6 +18,32 @@
     // Non-fatal: the marker is only used for detection.
   }
 
+  // Exposes the real number of loaded DNR rules to the web app so the Browser
+  // Shield page never has to display a hardcoded rule count.
+  function publishExtensionStatus() {
+    try {
+      chrome.runtime.sendMessage({ action: "TRUSTBREAK_GET_STATUS" }, (status) => {
+        if (chrome.runtime.lastError || !status || !status.ok) return;
+        document.documentElement.setAttribute(
+          "data-trustbreak-dnr-rules",
+          String(status.rules)
+        );
+        document.documentElement.setAttribute(
+          "data-trustbreak-sync-state",
+          String(status.sync?.state || "unknown")
+        );
+        document.dispatchEvent(
+          new CustomEvent("trustbreak-extension-status", { detail: status })
+        );
+      });
+    } catch {
+      // Status bridge is optional telemetry.
+    }
+  }
+
+  publishExtensionStatus();
+  [1500, 5000].forEach((delay) => setTimeout(publishExtensionStatus, delay));
+
   chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
     if (request.action === "TRUSTBREAK_SHOW_OVERLAY" && request.threat) {
       showThreatBanner(request.threat);
@@ -54,6 +80,7 @@
 
     const rawScore = Number(threat.fraud_score);
     const score = Number.isFinite(rawScore) ? Math.max(0, Math.min(100, Math.round(rawScore))) : 85;
+    const degraded = threat.degraded === true;
     const rawReasons = Array.isArray(threat.reasons) && threat.reasons.length > 0
       ? threat.reasons
       : ["Phishing and social engineering cues detected"];
@@ -159,7 +186,7 @@
           <div class="info">
             <h4>
               TrustBreak AI Warning
-              <span class="badge">Potential Scam / Phishing</span>
+              <span class="badge">${degraded ? "Heuristic Threat Match" : "Potential Scam / Phishing"}</span>
             </h4>
             <p>${reasons}</p>
           </div>

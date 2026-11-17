@@ -210,6 +210,8 @@ async function checkCommunityFeed(indicatorHash) {
       reasonCodes: filterValidReasonCodes(row.reason_codes || []),
       explanation: 'Matched community threat intelligence feed.',
       source: 'community-threat-feed',
+      engine: 'community-threat-feed',
+      degraded: false,
       attack_intent: 'Previously identified malicious indicator — see original scan for full reconstruction.',
       threat_reconstruction: [],
       emergency_actions: {
@@ -249,6 +251,8 @@ async function checkPublicBlocklist(domainHash) {
       reasonCodes: ['KNOWN_MALICIOUS_DOMAIN'],
       explanation: `Domain is on the ${row.source} public malicious feed.`,
       source: `public-feed:${row.source}`,
+      engine: 'public-blocklist',
+      degraded: false,
       attack_intent: 'Redirect victims to a known malicious phishing or malware-serving domain.',
       domain_age_days: 1,
       ssl_status: 'Untrusted',
@@ -265,6 +269,55 @@ async function checkPublicBlocklist(domainHash) {
     }
   } catch {
     return null
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Live OpenPhish fallback when the Supabase threat table is unreachable
+// ---------------------------------------------------------------------------
+let liveFeedCache = { fetchedAt: 0, domains: new Set() }
+const LIVE_FEED_URL = 'https://openphish.com/feed.txt'
+const LIVE_FEED_TTL_MS = 5 * 60 * 1000
+
+async function checkLiveThreatFeed(hostname) {
+  const now = Date.now()
+  if (now - liveFeedCache.fetchedAt > LIVE_FEED_TTL_MS) {
+    // Record the attempt up-front so a slow/unreachable feed cannot add
+    // latency to every single analysis request.
+    liveFeedCache = { ...liveFeedCache, fetchedAt: now }
+    try {
+      const resp = await withTimeout(fetch(LIVE_FEED_URL, { cache: 'no-store' }), 3000)
+      if (resp.ok) {
+        const text = await resp.text()
+        const domains = new Set()
+        for (const line of text.split('\n')) {
+          const value = line.trim()
+          if (!value || value.startsWith('#')) continue
+          try {
+            domains.add(new URL(value).hostname.toLowerCase())
+          } catch {}
+        }
+        liveFeedCache = { fetchedAt: now, domains }
+      }
+    } catch (err) {
+      console.warn('[TrustBreak AI] Live OpenPhish fallback unavailable:', err?.message)
+    }
+  }
+  return liveFeedCache.domains.has(hostname)
+}
+
+function liveFeedVerdict(hostname) {
+  return {
+    fraud_score: 95,
+    risk_level: 'scam',
+    confidence: 'high',
+    reasons: [`Domain ${hostname} is listed in the live OpenPhish phishing feed`],
+    analysis: 'This domain is actively listed in the OpenPhish public phishing feed. Do not visit this site.',
+    source: 'feed:openphish-live',
+    engine: 'live-feed',
+    degraded: false,
+    attack_intent: 'Harvest credentials or deliver malware from a confirmed phishing domain.',
+    threat_reconstruction: [],
   }
 }
 
@@ -662,6 +715,13 @@ export default async function handler(req, res) {
           res.status(200).json(blocklistHit)
           return
         }
+
+        // Live feed fallback so a dead/unseeded database does not downgrade
+        // known phishing domains to the heuristic engine.
+        if (await checkLiveThreatFeed(domain)) {
+          res.status(200).json(liveFeedVerdict(domain))
+          return
+        }
       }
 
       let groq = null
@@ -671,13 +731,19 @@ export default async function handler(req, res) {
         console.warn('[TrustBreak AI] Groq timed out or failed for link:', err.message)
       }
 
-      const base = analyzeUrlContent(payload?.url || '')
+      const base = analyzeUrlContent(payload?.url || '', {
+        domain_age_days: payload?.domain_age_days,
+        community_reports: payload?.community_reports,
+        known_malicious: payload?.known_malicious,
+      })
       if (groq) {
         const combined = {
           ...base,
           ...groq,
           trust_profile: base.trust_profile,
           simulation_steps: base.simulation_steps,
+          engine: 'groq',
+          degraded: false,
         }
         // Record high-risk indicator (fire-and-forget)
         if (combined.fraud_score >= 60 && domain) {
@@ -687,8 +753,16 @@ export default async function handler(req, res) {
         return
       }
 
-      // Fallback to heuristic
-      const fallback = { ...base, source: 'offline-heuristic' }
+      // Fallback to heuristic — explicitly labelled so clients never present a
+      // degraded result as a full AI/threat-intel verdict.
+      console.warn('[TrustBreak AI] AI engine unavailable; serving heuristic result for', payload?.url)
+      const fallback = {
+        ...base,
+        source: 'offline-heuristic',
+        engine: 'heuristic',
+        degraded: true,
+        degraded_reason: 'ai-unavailable',
+      }
       res.status(200).json(fallback)
       return
     }

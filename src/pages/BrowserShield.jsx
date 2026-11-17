@@ -10,59 +10,75 @@ export default function BrowserShield() {
   const [simulatingBlock, setSimulatingBlock] = useState(false);
   const [blocklistFeed, setBlocklistFeed] = useState([]);
   const [feedLoading, setFeedLoading] = useState(true);
+  const [feedError, setFeedError] = useState("");
+  const [sandboxMessage, setSandboxMessage] = useState("");
   const [extensionVersion, setExtensionVersion] = useState(null);
+  const [dnrRuleCount, setDnrRuleCount] = useState(null);
+  const [syncState, setSyncState] = useState(null);
 
   useEffect(() => {
-    const readVersion = () =>
-      document.documentElement.getAttribute("data-trustbreak-extension");
-    const syncVersion = () => {
-      const version = readVersion();
+    const root = document.documentElement;
+    const readExtensionState = () => {
+      const version = root.getAttribute("data-trustbreak-extension");
       if (version) setExtensionVersion(version);
+
+      const rawRules = root.getAttribute("data-trustbreak-dnr-rules");
+      if (rawRules !== null && Number.isFinite(Number(rawRules))) {
+        setDnrRuleCount(Number(rawRules));
+      }
+
+      const state = root.getAttribute("data-trustbreak-sync-state");
+      if (state) setSyncState(state);
     };
 
-    syncVersion();
-    document.addEventListener("trustbreak-extension-ready", syncVersion);
-    const timers = [setTimeout(syncVersion, 600), setTimeout(syncVersion, 1800)];
+    const onStatus = (event) => {
+      const detail = event?.detail;
+      if (!detail) return;
+      if (typeof detail.rules === "number") setDnrRuleCount(detail.rules);
+      if (detail.sync?.state) setSyncState(detail.sync.state);
+    };
+
+    readExtensionState();
+    document.addEventListener("trustbreak-extension-ready", readExtensionState);
+    document.addEventListener("trustbreak-extension-status", onStatus);
+    const timers = [setTimeout(readExtensionState, 600), setTimeout(readExtensionState, 1800)];
 
     return () => {
-      document.removeEventListener("trustbreak-extension-ready", syncVersion);
+      document.removeEventListener("trustbreak-extension-ready", readExtensionState);
+      document.removeEventListener("trustbreak-extension-status", onStatus);
       timers.forEach((timer) => clearTimeout(timer));
     };
   }, []);
 
   useEffect(() => {
     fetch("/api/blocklist-lite")
-      .then((res) => (res.ok ? res.text() : ""))
+      .then(async (res) => {
+        if (!res.ok) throw new Error(`Threat feed unavailable (HTTP ${res.status})`);
+        return res.text();
+      })
       .then((text) => {
         const lines = text
           .split("\n")
-          .map((l) => l.trim())
-          .filter((l) => l && !l.startsWith("#"));
-        if (lines.length > 0) {
-          setBlocklistFeed(lines);
-        } else {
-          setBlocklistFeed([
-            "sbi-kyc-verification-portal.online",
-            "paypal-security-verification.com",
-            "paytm-refund-claim.online",
-            "hdfc-netbanking-reauth.xyz",
-            "netflix-payment-update.top",
-            "indiapost-delivery-fee.bid",
-            "electricity-bill-poweroff.site",
-          ]);
-        }
+          .map((line) => line.trim())
+          .filter((line) => line && !line.startsWith("#"));
+        setBlocklistFeed(lines);
+        setFeedError(
+          lines.length === 0
+            ? "Threat feed is empty — no domains are currently blocked by the extension."
+            : ""
+        );
       })
-      .catch(() => {
-        setBlocklistFeed([
-          "sbi-kyc-verification-portal.online",
-          "paypal-security-verification.com",
-          "paytm-refund-claim.online",
-          "hdfc-netbanking-reauth.xyz",
-          "netflix-payment-update.top",
-        ]);
+      .catch((err) => {
+        setBlocklistFeed([]);
+        setFeedError(err.message);
       })
       .finally(() => setFeedLoading(false));
   }, []);
+
+  const normalizedTestDomain = testDomain.trim().toLowerCase().replace(/^https?:\/\//, "").split("/")[0];
+  const isBlocklisted = normalizedTestDomain.length > 0 && blocklistFeed.some(
+    (domain) => normalizedTestDomain === domain || normalizedTestDomain.endsWith(`.${domain}`)
+  );
 
   return (
     <ProtectedPage feature="Browser Shield">
@@ -87,7 +103,7 @@ export default function BrowserShield() {
         </div>
         <span className="text-[11px] font-mono" style={{ color: "var(--tb-text-dim)" }}>
           {extensionVersion
-            ? "Connected through the content-script bridge"
+            ? `DNR rules loaded: ${dnrRuleCount === null ? "—" : dnrRuleCount} · Sync: ${syncState || "unknown"}`
             : "Load the unpacked build from dist-extension/ to activate"}
         </span>
       </div>
@@ -133,7 +149,10 @@ export default function BrowserShield() {
             Intercepts connections to known phishing and malware domains before network transmission, redirecting the browser to a protected containment page.
           </p>
           <div className="flex items-center gap-2 pt-1 text-[11px] text-rose-400 font-medium">
-            <CheckCircle2 className="w-3.5 h-3.5" /> 4,500+ dynamic rules synchronized from threat feed
+            <CheckCircle2 className="w-3.5 h-3.5" />
+            {dnrRuleCount === null
+              ? "Extension not connected — no DNR rules loaded"
+              : `${dnrRuleCount} dynamic rule(s) loaded from the live threat feed`}
           </div>
         </div>
       </div>
@@ -158,18 +177,34 @@ export default function BrowserShield() {
           <input
             type="text"
             value={testDomain}
-            onChange={(e) => setTestDomain(e.target.value)}
+            onChange={(e) => {
+              setTestDomain(e.target.value);
+              setSandboxMessage("");
+            }}
             placeholder="Enter destination domain to test interception..."
             className="flex-1 px-3.5 py-2.5 rounded-xl border text-xs font-mono outline-none"
             style={{ background: "var(--tb-surface-2)", borderColor: "var(--tb-border)", color: "var(--tb-text)" }}
           />
           <Button
-            onClick={() => setSimulatingBlock(true)}
+            onClick={() => {
+              if (!isBlocklisted) {
+                setSandboxMessage(
+                  `${normalizedTestDomain || "This domain"} is not present in the live blocklist — the extension will NOT intercept it.`
+                );
+                return;
+              }
+              setSandboxMessage("");
+              setSimulatingBlock(true);
+            }}
             className="bg-rose-600 hover:bg-rose-500 text-white font-bold text-xs gap-2"
           >
             <ShieldAlert className="w-4 h-4" /> Trigger Pre-Click Intercept
           </Button>
         </div>
+
+        {sandboxMessage && (
+          <p className="text-[11px] font-mono text-amber-400">{sandboxMessage}</p>
+        )}
 
         {/* Quick Test Vectors */}
         <div className="flex flex-wrap items-center gap-1.5 pt-1">
@@ -179,7 +214,7 @@ export default function BrowserShield() {
               key={d}
               onClick={() => {
                 setTestDomain(d);
-                setSimulatingBlock(true);
+                setSandboxMessage("");
               }}
               className="text-[11px] font-mono px-2 py-0.5 rounded-md border hover:border-rose-400/50 transition-colors"
               style={{ background: "var(--tb-surface-2)", borderColor: "var(--tb-border)", color: "var(--tb-text)" }}
@@ -292,8 +327,11 @@ export default function BrowserShield() {
               Live Pre-Click Blocklist Feed (OpenPhish / URLhaus Sync)
             </h3>
           </div>
-          <span className="text-[10px] font-mono text-emerald-400 flex items-center gap-1">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" /> Live Telemetry
+          <span className="text-[10px] font-mono flex items-center gap-1">
+            <span className={`w-1.5 h-1.5 rounded-full ${feedError ? "bg-amber-400" : "bg-emerald-400 animate-pulse"}`} />
+            <span className={feedError ? "text-amber-400" : "text-emerald-400"}>
+              {feedError ? "Feed Degraded" : `Live Feed · ${blocklistFeed.length} domains`}
+            </span>
           </span>
         </div>
 
@@ -301,11 +339,13 @@ export default function BrowserShield() {
           style={{ background: "var(--tb-surface-2)", borderColor: "var(--tb-border)", color: "var(--tb-text-dim)" }}>
           {feedLoading ? (
             <TableSkeleton rows={4} />
+          ) : feedError ? (
+            <div className="text-amber-400 text-[11px] font-bold">{feedError}</div>
           ) : (
             blocklistFeed.map((domain, i) => (
               <div key={i} className="flex items-center justify-between text-[11px]">
                 <span className="text-rose-400 font-bold">{domain}</span>
-                <span className="text-slate-500 text-[10px]">BLOCKED (Severity: High)</span>
+                <span className="text-slate-500 text-[10px]">Listed in live threat feed</span>
               </div>
             ))
           )}

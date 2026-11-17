@@ -81,10 +81,19 @@ document.addEventListener("DOMContentLoaded", async () => {
       riskBadge.style.color =
         risk === "scam" ? "#ef4444" : risk === "suspicious" ? "#f59e0b" : "#10b981";
 
+      const engine = data.source || data.engine || "unknown";
+      const degraded = data.degraded === true || engine === "offline-heuristic";
+
       analysisText.textContent =
-        data.explanation || data.analysis || data.ai_analysis || "Threat analysis complete.";
+        (degraded ? "⚠ Heuristic-only result (AI/feed unavailable). " : "") +
+        (data.explanation || data.analysis || data.ai_analysis || "Threat analysis complete.");
 
       reasonsList.innerHTML = "";
+      const engineItem = document.createElement("li");
+      engineItem.textContent = `Engine: ${engine}`;
+      engineItem.style.color = degraded ? "#f59e0b" : "#64748b";
+      reasonsList.appendChild(engineItem);
+
       const reasons = Array.isArray(data.reasons) ? data.reasons : [];
       for (const reason of reasons.slice(0, 3)) {
         const li = document.createElement("li");

@@ -65,8 +65,56 @@ const SCAM_KEYWORDS = [
 // Feature 2 addition — extra URL shorteners & deceptive redirect TLDs
 const SHORTENER_DOMAINS = [
   'bit.ly', 'tinyurl.com', 't.co', 'cutt.ly', 'rb.gy', 'is.gd', 'rebrand.ly',
-  'ow.ly', 'short.link', 'buff.ly', 'tiny.cc', 'mnge.co', 'mnge', 'short.gy'
+  'ow.ly', 'short.link', 'buff.ly', 'tiny.cc', 'mnge.co', 'short.gy'
 ]
+
+// High-reputation registries. A hostname that matches one of these (or a
+// trusted government/education suffix) is capped at a very low risk score.
+const TRUSTED_DOMAINS = [
+  'google.com', 'google.co.in', 'youtube.com', 'gmail.com', 'github.com',
+  'microsoft.com', 'apple.com', 'amazon.com', 'amazon.in', 'netflix.com',
+  'wikipedia.org', 'cloudflare.com', 'openai.com', 'vercel.com',
+  'facebook.com', 'instagram.com', 'whatsapp.com', 'linkedin.com', 'x.com',
+  'twitter.com', 'paypal.com', 'stripe.com', 'razorpay.com',
+  'sbi.co.in', 'onlinesbi.sbi', 'sbicard.com', 'hdfcbank.com', 'icicibank.com',
+  'axisbank.com', 'kotak.com', 'phonepe.com', 'pay.google.com', 'supermoney.in',
+  'indiapost.gov.in', 'irctc.co.in', 'uidai.gov.in', 'npci.org.in'
+]
+
+const TRUSTED_SUFFIXES = [
+  '.gov', '.gov.in', '.nic.in', '.ac.in', '.edu', '.edu.in', '.mil',
+  '.gov.uk', '.gov.au', '.europa.eu'
+]
+
+// TLDs with a disproportionate volume of disposable phishing infrastructure.
+const SUSPICIOUS_TLDS = new Set([
+  'xyz', 'top', 'click', 'info', 'online', 'site', 'bid', 'live', 'work',
+  'support', 'rest', 'buzz', 'monster', 'quest', 'cfd', 'loan', 'win',
+  'review', 'country', 'stream', 'download', 'racing', 'party', 'trade',
+  'science', 'gq', 'ml', 'ga', 'cf', 'tk', 'icu', 'vip', 'shop', 'store',
+  'club', 'link', 'host', 'press', 'website', 'space', 'fun', 'life', 'world',
+  'today', 'email', 'sbs', 'cyou'
+])
+
+// Tokens used by credential-harvesting landing pages.
+const PHISHING_HOST_TOKENS = [
+  'login', 'signin', 'verify', 'verification', 'secure', 'security', 'update',
+  'account', 'banking', 'bank', 'kyc', 'wallet', 'payment', 'pay', 'invoice',
+  'billing', 'refund', 'claim', 'reward', 'bonus', 'free', 'gift', 'winner',
+  'prize', 'offer', 'crypto', 'support', 'auth', 'alert', 'confirm', 'recovery',
+  'unlock', 'delivery', 'parcel'
+]
+
+const HIGH_RISK_FILE_EXTENSIONS = [
+  '.apk', '.exe', '.scr', '.msi', '.vbs', '.jar', '.ps1', '.bat', '.cmd',
+  '.zip', '.rar', '.7z', '.iso', '.img'
+]
+
+function isTrustedHost(host) {
+  if (host === 'localhost' || host === '127.0.0.1' || host === '::1') return true
+  if (TRUSTED_DOMAINS.some((domain) => host === domain || host.endsWith(`.${domain}`))) return true
+  return TRUSTED_SUFFIXES.some((suffix) => host.endsWith(suffix))
+}
 
 const KNOWN_BRANDS = [
   { name: 'State Bank of India (SBI)', match: /(sbi|statebank)/i, legitimate: 'sbi.co.in' },
@@ -416,10 +464,9 @@ export function analyzeMessageContent(message) {
 /**
  * Deep domain & URL structural intelligence
  */
-export function analyzeUrlContent(rawUrl) {
+export function analyzeUrlContent(rawUrl, intel = {}) {
   let url
   const reasons = []
-  let score = 10
   const trustSignals = []
   const warningSignals = []
   const criticalSignals = []
@@ -433,11 +480,11 @@ export function analyzeUrlContent(rawUrl) {
       confidence: 'high',
       reasons: ['Invalid or malformed URL syntax — commonly used in obfuscated payloads.'],
       analysis: 'The URL structure is malformed and unsafe to inspect or browse.',
-      domain_age_days: 1,
+      domain_age_days: Number.isFinite(Number(intel?.domain_age_days)) ? Number(intel.domain_age_days) : null,
       ssl_status: 'Invalid',
-      community_reports: 24,
+      community_reports: Number.isFinite(Number(intel?.community_reports)) ? Number(intel.community_reports) : 0,
       is_known_brand_impersonation: false,
-      trust_profile: { trust: 0, warnings: 2, critical: 3 },
+      trust_profile: { trust: 0, warnings: 2, critical: 3, trustSignals: [], warningSignals: [], criticalSignals: [] },
       threat_reconstruction: reconstructAttackChain(rawUrl, rawUrl, 'scam'),
       attack_intent: 'Redirect browser to an invalid, obfuscated, or malicious exploit destination.'
     }
@@ -445,7 +492,20 @@ export function analyzeUrlContent(rawUrl) {
 
   const host = url.hostname.toLowerCase()
   const path = url.pathname.toLowerCase()
+  const search = url.search.toLowerCase()
+  const labels = host.split('.')
+  const tld = labels[labels.length - 1] || ''
+  const isIpLiteral = /^\d{1,3}(\.\d{1,3}){3}$/.test(host)
+  const trustedHost = !isIpLiteral && isTrustedHost(host)
+  const hyphenCount = (host.match(/-/g) || []).length
 
+  let score = 0
+
+  if (trustedHost) {
+    trustSignals.push('Domain matches verified high-reputation registry')
+  }
+
+  // Transport layer
   if (url.protocol !== 'https:') {
     score += 25
     reasons.push('Insecure protocol (HTTP) — lack of SSL encryption')
@@ -454,51 +514,141 @@ export function analyzeUrlContent(rawUrl) {
     trustSignals.push('Standard HTTPS encryption active')
   }
 
-  if (SHORTENER_DOMAINS.some((d) => host.includes(d))) {
+  // Raw IP host
+  if (isIpLiteral) {
+    score += 50
+    reasons.push('URL uses a raw IP address instead of a domain name — strong indicator of malicious infrastructure')
+    criticalSignals.push('IP-literal address (no domain)')
+  }
+
+  // Credentials embedded before the hostname
+  if (url.username || url.password) {
     score += 30
-    reasons.push(`Uses URL shortening service (${host}) to conceal true target destination`)
-    warningSignals.push('URL Shortener destination mask')
+    reasons.push('URL embeds credentials before the hostname — classic obfuscation trick')
+    criticalSignals.push('Credentials embedded in URL')
   }
 
-  if (/login|verify|secure|update|payment|wallet|kyc|auth|banking|signin|account/.test(path)) {
-    score += 20
-    reasons.push('High-risk action keywords present in URL path')
-    warningSignals.push('Sensitive action keyword in path')
-  }
-
-  if (host.split('.').length > 3) {
-    score += 15
-    reasons.push(`Excessive subdomains (${host.split('.').length} levels) indicative of DNS cloaking`)
-    warningSignals.push('Deep subdomain nesting')
-  }
-
-  const matchedBrand = KNOWN_BRANDS.find(b => b.match.test(host) && !host.endsWith(b.legitimate))
-  if (matchedBrand) {
+  // Shorteners — exact host match so "microsof[t.co]m" no longer matches "t.co".
+  const shortener = SHORTENER_DOMAINS.find((domain) => host === domain || host.endsWith(`.${domain}`))
+  if (shortener) {
     score += 40
+    reasons.push(`Uses URL shortening service (${shortener}) to conceal the true destination`)
+    warningSignals.push('URL shortener destination mask')
+  }
+
+  // Brand impersonation
+  const matchedBrand = KNOWN_BRANDS.find((brand) => brand.match.test(host) && !host.endsWith(brand.legitimate))
+  if (matchedBrand) {
+    score += 70
     reasons.push(`Brand Impersonation: Domain mimics ${matchedBrand.name} but is NOT hosted on official ${matchedBrand.legitimate}`)
     criticalSignals.push(`Typosquatting / Brand Mimicry (${matchedBrand.name})`)
   }
 
+  // Homograph domains
   if (/xn--/.test(host)) {
-    score += 35
+    score += 40
     reasons.push('Punycode / Homograph domain detected — uses visually identical Unicode glyphs')
     criticalSignals.push('Homograph / Punycode character spoofing')
   }
 
-  // Feature 2 addition — IP-literal URL detection
-  if (/^\d{1,3}(\.\d{1,3}){3}$/.test(host)) {
-    score += 40
-    reasons.push('URL uses raw IP address instead of domain name — strong indicator of malicious infrastructure')
-    criticalSignals.push('IP-literal address (no domain)')
+  // TLD reputation
+  if (!trustedHost && SUSPICIOUS_TLDS.has(tld)) {
+    score += 35
+    reasons.push(`High-abuse TLD (.${tld}) is widely used for disposable phishing infrastructure`)
+    warningSignals.push('High-risk top-level domain')
   }
-  const finalScore = Math.min(100, Math.max(5, score))
+
+  // Hostname structure
+  if (!trustedHost && labels.length > 3) {
+    score += 12
+    reasons.push(`Excessive subdomains (${labels.length} levels) indicative of DNS cloaking`)
+    warningSignals.push('Deep subdomain nesting')
+  }
+
+  if (!trustedHost && hyphenCount >= 2) {
+    score += hyphenCount >= 4 ? 15 : 10
+    reasons.push(`Multiple hyphens in hostname (${hyphenCount}) — common in lookalike domains`)
+    warningSignals.push('Hyphenated lookalike hostname')
+  }
+
+  if (!trustedHost) {
+    // Phishing lure tokens in the hostname itself
+    const hostTokens = PHISHING_HOST_TOKENS.filter((token) => host.includes(token))
+    if (hostTokens.length >= 2) {
+      score += hostTokens.length >= 3 ? 25 : 15
+      reasons.push(`Phishing lure keywords in hostname: ${hostTokens.join(', ')}`)
+      warningSignals.push('Phishing lure keywords in hostname')
+    }
+
+    if (/login|verify|secure|update|payment|wallet|kyc|auth|banking|signin|account/.test(path)) {
+      score += 10
+      reasons.push('High-risk action keywords present in URL path')
+      warningSignals.push('Sensitive action keyword in path')
+    }
+
+    if (HIGH_RISK_FILE_EXTENSIONS.some((extension) => path.endsWith(extension))) {
+      score += 25
+      reasons.push('URL points directly to a downloadable executable or archive payload')
+      criticalSignals.push('Direct executable/archive download')
+    }
+
+    if (/(?:redirect|url|next|target|continue)=https?%3a|(?:redirect|url|next|target|continue)=https?:\/\//.test(search)) {
+      score += 10
+      reasons.push('URL carries an open-redirect parameter pointing at another destination')
+      warningSignals.push('Open redirect parameter')
+    }
+
+    if (rawUrl.length > 200) {
+      score += 8
+      reasons.push('Abnormally long URL used to hide the real destination')
+      warningSignals.push('Abnormally long URL')
+    }
+  }
+
+  // Domain age / reputation supplied by a live intelligence lookup.
+  const domainAgeDays = Number(intel?.domain_age_days)
+  if (Number.isFinite(domainAgeDays)) {
+    if (domainAgeDays <= 30) {
+      score += 20
+      reasons.push(`Domain is only ${Math.max(0, Math.round(domainAgeDays))} days old — newly registered infrastructure`)
+      warningSignals.push('Newly registered domain')
+    } else if (domainAgeDays <= 90) {
+      score += 10
+      reasons.push(`Domain is ${Math.round(domainAgeDays)} days old — recent registration`)
+      warningSignals.push('Recently registered domain')
+    } else if (domainAgeDays >= 730) {
+      score -= 8
+      trustSignals.push('Long-standing domain registration history')
+    }
+  }
+
+  const communityReports = Number(intel?.community_reports)
+  if (Number.isFinite(communityReports) && communityReports > 0) {
+    score += Math.min(25, Math.round(communityReports))
+    reasons.push(`${Math.round(communityReports)} community threat report(s) recorded for this domain`)
+    criticalSignals.push('Community threat reports')
+  }
+
+  const knownMalicious = intel?.known_malicious === true
+  if (knownMalicious) {
+    score = Math.max(score, 95)
+    reasons.push('Domain is listed in a verified malicious-domain threat feed')
+    criticalSignals.push('Known malicious domain')
+  }
+
+  let finalScore = Math.max(0, Math.min(100, Math.round(score)))
+  if (trustedHost && !knownMalicious) {
+    finalScore = Math.min(finalScore, 8)
+  }
   const riskLevel = scoreToRisk(finalScore)
 
   if (reasons.length === 0) {
-    if (url.protocol === 'https:') reasons.push('Transport Security: Valid HTTPS protocol active with standard TLS encryption.')
-    reasons.push(`Hostname Structure: Hostname (${host}) validated without DNS cloaking, IP literals, or deep subdomain nesting.`)
-    reasons.push('Brand Impersonation Audit: Passed homograph character analysis and typosquatting pattern detection.')
-    reasons.push('Threat Feeds Lookup: Zero malicious flags or active phishing reports recorded across open threat intelligence feeds.')
+    if (url.protocol === 'https:') {
+      reasons.push('Transport Security: Valid HTTPS protocol active with standard TLS encryption.')
+    }
+    reasons.push(`Hostname Structure: Hostname (${host}) contains no high-risk phishing tokens or DNS obfuscation patterns.`)
+    reasons.push('Brand Impersonation Audit: Domain does not mimic any monitored brand.')
+    reasons.push('Reputation: No structural phishing indicators detected in this URL.')
   }
 
   const attackChain = reconstructAttackChain(`Phishing link inspection: ${rawUrl}`, rawUrl, riskLevel)
@@ -514,9 +664,9 @@ export function analyzeUrlContent(rawUrl) {
       riskLevel === 'safe'
         ? 'Domain structure passes standard security checks. Always verify authenticity before submitting passwords.'
         : `High-risk indicators identified on domain ${host}. Potential phishing infrastructure.`,
-    domain_age_days: finalScore > 60 ? 12 : 640,
+    domain_age_days: Number.isFinite(domainAgeDays) ? Math.round(domainAgeDays) : null,
     ssl_status: url.protocol === 'https:' ? 'Valid Certificate' : 'Missing / Insecure',
-    community_reports: finalScore > 60 ? Math.max(4, Math.round((finalScore - 20) * 0.8)) : 0,
+    community_reports: Number.isFinite(communityReports) && communityReports > 0 ? Math.round(communityReports) : 0,
     is_known_brand_impersonation: Boolean(matchedBrand),
     impersonated_brand: matchedBrand ? matchedBrand.name : null,
     trust_profile: {
@@ -531,6 +681,8 @@ export function analyzeUrlContent(rawUrl) {
     attack_intent: intent,
     reasonCodes,
     source: 'offline-heuristic',
+    engine: 'heuristic',
+    degraded: true,
     simulation_steps: riskLevel === 'safe'
       ? [
           {

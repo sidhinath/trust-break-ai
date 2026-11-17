@@ -9,7 +9,9 @@ const ALLOW_ONCE_ACTION = "TRUSTBREAK_ALLOW_ONCE";
 const SYNC_BLOCKLIST_ACTION = "TRUSTBREAK_SYNC_BLOCKLIST";
 const BYPASS_RULE_ID = 9001;
 const MAX_CACHE_ENTRIES = 500;
-const MAX_BLOCKLIST_RULES = 4500;
+// Chrome permits at most 1000 regexFilter rules per ruleset type. Exceeding it
+// makes updateDynamicRules() reject the entire batch, leaving zero protection.
+const MAX_BLOCKLIST_RULES = 1000;
 const SYNC_ALARM = "syncBlocklistAlarm";
 const RETRY_ALARM = "trustbreakBlocklistRetry";
 const BYPASS_ALARM = "trustbreakBypassExpiry";
@@ -84,7 +86,10 @@ chrome.webNavigation.onCommitted.addListener(async (details) => {
       }),
     });
 
-    if (!resp.ok) return;
+    if (!resp.ok) {
+      console.warn(`[TrustBreak AI Ext] Navigation scan failed (HTTP ${resp.status}) for ${details.url}`);
+      return;
+    }
 
     const data = await resp.json();
     cacheScanResult(details.url, data);
@@ -299,6 +304,22 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
     syncPreClickBlocklist()
       .then((result) => sendResponse(result))
       .catch((err) => sendResponse({ ok: false, state: "error", message: err?.message }));
+    return true;
+  }
+
+  if (message?.action === "TRUSTBREAK_GET_STATUS") {
+    Promise.all([
+      chrome.declarativeNetRequest.getDynamicRules(),
+      chrome.storage.local.get(["blocklistSync"]),
+    ])
+      .then(([rules, stored]) => {
+        sendResponse({
+          ok: true,
+          rules: rules.filter((rule) => rule.id !== BYPASS_RULE_ID).length,
+          sync: stored.blocklistSync || null,
+        });
+      })
+      .catch(() => sendResponse({ ok: false, rules: 0, sync: null }));
     return true;
   }
 
