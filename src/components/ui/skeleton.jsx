@@ -71,7 +71,7 @@ function HeaderSkeleton() {
 function SidebarSkeleton() {
   return (
     <aside
-      className="hidden md:flex flex-col w-64 fixed top-14 left-0 bottom-0 border-r z-30 p-4 space-y-6 overflow-y-auto"
+      className="hidden md:flex flex-col w-72 2xl:w-80 fixed top-14 left-0 bottom-0 border-r z-30 p-4 space-y-6 overflow-y-auto"
       style={{ background: 'var(--tb-surface)', borderColor: 'var(--tb-border)' }}
       role="status"
       aria-label="Loading navigation sidebar">
@@ -364,7 +364,7 @@ function AppShellSkeleton() {
       <HeaderSkeleton />
       <div className="flex flex-1 pt-14">
         <SidebarSkeleton />
-        <main className="flex-1 md:ml-64 p-4 sm:p-6 lg:p-8 max-w-5xl lg:max-w-7xl 2xl:max-w-[1720px] w-full mx-auto">
+        <main className="flex-1 md:ml-72 2xl:ml-80 p-4 sm:p-6 lg:p-8 px-4 sm:px-6 lg:px-10 2xl:px-16 max-w-5xl lg:max-w-7xl 2xl:max-w-[1720px] w-full mx-auto">
           <DashboardSkeleton />
         </main>
       </div>

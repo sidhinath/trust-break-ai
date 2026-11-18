@@ -839,7 +839,7 @@ export default function Layout({ children, currentPageName }) {
 
       {/* Desktop Toggleable Sidebar */}
       <aside className={`hidden md:flex fixed left-0 top-14 bottom-0 flex-col border-r z-30 py-4 overflow-y-auto no-scrollbar justify-between backdrop-blur-xl transition-all duration-300 ${
-        sidebarOpen ? 'w-64 px-3' : 'w-16 px-2'
+        sidebarOpen ? 'w-72 2xl:w-80 px-3.5' : 'w-16 px-2'
       }`}
         style={{
           background: 'var(--tb-surface)',
@@ -965,9 +965,9 @@ export default function Layout({ children, currentPageName }) {
 
       {/* Main Content Viewport - Dynamically adjusts padding based on sidebar state */}
       <main className={`relative z-10 pt-16 pb-24 md:pb-8 flex-1 w-full overflow-x-hidden transition-all duration-300 ${
-        sidebarOpen ? 'md:pl-64' : 'md:pl-16'
+        sidebarOpen ? 'md:pl-72 2xl:pl-80' : 'md:pl-16'
       }`}>
-        <div className="max-w-5xl lg:max-w-7xl 2xl:max-w-[1720px] mx-auto px-3 sm:px-6 lg:px-8 2xl:px-10 w-full">
+        <div className="max-w-5xl lg:max-w-7xl 2xl:max-w-[1720px] mx-auto px-4 sm:px-6 lg:px-10 2xl:px-16 w-full">
           {children}
 
           {/* Transparent Legal Footer */}
