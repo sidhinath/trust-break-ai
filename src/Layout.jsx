@@ -967,7 +967,7 @@ export default function Layout({ children, currentPageName }) {
       <main className={`relative z-10 pt-16 pb-24 md:pb-8 flex-1 w-full overflow-x-hidden transition-all duration-300 ${
         sidebarOpen ? 'md:pl-64' : 'md:pl-16'
       }`}>
-        <div className="max-w-5xl mx-auto px-3 sm:px-6 lg:px-8 w-full">
+        <div className="max-w-5xl lg:max-w-7xl 2xl:max-w-[1720px] mx-auto px-3 sm:px-6 lg:px-8 2xl:px-10 w-full">
           {children}
 
           {/* Transparent Legal Footer */}

@@ -364,7 +364,7 @@ function AppShellSkeleton() {
       <HeaderSkeleton />
       <div className="flex flex-1 pt-14">
         <SidebarSkeleton />
-        <main className="flex-1 md:ml-64 p-4 sm:p-6 lg:p-8 max-w-7xl w-full mx-auto">
+        <main className="flex-1 md:ml-64 p-4 sm:p-6 lg:p-8 max-w-5xl lg:max-w-7xl 2xl:max-w-[1720px] w-full mx-auto">
           <DashboardSkeleton />
         </main>
       </div>
