@@ -618,12 +618,19 @@ const GEMINI_ENDPOINT = 'https://generativelanguage.googleapis.com/v1beta/models
 /**
  * Runs one model attempt against the Gemini API and records exactly what
  * happened. No silent catches: every branch writes to `diag.attempts`.
+ *
+ * Recovery built in:
+ *  - 429/503 (transient overload) → one retry after a short pause
+ *  - 400 about `thinkingConfig` → retry once without it
+ *  - 404 "use models/X" (model retired) → records `suggestedModel` so the
+ *    caller can try Google's replacement immediately
  */
 async function callGeminiVision({ apiKey, model, base64, mimeType, diag }) {
   const startedAt = Date.now()
   const attempt = { model, ok: false, status: null, durationMs: 0 }
-  try {
-    const response = await withTimeout(
+
+  const send = (payload) =>
+    withTimeout(
       fetch(`${GEMINI_ENDPOINT}/${model}:generateContent`, {
         method: 'POST',
         headers: {
@@ -631,17 +638,48 @@ async function callGeminiVision({ apiKey, model, base64, mimeType, diag }) {
           // Header auth keeps the key out of URLs/logs.
           'x-goog-api-key': apiKey,
         },
-        body: JSON.stringify(buildVisionRequestBody(base64, mimeType, model)),
+        body: JSON.stringify(payload),
       }),
       VISION_TIMEOUT_MS
     )
 
+  try {
+    let body = buildVisionRequestBody(base64, mimeType, model)
+    let response = await send(body)
+    let raw = await response.text()
+
+    if (response.status === 400 && /thinking|Unknown name/i.test(raw) && body.generationConfig.thinkingConfig) {
+      attempt.thinkingConfigDropped = true
+      body = buildVisionRequestBody(base64, mimeType, model, { thinking: false })
+      response = await send(body)
+      raw = await response.text()
+    }
+
+    if (response.status === 429 || response.status === 503) {
+      attempt.transientRetry = true
+      await new Promise((resolve) => setTimeout(resolve, 600))
+      response = await send(body)
+      raw = await response.text()
+    }
+
     attempt.status = response.status
-    const raw = await response.text()
 
     if (!response.ok) {
       attempt.error = raw.slice(0, 400)
       attempt.durationMs = Date.now() - startedAt
+
+      // Google embeds its replacement model in retirement errors:
+      // "This model models/gemini-3.8-flash is no longer available. Please
+      // update your code to use models/gemini-4.0-flash". The message also
+      // repeats the retired name, so pick the first model that is not the one
+      // we just tried.
+      const mentioned = [...raw.matchAll(/models\/([a-zA-Z0-9._-]{3,})/g)].map((m) => m[1])
+      const suggested = mentioned.find((name) => name !== model)
+      if (suggested && response.status === 404) {
+        attempt.suggestedModel = suggested
+        diag.suggestedModel = suggested
+      }
+
       diag.attempts.push(attempt)
       console.warn(`[TrustBreak AI][vision] ${model} failed HTTP ${response.status} in ${attempt.durationMs}ms — ${attempt.error}`)
       return null
@@ -756,11 +794,27 @@ async function analyzeScreenshotWithGemini({ screenshotUrl, imageBase64, mimeTyp
   })
 
   diag.status = 'all-models-failed'
-  for (const model of VISION_MODELS) {
+  // Queue, not a fixed list: when Google retires a model it answers 404 with
+  // "use models/X", and we immediately retry with X. Capped so a broken
+  // response can never loop.
+  const queue = [...VISION_MODELS]
+  const attempted = new Set()
+  while (queue.length > 0 && attempted.size < VISION_MODELS.length + 3) {
+    const model = queue.shift()
+    if (!model || attempted.has(model)) continue
+    attempted.add(model)
+
+    diag.suggestedModel = null
     const result = await callGeminiVision({ apiKey: keyInfo.key, model, base64, mimeType: contentType, diag })
     if (result) return result
+
+    if (diag.suggestedModel && !attempted.has(diag.suggestedModel)) {
+      console.log(`[TrustBreak AI][vision] ${model} is retired — following Google's hint to ${diag.suggestedModel}`)
+      queue.unshift(diag.suggestedModel)
+    }
   }
 
+  diag.attemptedModels = [...attempted]
   console.warn('[TrustBreak AI][vision] every model failed — see attempts', diag.attempts)
   return null
 }

@@ -164,20 +164,33 @@ async function analyzeWithClientGemini(payload, diag = null) {
     const startedAt = Date.now()
     const attempt = { model, ok: false, status: null, durationMs: 0 }
     try {
-      const response = await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`,
-        {
+      const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`
+      const headers = {
+        'Content-Type': 'application/json',
+        'x-goog-api-key': apiKey,
+      }
+
+      let response = await fetch(endpoint, {
+        method: 'POST',
+        headers,
+        body: JSON.stringify(buildVisionRequestBody(payload.image_base64, payload.mime_type || 'image/jpeg', model)),
+      })
+      let raw = await response.text()
+
+      // A model that rejects `thinkingConfig` still works without it.
+      if (response.status === 400 && /thinking|Unknown name/i.test(raw)) {
+        attempt.thinkingConfigDropped = true
+        response = await fetch(endpoint, {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'x-goog-api-key': apiKey,
-          },
-          body: JSON.stringify(buildVisionRequestBody(payload.image_base64, payload.mime_type || 'image/jpeg', model)),
-        }
-      )
+          headers,
+          body: JSON.stringify(
+            buildVisionRequestBody(payload.image_base64, payload.mime_type || 'image/jpeg', model, { thinking: false })
+          ),
+        })
+        raw = await response.text()
+      }
 
       attempt.status = response.status
-      const raw = await response.text()
       attempt.durationMs = Date.now() - startedAt
 
       if (!response.ok) {

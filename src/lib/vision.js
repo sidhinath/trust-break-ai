@@ -10,14 +10,20 @@ import { filterValidReasonCodes } from './reasonCodes.js'
  */
 
 /**
- * Models are tried in order. `gemini-flash-latest` is an alias that stays valid
- * across releases, so it keeps working even if a pinned model is retired.
+ * Models are tried in order, newest first.
+ *
+ * Google retires models for new API keys without warning: `gemini-2.5-flash`,
+ * `gemini-2.0-flash` and `gemini-2.5-flash-lite` now answer 404 "no longer
+ * available to new users" and point at `gemini-3.8-flash`. If a model is
+ * retired again, `callGeminiVision()` follows the `models/<name>` hint in the
+ * error message, so vision keeps working without a code change.
  */
 export const VISION_MODELS = [
-  'gemini-2.5-flash',
+  'gemini-3.8-flash',
+  'gemini-3.5-flash-lite',
   'gemini-flash-latest',
+  'gemini-2.5-flash',
   'gemini-2.0-flash',
-  'gemini-2.5-flash-lite',
 ]
 
 /**
@@ -270,17 +276,26 @@ export function normalizeImageBase64(input) {
 
 /**
  * Builds the Gemini generateContent request body.
- * `thinkingConfig` is only sent to 2.5 models (older models reject the field),
- * and thinking is disabled so a screenshot verdict returns in ~2s instead of
- * burning the request timeout.
+ *
+ * Thinking is turned down where the model supports it so a screenshot verdict
+ * returns quickly instead of burning the request timeout:
+ *   - 2.5 models use `thinkingBudget: 0`
+ *   - 3.x models use `thinkingLevel: 'low'`
+ * Pass `{ thinking: false }` to omit the field entirely (used when a model
+ * rejects it, so the call still succeeds).
  */
-export function buildVisionRequestBody(base64, mimeType = 'image/jpeg', model = '') {
+export function buildVisionRequestBody(base64, mimeType = 'image/jpeg', model = '', options = {}) {
   const generationConfig = {
     temperature: 0.2,
     responseMimeType: 'application/json',
   }
-  if (model.includes('2.5')) {
-    generationConfig.thinkingConfig = { thinkingBudget: 0 }
+
+  if (options.thinking !== false) {
+    if (model.includes('2.5')) {
+      generationConfig.thinkingConfig = { thinkingBudget: 0 }
+    } else if (/gemini-3/.test(model)) {
+      generationConfig.thinkingConfig = { thinkingLevel: 'low' }
+    }
   }
 
   return {

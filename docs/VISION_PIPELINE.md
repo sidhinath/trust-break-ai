@@ -13,7 +13,9 @@ ScreenshotScanner.jsx
        │    └─ api/analyze.js
        │         ├─ resolveGeminiKey()           header → GEMINI_API_KEY → aliases
        │         ├─ normalizeImageBase64()       strips data: prefix, validates base64
-       │         ├─ Gemini  (gemini-2.5-flash → gemini-flash-latest → 2.0-flash → 2.5-flash-lite)
+       │         ├─ Gemini  (gemini-3.8-flash → 3.5-flash-lite → flash-latest → 2.5-flash → 2.0-flash)
+       │         │    └─ 404 "use models/X" → automatically retries X
+       │         │    └─ 429/503 → one retry after 600 ms
        │         ├─ Groq Llama-4 Vision          (if GROQ_API_KEY is set)
        │         └─ OpenAI gpt-4.1-mini          (only for screenshot_url)
        └─ if server returned `unverified` → retry with the browser's own Gemini key
@@ -69,6 +71,23 @@ The scanner UI also exposes:
 - a human-readable reason code,
 - a **Run vision diagnostics** button (calls the endpoint above),
 - a collapsible **Scan diagnostics** block with every model attempt.
+
+## Models
+
+Tried in this order (`VISION_MODELS` in `src/lib/vision.js`):
+
+| Order | Model | Notes |
+|---|---|---|
+| 1 | `gemini-3.8-flash` | current model recommended by Google's migration errors |
+| 2 | `gemini-3.5-flash-lite` | cheaper/faster fallback |
+| 3 | `gemini-flash-latest` | floating alias |
+| 4 | `gemini-2.5-flash` | retired for new keys (404), kept for older projects |
+| 5 | `gemini-2.0-flash` | retired for new keys (404), kept for older projects |
+
+Google retires models for new API keys silently. When a model answers 404
+with `Please update your code to use models/X`, the scanner immediately retries
+`X`, so a retirement does not break vision again. Transient 429/503 responses
+get one retry after 600 ms.
 
 ## Degraded reason codes
 

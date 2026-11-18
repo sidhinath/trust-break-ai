@@ -735,7 +735,7 @@ describe('Vision Scanner — /api/analyze screenshot branch', () => {
       assert.strictEqual(res.body.fraud_score, 8)
       assert.strictEqual(res.body.risk_level, 'safe')
       assert.notStrictEqual(res.body.fraud_score, 65)
-      assert.match(calledUrl, /gemini-2\.5-flash/)
+      assert.match(calledUrl, /gemini-3\.8-flash/)
       assert.strictEqual(calledApiKeyHeader, process.env.GEMINI_API_KEY, 'Key must be sent as x-goog-api-key header')
     } finally {
       globalThis.fetch = originalFetch
@@ -772,6 +772,128 @@ describe('Vision Scanner — /api/analyze screenshot branch', () => {
       assert.ok(attempts.length >= 1, 'Every model attempt must be recorded')
       assert.strictEqual(attempts[0].status, 403)
       assert.match(attempts[0].error, /Generative Language API has not been used/)
+    } finally {
+      globalThis.fetch = originalFetch
+      if (originalKey === undefined) delete process.env.GEMINI_API_KEY
+      else process.env.GEMINI_API_KEY = originalKey
+    }
+  })
+
+  it('should follow Google\'s hint when a model has been retired', async () => {
+    const originalFetch = globalThis.fetch
+    const originalKey = process.env.GEMINI_API_KEY
+    process.env.GEMINI_API_KEY = 'AIzaSy_test_key_1234567890abcdef'
+
+    const requestedModels = []
+    globalThis.fetch = async (url) => {
+      const model = String(url).match(/models\/([^:]+):/)?.[1] || ''
+      requestedModels.push(model)
+
+      if (model === 'gemini-3.8-flash') {
+        return {
+          ok: false,
+          status: 404,
+          text: async () => JSON.stringify({
+            error: {
+              code: 404,
+              message: 'This model models/gemini-3.8-flash is no longer available. Please update your code to use models/gemini-4.0-flash for the latest features.',
+            },
+          }),
+        }
+      }
+
+      return {
+        ok: true,
+        status: 200,
+        text: async () => JSON.stringify({
+          candidates: [{
+            content: {
+              parts: [{
+                text: JSON.stringify({
+                  fraud_score: 12,
+                  risk_level: 'safe',
+                  reasons: ['Ordinary screenshot'],
+                  detected_text: 'hello',
+                }),
+              }],
+            },
+          }],
+        }),
+      }
+    }
+
+    try {
+      const req = {
+        method: 'POST',
+        headers: {},
+        body: { type: 'screenshot', payload: { image_base64: 'iVBORw0KGgoAAAANSUhEUg==', mime_type: 'image/jpeg' } },
+      }
+      const res = createMockRes()
+
+      await analyzeHandler(req, res)
+
+      assert.strictEqual(res.body.source, 'gemini')
+      assert.strictEqual(res.body.model, 'gemini-4.0-flash')
+      assert.ok(
+        requestedModels.includes('gemini-4.0-flash'),
+        `Expected the replacement model to be requested, got ${requestedModels.join(', ')}`
+      )
+    } finally {
+      globalThis.fetch = originalFetch
+      if (originalKey === undefined) delete process.env.GEMINI_API_KEY
+      else process.env.GEMINI_API_KEY = originalKey
+    }
+  })
+
+  it('should retry once when Gemini is briefly overloaded', async () => {
+    const originalFetch = globalThis.fetch
+    const originalKey = process.env.GEMINI_API_KEY
+    process.env.GEMINI_API_KEY = 'AIzaSy_test_key_1234567890abcdef'
+
+    let calls = 0
+    globalThis.fetch = async () => {
+      calls += 1
+      if (calls === 1) {
+        return {
+          ok: false,
+          status: 503,
+          text: async () => '{"error":{"code":503,"message":"This model is currently experiencing high demand."}}',
+        }
+      }
+      return {
+        ok: true,
+        status: 200,
+        text: async () => JSON.stringify({
+          candidates: [{
+            content: {
+              parts: [{
+                text: JSON.stringify({
+                  fraud_score: 91,
+                  risk_level: 'scam',
+                  reasons: ['Fake bank notice asking for an OTP'],
+                  detected_text: 'Your account is locked. Share the OTP now.',
+                }),
+              }],
+            },
+          }],
+        }),
+      }
+    }
+
+    try {
+      const req = {
+        method: 'POST',
+        headers: {},
+        body: { type: 'screenshot', payload: { image_base64: 'iVBORw0KGgoAAAANSUhEUg==', mime_type: 'image/jpeg', debug: true } },
+      }
+      const res = createMockRes()
+
+      await analyzeHandler(req, res)
+
+      assert.strictEqual(res.body.fraud_score, 91)
+      assert.strictEqual(res.body.risk_level, 'scam')
+      assert.strictEqual(calls, 2, 'A 503 must trigger exactly one retry')
+      assert.ok(res.body.vision_diagnostics.attempts[0].transientRetry, 'The retry must be recorded in diagnostics')
     } finally {
       globalThis.fetch = originalFetch
       if (originalKey === undefined) delete process.env.GEMINI_API_KEY
@@ -902,8 +1024,8 @@ describe('Vision diagnostics — key resolution & health endpoint', () => {
       const res = createMockRes()
       await visionHealthHandler({ method: 'GET', headers: {}, query: { probe: '1' } }, res)
 
-      assert.match(probedUrl, /gemini-2\.5-flash:generateContent/)
-      assert.strictEqual(res.body.probe.workingModel, 'gemini-2.5-flash')
+      assert.match(probedUrl, /gemini-3\.8-flash:generateContent/)
+      assert.strictEqual(res.body.probe.workingModel, 'gemini-3.8-flash')
       assert.strictEqual(res.body.probe.attempts[0].status, 200)
       assert.strictEqual(res.body.probe.attempts[0].text, 'ok')
       assert.strictEqual(res.body.keySource, 'GEMINI_API_KEY env var')
