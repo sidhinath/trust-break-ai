@@ -1,6 +1,8 @@
 import React, { useState, useRef } from "react";
 import { useQueryClient } from "@tanstack/react-query";
-import { Image, Upload, X, FileSearch, Info, QrCode, Users } from "lucide-react";
+import { Link } from "react-router-dom";
+import { createPageUrl } from "@/utils";
+import { Image, Upload, X, FileSearch, Info, QrCode, Users, AlertTriangle, RefreshCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import ScannerHeader from "../components/scanner/ScannerHeader";
 import FraudScoreDisplay from "../components/scanner/FraudScoreDisplay";
@@ -146,6 +148,15 @@ export default function ScreenshotScanner() {
 
       const res = await analyzeScreenshot(file);
       setResult(res);
+
+      // Never record or alert on a scan that was not actually analyzed — the
+      // old code logged a fake 65/100 "suspicious" verdict for every image.
+      const unverified = Boolean(res?.unverified) || res?.analysis_status === 'vision_unavailable';
+      if (unverified) {
+        setScanError("");
+        return;
+      }
+
       notify(res.risk_level, "screenshot");
 
       await createScanHistory({
@@ -167,6 +178,10 @@ export default function ScreenshotScanner() {
   };
 
   const extractedUrl = extractUrlFromText(result?.detected_text || "");
+  const isUnverified = Boolean(result?.unverified) || result?.analysis_status === 'vision_unavailable';
+  const unverifiedDetail = result?.degraded_reason === 'no-image-payload'
+    ? 'The image could not be uploaded to the vision service.'
+    : 'The vision engine is not configured on this deployment, or it did not respond in time.';
 
   return (
     <ProtectedPage feature="Vision Screenshot Scanner">
@@ -330,13 +345,50 @@ export default function ScreenshotScanner() {
               <Info className="w-4 h-4 text-rose-500 mt-0.5 shrink-0" />
               <div className="text-xs" style={{ color: 'var(--tb-text-dim)' }}>
                 <p className="font-bold text-rose-500">{scanError}</p>
-                <p className="mt-1">Fallback analysis will evaluate extracted signals automatically.</p>
+                <p className="mt-1">No risk score is produced for an image that could not be read — nothing is guessed.</p>
               </div>
             </div>
           )}
 
           {result && !scanning && (
             <div className="space-y-6">
+              {isUnverified ? (
+                <div className="tb-card p-5 border-amber-500/40 space-y-3">
+                  <div className="flex items-start gap-3">
+                    <div className="w-10 h-10 rounded-xl bg-amber-500/15 border border-amber-500/30 flex items-center justify-center shrink-0">
+                      <AlertTriangle className="w-5 h-5 text-amber-500" />
+                    </div>
+                    <div className="space-y-1">
+                      <p className="text-sm font-bold text-amber-500">Image not analyzed — no risk score produced</p>
+                      <p className="text-xs leading-relaxed" style={{ color: 'var(--tb-text-dim)' }}>
+                        {unverifiedDetail} TrustBreak AI will not guess: there is no verdict because the image
+                        itself was never evaluated. This is not a &quot;safe&quot; result and not a &quot;scam&quot; result.
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="text-[11px] font-mono rounded-lg border px-3 py-2"
+                    style={{ borderColor: 'var(--tb-border)', background: 'var(--tb-surface-2)', color: 'var(--tb-text-dim)' }}>
+                    reason: {result.degraded_reason || 'vision-unavailable'}
+                  </div>
+
+                  <div className="flex flex-col sm:flex-row gap-2 pt-1">
+                    <Button
+                      onClick={handleScan}
+                      disabled={scanning}
+                      className="h-10 rounded-xl font-bold text-white bg-amber-600 hover:bg-amber-500 transition-all text-xs cursor-pointer">
+                      <RefreshCw className="w-3.5 h-3.5 mr-1.5" /> Retry analysis
+                    </Button>
+                    <Link
+                      to={createPageUrl("Settings")}
+                      className="h-10 px-4 rounded-xl border font-bold text-xs flex items-center justify-center transition-colors hover:border-cyan-400 hover:text-cyan-400"
+                      style={{ borderColor: 'var(--tb-border)', color: 'var(--tb-text-dim)' }}>
+                      Configure Gemini Vision key
+                    </Link>
+                  </div>
+                </div>
+              ) : (
+              <>
               {/* Senior Plain-Language Explanation */}
               <SeniorScanExplanation result={result} rawInput={result.detected_text || "Screenshot scan"} scanType="screenshot" />
 
@@ -361,7 +413,9 @@ export default function ScreenshotScanner() {
                       style={{ color: 'var(--tb-text-dim)' }}>
                       <FileSearch className="w-3.5 h-3.5 text-pink-500" /> Extracted OCR Text from Image
                     </span>
-                    <span className="text-[10px] font-mono text-cyan-600 dark:text-cyan-400">Gemini Vision OCR</span>
+                    <span className="text-[10px] font-mono text-cyan-600 dark:text-cyan-400">
+                      {result.source === 'gemini' ? 'Gemini Vision OCR' : 'OCR Text'}
+                    </span>
                   </div>
                   <div className="p-3 rounded-xl border text-xs font-mono max-h-36 overflow-y-auto whitespace-pre-wrap leading-relaxed"
                     style={{ background: 'var(--tb-surface-2)', borderColor: 'var(--tb-border)', color: 'var(--tb-text)' }}>
@@ -400,6 +454,8 @@ export default function ScreenshotScanner() {
                   reasons: result.reasons,
                 }}
               />
+              </>
+              )}
             </div>
           )}
         </>

@@ -998,35 +998,60 @@ export function analyzeScamReportContent(form) {
   }
 }
 
-export function analyzeScreenshotFallback(detectedText = '') {
-  const norm = (detectedText || '').toLowerCase()
-  const reasons = [
-    'Visual layout scanned for brand impersonation & UI spoofing vectors',
-    'OCR text vector parsed for urgency coercion and financial fraud prompts',
-    'Payment QR code & account authorization fields evaluated'
-  ]
-  if (norm) {
-    if (/\b(urgent|immediately|blocked|suspended|action required)\b/i.test(norm)) {
-      reasons.push('High-pressure urgency markers detected in image text')
-    }
-    if (/\b(upi|collect|pay|transfer|rupees|inr|bank|otp|pin)\b/i.test(norm)) {
-      reasons.push('Financial transfer or credential request keywords identified')
+/**
+ * Text-only fallback for screenshot scans.
+ *
+ * A screenshot verdict requires the actual pixels. Earlier versions returned a
+ * hardcoded 65/100 for every image that reached this path, which is why every
+ * scan looked identical (and why a harmless terminal screenshot was reported as
+ * a dangerous scam). Now:
+ *
+ *  - OCR text available -> score the extracted text with the same heuristic
+ *    engine used for messages, and label the result as text-only.
+ *  - No OCR text         -> return an explicit "not analyzed" result with a
+ *    neutral score. Callers must render it as unverified instead of a verdict.
+ */
+export function analyzeScreenshotFallback(detectedText = '', options = {}) {
+  const text = normalize(detectedText || '')
+
+  if (text.length < 8) {
+    return {
+      fraud_score: 0,
+      risk_level: 'safe',
+      confidence: 'low',
+      unverified: true,
+      analysis_status: 'vision_unavailable',
+      reasons: [],
+      analysis:
+        'This image was not analyzed. No vision/OCR engine was available, so TrustBreak AI could not read the screenshot and did not produce a risk score. Nothing here says the image is safe or dangerous.',
+      ai_analysis: 'Vision engine unavailable — image not analyzed.',
+      detected_text: detectedText || '',
+      attack_intent: null,
+      threat_reconstruction: [],
+      reasonCodes: [],
+      source: 'offline-heuristic',
+      engine: 'heuristic',
+      degraded: true,
+      degraded_reason: options.reason || 'vision-unavailable',
     }
   }
 
-  const score = norm && (reasons.length > 3) ? 82 : 65
-  const riskLevel = scoreToRisk(score)
+  // OCR text is available: reuse the deterministic text engine so the verdict
+  // reflects what the image actually said.
+  const textResult = analyzeMessageContent(detectedText)
 
   return {
-    fraud_score: score,
-    risk_level: riskLevel,
-    confidence: 'high',
-    reasons,
-    analysis: 'Screenshot processed. Multi-modal vision scanned for suspicious text, brand mimicry, and unauthorized payment QR prompts.',
+    ...textResult,
     detected_text: detectedText,
-    threat_reconstruction: reconstructAttackChain(detectedText || 'Screenshot image scan', '', riskLevel),
-    attack_intent: inferAttackerIntent(detectedText || 'Screenshot visual deception', '', riskLevel),
-    reasonCodes: filterValidReasonCodes(inferReasonCodes(detectedText || 'Screenshot', '', {}, riskLevel)),
-    source: 'offline-heuristic'
+    unverified: false,
+    analysis_status: 'text_only',
+    degraded: true,
+    degraded_reason: options.reason || 'vision-unavailable-text-only',
+    analysis: `Vision model unavailable — this verdict is based only on the text extracted from the image (OCR), not on the visual layout. ${textResult.analysis}`,
+    reasons: [
+      'Verdict derived from OCR text only — visual/brand-layout checks did not run',
+      ...textResult.reasons,
+    ],
+    reasonCodes: filterValidReasonCodes(textResult.reasonCodes || []),
   }
 }

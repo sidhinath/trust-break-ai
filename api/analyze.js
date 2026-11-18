@@ -652,7 +652,8 @@ async function analyzeScreenshotWithGemini(screenshotUrl, imageBase64 = null, mi
 
     if (!base64) return null
 
-    const prompt = `Analyze this screenshot for cyber scam, phishing, brand impersonation, urgency manipulation, payment fraud, QR code traps, or social engineering.
+    const prompt = `You are TrustBreak AI, a multi-modal cyber-fraud detection engine.
+Analyze this screenshot for cyber scam, phishing, brand impersonation, urgency manipulation, payment fraud, QR code traps, or social engineering.
 Return strict JSON only with keys:
 - fraud_score (number 0-100)
 - risk_level (safe|suspicious|scam)
@@ -661,7 +662,13 @@ Return strict JSON only with keys:
 - analysis (professional summary of the visual threat)
 - detected_text (all OCR extracted text from the image)
 - attack_intent (what the fraudster is attempting to achieve)
-${REASON_CODES_INSTRUCTION}`
+${REASON_CODES_INSTRUCTION}
+
+Scoring rules (follow them exactly):
+- 0-25 = safe: ordinary screenshots such as app dashboards, terminals, code editors, photos, receipts, or normal chats with no deception cues. Return risk_level "safe" and few or no reasons.
+- 26-60 = suspicious: some pressure/financial wording or an unverifiable claim, but no clear malicious intent.
+- 61-100 = scam: explicit credential/OTP requests, payment demands to unverified parties, fake bank/government notices, brand impersonation, or lookalike payment links.
+Only flag what is actually visible in the image. Do not assume fraud when the screenshot is an ordinary user interface or a technical/developer screen.`
 
     for (const model of GEMINI_MODELS) {
       try {
@@ -972,21 +979,73 @@ export default async function handler(req, res) {
     }
 
     if (type === 'screenshot') {
-      let ai = null
-      try {
-        ai = await withTimeout(
-          (async () => {
-            const gemini = await analyzeScreenshotWithGemini(payload?.screenshot_url, payload?.image_base64, payload?.mime_type, req)
-            if (gemini) return gemini
-            return analyzeScreenshotWithOpenAI(payload?.screenshot_url)
-          })(),
-          AI_TIMEOUT_MS * 2 // give screenshots extra time
-        )
-      } catch (err) {
-        console.warn('[TrustBreak AI] Vision AI timed out or failed:', err.message)
+      const hasImage = Boolean(payload?.screenshot_url || payload?.image_base64)
+      const visionDiagnostics = {
+        hasImage,
+        imageBytes: typeof payload?.image_base64 === 'string' ? payload.image_base64.length : 0,
+        mimeType: payload?.mime_type || null,
+        geminiConfigured: Boolean(getValidGeminiKey(req)),
+        openaiConfigured: Boolean(process.env.OPENAI_API_KEY),
       }
 
-      res.status(200).json(ai || { ...analyzeScreenshotFallback(), source: 'offline-heuristic', reasonCodes: [], explanation: null })
+      if (!hasImage) {
+        console.warn('[TrustBreak AI] screenshot request carried no image payload — refusing to invent a score')
+      }
+
+      let ai = null
+      if (hasImage) {
+        try {
+          ai = await withTimeout(
+            (async () => {
+              const gemini = await analyzeScreenshotWithGemini(payload?.screenshot_url, payload?.image_base64, payload?.mime_type, req)
+              if (gemini) return gemini
+              return analyzeScreenshotWithOpenAI(payload?.screenshot_url)
+            })(),
+            AI_TIMEOUT_MS * 2 // give screenshots extra time
+          )
+        } catch (err) {
+          console.warn('[TrustBreak AI] Vision AI timed out or failed:', err.message)
+        }
+      }
+
+      if (ai) {
+        const verdict = { ...ai, engine: ai.source, degraded: false }
+        if (debug) verdict.vision_diagnostics = visionDiagnostics
+        console.log('[TrustBreak AI][verdict]', {
+          type,
+          engine: verdict.engine,
+          score: verdict.fraud_score,
+          risk: verdict.risk_level,
+          hasOcrText: Boolean(verdict.detected_text),
+          elapsedMs: Date.now() - requestStartedAt,
+        })
+        res.status(200).json(verdict)
+        return
+      }
+
+      // Never fabricate a score: without an image (or without a working vision
+      // key) the honest answer is "not analyzed".
+      const fallback = {
+        ...analyzeScreenshotFallback(payload?.detected_text || '', {
+          reason: hasImage ? 'vision-call-failed' : 'no-image-payload',
+        }),
+        source: 'offline-heuristic',
+        engine: 'heuristic',
+        degraded: true,
+        degraded_reason: hasImage ? 'vision-unavailable' : 'no-image-payload',
+        explanation: null,
+      }
+      if (debug) fallback.vision_diagnostics = visionDiagnostics
+      console.warn('[TrustBreak AI][verdict]', {
+        type,
+        engine: 'heuristic',
+        degraded: true,
+        status: fallback.analysis_status,
+        reason: fallback.degraded_reason,
+        ...visionDiagnostics,
+        elapsedMs: Date.now() - requestStartedAt,
+      })
+      res.status(200).json(fallback)
       return
     }
 

@@ -7,6 +7,7 @@ import {
   findSimilarScams,
   analyzeMessageContent,
   analyzeUrlContent,
+  analyzeScreenshotFallback,
   analyzePageContext,
   scoreToRisk,
   scoreToBand,
@@ -300,6 +301,7 @@ import {
   getSupabaseServiceClient,
 } from '../api/analyze.js'
 import syncFeedsHandler from '../api/cron/sync-feeds.js'
+import analyzeHandler from '../api/analyze.js'
 import voiceHandler from '../api/analyze-voice.js'
 import {
   analyzeMessage,
@@ -572,6 +574,135 @@ describe('Audit Repairs — Client Production Offline Fallback', () => {
       assert.ok(reportResult, 'Must return fallback scam report analysis')
     } finally {
       globalThis.fetch = originalFetch
+    }
+  })
+})
+
+describe('Vision Scanner — honest screenshot scoring', () => {
+  it('should not invent a risk score when the image was never analyzed', () => {
+    const res = analyzeScreenshotFallback()
+
+    assert.strictEqual(res.unverified, true)
+    assert.strictEqual(res.analysis_status, 'vision_unavailable')
+    assert.strictEqual(res.fraud_score, 0)
+    assert.strictEqual(res.confidence, 'low')
+    assert.deepStrictEqual(res.reasons, [], 'An unanalyzed image must not claim evidence')
+    assert.ok(!/scam detected/i.test(res.analysis), 'Must not assert a scam verdict')
+  })
+
+  it('should not return the same hardcoded 65/100 for every screenshot', () => {
+    const benign = analyzeScreenshotFallback('Ubuntu terminal — npm test — 74 tests passing, 0 failures, duration 549ms')
+    const scam = analyzeScreenshotFallback('URGENT: Your SBI bank account is blocked today. Share OTP and UPI PIN immediately to avoid suspension.')
+
+    assert.notStrictEqual(benign.fraud_score, scam.fraud_score, 'Different images must not share one score')
+    assert.ok(benign.fraud_score < 61, `Benign developer text must not reach the scam band (got ${benign.fraud_score})`)
+    assert.ok(scam.fraud_score >= 61, `Credential request text must reach the scam band (got ${scam.fraud_score})`)
+    assert.strictEqual(benign.unverified, false)
+    assert.strictEqual(benign.analysis_status, 'text_only')
+  })
+
+  it('should serialize the image into the /api/analyze request body', async () => {
+    const originalFetch = globalThis.fetch
+    const calls = []
+    globalThis.fetch = async (url, options = {}) => {
+      calls.push({ url: String(url), body: options.body })
+      return {
+        ok: true,
+        headers: { get: () => 'application/json' },
+        text: async () => JSON.stringify({ fraud_score: 12, risk_level: 'safe', source: 'gemini' }),
+      }
+    }
+
+    try {
+      const res = await analyzeScreenshot({ image_base64: 'iVBORw0KGgoAAAANSUhEUg==', mime_type: 'image/jpeg' })
+      assert.strictEqual(res.source, 'gemini')
+
+      const sent = JSON.parse(calls[0].body)
+      assert.strictEqual(sent.type, 'screenshot')
+      assert.strictEqual(sent.payload.image_base64, 'iVBORw0KGgoAAAANSUhEUg==', 'Image bytes must reach the server')
+      assert.strictEqual(sent.payload.mime_type, 'image/jpeg')
+    } finally {
+      globalThis.fetch = originalFetch
+    }
+  })
+})
+
+describe('Vision Scanner — /api/analyze screenshot branch', () => {
+  function createMockRes() {
+    return {
+      statusCode: 200,
+      body: null,
+      headers: {},
+      setHeader(k, v) { this.headers[k] = v },
+      status(code) { this.statusCode = code; return this },
+      json(payload) { this.body = payload; return this },
+      end() { return this },
+    }
+  }
+
+  it('should return an unverified result instead of a fabricated score when no image arrives', async () => {
+    const req = { method: 'POST', headers: {}, body: { type: 'screenshot', payload: {} } }
+    const res = createMockRes()
+
+    await analyzeHandler(req, res)
+
+    assert.strictEqual(res.statusCode, 200)
+    assert.strictEqual(res.body.unverified, true)
+    assert.strictEqual(res.body.analysis_status, 'vision_unavailable')
+    assert.strictEqual(res.body.fraud_score, 0)
+    assert.strictEqual(res.body.degraded_reason, 'no-image-payload')
+  })
+
+  it('should score a benign image with the vision engine instead of the old fixed 65', async () => {
+    const originalFetch = globalThis.fetch
+    const originalKey = process.env.GEMINI_API_KEY
+    process.env.GEMINI_API_KEY = 'AIzaSy_test_key_1234567890abcdef'
+
+    globalThis.fetch = async (url) => {
+      if (String(url).includes('generativelanguage.googleapis.com')) {
+        return {
+          ok: true,
+          json: async () => ({
+            candidates: [{
+              content: {
+                parts: [{
+                  text: JSON.stringify({
+                    fraud_score: 8,
+                    risk_level: 'safe',
+                    confidence: 'high',
+                    reasons: ['Ordinary developer terminal window with no fraud cues'],
+                    analysis: 'This is a normal terminal screenshot running a test suite.',
+                    detected_text: '$ npm test — 74 passing tests, 0 failures',
+                    attack_intent: null,
+                  }),
+                }],
+              },
+            }],
+          }),
+        }
+      }
+      throw new Error(`Unexpected fetch: ${url}`)
+    }
+
+    try {
+      const req = {
+        method: 'POST',
+        headers: {},
+        body: { type: 'screenshot', payload: { image_base64: 'iVBORw0KGgoAAAANSUhEUg==', mime_type: 'image/jpeg' } },
+      }
+      const res = createMockRes()
+
+      await analyzeHandler(req, res)
+
+      assert.strictEqual(res.statusCode, 200)
+      assert.strictEqual(res.body.source, 'gemini')
+      assert.strictEqual(res.body.fraud_score, 8)
+      assert.strictEqual(res.body.risk_level, 'safe')
+      assert.notStrictEqual(res.body.fraud_score, 65)
+    } finally {
+      globalThis.fetch = originalFetch
+      if (originalKey === undefined) delete process.env.GEMINI_API_KEY
+      else process.env.GEMINI_API_KEY = originalKey
     }
   })
 })

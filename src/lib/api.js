@@ -136,7 +136,8 @@ async function analyzeWithClientGemini(payload) {
   if (!apiKey || !payload?.image_base64) return null
 
   const models = ['gemini-1.5-flash', 'gemini-1.5-pro', 'gemini-2.0-flash-exp']
-  const prompt = `Analyze this screenshot for cyber scam, phishing, brand impersonation, urgency manipulation, payment fraud, QR code traps, or social engineering.
+  const prompt = `You are TrustBreak AI, a multi-modal cyber-fraud detection engine.
+Analyze this screenshot for cyber scam, phishing, brand impersonation, urgency manipulation, payment fraud, QR code traps, or social engineering.
 Return strict JSON only with keys:
 - fraud_score (number 0-100)
 - risk_level (safe|suspicious|scam)
@@ -145,7 +146,13 @@ Return strict JSON only with keys:
 - analysis (professional summary of the visual threat)
 - detected_text (all OCR extracted text from the image)
 - attack_intent (what the fraudster is attempting to achieve)
-- reasonCodes (array of string codes)`
+- reasonCodes (array of string codes)
+
+Scoring rules (follow them exactly):
+- 0-25 = safe: ordinary screenshots such as app dashboards, terminals, code editors, photos, receipts, or normal chats with no deception cues. Return risk_level "safe" and few or no reasons.
+- 26-60 = suspicious: some pressure/financial wording or an unverifiable claim, but no clear malicious intent.
+- 61-100 = scam: explicit credential/OTP requests, payment demands to unverified parties, fake bank/government notices, brand impersonation, or lookalike payment links.
+Only flag what is actually visible in the image. Do not assume fraud when the screenshot is an ordinary user interface or a technical/developer screen.`
 
   for (const model of models) {
     try {
@@ -445,7 +452,11 @@ async function postAnalyze(type, payload) {
     })
   }
   if (type === 'report') return analyzeScamReportContent(payload || {})
-  if (type === 'screenshot') return analyzeScreenshotFallback(payload?.detected_text || '')
+  if (type === 'screenshot') {
+    return analyzeScreenshotFallback(payload?.detected_text || '', {
+      reason: payload?.image_base64 || payload?.screenshot_url ? 'vision-call-failed' : 'no-image-payload',
+    })
+  }
   throw new Error('Analysis request failed')
 }
 
@@ -510,7 +521,106 @@ export function analyzeReport(payload) {
   return postAnalyze('report', payload)
 }
 
-export function analyzeScreenshot(payload = {}) {
+// Longest edge used when downscaling an upload before it is sent to the vision
+// engine. Keeps the JSON body well inside serverless request limits (a 10MB PNG
+// becomes a ~250KB JPEG) and cuts round-trip time without hurting OCR accuracy.
+const VISION_MAX_EDGE = 1280
+const VISION_JPEG_QUALITY = 0.82
+
+async function imageToVisionBase64(file) {
+  if (typeof document === 'undefined' || typeof Image === 'undefined') {
+    throw new Error('Image preprocessing is not available in this environment')
+  }
+
+  const objectUrl = URL.createObjectURL(file)
+  try {
+    const img = await new Promise((resolve, reject) => {
+      const el = new Image()
+      el.onload = () => resolve(el)
+      el.onerror = () => reject(new Error('Selected image could not be decoded'))
+      el.src = objectUrl
+    })
+
+    const width = img.naturalWidth || img.width
+    const height = img.naturalHeight || img.height
+    const longest = Math.max(width, height) || 1
+    const scale = longest > VISION_MAX_EDGE ? VISION_MAX_EDGE / longest : 1
+
+    const canvas = document.createElement('canvas')
+    canvas.width = Math.max(1, Math.round(width * scale))
+    canvas.height = Math.max(1, Math.round(height * scale))
+
+    const ctx = canvas.getContext('2d')
+    if (!ctx) throw new Error('Canvas is unavailable for image preprocessing')
+    ctx.drawImage(img, 0, 0, canvas.width, canvas.height)
+
+    const dataUrl = canvas.toDataURL('image/jpeg', VISION_JPEG_QUALITY)
+    const base64 = dataUrl.split(',')[1] || ''
+    if (!base64) throw new Error('Image encoding failed')
+
+    return { image_base64: base64, mime_type: 'image/jpeg' }
+  } finally {
+    URL.revokeObjectURL(objectUrl)
+  }
+}
+
+/**
+ * Normalizes whatever the caller has (File/Blob, data URL, raw base64, remote
+ * URL, or a ready-made payload) into the shape /api/analyze expects.
+ */
+async function toScreenshotPayload(input) {
+  if (!input) return {}
+
+  if (typeof input === 'string') {
+    const value = input.trim()
+    if (!value) return {}
+    if (value.startsWith('data:')) {
+      const [meta, data] = value.split(',')
+      return {
+        image_base64: data || '',
+        mime_type: meta?.match(/data:([^;]+)/)?.[1] || 'image/png',
+      }
+    }
+    if (/^https?:\/\//i.test(value)) return { screenshot_url: value }
+    return { image_base64: value, mime_type: 'image/png' }
+  }
+
+  if (typeof Blob !== 'undefined' && input instanceof Blob) {
+    return imageToVisionBase64(input)
+  }
+
+  if (typeof input === 'object') {
+    if (input.image_base64) {
+      return { image_base64: input.image_base64, mime_type: input.mime_type || 'image/png' }
+    }
+    if (input.screenshot_url) {
+      return { screenshot_url: input.screenshot_url, mime_type: input.mime_type }
+    }
+    if (input.detected_text) {
+      return { detected_text: input.detected_text }
+    }
+  }
+
+  return {}
+}
+
+/**
+ * Analyze a screenshot with the vision engine.
+ *
+ * Accepts a File/Blob (what the uploader gives us), a data URL, base64, or a
+ * remote URL. The image is genuinely serialized into the request body — the old
+ * implementation passed the File object straight to JSON.stringify(), which
+ * produced `{}` so the server never received any image and every scan fell back
+ * to the same hardcoded score.
+ */
+export async function analyzeScreenshot(input = null) {
+  let payload = {}
+  try {
+    payload = await toScreenshotPayload(input)
+  } catch (err) {
+    console.warn('Screenshot preprocessing failed:', err?.message)
+    payload = {}
+  }
   return postAnalyze('screenshot', payload)
 }
 
