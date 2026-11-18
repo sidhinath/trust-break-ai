@@ -303,7 +303,7 @@ import {
 import syncFeedsHandler from '../api/cron/sync-feeds.js'
 import analyzeHandler from '../api/analyze.js'
 import visionHealthHandler from '../api/vision-health.js'
-import { resolveGeminiKey } from '../src/lib/vision.js'
+import { inspectKey, resolveGeminiKey, sanitizeKeyValue } from '../src/lib/vision.js'
 import voiceHandler from '../api/analyze-voice.js'
 import {
   analyzeMessage,
@@ -809,6 +809,50 @@ describe('Vision diagnostics — key resolution & health endpoint', () => {
     assert.strictEqual(resolved.key, null)
     const geminiCheck = resolved.checked.find((c) => c.source === 'GEMINI_API_KEY')
     assert.strictEqual(geminiCheck.status, 'is a placeholder value')
+  })
+
+  it('should recover a valid key that was pasted with quotes, whitespace or an env prefix', () => {
+    const quoted = inspectKey('"AIzaSy_quoted_key_1234567890abcd"')
+    assert.ok(quoted.key, 'Surrounding quotes must not disable vision')
+    assert.strictEqual(quoted.cleaned, true)
+
+    const prefixed = inspectKey('GEMINI_API_KEY=AIzaSy_prefixed_key_1234567890ab')
+    assert.ok(prefixed.key, 'A pasted KEY=value line must not disable vision')
+    assert.ok(prefixed.key.startsWith('AIza'))
+
+    const spaces = inspectKey('  AIzaSy_line\nbreak key_1234567890abcdef  ')
+    assert.ok(spaces.key)
+    assert.ok(!/\s/.test(spaces.key))
+
+    const smartQuotes = inspectKey('\u201CAIzaSy_smart_quote_key_1234567890ab\u201D')
+    assert.ok(smartQuotes.key, 'Smart quotes from a document must not disable vision')
+    assert.strictEqual(sanitizeKeyValue('\uFEFFAIzaSy_bom_key_1234567890abcdef '), 'AIzaSy_bom_key_1234567890abcdef')
+  })
+
+  it('should name the exact character that makes a key unusable', () => {
+    const result = inspectKey('AIzaSy_key.with.dots.1234567890abcd')
+
+    assert.strictEqual(result.key, null)
+    assert.match(result.problem, /unexpected characters/)
+    assert.match(result.problem, /position \d+/)
+  })
+
+  it('should explain that a configured-but-invalid key needs re-saving', async () => {
+    const originalKey = process.env.GEMINI_API_KEY
+    process.env.GEMINI_API_KEY = 'AIzaSy_key.with.dots.1234567890abcd'
+
+    try {
+      const res = createMockRes()
+      await visionHealthHandler({ method: 'GET', headers: {}, query: {} }, res)
+
+      assert.strictEqual(res.body.configured, false)
+      assert.match(res.body.hint, /GEMINI_API_KEY is set but unusable/)
+      assert.match(res.body.hint, /position \d+/)
+      assert.ok(!JSON.stringify(res.body).includes('AIzaSy_key.with'), 'Must never echo the raw key')
+    } finally {
+      if (originalKey === undefined) delete process.env.GEMINI_API_KEY
+      else process.env.GEMINI_API_KEY = originalKey
+    }
   })
 
   it('should report a missing key from /api/vision-health without leaking secrets', async () => {

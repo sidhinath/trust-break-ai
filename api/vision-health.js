@@ -40,6 +40,7 @@ export default async function handler(req, res) {
     configured: Boolean(resolved.key),
     keySource: resolved.source,
     keyFingerprint: keyFingerprint(resolved.key),
+    keyWasCleaned: Boolean(resolved.cleaned),
     checkedSources: resolved.checked,
     envNamesAccepted: [...GEMINI_KEY_ENV_NAMES],
     models: [...VISION_MODELS],
@@ -51,11 +52,23 @@ export default async function handler(req, res) {
   }
 
   if (!resolved.key) {
+    // Distinguish "nobody set a key" from "a key is set but unusable" — the
+    // second case used to look identical in the UI while the real problem was
+    // a stray quote or newline in the pasted value.
+    const rejected = resolved.checked.filter(
+      (entry) =>
+        entry.source !== 'x-gemini-api-key header' &&
+        entry.status &&
+        entry.status !== 'ok' &&
+        entry.status !== 'is not set'
+    )
+
     res.status(200).json({
       ...report,
       ok: false,
-      hint:
-        'No usable Gemini key found. Set GEMINI_API_KEY in Vercel → Project → Settings → Environment Variables (Production), then Redeploy. Or paste a key in the app under Security & Settings → AI Keys.',
+      hint: rejected.length
+        ? `${rejected[0].source} is set but unusable (${rejected[0].status}). Re-save that variable in Vercel with the raw key only — no quotes, no "KEY=", no spaces or line breaks — then Redeploy.`
+        : 'No usable Gemini key found. Set GEMINI_API_KEY in Vercel → Project → Settings → Environment Variables (Production), then Redeploy. Or paste a key in the app under Security & Settings → AI Keys.',
     })
     return
   }

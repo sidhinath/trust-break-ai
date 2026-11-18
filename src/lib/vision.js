@@ -68,22 +68,90 @@ Scoring rules (follow them exactly):
 Only flag what is actually visible in the image. Do not assume fraud when the screenshot is an ordinary user interface or a technical/developer screen.`
 
 /**
- * Validates an API key value and reports *why* it is unusable.
+ * Normalises a raw key value copied from a dashboard, `.env` file or docs.
+ *
+ * Values pasted into Vercel's "Value" box very often arrive with a trailing
+ * newline, surrounding quotes, smart quotes, a `KEY=value` prefix or a
+ * `Bearer ` prefix. Those all made the old validator reject an otherwise
+ * perfectly valid Google key, which is why vision reported "unavailable"
+ * even though the environment variable existed.
  */
-export function inspectKey(value) {
-  if (value === undefined || value === null || value === '') return { key: null, problem: 'is not set' }
-  if (typeof value !== 'string') return { key: null, problem: 'is not a string' }
-  const trimmed = value.trim().replace(/^["']|["']$/g, '')
-  if (!trimmed) return { key: null, problem: 'is empty' }
-  const lower = trimmed.toLowerCase()
+export function sanitizeKeyValue(rawValue) {
+  if (typeof rawValue !== 'string') return ''
+
+  let value = rawValue
+    // Zero-width characters sneak in from copy/paste out of docs.
+    .replace(/[\u200B-\u200D\u2060\uFEFF]/g, '')
+    // Smart/typographic quotes normalised to a plain double quote.
+    .replace(/[\u2018\u2019\u201A\u201B\u201C\u201D\u201E\u201F\u2032\u2033]/g, '"')
+    .trim()
+
+  // A value like `GEMINI_API_KEY=AIza...` (env-file line pasted whole).
+  const assignment = value.match(/^\s*(?:export\s+)?[A-Z][A-Z0-9_]{2,}\s*=\s*([\s\S]+)$/)
+  if (assignment) value = assignment[1]
+
+  return value
+    .replace(/^Bearer\s+/i, '')
+    // API keys never contain whitespace; leaving it in guarantees a 400.
+    .replace(/[\s\u00A0\u1680\u2000-\u200A\u202F\u205F\u3000]+/g, '')
+    .replace(/^["'`]+|["'`]+$/g, '')
+}
+
+/**
+ * Points at the first character that makes a key unusable, without printing
+ * the secret itself. Reporting the position is what turns "vision unavailable"
+ * into an actionable message.
+ */
+function describeInvalidCharacter(value) {
+  const chars = Array.from(value)
+  const index = chars.findIndex((ch) => !/[A-Za-z0-9_-]/.test(ch))
+  if (index < 0) return null
+
+  const ch = chars[index]
+  const code = ch.codePointAt(0)
+  const label = /\s/.test(ch)
+    ? 'whitespace'
+    : code < 32 || code > 126
+      ? `non-ASCII character (U+${code.toString(16).toUpperCase().padStart(4, '0')})`
+      : `character "${ch}"`
+
+  return `${label} at position ${index + 1}`
+}
+
+/**
+ * Validates an API key value and reports *why* it is unusable. The value is
+ * cleaned first, so harmless paste artifacts no longer disable vision.
+ */
+export function inspectKey(rawValue) {
+  if (rawValue === undefined || rawValue === null || rawValue === '') {
+    return { key: null, problem: 'is not set' }
+  }
+  if (typeof rawValue !== 'string') return { key: null, problem: 'is not a string' }
+
+  const original = rawValue
+  const cleanedValue = sanitizeKeyValue(original)
+  if (!cleanedValue) return { key: null, problem: 'is empty' }
+
+  const lower = cleanedValue.toLowerCase()
   if (PLACEHOLDER_MARKERS.some((marker) => lower.includes(marker))) {
     return { key: null, problem: 'is a placeholder value' }
   }
-  if (trimmed.length < 20) return { key: null, problem: `looks truncated (${trimmed.length} chars)` }
-  if (!/^AIza[\w-]+$/.test(trimmed) && !/^[\w-]{20,}$/.test(trimmed)) {
-    return { key: null, problem: 'contains unexpected characters' }
+  if (cleanedValue.length < 20) {
+    return { key: null, problem: `looks truncated (${cleanedValue.length} chars after cleanup)` }
   }
-  return { key: trimmed, source: null, problem: null }
+
+  const invalid = describeInvalidCharacter(cleanedValue)
+  if (invalid) {
+    return { key: null, problem: `contains unexpected characters — ${invalid}` }
+  }
+
+  return {
+    key: cleanedValue,
+    source: null,
+    problem: null,
+    cleaned: cleanedValue !== original.trim(),
+    length: cleanedValue.length,
+  }
 }
 
 /**
@@ -92,7 +160,8 @@ export function inspectKey(value) {
  */
 export function keyFingerprint(key) {
   if (!key || typeof key !== 'string') return null
-  const trimmed = key.trim()
+  const trimmed = sanitizeKeyValue(key)
+  if (!trimmed) return null
   if (trimmed.length < 12) return `*** (${trimmed.length} chars)`
   return `${trimmed.slice(0, 6)}...${trimmed.slice(-4)} (${trimmed.length} chars)`
 }
@@ -106,25 +175,35 @@ export function resolveGeminiKey({ headerKey, env = null } = {}) {
   const checked = []
 
   const fromHeader = inspectKey(headerKey)
-  checked.push({ source: 'x-gemini-api-key header', status: fromHeader.key ? 'ok' : fromHeader.problem })
+  checked.push({
+    source: 'x-gemini-api-key header',
+    status: fromHeader.key ? 'ok' : fromHeader.problem,
+    length: fromHeader.length ?? null,
+    cleaned: Boolean(fromHeader.cleaned),
+  })
   if (fromHeader.key) {
-    return { key: fromHeader.key, source: 'x-gemini-api-key header', checked }
+    return { key: fromHeader.key, source: 'x-gemini-api-key header', checked, cleaned: Boolean(fromHeader.cleaned) }
   }
 
   const environment = env || (typeof process !== 'undefined' ? process.env : null)
   if (environment) {
     for (const name of GEMINI_KEY_ENV_NAMES) {
       const found = inspectKey(environment[name])
-      checked.push({ source: name, status: found.key ? 'ok' : found.problem })
+      checked.push({
+        source: name,
+        status: found.key ? 'ok' : found.problem,
+        length: found.length ?? null,
+        cleaned: Boolean(found.cleaned),
+      })
       if (found.key) {
-        return { key: found.key, source: `${name} env var`, checked }
+        return { key: found.key, source: `${name} env var`, checked, cleaned: Boolean(found.cleaned) }
       }
     }
   } else {
     checked.push({ source: 'process.env', status: 'not available in this runtime' })
   }
 
-  return { key: null, source: 'none', checked }
+  return { key: null, source: 'none', checked, cleaned: false }
 }
 
 /**

@@ -34,6 +34,17 @@ Accepted environment variable names (checked in this order, server side):
 | 4 | `GEMINI_KEY` |
 | 5 | `VITE_GEMINI_API_KEY` |
 
+Before a value is used it is normalised by `sanitizeKeyValue()`:
+
+- surrounding quotes (including smart quotes) are removed,
+- zero-width characters and byte-order marks are removed,
+- whitespace and line breaks inside the value are removed,
+- a pasted `GEMINI_API_KEY=...` or `Bearer ...` prefix is stripped.
+
+A key that still fails validation is reported with the exact position of the
+offending character, e.g. `contains unexpected characters — character "." at
+position 13`. Nothing is silently discarded any more.
+
 A key pasted in **Security & Settings → AI Keys** is stored in `localStorage`
 under `trustbreak_gemini_api_key` and sent on every request as the
 `x-gemini-api-key` header. The header always wins over the environment.
