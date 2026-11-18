@@ -41,6 +41,7 @@ export default async function handler(req, res) {
     keySource: resolved.source,
     keyFingerprint: keyFingerprint(resolved.key),
     keyWasCleaned: Boolean(resolved.cleaned),
+    keyShape: resolved.shape,
     checkedSources: resolved.checked,
     envNamesAccepted: [...GEMINI_KEY_ENV_NAMES],
     models: [...VISION_MODELS],
@@ -138,13 +139,34 @@ export default async function handler(req, res) {
     }
   }
 
+  const probeResult = {
+    workingModel: firstSuccess,
+    totalDurationMs: Date.now() - startedAt,
+    attempts,
+  }
+
+  let hint
+  if (firstSuccess) {
+    hint = `Vision engine is working (${firstSuccess}).`
+  } else {
+    const firstError = attempts.find((a) => a.error)?.error || ''
+    if (/API key not valid|API_KEY_INVALID/i.test(firstError)) {
+      hint = `Google rejected the key (${report.keyShape}). Create/copy a key from Google AI Studio (aistudio.google.com/apikey) — it should start with "AIza" or "AQ." — then update GEMINI_API_KEY and redeploy.`
+    } else if (/has not been used in project|SERVICE_DISABLED/i.test(firstError)) {
+      hint = 'The key is valid but the Generative Language API is disabled for its project. Enable it at console.cloud.google.com → APIs & Services → Enable APIs → "Generative Language API".'
+    } else if (/referer|referrer|PERMISSION_DENIED/i.test(firstError)) {
+      hint = 'The key is restricted (HTTP referrer/IP restriction) and cannot be used from the server. Create an unrestricted server key, or one restricted to the Generative Language API only.'
+    } else if (/quota|RESOURCE_EXHAUSTED|429/i.test(firstError)) {
+      hint = 'The key hit its quota. Wait for the quota window to reset or use a different project/key.'
+    } else {
+      hint = 'No model answered successfully — read probe.attempts[].error for the exact reason.'
+    }
+  }
+
   res.status(200).json({
     ...report,
     ok: Boolean(firstSuccess),
-    probe: {
-      workingModel: firstSuccess,
-      totalDurationMs: Date.now() - startedAt,
-      attempts,
-    },
+    hint,
+    probe: probeResult,
   })
 }

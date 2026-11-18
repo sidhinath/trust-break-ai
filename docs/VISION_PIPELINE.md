@@ -41,9 +41,16 @@ Before a value is used it is normalised by `sanitizeKeyValue()`:
 - whitespace and line breaks inside the value are removed,
 - a pasted `GEMINI_API_KEY=...` or `Bearer ...` prefix is stripped.
 
+Both Google key formats are accepted:
+
+| Prefix | Meaning |
+|---|---|
+| `AIza…` | classic Google API key |
+| `AQ.…` | Google API key issued after the 2025 format change |
+
 A key that still fails validation is reported with the exact position of the
-offending character, e.g. `contains unexpected characters — character "." at
-position 13`. Nothing is silently discarded any more.
+offending character, e.g. `contains unexpected characters — character "/" at
+position 11`. Nothing is silently discarded any more.
 
 A key pasted in **Security & Settings → AI Keys** is stored in `localStorage`
 under `trustbreak_gemini_api_key` and sent on every request as the

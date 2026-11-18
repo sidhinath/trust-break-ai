@@ -829,17 +829,25 @@ describe('Vision diagnostics — key resolution & health endpoint', () => {
     assert.strictEqual(sanitizeKeyValue('\uFEFFAIzaSy_bom_key_1234567890abcdef '), 'AIzaSy_bom_key_1234567890abcdef')
   })
 
+  it('should accept the current Google key format that starts with AQ.', () => {
+    const result = inspectKey('AQ.Ab8RN6Jk_example-key_1234567890abcdef')
+
+    assert.ok(result.key, 'AQ. keys are valid Google keys and must not be rejected')
+    assert.strictEqual(result.shape, 'Google API key (AQ.…, current format)')
+    assert.strictEqual(result.cleaned, false)
+  })
+
   it('should name the exact character that makes a key unusable', () => {
-    const result = inspectKey('AIzaSy_key.with.dots.1234567890abcd')
+    const result = inspectKey('AIzaSy_key/with/slashes/1234567890ab')
 
     assert.strictEqual(result.key, null)
     assert.match(result.problem, /unexpected characters/)
-    assert.match(result.problem, /position \d+/)
+    assert.match(result.problem, /position 11/)
   })
 
   it('should explain that a configured-but-invalid key needs re-saving', async () => {
     const originalKey = process.env.GEMINI_API_KEY
-    process.env.GEMINI_API_KEY = 'AIzaSy_key.with.dots.1234567890abcd'
+    process.env.GEMINI_API_KEY = 'AIzaSy_key/with/slashes/1234567890ab'
 
     try {
       const res = createMockRes()
@@ -848,7 +856,7 @@ describe('Vision diagnostics — key resolution & health endpoint', () => {
       assert.strictEqual(res.body.configured, false)
       assert.match(res.body.hint, /GEMINI_API_KEY is set but unusable/)
       assert.match(res.body.hint, /position \d+/)
-      assert.ok(!JSON.stringify(res.body).includes('AIzaSy_key.with'), 'Must never echo the raw key')
+      assert.ok(!JSON.stringify(res.body).includes('AIzaSy_key/with'), 'Must never echo the raw key')
     } finally {
       if (originalKey === undefined) delete process.env.GEMINI_API_KEY
       else process.env.GEMINI_API_KEY = originalKey

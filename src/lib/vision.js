@@ -98,13 +98,22 @@ export function sanitizeKeyValue(rawValue) {
 }
 
 /**
+ * Google API keys come in two shapes:
+ *   AIza...   classic keys
+ *   AQ....    keys issued after Google's 2025 format change (contain a dot)
+ * Both are valid for the Generative Language API, so dots must be allowed.
+ */
+const VALID_KEY_CHARACTER = /[A-Za-z0-9_.-]/
+const VALID_KEY_SHAPE = /^[A-Za-z0-9_.-]{20,}$/
+
+/**
  * Points at the first character that makes a key unusable, without printing
  * the secret itself. Reporting the position is what turns "vision unavailable"
  * into an actionable message.
  */
 function describeInvalidCharacter(value) {
   const chars = Array.from(value)
-  const index = chars.findIndex((ch) => !/[A-Za-z0-9_-]/.test(ch))
+  const index = chars.findIndex((ch) => !VALID_KEY_CHARACTER.test(ch))
   if (index < 0) return null
 
   const ch = chars[index]
@@ -116,6 +125,21 @@ function describeInvalidCharacter(value) {
       : `character "${ch}"`
 
   return `${label} at position ${index + 1}`
+}
+
+/**
+ * Google keys start with AIza (classic) or AQ. (current format). Anything else
+ * is still attempted, but the diagnostics say so up front.
+ */
+export function describeKeyShape(key) {
+  if (!key) return 'unknown'
+  if (key.startsWith('AIza')) return 'Google API key (AIza…)'
+  if (key.startsWith('AQ.')) return 'Google API key (AQ.…, current format)'
+  if (key.startsWith('gsk_')) return 'Groq API key — not a Google key'
+  if (key.startsWith('sk-') || key.startsWith('sk.')) return 'OpenAI/Anthropic-style key — not a Google key'
+  if (key.startsWith('hf_')) return 'Hugging Face token — not a Google key'
+  if (key.startsWith('xai-')) return 'xAI key — not a Google key'
+  return 'unrecognised format'
 }
 
 /**
@@ -144,6 +168,9 @@ export function inspectKey(rawValue) {
   if (invalid) {
     return { key: null, problem: `contains unexpected characters — ${invalid}` }
   }
+  if (!VALID_KEY_SHAPE.test(cleanedValue)) {
+    return { key: null, problem: 'has an unexpected shape' }
+  }
 
   return {
     key: cleanedValue,
@@ -151,6 +178,7 @@ export function inspectKey(rawValue) {
     problem: null,
     cleaned: cleanedValue !== original.trim(),
     length: cleanedValue.length,
+    shape: describeKeyShape(cleanedValue),
   }
 }
 
@@ -179,10 +207,17 @@ export function resolveGeminiKey({ headerKey, env = null } = {}) {
     source: 'x-gemini-api-key header',
     status: fromHeader.key ? 'ok' : fromHeader.problem,
     length: fromHeader.length ?? null,
+    shape: fromHeader.shape ?? null,
     cleaned: Boolean(fromHeader.cleaned),
   })
   if (fromHeader.key) {
-    return { key: fromHeader.key, source: 'x-gemini-api-key header', checked, cleaned: Boolean(fromHeader.cleaned) }
+    return {
+      key: fromHeader.key,
+      source: 'x-gemini-api-key header',
+      checked,
+      cleaned: Boolean(fromHeader.cleaned),
+      shape: fromHeader.shape ?? null,
+    }
   }
 
   const environment = env || (typeof process !== 'undefined' ? process.env : null)
@@ -193,17 +228,24 @@ export function resolveGeminiKey({ headerKey, env = null } = {}) {
         source: name,
         status: found.key ? 'ok' : found.problem,
         length: found.length ?? null,
+        shape: found.shape ?? null,
         cleaned: Boolean(found.cleaned),
       })
       if (found.key) {
-        return { key: found.key, source: `${name} env var`, checked, cleaned: Boolean(found.cleaned) }
+        return {
+          key: found.key,
+          source: `${name} env var`,
+          checked,
+          cleaned: Boolean(found.cleaned),
+          shape: found.shape ?? null,
+        }
       }
     }
   } else {
     checked.push({ source: 'process.env', status: 'not available in this runtime' })
   }
 
-  return { key: null, source: 'none', checked, cleaned: false }
+  return { key: null, source: 'none', checked, cleaned: false, shape: null }
 }
 
 /**
