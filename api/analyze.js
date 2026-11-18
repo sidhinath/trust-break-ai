@@ -64,14 +64,21 @@ function withTimeout(promise, ms) {
 }
 
 const AI_TIMEOUT_MS = parseInt(process.env.AI_TIMEOUT_MS || '9000', 10)
-// Total budget for the whole vision chain. Stays under the 60s function limit.
-const VISION_TIMEOUT_MS = parseInt(process.env.VISION_TIMEOUT_MS || '45000', 10)
-// Budget for a single model call. A model that hangs must not block the scan.
-const VISION_MODEL_TIMEOUT_MS = parseInt(process.env.VISION_MODEL_TIMEOUT_MS || '20000', 10)
-// If the preferred model has not answered by now, start the next one in
-// parallel (hedged request) so a slow/overloaded model costs seconds, not the
-// whole budget.
-const VISION_HEDGE_DELAY_MS = parseInt(process.env.VISION_HEDGE_DELAY_MS || '6000', 10)
+
+/**
+ * Read at call time (not module load) so tests can tune the timings.
+ * - total: budget for the whole vision chain, stays under the 60s function limit
+ * - model: budget for a single model call, so a hung model cannot block the scan
+ * - hedge: if the preferred model is still silent after this delay, the next
+ *   model starts in parallel and the first successful verdict wins
+ */
+function getVisionTimeouts() {
+  return {
+    total: parseInt(process.env.VISION_TIMEOUT_MS || '45000', 10),
+    model: parseInt(process.env.VISION_MODEL_TIMEOUT_MS || '20000', 10),
+    hedge: parseInt(process.env.VISION_HEDGE_DELAY_MS || '6000', 10),
+  }
+}
 
 // ---------------------------------------------------------------------------
 // Supabase server-side client (for blocklist + community feed lookups)
@@ -422,6 +429,7 @@ export function getGeminiConfigurationStatus() {
 // model chain without uploading an image.
 export function getVisionRuntimeStatus() {
   const resolved = resolveGeminiKey({ env: process.env })
+  const timeouts = getVisionTimeouts()
   return {
     configured: Boolean(resolved.key),
     keySource: resolved.source,
@@ -429,9 +437,9 @@ export function getVisionRuntimeStatus() {
     checked: resolved.checked,
     acceptedEnvVars: [...GEMINI_KEY_ENV_NAMES],
     models: [...VISION_MODELS],
-    timeoutMs: VISION_TIMEOUT_MS,
-    modelTimeoutMs: VISION_MODEL_TIMEOUT_MS,
-    hedgeDelayMs: VISION_HEDGE_DELAY_MS,
+    timeoutMs: timeouts.total,
+    modelTimeoutMs: timeouts.model,
+    hedgeDelayMs: timeouts.hedge,
   }
 }
 
@@ -635,6 +643,7 @@ const GEMINI_ENDPOINT = 'https://generativelanguage.googleapis.com/v1beta/models
 async function callGeminiVision({ apiKey, model, base64, mimeType, diag }) {
   const startedAt = Date.now()
   const attempt = { model, ok: false, status: null, durationMs: 0 }
+  const { model: modelTimeoutMs } = getVisionTimeouts()
 
   const send = (payload) =>
     withTimeout(
@@ -647,7 +656,7 @@ async function callGeminiVision({ apiKey, model, base64, mimeType, diag }) {
         },
         body: JSON.stringify(payload),
       }),
-      VISION_MODEL_TIMEOUT_MS
+      modelTimeoutMs
     )
 
   try {
@@ -797,8 +806,7 @@ async function analyzeScreenshotWithGemini({ screenshotUrl, imageBase64, mimeTyp
     models: VISION_MODELS,
     mimeType: contentType,
     base64Bytes: base64.length,
-    hedgeDelayMs: VISION_HEDGE_DELAY_MS,
-    modelTimeoutMs: VISION_MODEL_TIMEOUT_MS,
+    ...getVisionTimeouts(),
   })
 
   diag.status = 'all-models-failed'
@@ -807,20 +815,45 @@ async function analyzeScreenshotWithGemini({ screenshotUrl, imageBase64, mimeTyp
   //   - the preferred model starts immediately;
   //   - if it has not answered after VISION_HEDGE_DELAY_MS, the next model is
   //     started in parallel and the first *successful* verdict wins.
-  // A model that hangs (gemini-3.8-flash did, for the full 45s) therefore
-  // costs a few seconds instead of the whole scan.
+  // A model that hangs (gemini-3.8-flash did) therefore costs a few seconds
+  // instead of the whole scan.
+  //
+  // Completed calls are delivered through a queue rather than Promise.race,
+  // because a race snapshot would ignore a model launched by the hedge timer
+  // while we are already waiting.
   const launched = new Set()
-  const pending = new Map()
+  const outcomes = []
+  let pendingCount = 0
+  let notifyOutcome = null
+
+  const pushOutcome = (outcome) => {
+    outcomes.push(outcome)
+    if (notifyOutcome) {
+      const notify = notifyOutcome
+      notifyOutcome = null
+      notify()
+    }
+  }
+
+  const nextOutcome = () => {
+    if (outcomes.length > 0) return Promise.resolve(outcomes.shift())
+    return new Promise((resolve) => {
+      notifyOutcome = () => resolve(outcomes.shift())
+    })
+  }
 
   const launch = (model) => {
     if (!model || launched.has(model)) return
     launched.add(model)
-    pending.set(
-      model,
-      callGeminiVision({ apiKey: keyInfo.key, model, base64, mimeType: contentType, diag })
-        .then((result) => ({ model, result }))
-        .catch((err) => ({ model, result: null, error: err?.message }))
-    )
+    pendingCount += 1
+
+    callGeminiVision({ apiKey: keyInfo.key, model, base64, mimeType: contentType, diag })
+      .then((result) => ({ model, result }))
+      .catch((err) => ({ model, result: null, error: err?.message }))
+      .then((outcome) => {
+        pendingCount -= 1
+        pushOutcome(outcome)
+      })
   }
 
   launch(VISION_MODELS[0])
@@ -831,13 +864,14 @@ async function analyzeScreenshotWithGemini({ screenshotUrl, imageBase64, mimeTyp
       console.log(`[TrustBreak AI][vision] hedge — ${VISION_MODELS[0]} is slow, starting ${next} in parallel`)
       launch(next)
     }
-  }, VISION_HEDGE_DELAY_MS)
+  }, getVisionTimeouts().hedge)
 
   try {
-    while (pending.size > 0 && launched.size <= VISION_MODELS.length + 3) {
-      const settled = await Promise.race([...pending.values()])
-      pending.delete(settled.model)
+    while (outcomes.length > 0 || pendingCount > 0) {
+      if (launched.size > VISION_MODELS.length + 3) break
 
+      const settled = await nextOutcome()
+      if (!settled) continue
       if (settled.result) return settled.result
 
       // Read the hint from this model's own attempt record, so parallel
@@ -845,12 +879,16 @@ async function analyzeScreenshotWithGemini({ screenshotUrl, imageBase64, mimeTyp
       const suggestion = diag.attempts.find((a) => a.model === settled.model && a.suggestedModel)?.suggestedModel
       if (suggestion && !launched.has(suggestion)) {
         console.log(`[TrustBreak AI][vision] ${settled.model} is retired — following Google's hint to ${suggestion}`)
+        clearTimeout(hedgeTimer)
         launch(suggestion)
         continue
       }
 
       const next = VISION_MODELS.find((model) => !launched.has(model))
-      if (next) launch(next)
+      if (next) {
+        clearTimeout(hedgeTimer)
+        launch(next)
+      }
     }
   } finally {
     clearTimeout(hedgeTimer)
@@ -903,7 +941,7 @@ async function analyzeScreenshotWithGroqVision({ base64, mimeType, req, diag }) 
             ],
           }),
         }),
-        VISION_TIMEOUT_MS
+        getVisionTimeouts().model
       )
 
       attempt.status = response.status
@@ -1280,7 +1318,7 @@ export default async function handler(req, res) {
 
               return analyzeScreenshotWithOpenAI(payload?.screenshot_url, visionDiagnostics)
             })(),
-            Math.max(VISION_TIMEOUT_MS, AI_TIMEOUT_MS * 2)
+            Math.max(getVisionTimeouts().total, AI_TIMEOUT_MS * 2)
           )
         } catch (err) {
           visionDiagnostics.status = /timed out/i.test(err?.message || '') ? 'timeout' : 'error'

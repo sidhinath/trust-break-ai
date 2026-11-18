@@ -900,6 +900,74 @@ describe('Vision Scanner — /api/analyze screenshot branch', () => {
       else process.env.GEMINI_API_KEY = originalKey
     }
   })
+
+  it('should return the hedged result when the preferred model is too slow', async () => {
+    const originalFetch = globalThis.fetch
+    const originalKey = process.env.GEMINI_API_KEY
+    const originalHedge = process.env.VISION_HEDGE_DELAY_MS
+    const originalModelTimeout = process.env.VISION_MODEL_TIMEOUT_MS
+
+    process.env.GEMINI_API_KEY = 'AIzaSy_test_key_1234567890abcdef'
+    process.env.VISION_HEDGE_DELAY_MS = '100'
+    process.env.VISION_MODEL_TIMEOUT_MS = '400'
+
+    const requestedModels = []
+    globalThis.fetch = async (url) => {
+      const model = String(url).match(/models\/([^:]+):/)?.[1] || ''
+      requestedModels.push(model)
+
+      if (model === 'gemini-3.8-flash') {
+        // Simulates the real behaviour observed in production: the model
+        // accepts the request and never answers.
+        return new Promise(() => {})
+      }
+
+      return {
+        ok: true,
+        status: 200,
+        text: async () => JSON.stringify({
+          candidates: [{
+            content: {
+              parts: [{
+                text: JSON.stringify({
+                  fraud_score: 77,
+                  risk_level: 'scam',
+                  reasons: ['Fake payment request'],
+                  detected_text: 'Pay now or your account is closed',
+                }),
+              }],
+            },
+          }],
+        }),
+      }
+    }
+
+    try {
+      const req = {
+        method: 'POST',
+        headers: {},
+        body: { type: 'screenshot', payload: { image_base64: 'iVBORw0KGgoAAAANSUhEUg==', mime_type: 'image/jpeg' } },
+      }
+      const res = createMockRes()
+
+      const startedAt = Date.now()
+      await analyzeHandler(req, res)
+      const elapsed = Date.now() - startedAt
+
+      assert.strictEqual(res.body.fraud_score, 77)
+      assert.strictEqual(res.body.model, 'gemini-3.5-flash-lite')
+      assert.ok(elapsed < 1500, `Hedge should answer fast, took ${elapsed}ms`)
+      assert.ok(requestedModels.includes('gemini-3.5-flash-lite'), 'The fallback model must be tried in parallel')
+    } finally {
+      globalThis.fetch = originalFetch
+      if (originalKey === undefined) delete process.env.GEMINI_API_KEY
+      else process.env.GEMINI_API_KEY = originalKey
+      if (originalHedge === undefined) delete process.env.VISION_HEDGE_DELAY_MS
+      else process.env.VISION_HEDGE_DELAY_MS = originalHedge
+      if (originalModelTimeout === undefined) delete process.env.VISION_MODEL_TIMEOUT_MS
+      else process.env.VISION_MODEL_TIMEOUT_MS = originalModelTimeout
+    }
+  })
 })
 
 describe('Vision diagnostics — key resolution & health endpoint', () => {
