@@ -302,6 +302,8 @@ import {
 } from '../api/analyze.js'
 import syncFeedsHandler from '../api/cron/sync-feeds.js'
 import analyzeHandler from '../api/analyze.js'
+import visionHealthHandler from '../api/vision-health.js'
+import { resolveGeminiKey } from '../src/lib/vision.js'
 import voiceHandler from '../api/analyze-voice.js'
 import {
   analyzeMessage,
@@ -651,18 +653,52 @@ describe('Vision Scanner — /api/analyze screenshot branch', () => {
     assert.strictEqual(res.body.analysis_status, 'vision_unavailable')
     assert.strictEqual(res.body.fraud_score, 0)
     assert.strictEqual(res.body.degraded_reason, 'no-image-payload')
+    assert.ok(res.body.vision_diagnostics, 'Diagnostics must always be returned')
+  })
+
+  it('should report gemini-key-missing with a full key audit trail', async () => {
+    const originalKey = process.env.GEMINI_API_KEY
+    const originalViteKey = process.env.VITE_GEMINI_API_KEY
+    delete process.env.GEMINI_API_KEY
+    delete process.env.VITE_GEMINI_API_KEY
+
+    try {
+      const req = {
+        method: 'POST',
+        headers: {},
+        body: { type: 'screenshot', payload: { image_base64: 'iVBORw0KGgoAAAANSUhEUg==', mime_type: 'image/jpeg' } },
+      }
+      const res = createMockRes()
+
+      await analyzeHandler(req, res)
+
+      assert.strictEqual(res.body.degraded_reason, 'gemini-key-missing')
+      assert.strictEqual(res.body.vision_diagnostics.status, 'no-key')
+      assert.ok(
+        res.body.vision_diagnostics.keyChecks.some((c) => c.source === 'GEMINI_API_KEY'),
+        'Diagnostics must list every environment variable that was checked'
+      )
+    } finally {
+      if (originalKey !== undefined) process.env.GEMINI_API_KEY = originalKey
+      if (originalViteKey !== undefined) process.env.VITE_GEMINI_API_KEY = originalViteKey
+    }
   })
 
   it('should score a benign image with the vision engine instead of the old fixed 65', async () => {
     const originalFetch = globalThis.fetch
     const originalKey = process.env.GEMINI_API_KEY
     process.env.GEMINI_API_KEY = 'AIzaSy_test_key_1234567890abcdef'
+    let calledUrl = ''
+    let calledApiKeyHeader = ''
 
-    globalThis.fetch = async (url) => {
+    globalThis.fetch = async (url, options = {}) => {
+      calledUrl = String(url)
+      calledApiKeyHeader = options.headers?.['x-goog-api-key'] || ''
       if (String(url).includes('generativelanguage.googleapis.com')) {
         return {
           ok: true,
-          json: async () => ({
+          status: 200,
+          text: async () => JSON.stringify({
             candidates: [{
               content: {
                 parts: [{
@@ -699,6 +735,126 @@ describe('Vision Scanner — /api/analyze screenshot branch', () => {
       assert.strictEqual(res.body.fraud_score, 8)
       assert.strictEqual(res.body.risk_level, 'safe')
       assert.notStrictEqual(res.body.fraud_score, 65)
+      assert.match(calledUrl, /gemini-2\.5-flash/)
+      assert.strictEqual(calledApiKeyHeader, process.env.GEMINI_API_KEY, 'Key must be sent as x-goog-api-key header')
+    } finally {
+      globalThis.fetch = originalFetch
+      if (originalKey === undefined) delete process.env.GEMINI_API_KEY
+      else process.env.GEMINI_API_KEY = originalKey
+    }
+  })
+
+  it('should expose the real Gemini error instead of a silent fallback', async () => {
+    const originalFetch = globalThis.fetch
+    const originalKey = process.env.GEMINI_API_KEY
+    process.env.GEMINI_API_KEY = 'AIzaSy_test_key_1234567890abcdef'
+
+    globalThis.fetch = async () => ({
+      ok: false,
+      status: 403,
+      text: async () => JSON.stringify({
+        error: { code: 403, message: 'Generative Language API has not been used in project before or it is disabled.' },
+      }),
+    })
+
+    try {
+      const req = {
+        method: 'POST',
+        headers: {},
+        body: { type: 'screenshot', payload: { image_base64: 'iVBORw0KGgoAAAANSUhEUg==', mime_type: 'image/jpeg' } },
+      }
+      const res = createMockRes()
+
+      await analyzeHandler(req, res)
+
+      assert.strictEqual(res.body.degraded_reason, 'gemini-call-failed')
+      const attempts = res.body.vision_diagnostics.attempts
+      assert.ok(attempts.length >= 1, 'Every model attempt must be recorded')
+      assert.strictEqual(attempts[0].status, 403)
+      assert.match(attempts[0].error, /Generative Language API has not been used/)
+    } finally {
+      globalThis.fetch = originalFetch
+      if (originalKey === undefined) delete process.env.GEMINI_API_KEY
+      else process.env.GEMINI_API_KEY = originalKey
+    }
+  })
+})
+
+describe('Vision diagnostics — key resolution & health endpoint', () => {
+  function createMockRes() {
+    return {
+      statusCode: 200,
+      body: null,
+      headers: {},
+      setHeader(k, v) { this.headers[k] = v },
+      status(code) { this.statusCode = code; return this },
+      json(payload) { this.body = payload; return this },
+      end() { return this },
+    }
+  }
+
+  it('should accept Gemini keys stored under any documented env name', () => {
+    const resolved = resolveGeminiKey({
+      env: { GOOGLE_API_KEY: 'AIzaSy_alias_key_1234567890abcdef' },
+    })
+
+    assert.ok(resolved.key, 'Alias env var must be accepted')
+    assert.match(resolved.source, /GOOGLE_API_KEY/)
+    assert.ok(resolved.checked.length >= 1)
+  })
+
+  it('should reject placeholder keys and say why', () => {
+    const resolved = resolveGeminiKey({ env: { GEMINI_API_KEY: 'your-gemini-api-key-placeholder' } })
+
+    assert.strictEqual(resolved.key, null)
+    const geminiCheck = resolved.checked.find((c) => c.source === 'GEMINI_API_KEY')
+    assert.strictEqual(geminiCheck.status, 'is a placeholder value')
+  })
+
+  it('should report a missing key from /api/vision-health without leaking secrets', async () => {
+    const originalKey = process.env.GEMINI_API_KEY
+    delete process.env.GEMINI_API_KEY
+
+    try {
+      const res = createMockRes()
+      await visionHealthHandler({ method: 'GET', headers: {}, query: {} }, res)
+
+      assert.strictEqual(res.statusCode, 200)
+      assert.strictEqual(res.body.configured, false)
+      assert.ok(res.body.checkedSources.some((c) => c.source === 'GEMINI_API_KEY'))
+      assert.ok(Array.isArray(res.body.envNamesAccepted) && res.body.envNamesAccepted.includes('GEMINI_API_KEY'))
+      assert.ok(!JSON.stringify(res.body).includes('AIza'), 'Must never echo a raw key')
+    } finally {
+      if (originalKey !== undefined) process.env.GEMINI_API_KEY = originalKey
+    }
+  })
+
+  it('should probe the real Gemini endpoint and return its status', async () => {
+    const originalFetch = globalThis.fetch
+    const originalKey = process.env.GEMINI_API_KEY
+    process.env.GEMINI_API_KEY = 'AIzaSy_probe_key_1234567890abcdef'
+
+    let probedUrl = ''
+    globalThis.fetch = async (url) => {
+      probedUrl = String(url)
+      return {
+        ok: true,
+        status: 200,
+        text: async () => JSON.stringify({
+          candidates: [{ content: { parts: [{ text: 'ok' }] }, finishReason: 'STOP' }],
+        }),
+      }
+    }
+
+    try {
+      const res = createMockRes()
+      await visionHealthHandler({ method: 'GET', headers: {}, query: { probe: '1' } }, res)
+
+      assert.match(probedUrl, /gemini-2\.5-flash:generateContent/)
+      assert.strictEqual(res.body.probe.workingModel, 'gemini-2.5-flash')
+      assert.strictEqual(res.body.probe.attempts[0].status, 200)
+      assert.strictEqual(res.body.probe.attempts[0].text, 'ok')
+      assert.strictEqual(res.body.keySource, 'GEMINI_API_KEY env var')
     } finally {
       globalThis.fetch = originalFetch
       if (originalKey === undefined) delete process.env.GEMINI_API_KEY

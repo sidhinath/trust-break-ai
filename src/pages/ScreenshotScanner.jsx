@@ -18,6 +18,18 @@ import ScannerAnalysisProgress from "@/components/scanners/ScannerAnalysisProgre
 import { triggerHaptic } from "@/lib/haptics";
 import ProtectedPage from '@/components/auth/ProtectedPage';
 
+const VISION_REASON_LABELS = {
+  'no-image-payload': 'The image never reached the server (upload or serialization failure).',
+  'invalid-image-payload': 'The image data was rejected before it could be sent to Gemini.',
+  'image-download-failed': 'The server could not download the screenshot URL.',
+  'gemini-key-missing': 'No Gemini API key was found on the server or in this browser.',
+  'gemini-timeout': 'Gemini did not answer before the request timeout.',
+  'gemini-call-failed': 'Gemini rejected the request — invalid key, missing API access, quota, or unsupported model.',
+  'vision-providers-failed': 'Gemini and Groq vision both rejected the request — check the keys and API access.',
+  'vision-call-failed': 'The vision request failed before any verdict was returned.',
+  'vision-unavailable': 'The vision engine was not reachable.',
+}
+
 export default function ScreenshotScanner() {
   const queryClient = useQueryClient();
   const [activeTab, setActiveTab] = useState("screenshot");
@@ -39,6 +51,32 @@ export default function ScreenshotScanner() {
   const [qrResult, setQrResult] = useState(null);
   const [qrError, setQrError] = useState("");
   const [qrScanning, setQrScanning] = useState(false);
+
+  // Vision diagnostics state
+  const [healthReport, setHealthReport] = useState(null);
+  const [healthLoading, setHealthLoading] = useState(false);
+
+  const runVisionDiagnostics = async () => {
+    setHealthLoading(true);
+    setHealthReport(null);
+    try {
+      const res = await fetch("/api/vision-health?probe=1", { cache: "no-store" });
+      const text = await res.text();
+      try {
+        setHealthReport(JSON.parse(text));
+      } catch {
+        setHealthReport({
+          ok: false,
+          error: `Endpoint did not return JSON (HTTP ${res.status}) — /api/vision-health is probably not deployed yet.`,
+          body: text.slice(0, 300),
+        });
+      }
+    } catch (err) {
+      setHealthReport({ ok: false, error: err?.message || "Diagnostics request failed" });
+    } finally {
+      setHealthLoading(false);
+    }
+  };
 
   const handleQrDecoded = async (payload) => {
     setQrResult(null);
@@ -179,9 +217,8 @@ export default function ScreenshotScanner() {
 
   const extractedUrl = extractUrlFromText(result?.detected_text || "");
   const isUnverified = Boolean(result?.unverified) || result?.analysis_status === 'vision_unavailable';
-  const unverifiedDetail = result?.degraded_reason === 'no-image-payload'
-    ? 'The image could not be uploaded to the vision service.'
-    : 'The vision engine is not configured on this deployment, or it did not respond in time.';
+  const unverifiedReason = result?.degraded_reason || 'vision-unavailable';
+  const unverifiedDetail = VISION_REASON_LABELS[unverifiedReason] || 'The vision engine did not return a verdict.';
 
   return (
     <ProtectedPage feature="Vision Screenshot Scanner">
@@ -367,17 +404,29 @@ export default function ScreenshotScanner() {
                     </div>
                   </div>
 
-                  <div className="text-[11px] font-mono rounded-lg border px-3 py-2"
+                  <div className="text-[11px] font-mono rounded-lg border px-3 py-2 space-y-1"
                     style={{ borderColor: 'var(--tb-border)', background: 'var(--tb-surface-2)', color: 'var(--tb-text-dim)' }}>
-                    reason: {result.degraded_reason || 'vision-unavailable'}
+                    <div>reason: {unverifiedReason}</div>
+                    {result?.vision_diagnostics?.attempts?.length > 0 && (
+                      <div>
+                        attempts: {result.vision_diagnostics.attempts.map((a) => `${a.model}=${a.status ?? a.error ?? 'failed'}`).join(' • ')}
+                      </div>
+                    )}
                   </div>
 
-                  <div className="flex flex-col sm:flex-row gap-2 pt-1">
+                  <div className="flex flex-col sm:flex-row flex-wrap gap-2 pt-1">
                     <Button
                       onClick={handleScan}
                       disabled={scanning}
                       className="h-10 rounded-xl font-bold text-white bg-amber-600 hover:bg-amber-500 transition-all text-xs cursor-pointer">
                       <RefreshCw className="w-3.5 h-3.5 mr-1.5" /> Retry analysis
+                    </Button>
+                    <Button
+                      onClick={runVisionDiagnostics}
+                      disabled={healthLoading}
+                      variant="outline"
+                      className="h-10 rounded-xl font-bold text-xs border-cyan-500/40 text-cyan-500 hover:bg-cyan-500/10 cursor-pointer">
+                      {healthLoading ? "Checking vision engine..." : "Run vision diagnostics"}
                     </Button>
                     <Link
                       to={createPageUrl("Settings")}
@@ -386,6 +435,30 @@ export default function ScreenshotScanner() {
                       Configure Gemini Vision key
                     </Link>
                   </div>
+
+                  {result?.vision_diagnostics && (
+                    <details className="text-[11px] rounded-lg border px-3 py-2"
+                      style={{ borderColor: 'var(--tb-border)', background: 'var(--tb-surface-2)' }}>
+                      <summary className="cursor-pointer font-bold" style={{ color: 'var(--tb-text-dim)' }}>
+                        Scan diagnostics
+                      </summary>
+                      <pre className="mt-2 overflow-x-auto whitespace-pre-wrap break-all leading-relaxed" style={{ color: 'var(--tb-text-dim)' }}>
+{JSON.stringify(result.vision_diagnostics, null, 2)}
+                      </pre>
+                    </details>
+                  )}
+
+                  {healthReport && (
+                    <details open className="text-[11px] rounded-lg border border-cyan-500/30 px-3 py-2"
+                      style={{ background: 'var(--tb-surface-2)' }}>
+                      <summary className="cursor-pointer font-bold text-cyan-500">
+                        Vision engine health: {healthReport.ok ? "reachable" : "not working"}
+                      </summary>
+                      <pre className="mt-2 overflow-x-auto whitespace-pre-wrap break-all leading-relaxed" style={{ color: 'var(--tb-text-dim)' }}>
+{JSON.stringify(healthReport, null, 2)}
+                      </pre>
+                    </details>
+                  )}
                 </div>
               ) : (
               <>

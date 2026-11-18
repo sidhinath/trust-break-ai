@@ -11,6 +11,13 @@ import {
   inferReasonCodes,
 } from './scanner.js'
 import { filterValidReasonCodes } from './reasonCodes.js'
+import {
+  VISION_MODELS,
+  buildVisionRequestBody,
+  extractGeminiText,
+  normalizeVisionResult,
+  parseJsonFromText,
+} from './vision.js'
 
 function getGroqKey() {
   let key = ''
@@ -26,9 +33,16 @@ function getGroqKey() {
 function getGeminiKey() {
   let key = ''
   try {
-    key = localStorage.getItem('trustbreak_gemini_api_key') || import.meta.env?.VITE_GEMINI_API_KEY || import.meta.env?.GEMINI_API_KEY || ''
+    key = localStorage.getItem('trustbreak_gemini_api_key')
+      || import.meta.env?.VITE_GEMINI_API_KEY
+      || import.meta.env?.VITE_GOOGLE_API_KEY
+      || import.meta.env?.GEMINI_API_KEY
+      || ''
   } catch {
-    key = import.meta.env?.VITE_GEMINI_API_KEY || import.meta.env?.GEMINI_API_KEY || ''
+    key = import.meta.env?.VITE_GEMINI_API_KEY
+      || import.meta.env?.VITE_GOOGLE_API_KEY
+      || import.meta.env?.GEMINI_API_KEY
+      || ''
   }
   if (!key || typeof key !== 'string' || key.includes('placeholder') || key.includes('your_gemini')) return ''
   return key.trim()
@@ -131,85 +145,73 @@ Return STRICT JSON only with keys:
   return null
 }
 
-async function analyzeWithClientGemini(payload) {
+async function analyzeWithClientGemini(payload, diag = null) {
   const apiKey = getGeminiKey()
-  if (!apiKey || !payload?.image_base64) return null
+  const trailer = diag || {}
+  trailer.attempted = Boolean(apiKey)
+  trailer.attempts = trailer.attempts || []
 
-  const models = ['gemini-1.5-flash', 'gemini-1.5-pro', 'gemini-2.0-flash-exp']
-  const prompt = `You are TrustBreak AI, a multi-modal cyber-fraud detection engine.
-Analyze this screenshot for cyber scam, phishing, brand impersonation, urgency manipulation, payment fraud, QR code traps, or social engineering.
-Return strict JSON only with keys:
-- fraud_score (number 0-100)
-- risk_level (safe|suspicious|scam)
-- confidence (low|medium|high)
-- reasons (array of specific visual and textual evidence strings)
-- analysis (professional summary of the visual threat)
-- detected_text (all OCR extracted text from the image)
-- attack_intent (what the fraudster is attempting to achieve)
-- reasonCodes (array of string codes)
+  if (!apiKey) {
+    trailer.skipped = 'no client Gemini key in localStorage/import.meta.env'
+    return null
+  }
+  if (!payload?.image_base64) {
+    trailer.skipped = 'no image_base64 to send'
+    return null
+  }
 
-Scoring rules (follow them exactly):
-- 0-25 = safe: ordinary screenshots such as app dashboards, terminals, code editors, photos, receipts, or normal chats with no deception cues. Return risk_level "safe" and few or no reasons.
-- 26-60 = suspicious: some pressure/financial wording or an unverifiable claim, but no clear malicious intent.
-- 61-100 = scam: explicit credential/OTP requests, payment demands to unverified parties, fake bank/government notices, brand impersonation, or lookalike payment links.
-Only flag what is actually visible in the image. Do not assume fraud when the screenshot is an ordinary user interface or a technical/developer screen.`
-
-  for (const model of models) {
+  for (const model of VISION_MODELS) {
+    const startedAt = Date.now()
+    const attempt = { model, ok: false, status: null, durationMs: 0 }
     try {
       const response = await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`,
+        `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`,
         {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            contents: [
-              {
-                parts: [
-                  { text: prompt },
-                  {
-                    inline_data: {
-                      mime_type: payload.mime_type || 'image/png',
-                      data: payload.image_base64,
-                    },
-                  },
-                ],
-              },
-            ],
-            generationConfig: {
-              temperature: 0.2,
-              responseMimeType: 'application/json',
-            },
-          }),
+          headers: {
+            'Content-Type': 'application/json',
+            'x-goog-api-key': apiKey,
+          },
+          body: JSON.stringify(buildVisionRequestBody(payload.image_base64, payload.mime_type || 'image/jpeg', model)),
         }
       )
 
-      if (!response.ok) continue
-      const data = await response.json()
-      const text = data?.candidates?.[0]?.content?.parts?.map((p) => p.text || '').join(' ') || ''
-      if (!text) continue
-      const parsed = JSON.parse(text)
-      if (parsed && typeof parsed.fraud_score !== 'undefined') {
-        const score = Math.max(0, Math.min(100, Number(parsed.fraud_score || 0)))
-        const risk = ['safe', 'suspicious', 'scam'].includes(parsed.risk_level) ? parsed.risk_level : scoreToRisk(score)
+      attempt.status = response.status
+      const raw = await response.text()
+      attempt.durationMs = Date.now() - startedAt
 
-        return {
-          fraud_score: score,
-          risk_level: risk,
-          confidence: parsed.confidence || (score > 70 ? 'high' : 'medium'),
-          reasons: Array.isArray(parsed.reasons) ? parsed.reasons.map((r) => String(r)) : [],
-          analysis: String(parsed.analysis || parsed.ai_analysis || ''),
-          ai_analysis: String(parsed.ai_analysis || parsed.analysis || ''),
-          detected_text: String(parsed.detected_text || ''),
-          attack_intent: String(parsed.attack_intent || inferAttackerIntent(parsed.detected_text || '', '', risk)),
-          threat_reconstruction: reconstructAttackChain(parsed.detected_text || 'Screenshot image analysis', '', risk),
-          reasonCodes: filterValidReasonCodes(parsed.reasonCodes || []),
-          source: 'gemini',
-        }
+      if (!response.ok) {
+        attempt.error = raw.slice(0, 300)
+        trailer.attempts.push(attempt)
+        console.warn(`[TrustBreak AI][vision-client] ${model} HTTP ${response.status}`, attempt.error)
+        continue
       }
-    } catch {
-      continue
+
+      const data = JSON.parse(raw)
+      const parsed = parseJsonFromText(extractGeminiText(data))
+      const result = normalizeVisionResult(parsed)
+
+      if (!result) {
+        attempt.error = 'model returned no parsable JSON verdict'
+        trailer.attempts.push(attempt)
+        console.warn(`[TrustBreak AI][vision-client] ${model} gave no verdict`)
+        continue
+      }
+
+      attempt.ok = true
+      attempt.score = result.fraud_score
+      attempt.risk = result.risk_level
+      trailer.attempts.push(attempt)
+      console.log(`[TrustBreak AI][vision-client] ${model} verdict ${result.fraud_score}/${result.risk_level} in ${attempt.durationMs}ms`)
+      return { ...result, source: 'gemini', model }
+    } catch (err) {
+      attempt.durationMs = Date.now() - startedAt
+      attempt.error = err?.message || String(err)
+      trailer.attempts.push(attempt)
+      console.warn(`[TrustBreak AI][vision-client] ${model} threw:`, attempt.error)
     }
   }
+
   return null
 }
 
@@ -621,7 +623,41 @@ export async function analyzeScreenshot(input = null) {
     console.warn('Screenshot preprocessing failed:', err?.message)
     payload = {}
   }
-  return postAnalyze('screenshot', payload)
+
+  const serverResult = await postAnalyze('screenshot', payload)
+  const unverified =
+    serverResult?.unverified === true || serverResult?.analysis_status === 'vision_unavailable'
+
+  if (!unverified) return serverResult
+
+  // The server could not run vision (no key, bad key, timeout, 4xx...). If this
+  // browser holds a Gemini key (Settings → AI Keys), try Gemini directly before
+  // giving up — this is what keeps the scanner working when server env vars are
+  // missing or misconfigured.
+  const clientDiag = { attempted: false, attempts: [] }
+  const clientResult = payload?.image_base64
+    ? await analyzeWithClientGemini(payload, clientDiag)
+    : null
+
+  if (clientResult) {
+    return {
+      ...clientResult,
+      degraded: false,
+      vision_diagnostics: {
+        ...(serverResult?.vision_diagnostics || {}),
+        serverDegradedReason: serverResult?.degraded_reason || null,
+        clientRetry: clientDiag,
+      },
+    }
+  }
+
+  return {
+    ...serverResult,
+    vision_diagnostics: {
+      ...(serverResult?.vision_diagnostics || {}),
+      clientRetry: clientDiag,
+    },
+  }
 }
 
 export async function analyzeVoice(payload = {}) {

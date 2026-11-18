@@ -12,26 +12,24 @@ import {
   inferReasonCodes,
 } from '../src/lib/scanner.js'
 import { filterValidReasonCodes } from '../src/lib/reasonCodes.js'
+import {
+  GEMINI_KEY_ENV_NAMES,
+  VISION_MODELS,
+  VISION_PROMPT,
+  buildVisionRequestBody,
+  describeGeminiFailure,
+  extractGeminiText,
+  keyFingerprint,
+  normalizeImageBase64,
+  normalizeVisionResult,
+  parseJsonFromText,
+  resolveGeminiKey,
+} from '../src/lib/vision.js'
 import crypto from 'node:crypto'
 
 // ---------------------------------------------------------------------------
 // Helpers
 // ---------------------------------------------------------------------------
-
-function parseJsonFromText(text) {
-  if (!text) return null
-  try {
-    return JSON.parse(text)
-  } catch {
-    const match = text.match(/\{[\s\S]*\}/)
-    if (!match) return null
-    try {
-      return JSON.parse(match[0])
-    } catch {
-      return null
-    }
-  }
-}
 
 /**
  * Defensively parses the AI response and extracts reasonCodes / explanation.
@@ -66,27 +64,9 @@ function withTimeout(promise, ms) {
 }
 
 const AI_TIMEOUT_MS = parseInt(process.env.AI_TIMEOUT_MS || '9000', 10)
-
-function normalizeVisionResult(parsed) {
-  if (!parsed || typeof parsed !== 'object') return null
-  const score = Math.max(0, Math.min(100, Number(parsed.fraud_score || 0)))
-  const risk = ['safe', 'suspicious', 'scam'].includes(parsed.risk_level) ? parsed.risk_level : scoreToRisk(score)
-  const verdict = safeParseVerdict(JSON.stringify(parsed))
-  
-  return {
-    fraud_score: score,
-    risk_level: risk,
-    confidence: parsed.confidence || (score > 70 ? 'high' : 'medium'),
-    reasons: Array.isArray(parsed.reasons) ? parsed.reasons.map((r) => String(r)) : [],
-    analysis: String(parsed.analysis || parsed.ai_analysis || ''),
-    ai_analysis: String(parsed.ai_analysis || parsed.analysis || ''),
-    detected_text: String(parsed.detected_text || ''),
-    attack_intent: parsed.attack_intent || inferAttackerIntent(parsed.detected_text || '', '', risk),
-    threat_reconstruction: reconstructAttackChain(parsed.detected_text || 'Screenshot image analysis', '', risk),
-    reasonCodes: verdict?.reasonCodes || [],
-    explanation: verdict?.explanation || null,
-  }
-}
+// Per-model budget for vision calls. Kept short so a bad model/key fails over
+// quickly instead of eating the whole serverless budget.
+const VISION_TIMEOUT_MS = parseInt(process.env.VISION_TIMEOUT_MS || '45000', 10)
 
 // ---------------------------------------------------------------------------
 // Supabase server-side client (for blocklist + community feed lookups)
@@ -423,23 +403,29 @@ export function getGroqConfigurationStatus() {
 }
 
 export function getGeminiConfigurationStatus() {
-  const envValue = process.env.GEMINI_API_KEY || process.env.VITE_GEMINI_API_KEY
-  const status = inspectApiKey(envValue)
+  const resolved = resolveGeminiKey({ env: process.env })
   return {
-    configured: Boolean(status.key),
-    source: 'GEMINI_API_KEY',
-    problem: status.problem,
+    configured: Boolean(resolved.key),
+    source: resolved.source,
+    checked: resolved.checked,
+    fingerprint: keyFingerprint(resolved.key),
+    acceptedEnvVars: [...GEMINI_KEY_ENV_NAMES],
   }
 }
 
-function getValidGeminiKey(req = null) {
-  const headerKey = req?.headers?.['x-gemini-api-key']
-  if (headerKey && typeof headerKey === 'string' && !headerKey.includes('placeholder') && !headerKey.includes('your_gemini')) {
-    return headerKey.trim()
+// Exported for /api/vision-health so operators can verify the exact key and
+// model chain without uploading an image.
+export function getVisionRuntimeStatus() {
+  const resolved = resolveGeminiKey({ env: process.env })
+  return {
+    configured: Boolean(resolved.key),
+    keySource: resolved.source,
+    fingerprint: keyFingerprint(resolved.key),
+    checked: resolved.checked,
+    acceptedEnvVars: [...GEMINI_KEY_ENV_NAMES],
+    models: [...VISION_MODELS],
+    timeoutMs: VISION_TIMEOUT_MS,
   }
-  const key = process.env.GEMINI_API_KEY || process.env.VITE_GEMINI_API_KEY
-  if (!key || typeof key !== 'string' || key.includes('placeholder') || key.includes('your_gemini')) return null
-  return key.trim()
 }
 
 async function analyzeWithGroq(type, payload, req = null, diag = null) {
@@ -624,100 +610,246 @@ ${REASON_CODES_INSTRUCTION}`
 }
 
 // ---------------------------------------------------------------------------
-// Gemini + OpenAI vision analysis (unchanged behavior)
+// Gemini + OpenAI vision analysis
 // ---------------------------------------------------------------------------
 
-const GEMINI_MODELS = [
-  'gemini-2.5-flash',
-  'gemini-2.0-flash',
-  'gemini-1.5-flash',
-  'gemini-1.5-pro',
-]
+const GEMINI_ENDPOINT = 'https://generativelanguage.googleapis.com/v1beta/models'
 
-async function analyzeScreenshotWithGemini(screenshotUrl, imageBase64 = null, mimeType = 'image/png', req = null) {
-  const apiKey = getValidGeminiKey(req)
-  if (!apiKey || (!screenshotUrl && !imageBase64)) return null
-
+/**
+ * Runs one model attempt against the Gemini API and records exactly what
+ * happened. No silent catches: every branch writes to `diag.attempts`.
+ */
+async function callGeminiVision({ apiKey, model, base64, mimeType, diag }) {
+  const startedAt = Date.now()
+  const attempt = { model, ok: false, status: null, durationMs: 0 }
   try {
-    let base64 = imageBase64
-    let contentType = mimeType || 'image/png'
+    const response = await withTimeout(
+      fetch(`${GEMINI_ENDPOINT}/${model}:generateContent`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          // Header auth keeps the key out of URLs/logs.
+          'x-goog-api-key': apiKey,
+        },
+        body: JSON.stringify(buildVisionRequestBody(base64, mimeType, model)),
+      }),
+      VISION_TIMEOUT_MS
+    )
 
-    if (!base64 && screenshotUrl) {
-      const imageResp = await fetch(screenshotUrl)
-      if (!imageResp.ok) return null
-      contentType = imageResp.headers.get('content-type') || 'image/png'
-      const ab = await imageResp.arrayBuffer()
-      base64 = Buffer.from(ab).toString('base64')
+    attempt.status = response.status
+    const raw = await response.text()
+
+    if (!response.ok) {
+      attempt.error = raw.slice(0, 400)
+      attempt.durationMs = Date.now() - startedAt
+      diag.attempts.push(attempt)
+      console.warn(`[TrustBreak AI][vision] ${model} failed HTTP ${response.status} in ${attempt.durationMs}ms — ${attempt.error}`)
+      return null
     }
 
-    if (!base64) return null
-
-    const prompt = `You are TrustBreak AI, a multi-modal cyber-fraud detection engine.
-Analyze this screenshot for cyber scam, phishing, brand impersonation, urgency manipulation, payment fraud, QR code traps, or social engineering.
-Return strict JSON only with keys:
-- fraud_score (number 0-100)
-- risk_level (safe|suspicious|scam)
-- confidence (low|medium|high)
-- reasons (array of specific visual and textual evidence strings)
-- analysis (professional summary of the visual threat)
-- detected_text (all OCR extracted text from the image)
-- attack_intent (what the fraudster is attempting to achieve)
-${REASON_CODES_INSTRUCTION}
-
-Scoring rules (follow them exactly):
-- 0-25 = safe: ordinary screenshots such as app dashboards, terminals, code editors, photos, receipts, or normal chats with no deception cues. Return risk_level "safe" and few or no reasons.
-- 26-60 = suspicious: some pressure/financial wording or an unverifiable claim, but no clear malicious intent.
-- 61-100 = scam: explicit credential/OTP requests, payment demands to unverified parties, fake bank/government notices, brand impersonation, or lookalike payment links.
-Only flag what is actually visible in the image. Do not assume fraud when the screenshot is an ordinary user interface or a technical/developer screen.`
-
-    for (const model of GEMINI_MODELS) {
-      try {
-        const response = await fetch(
-          `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`,
-          {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              contents: [
-                {
-                  parts: [
-                    { text: prompt },
-                    {
-                      inline_data: {
-                        mime_type: contentType,
-                        data: base64,
-                      },
-                    },
-                  ],
-                },
-              ],
-              generationConfig: {
-                temperature: 0.2,
-                responseMimeType: 'application/json',
-              },
-            }),
-          }
-        )
-
-        if (!response.ok) continue
-        const data = await response.json()
-        const text = data?.candidates?.[0]?.content?.parts?.map((p) => p.text || '').join(' ') || ''
-        const result = normalizeVisionResult(parseJsonFromText(text))
-        if (result) return { ...result, source: 'gemini' }
-      } catch {
-        continue
-      }
+    let data = null
+    try {
+      data = JSON.parse(raw)
+    } catch {
+      attempt.error = `response was not JSON: ${raw.slice(0, 200)}`
+      attempt.durationMs = Date.now() - startedAt
+      diag.attempts.push(attempt)
+      console.warn(`[TrustBreak AI][vision] ${model} returned unreadable body`)
+      return null
     }
-    return null
-  } catch {
+
+    const text = extractGeminiText(data)
+    const parsed = parseJsonFromText(text)
+    const result = normalizeVisionResult(parsed)
+
+    attempt.durationMs = Date.now() - startedAt
+    attempt.finishReason = data?.candidates?.[0]?.finishReason || null
+    attempt.hasText = Boolean(text)
+
+    if (!result) {
+      attempt.error = describeGeminiFailure(data)
+      diag.attempts.push(attempt)
+      console.warn(`[TrustBreak AI][vision] ${model} responded but gave no verdict — ${attempt.error}`)
+      return null
+    }
+
+    attempt.ok = true
+    attempt.score = result.fraud_score
+    attempt.risk = result.risk_level
+    diag.attempts.push(attempt)
+    diag.status = 'ok'
+    diag.model = model
+    console.log(`[TrustBreak AI][vision] ${model} verdict score=${result.fraud_score} risk=${result.risk_level} in ${attempt.durationMs}ms`)
+    return { ...result, source: 'gemini', model }
+  } catch (err) {
+    attempt.durationMs = Date.now() - startedAt
+    attempt.error = err?.message || String(err)
+    diag.attempts.push(attempt)
+    console.warn(`[TrustBreak AI][vision] ${model} threw after ${attempt.durationMs}ms — ${attempt.error}`)
     return null
   }
 }
 
-async function analyzeScreenshotWithOpenAI(screenshotUrl) {
+async function analyzeScreenshotWithGemini({ screenshotUrl, imageBase64, mimeType = 'image/png', req = null, diag }) {
+  const keyInfo = resolveGeminiKey({ headerKey: req?.headers?.['x-gemini-api-key'], env: process.env })
+  diag.keySource = keyInfo.source
+  diag.keyFingerprint = keyFingerprint(keyInfo.key)
+  diag.keyChecks = keyInfo.checked
+
+  console.log('[TrustBreak AI][vision] key resolution', {
+    source: keyInfo.source,
+    fingerprint: diag.keyFingerprint,
+    checked: keyInfo.checked,
+  })
+
+  if (!keyInfo.key) {
+    diag.status = 'no-key'
+    console.warn('[TrustBreak AI][vision] no Gemini key found — checked:', keyInfo.checked)
+    return null
+  }
+
+  let base64 = null
+  let contentType = mimeType || 'image/png'
+
+  if (imageBase64) {
+    const normalized = normalizeImageBase64(imageBase64)
+    diag.image = {
+      bytes: typeof imageBase64 === 'string' ? imageBase64.length : 0,
+      validBase64: Boolean(normalized.base64),
+      problem: normalized.problem,
+    }
+    if (!normalized.base64) {
+      diag.status = 'invalid-image'
+      console.warn('[TrustBreak AI][vision] image payload rejected:', normalized.problem)
+      return null
+    }
+    base64 = normalized.base64
+    contentType = normalized.mimeType || contentType
+  } else if (screenshotUrl) {
+    try {
+      console.log('[TrustBreak AI][vision] downloading screenshot_url', screenshotUrl)
+      const imageResp = await fetch(screenshotUrl)
+      if (!imageResp.ok) {
+        diag.status = 'image-download-failed'
+        diag.image = { problem: `HTTP ${imageResp.status} while downloading screenshot_url` }
+        return null
+      }
+      contentType = imageResp.headers.get('content-type') || 'image/png'
+      const ab = await imageResp.arrayBuffer()
+      base64 = Buffer.from(ab).toString('base64')
+      diag.image = { bytes: base64.length, source: 'screenshot_url' }
+    } catch (err) {
+      diag.status = 'image-download-failed'
+      diag.image = { problem: err?.message || 'download failed' }
+      return null
+    }
+  } else {
+    diag.status = 'no-image'
+    console.warn('[TrustBreak AI][vision] no image supplied (image_base64 / screenshot_url both empty)')
+    return null
+  }
+
+  console.log('[TrustBreak AI][vision] request start', {
+    models: VISION_MODELS,
+    mimeType: contentType,
+    base64Bytes: base64.length,
+  })
+
+  diag.status = 'all-models-failed'
+  for (const model of VISION_MODELS) {
+    const result = await callGeminiVision({ apiKey: keyInfo.key, model, base64, mimeType: contentType, diag })
+    if (result) return result
+  }
+
+  console.warn('[TrustBreak AI][vision] every model failed — see attempts', diag.attempts)
+  return null
+}
+
+/**
+ * Secondary vision provider. Groq serves Llama-4 vision models through an
+ * OpenAI-compatible endpoint, so a deployment with GROQ_API_KEY but no Gemini
+ * key can still return a genuine (not fabricated) screenshot verdict.
+ */
+async function analyzeScreenshotWithGroqVision({ base64, mimeType, req, diag }) {
+  const keyInfo = resolveGroqKey(req)
+  if (!keyInfo.key) {
+    if (diag) diag.groqVision = { attempted: false, reason: keyInfo.reason }
+    return null
+  }
+  if (!base64) return null
+
+  const models = ['meta-llama/llama-4-scout-17b-16e-instruct', 'meta-llama/llama-4-maverick-17b-128e-instruct']
+  if (diag) diag.groqVision = { attempted: true, attempts: [] }
+
+  for (const model of models) {
+    const startedAt = Date.now()
+    const attempt = { model, ok: false, status: null, durationMs: 0 }
+    try {
+      const response = await withTimeout(
+        fetch('https://api.groq.com/openai/v1/chat/completions', {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${keyInfo.key}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            model,
+            temperature: 0.2,
+            response_format: { type: 'json_object' },
+            messages: [
+              {
+                role: 'user',
+                content: [
+                  { type: 'text', text: VISION_PROMPT },
+                  { type: 'image_url', image_url: { url: `data:${mimeType || 'image/jpeg'};base64,${base64}` } },
+                ],
+              },
+            ],
+          }),
+        }),
+        VISION_TIMEOUT_MS
+      )
+
+      attempt.status = response.status
+      const raw = await response.text()
+      attempt.durationMs = Date.now() - startedAt
+
+      if (!response.ok) {
+        attempt.error = raw.slice(0, 300)
+        if (diag) diag.groqVision.attempts.push(attempt)
+        console.warn(`[TrustBreak AI][vision] Groq ${model} HTTP ${response.status} — ${attempt.error}`)
+        continue
+      }
+
+      const data = JSON.parse(raw)
+      const result = normalizeVisionResult(parseJsonFromText(data?.choices?.[0]?.message?.content))
+      if (!result) {
+        attempt.error = 'no parsable JSON verdict'
+        if (diag) diag.groqVision.attempts.push(attempt)
+        continue
+      }
+
+      attempt.ok = true
+      attempt.score = result.fraud_score
+      if (diag) diag.groqVision.attempts.push(attempt)
+      console.log(`[TrustBreak AI][vision] Groq ${model} verdict ${result.fraud_score}/${result.risk_level} in ${attempt.durationMs}ms`)
+      return { ...result, source: 'groq-vision', model }
+    } catch (err) {
+      attempt.durationMs = Date.now() - startedAt
+      attempt.error = err?.message || String(err)
+      if (diag) diag.groqVision.attempts.push(attempt)
+      console.warn(`[TrustBreak AI][vision] Groq ${model} threw:`, attempt.error)
+    }
+  }
+
+  return null
+}
+
+async function analyzeScreenshotWithOpenAI(screenshotUrl, diag = null) {
   const apiKey = process.env.OPENAI_API_KEY
   if (!apiKey || !screenshotUrl) return null
 
+  const startedAt = Date.now()
   try {
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
@@ -745,13 +877,26 @@ async function analyzeScreenshotWithOpenAI(screenshotUrl) {
       }),
     })
 
-    if (!response.ok) return null
-    const data = await response.json()
+    const raw = await response.text()
+    const attempt = { model: 'gpt-4.1-mini', status: response.status, ok: response.ok, durationMs: Date.now() - startedAt }
+    if (diag) diag.openaiAttempt = attempt
+
+    if (!response.ok) {
+      attempt.error = raw.slice(0, 300)
+      console.warn(`[TrustBreak AI][vision] OpenAI failed HTTP ${response.status} — ${attempt.error}`)
+      return null
+    }
+
+    const data = JSON.parse(raw)
     const content = data?.choices?.[0]?.message?.content
     const result = normalizeVisionResult(parseJsonFromText(content))
-    if (result) return { ...result, source: 'openai' }
+    if (result) return { ...result, source: 'openai', model: 'gpt-4.1-mini' }
+
+    attempt.error = 'no parsable JSON verdict'
     return null
-  } catch {
+  } catch (err) {
+    if (diag) diag.openaiAttempt = { model: 'gpt-4.1-mini', ok: false, error: err?.message }
+    console.warn('[TrustBreak AI][vision] OpenAI vision threw:', err?.message)
     return null
   }
 }
@@ -980,15 +1125,32 @@ export default async function handler(req, res) {
 
     if (type === 'screenshot') {
       const hasImage = Boolean(payload?.screenshot_url || payload?.image_base64)
+      const keyInfo = resolveGeminiKey({ headerKey: req.headers?.['x-gemini-api-key'], env: process.env })
       const visionDiagnostics = {
         hasImage,
         imageBytes: typeof payload?.image_base64 === 'string' ? payload.image_base64.length : 0,
         mimeType: payload?.mime_type || null,
-        geminiConfigured: Boolean(getValidGeminiKey(req)),
+        geminiConfigured: Boolean(keyInfo.key),
+        keySource: keyInfo.source,
+        keyFingerprint: keyFingerprint(keyInfo.key),
+        keyChecks: keyInfo.checked,
         openaiConfigured: Boolean(process.env.OPENAI_API_KEY),
+        groqConfigured: Boolean(process.env.GROQ_API_KEY),
+        models: [...VISION_MODELS],
+        status: 'not-attempted',
+        attempts: [],
       }
 
+      console.log('[TrustBreak AI][vision] request received', {
+        hasImage,
+        imageBytes: visionDiagnostics.imageBytes,
+        mimeType: payload?.mime_type || null,
+        clientKeyHeader: Boolean(req.headers?.['x-gemini-api-key']),
+        serverKey: getGeminiConfigurationStatus(),
+      })
+
       if (!hasImage) {
+        visionDiagnostics.status = 'no-image'
         console.warn('[TrustBreak AI] screenshot request carried no image payload — refusing to invent a score')
       }
 
@@ -997,13 +1159,34 @@ export default async function handler(req, res) {
         try {
           ai = await withTimeout(
             (async () => {
-              const gemini = await analyzeScreenshotWithGemini(payload?.screenshot_url, payload?.image_base64, payload?.mime_type, req)
+              const gemini = await analyzeScreenshotWithGemini({
+                screenshotUrl: payload?.screenshot_url,
+                imageBase64: payload?.image_base64,
+                mimeType: payload?.mime_type,
+                req,
+                diag: visionDiagnostics,
+              })
               if (gemini) return gemini
-              return analyzeScreenshotWithOpenAI(payload?.screenshot_url)
+
+              // Second real provider — Groq Llama-4 Vision, when available.
+              const groqVision = await analyzeScreenshotWithGroqVision({
+                base64: payload?.image_base64 ? normalizeImageBase64(payload.image_base64).base64 : null,
+                mimeType: payload?.mime_type,
+                req,
+                diag: visionDiagnostics,
+              })
+              if (groqVision) return groqVision
+              if (visionDiagnostics.groqVision?.attempted) {
+                visionDiagnostics.status = 'all-providers-failed'
+              }
+
+              return analyzeScreenshotWithOpenAI(payload?.screenshot_url, visionDiagnostics)
             })(),
-            AI_TIMEOUT_MS * 2 // give screenshots extra time
+            Math.max(VISION_TIMEOUT_MS, AI_TIMEOUT_MS * 2)
           )
         } catch (err) {
+          visionDiagnostics.status = /timed out/i.test(err?.message || '') ? 'timeout' : 'error'
+          visionDiagnostics.timeoutError = err?.message
           console.warn('[TrustBreak AI] Vision AI timed out or failed:', err.message)
         }
       }
@@ -1014,6 +1197,7 @@ export default async function handler(req, res) {
         console.log('[TrustBreak AI][verdict]', {
           type,
           engine: verdict.engine,
+          model: verdict.model,
           score: verdict.fraud_score,
           risk: verdict.risk_level,
           hasOcrText: Boolean(verdict.detected_text),
@@ -1024,25 +1208,38 @@ export default async function handler(req, res) {
       }
 
       // Never fabricate a score: without an image (or without a working vision
-      // key) the honest answer is "not analyzed".
+      // key) the honest answer is "not analyzed" — but we always say *why*.
+      const degradedReason = !hasImage
+        ? 'no-image-payload'
+        : visionDiagnostics.status === 'no-key'
+          ? 'gemini-key-missing'
+          : visionDiagnostics.status === 'timeout'
+            ? 'gemini-timeout'
+            : visionDiagnostics.status === 'invalid-image'
+              ? 'invalid-image-payload'
+              : visionDiagnostics.status === 'image-download-failed'
+                ? 'image-download-failed'
+                : visionDiagnostics.status === 'all-providers-failed'
+                  ? 'vision-providers-failed'
+                  : 'gemini-call-failed'
+
       const fallback = {
-        ...analyzeScreenshotFallback(payload?.detected_text || '', {
-          reason: hasImage ? 'vision-call-failed' : 'no-image-payload',
-        }),
+        ...analyzeScreenshotFallback(payload?.detected_text || '', { reason: degradedReason }),
         source: 'offline-heuristic',
         engine: 'heuristic',
         degraded: true,
-        degraded_reason: hasImage ? 'vision-unavailable' : 'no-image-payload',
+        degraded_reason: degradedReason,
         explanation: null,
+        vision_diagnostics: visionDiagnostics,
       }
-      if (debug) fallback.vision_diagnostics = visionDiagnostics
       console.warn('[TrustBreak AI][verdict]', {
         type,
         engine: 'heuristic',
         degraded: true,
         status: fallback.analysis_status,
         reason: fallback.degraded_reason,
-        ...visionDiagnostics,
+        visionStatus: visionDiagnostics.status,
+        attempts: visionDiagnostics.attempts,
         elapsedMs: Date.now() - requestStartedAt,
       })
       res.status(200).json(fallback)
