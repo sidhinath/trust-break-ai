@@ -103,6 +103,7 @@ export default async function handler(req, res) {
             contents: [{ role: 'user', parts: [{ text: 'Reply with the single word: ok' }] }],
             generationConfig: { temperature: 0, maxOutputTokens: 8 },
           }),
+          signal: AbortSignal.timeout(15000),
         }
       )
 

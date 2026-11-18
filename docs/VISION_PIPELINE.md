@@ -89,6 +89,12 @@ with `Please update your code to use models/X`, the scanner immediately retries
 `X`, so a retirement does not break vision again. Transient 429/503 responses
 get one retry after 600 ms.
 
+Requests are **hedged**: the preferred model starts immediately, and if it has
+not answered after `VISION_HEDGE_DELAY_MS` (default 6 s) the next model starts
+in parallel. The first successful verdict wins, so a model that hangs costs a
+few seconds instead of the whole 45 s budget. Each individual call is capped by
+`VISION_MODEL_TIMEOUT_MS` (default 20 s).
+
 ## Degraded reason codes
 
 | `degraded_reason` | Meaning | Fix |

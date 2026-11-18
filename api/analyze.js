@@ -64,9 +64,14 @@ function withTimeout(promise, ms) {
 }
 
 const AI_TIMEOUT_MS = parseInt(process.env.AI_TIMEOUT_MS || '9000', 10)
-// Per-model budget for vision calls. Kept short so a bad model/key fails over
-// quickly instead of eating the whole serverless budget.
+// Total budget for the whole vision chain. Stays under the 60s function limit.
 const VISION_TIMEOUT_MS = parseInt(process.env.VISION_TIMEOUT_MS || '45000', 10)
+// Budget for a single model call. A model that hangs must not block the scan.
+const VISION_MODEL_TIMEOUT_MS = parseInt(process.env.VISION_MODEL_TIMEOUT_MS || '20000', 10)
+// If the preferred model has not answered by now, start the next one in
+// parallel (hedged request) so a slow/overloaded model costs seconds, not the
+// whole budget.
+const VISION_HEDGE_DELAY_MS = parseInt(process.env.VISION_HEDGE_DELAY_MS || '6000', 10)
 
 // ---------------------------------------------------------------------------
 // Supabase server-side client (for blocklist + community feed lookups)
@@ -425,6 +430,8 @@ export function getVisionRuntimeStatus() {
     acceptedEnvVars: [...GEMINI_KEY_ENV_NAMES],
     models: [...VISION_MODELS],
     timeoutMs: VISION_TIMEOUT_MS,
+    modelTimeoutMs: VISION_MODEL_TIMEOUT_MS,
+    hedgeDelayMs: VISION_HEDGE_DELAY_MS,
   }
 }
 
@@ -640,7 +647,7 @@ async function callGeminiVision({ apiKey, model, base64, mimeType, diag }) {
         },
         body: JSON.stringify(payload),
       }),
-      VISION_TIMEOUT_MS
+      VISION_MODEL_TIMEOUT_MS
     )
 
   try {
@@ -677,7 +684,6 @@ async function callGeminiVision({ apiKey, model, base64, mimeType, diag }) {
       const suggested = mentioned.find((name) => name !== model)
       if (suggested && response.status === 404) {
         attempt.suggestedModel = suggested
-        diag.suggestedModel = suggested
       }
 
       diag.attempts.push(attempt)
@@ -791,30 +797,66 @@ async function analyzeScreenshotWithGemini({ screenshotUrl, imageBase64, mimeTyp
     models: VISION_MODELS,
     mimeType: contentType,
     base64Bytes: base64.length,
+    hedgeDelayMs: VISION_HEDGE_DELAY_MS,
+    modelTimeoutMs: VISION_MODEL_TIMEOUT_MS,
   })
 
   diag.status = 'all-models-failed'
-  // Queue, not a fixed list: when Google retires a model it answers 404 with
-  // "use models/X", and we immediately retry with X. Capped so a broken
-  // response can never loop.
-  const queue = [...VISION_MODELS]
-  const attempted = new Set()
-  while (queue.length > 0 && attempted.size < VISION_MODELS.length + 3) {
-    const model = queue.shift()
-    if (!model || attempted.has(model)) continue
-    attempted.add(model)
 
-    diag.suggestedModel = null
-    const result = await callGeminiVision({ apiKey: keyInfo.key, model, base64, mimeType: contentType, diag })
-    if (result) return result
+  // Hedged requests:
+  //   - the preferred model starts immediately;
+  //   - if it has not answered after VISION_HEDGE_DELAY_MS, the next model is
+  //     started in parallel and the first *successful* verdict wins.
+  // A model that hangs (gemini-3.8-flash did, for the full 45s) therefore
+  // costs a few seconds instead of the whole scan.
+  const launched = new Set()
+  const pending = new Map()
 
-    if (diag.suggestedModel && !attempted.has(diag.suggestedModel)) {
-      console.log(`[TrustBreak AI][vision] ${model} is retired — following Google's hint to ${diag.suggestedModel}`)
-      queue.unshift(diag.suggestedModel)
-    }
+  const launch = (model) => {
+    if (!model || launched.has(model)) return
+    launched.add(model)
+    pending.set(
+      model,
+      callGeminiVision({ apiKey: keyInfo.key, model, base64, mimeType: contentType, diag })
+        .then((result) => ({ model, result }))
+        .catch((err) => ({ model, result: null, error: err?.message }))
+    )
   }
 
-  diag.attemptedModels = [...attempted]
+  launch(VISION_MODELS[0])
+
+  const hedgeTimer = setTimeout(() => {
+    const next = VISION_MODELS.find((model) => !launched.has(model))
+    if (next) {
+      console.log(`[TrustBreak AI][vision] hedge — ${VISION_MODELS[0]} is slow, starting ${next} in parallel`)
+      launch(next)
+    }
+  }, VISION_HEDGE_DELAY_MS)
+
+  try {
+    while (pending.size > 0 && launched.size <= VISION_MODELS.length + 3) {
+      const settled = await Promise.race([...pending.values()])
+      pending.delete(settled.model)
+
+      if (settled.result) return settled.result
+
+      // Read the hint from this model's own attempt record, so parallel
+      // (hedged) calls cannot overwrite each other's suggestion.
+      const suggestion = diag.attempts.find((a) => a.model === settled.model && a.suggestedModel)?.suggestedModel
+      if (suggestion && !launched.has(suggestion)) {
+        console.log(`[TrustBreak AI][vision] ${settled.model} is retired — following Google's hint to ${suggestion}`)
+        launch(suggestion)
+        continue
+      }
+
+      const next = VISION_MODELS.find((model) => !launched.has(model))
+      if (next) launch(next)
+    }
+  } finally {
+    clearTimeout(hedgeTimer)
+  }
+
+  diag.attemptedModels = [...launched]
   console.warn('[TrustBreak AI][vision] every model failed — see attempts', diag.attempts)
   return null
 }
