@@ -1176,7 +1176,9 @@ export default async function handler(req, res) {
                 diag: visionDiagnostics,
               })
               if (groqVision) return groqVision
-              if (visionDiagnostics.groqVision?.attempted) {
+              // Only blame "every provider" when Gemini actually had a key and
+              // rejected it; a missing key keeps its more specific status.
+              if (visionDiagnostics.groqVision?.attempted && visionDiagnostics.status === 'all-models-failed') {
                 visionDiagnostics.status = 'all-providers-failed'
               }
 
