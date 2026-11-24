@@ -12,6 +12,7 @@
  *   SUPABASE_SERVICE_ROLE_KEY
  */
 import crypto from "node:crypto"
+import { getSupabaseServiceKey, getSupabaseUrl } from "../src/lib/supabaseKeys.js"
 
 const OPENPHISH_FEED_URL = "https://openphish.com/feed.txt"
 const URLHAUS_FEED_URL = "https://urlhaus.abuse.ch/downloads/csv_recent/"
@@ -111,11 +112,11 @@ async function upsertBatch(supabaseUrl, serviceKey, rows) {
 }
 
 export async function syncThreatFeeds() {
-  const supabaseUrl = process.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL
-  const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY
+  const supabaseUrl = getSupabaseUrl().value
+  const serviceKey = getSupabaseServiceKey().value
 
   if (!supabaseUrl || !serviceKey) {
-    console.warn("[sync-feeds] Missing SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY — aborting sync")
+    console.warn("[sync-feeds] Missing Supabase URL or server key - aborting sync")
     return { synced: 0, error: "Missing env vars" }
   }
 

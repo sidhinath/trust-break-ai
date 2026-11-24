@@ -25,6 +25,7 @@ import {
   parseJsonFromText,
   resolveGeminiKey,
 } from '../src/lib/vision.js'
+import { getSupabaseAnonKey, getSupabaseServiceKey, getSupabaseUrl } from '../src/lib/supabaseKeys.js'
 import crypto from 'node:crypto'
 
 // ---------------------------------------------------------------------------
@@ -85,9 +86,9 @@ function getVisionTimeouts() {
 // ---------------------------------------------------------------------------
 
 function getSupabaseReadClient() {
-  const url = process.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL
-  // Read operations can use service role key or fall back to public anon key
-  const key = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.VITE_SUPABASE_ANON_KEY || process.env.SUPABASE_ANON_KEY
+  const url = getSupabaseUrl().value
+  // Read operations can use the server secret or fall back to the public key.
+  const key = getSupabaseServiceKey().value || getSupabaseAnonKey().value
   if (!url || !key) return null
   return {
     from: (table) => ({
@@ -103,8 +104,8 @@ function getSupabaseReadClient() {
 }
 
 function getSupabaseServiceClient() {
-  const url = process.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL
-  const key = process.env.SUPABASE_SERVICE_ROLE_KEY
+  const url = getSupabaseUrl().value
+  const key = getSupabaseServiceKey().value
   if (!url || !key) return null
   // Lightweight fetch-based Supabase REST client (no npm dependency needed)
   return {
@@ -315,12 +316,12 @@ function liveFeedVerdict(hostname) {
 
 /**
  * Upsert a high-risk indicator into threat_indicators (fire-and-forget, never blocks response).
- * Requires privileged SUPABASE_SERVICE_ROLE_KEY to write.
+ * Requires a privileged Supabase server key to write.
  */
 function recordThreatIndicator(indicatorHash, indicatorType, riskScore, reasonCodes) {
   if (riskScore < 60) return
-  const url = process.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL
-  const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY
+  const url = getSupabaseUrl().value
+  const serviceKey = getSupabaseServiceKey().value
   if (!url || !serviceKey) return
   const now = new Date().toISOString()
   supabaseFetchUpsert(

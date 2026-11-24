@@ -7,6 +7,8 @@
  * disable it (kill switch).
  */
 
+import { getSupabaseAnonKey, getSupabaseServiceKey, getSupabaseUrl } from '../src/lib/supabaseKeys.js'
+
 const MAX_DOMAINS = 4500
 const REQUEST_TIMEOUT_MS = 10000
 
@@ -73,11 +75,8 @@ export default async function handler(req, res) {
     return
   }
 
-  const url = process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL
-  const key =
-    process.env.SUPABASE_SERVICE_ROLE_KEY ||
-    process.env.SUPABASE_ANON_KEY ||
-    process.env.VITE_SUPABASE_ANON_KEY
+  const url = getSupabaseUrl().value
+  const key = getSupabaseServiceKey().value || getSupabaseAnonKey().value
 
   if (!url || !key) {
     res.status(503).send("# Blocklist database is not configured\n")
