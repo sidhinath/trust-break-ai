@@ -77,11 +77,11 @@ export default function ThreatStats({ reports = [], scans = [] }) {
         {/* Vectors Scanned Bar Chart */}
         <div className="tb-card p-5 space-y-3">
           <div className="flex items-center justify-between">
-            <h3 className="text-xs font-bold uppercase tracking-wider flex items-center gap-1.5"
-              style={{ color: 'var(--tb-text-dim)' }}>
+            <h3 className="text-sm font-bold uppercase tracking-wider flex items-center gap-1.5"
+              style={{ color: '#22d3ee' }}>
               <BarChart2 className="w-3.5 h-3.5 text-cyan-500" /> Vectors Scanned By Channel
             </h3>
-            <span className="text-[10px] font-mono" style={{ color: 'var(--tb-text-muted)' }}>Live Telemetry</span>
+            <span className="text-xs text-slate-400 font-mono">Live Telemetry</span>
           </div>
 
           <div className="h-44 w-full">
@@ -112,11 +112,11 @@ export default function ThreatStats({ reports = [], scans = [] }) {
         {/* 7-Day Activity Trend */}
         <div className="tb-card p-5 space-y-3">
           <div className="flex items-center justify-between">
-            <h3 className="text-xs font-bold uppercase tracking-wider flex items-center gap-1.5"
-              style={{ color: 'var(--tb-text-dim)' }}>
+            <h3 className="text-sm font-bold uppercase tracking-wider flex items-center gap-1.5"
+              style={{ color: '#22d3ee' }}>
               <Activity className="w-3.5 h-3.5 text-emerald-500" /> Detection Activity Trend
             </h3>
-            <span className="text-[10px] font-mono" style={{ color: 'var(--tb-text-muted)' }}>Weekly Curve</span>
+            <span className="text-xs text-slate-400 font-mono">Weekly Curve</span>
           </div>
 
           <div className="h-44 w-full">

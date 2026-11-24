@@ -77,21 +77,21 @@ export default function Home() {
 
       <div className="space-y-3">
         <div className="flex items-center justify-between">
-          <h2 className="text-xs font-bold uppercase tracking-widest" style={{ color: 'var(--tb-text-dim)' }}>
+          <h2 className="text-sm font-bold uppercase tracking-wider" style={{ color: '#22d3ee' }}>
             Security Scanners & Tools
           </h2>
-          <span className="text-[11px] font-mono font-bold text-cyan-600 dark:text-cyan-400">Multi-Modal Protection Engines</span>
+          <span className="text-xs text-slate-400 font-mono font-bold">Multi-Modal Protection Engines</span>
         </div>
         <QuickActions />
       </div>
 
       <div className="space-y-3">
         <div className="flex items-center justify-between">
-          <h2 className="text-xs font-bold uppercase tracking-widest" style={{ color: 'var(--tb-text-dim)' }}>
+          <h2 className="text-sm font-bold uppercase tracking-wider" style={{ color: '#22d3ee' }}>
             Global & Local Intelligence
           </h2>
-          <Link to={createPageUrl("Threats")} className="text-[11px] font-bold text-cyan-600 dark:text-cyan-400 hover:underline flex items-center gap-1">
-            Open Threat Intelligence <ArrowRight className="w-3 h-3" />
+          <Link to={createPageUrl("Threats")} className="text-xs text-slate-400 hover:text-cyan-400 hover:underline flex items-center gap-1">
+            Open Threat Intelligence <ArrowRight className="w-3 h-3 text-slate-400 hover:text-cyan-400" />
           </Link>
         </div>
         {isLoading ? (
@@ -103,10 +103,10 @@ export default function Home() {
 
       <div className="space-y-3">
         <div className="flex items-center justify-between">
-          <h2 className="text-xs font-bold uppercase tracking-widest" style={{ color: 'var(--tb-text-dim)' }}>
+          <h2 className="text-sm font-bold uppercase tracking-wider" style={{ color: '#22d3ee' }}>
             Recent Inspections
           </h2>
-          <Link to={createPageUrl("Reports")} className="text-[11px] font-bold text-cyan-600 dark:text-cyan-400 hover:underline">
+          <Link to={createPageUrl("Reports")} className="text-xs text-slate-400 hover:text-cyan-400 hover:underline">
             View All History
           </Link>
         </div>
