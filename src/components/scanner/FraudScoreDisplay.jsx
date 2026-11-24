@@ -97,7 +97,7 @@ export default function FraudScoreDisplay({
               </span>
             </div>
             <div className="flex items-baseline">
-              <span className={`text-4xl sm:text-5xl font-black font-display ${c.scoreClass}`}>
+              <span className={`text-4xl sm:text-5xl font-black font-mono ${c.scoreClass}`}>
                 {score}
               </span>
               <span className="text-sm font-bold ml-1" style={{ color: 'var(--tb-text-muted)' }}>/100</span>

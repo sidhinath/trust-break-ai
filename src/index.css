@@ -37,6 +37,11 @@
     --tb-skeleton-base: #e2e8f0;
     --tb-skeleton-highlight: #f8fafc;
     --tb-skeleton-border: #cbd5e1;
+
+    /* Font pairing for cybersecurity aesthetic */
+    --tb-font-heading: 'Plus Jakarta Sans', 'Inter', sans-serif;
+    --tb-font-base: 'Inter', system-ui, -apple-system, sans-serif;
+    --tb-font-mono: 'JetBrains Mono', 'SFMono-Regular', 'Consolas', monospace;
   }
 
   .dark {
@@ -145,8 +150,9 @@
     overflow-x: clip;
     background-color: var(--tb-bg);
     color: var(--tb-text);
-    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    font-family: var(--tb-font-base);
     letter-spacing: 0.01em;
+    line-height: 1.625; /* leading-relaxed */
     min-height: 100vh;
     transition: background-color 0.2s ease, color 0.2s ease;
     -webkit-font-smoothing: antialiased;
@@ -183,14 +189,15 @@
   white-space: nowrap;
 }
 
-/* Typography display */
+/* Typography display — headings use Plus Jakarta Sans */
 h1, h2, h3, h4, .font-display {
-  font-family: 'Sora', 'Inter', sans-serif;
+  font-family: var(--tb-font-heading);
   letter-spacing: -0.02em;
 }
 
+/* Monospace — numeric metrics, scanned URLs/codes use JetBrains Mono */
 code, pre, .font-mono {
-  font-family: 'IBM Plex Mono', 'SFMono-Regular', 'Consolas', monospace;
+  font-family: var(--tb-font-mono);
 }
 
 /* Enterprise Cards */

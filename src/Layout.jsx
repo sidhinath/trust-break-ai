@@ -746,7 +746,7 @@ export default function Layout({ children, currentPageName }) {
               </span>
             </button>
 
-            <span className="text-[13px] font-bold uppercase tracking-wider px-2 block mt-6 mb-2 text-cyan-400">
+            <span className="font-display text-[13px] font-bold uppercase tracking-wider px-2 block mt-6 mb-2 text-cyan-400">
               Detection Suites
             </span>
             {detectionNav.map(item => {
@@ -767,7 +767,7 @@ export default function Layout({ children, currentPageName }) {
               );
             })}
 
-            <span className="text-[13px] font-bold uppercase tracking-wider px-2 block mt-6 mb-2 text-cyan-400">
+            <span className="font-display text-[13px] font-bold uppercase tracking-wider px-2 block mt-6 mb-2 text-cyan-400">
               Intelligence & Radar
             </span>
             {intelligenceNav.map(item => {
@@ -788,7 +788,7 @@ export default function Layout({ children, currentPageName }) {
               );
             })}
 
-            <span className="text-[13px] font-bold uppercase tracking-wider px-2 block mt-6 mb-2 text-cyan-400">
+            <span className="font-display text-[13px] font-bold uppercase tracking-wider px-2 block mt-6 mb-2 text-cyan-400">
               Governance & Architecture
             </span>
             {governanceNav.map(item => {
@@ -853,7 +853,7 @@ export default function Layout({ children, currentPageName }) {
           {/* Detection */}
           <div className="space-y-1">
             {sidebarOpen && (
-              <span className="text-[13px] font-bold uppercase tracking-wider px-3 block mt-6 mb-2 text-cyan-400">
+              <span className="font-display text-[13px] font-bold uppercase tracking-wider px-3 block mt-6 mb-2 text-cyan-400">
                 Detection Suites
               </span>
             )}
@@ -883,7 +883,7 @@ export default function Layout({ children, currentPageName }) {
           {/* Intelligence & Business */}
           <div className="space-y-1 pt-1">
             {sidebarOpen && (
-              <span className="text-[13px] font-bold uppercase tracking-wider px-3 block mt-6 mb-2 text-cyan-400">
+              <span className="font-display text-[13px] font-bold uppercase tracking-wider px-3 block mt-6 mb-2 text-cyan-400">
                 Intelligence & Business
               </span>
             )}
@@ -913,7 +913,7 @@ export default function Layout({ children, currentPageName }) {
           {/* Architecture */}
           <div className="space-y-1 pt-1">
             {sidebarOpen && (
-              <span className="text-[13px] font-bold uppercase tracking-wider px-3 block mt-6 mb-2 text-cyan-400">
+              <span className="font-display text-[13px] font-bold uppercase tracking-wider px-3 block mt-6 mb-2 text-cyan-400">
                 Architecture & Trust
               </span>
             )}

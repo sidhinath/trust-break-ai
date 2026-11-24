@@ -89,7 +89,7 @@ export default function RecentScans({ scans = [] }) {
 
             <div className="flex items-center gap-3 shrink-0">
               <div className="text-right">
-                <span className="text-sm font-black font-display block" style={{ color: iconColor }}>
+                <span className="text-sm font-black font-mono block" style={{ color: iconColor }}>
                   {scan.fraud_score}%
                 </span>
                 <span className="text-[10px] font-mono block" style={{ color: 'var(--tb-text-muted)' }}>

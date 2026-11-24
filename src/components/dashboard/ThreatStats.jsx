@@ -62,7 +62,7 @@ export default function ThreatStats({ reports = [], scans = [] }) {
                 </div>
               </div>
               <div className="mt-2.5">
-                <span className="text-2xl sm:text-3xl font-black font-display" style={{ color: 'var(--tb-text)' }}>
+                <span className="text-2xl sm:text-3xl font-black font-mono" style={{ color: 'var(--tb-text)' }}>
                   {stat.value}
                 </span>
               </div>

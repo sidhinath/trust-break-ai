@@ -51,15 +51,10 @@ export default function ProtectionStatus({ threatsBlocked = 0, safetyScore = 100
 
           <div className="pt-2 flex flex-wrap items-center gap-2.5">
             <Link
-              to={createPageUrl("ScanHub")}
+              to={createPageUrl("MessageScanner")}
               className="inline-flex items-center justify-center gap-2 h-9 px-4 rounded-xl text-xs font-bold font-mono tracking-wide uppercase bg-gradient-to-r from-cyan-500 to-cyan-400 hover:from-cyan-400 hover:to-cyan-300 text-slate-950 shadow-[0_0_25px_rgba(0,229,255,0.4)] transition-all hover:scale-[1.02] active:scale-[0.98]">
               <Zap className="w-3.5 h-3.5 fill-current" />
-              Universal Scanner
-            </Link>
-            <Link
-              to={createPageUrl("MessageScanner")}
-              className="text-xs font-bold text-cyan-600 dark:text-cyan-400 hover:underline transition-colors flex items-center gap-1 px-2 py-1 rounded-lg hover:bg-cyan-500/10">
-              Message →
+              Scan Message
             </Link>
             <Link
               to={createPageUrl("LinkScanner")}
@@ -94,7 +89,7 @@ export default function ProtectionStatus({ threatsBlocked = 0, safetyScore = 100
               <Activity className="w-3.5 h-3.5 text-cyan-500" />
             </div>
             <div className="my-1.5 flex items-baseline">
-              <span className={`text-3xl font-black font-display ${isHealthy ? 'score-safe' : 'score-suspicious'}`}>
+              <span className={`text-3xl font-black font-mono ${isHealthy ? 'score-safe' : 'score-suspicious'}`}>
                 {safetyScore}
               </span>
               <span className="text-xs font-bold ml-1" style={{ color: 'var(--tb-text-muted)' }}>/100</span>
@@ -114,7 +109,7 @@ export default function ProtectionStatus({ threatsBlocked = 0, safetyScore = 100
               <ShieldAlert className="w-3.5 h-3.5 text-rose-500" />
             </div>
             <div className="my-1.5">
-              <span className="text-3xl font-black font-display text-rose-500 dark:text-rose-400">
+              <span className="text-3xl font-black font-mono text-rose-500 dark:text-rose-400">
                 {threatsBlocked}
               </span>
             </div>
@@ -133,7 +128,7 @@ export default function ProtectionStatus({ threatsBlocked = 0, safetyScore = 100
               <Zap className="w-3.5 h-3.5 text-amber-500" />
             </div>
             <div className="my-1.5">
-              <span className="text-3xl font-black font-display" style={{ color: 'var(--tb-text)' }}>
+              <span className="text-3xl font-black font-mono" style={{ color: 'var(--tb-text)' }}>
                 {totalScans}
               </span>
             </div>

@@ -411,23 +411,23 @@ export default function Threats() {
           </div>
 
           <div className="tb-card p-5 space-y-3">
-            <h3 className="text-xs font-bold uppercase tracking-wider text-cyan-400">Regional Incident Hotspots</h3>
+            <h3 className="font-display text-xs font-bold uppercase tracking-wider text-cyan-400">Regional Incident Hotspots</h3>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs font-mono">
               <div className="p-3 rounded-lg border bg-slate-900/50 border-slate-700/50">
                 <span className="text-slate-400 block text-[10px]">BENGALURU, KA</span>
-                <span className="font-bold text-rose-400 text-sm">34.2% Density</span>
+                <span className="font-bold font-mono text-rose-400 text-sm">34.2% Density</span>
               </div>
               <div className="p-3 rounded-lg border bg-slate-900/50 border-slate-700/50">
                 <span className="text-slate-400 block text-[10px]">MUMBAI, MH</span>
-                <span className="font-bold text-amber-400 text-sm">26.8% Density</span>
+                <span className="font-bold font-mono text-amber-400 text-sm">26.8% Density</span>
               </div>
               <div className="p-3 rounded-lg border bg-slate-900/50 border-slate-700/50">
                 <span className="text-slate-400 block text-[10px]">DELHI-NCR</span>
-                <span className="font-bold text-rose-400 text-sm">21.5% Density</span>
+                <span className="font-bold font-mono text-rose-400 text-sm">21.5% Density</span>
               </div>
               <div className="p-3 rounded-lg border bg-slate-900/50 border-slate-700/50">
                 <span className="text-slate-400 block text-[10px]">HYDERABAD / CHENNAI</span>
-                <span className="font-bold text-cyan-400 text-sm">17.5% Density</span>
+                <span className="font-bold font-mono text-cyan-400 text-sm">17.5% Density</span>
               </div>
             </div>
           </div>
