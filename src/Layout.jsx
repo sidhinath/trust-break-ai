@@ -324,26 +324,27 @@ export default function Layout({ children, currentPageName }) {
         </div>
 
         {/* Public Page Header */}
-        <header className="sticky top-0 z-40 h-16 border-b backdrop-blur-xl transition-colors duration-300"
+        <header className="tb-header sticky top-0 z-40 h-16 border-b backdrop-blur-xl transition-colors duration-300"
           style={{ background: 'var(--tb-surface)', borderColor: 'var(--tb-border)' }}>
-          <div className="flex items-center justify-between h-full px-4 sm:px-6 max-w-7xl mx-auto w-full">
+          <div className="flex items-center justify-between gap-1 sm:gap-3 h-full px-2 sm:px-6 max-w-7xl mx-auto w-full">
             {currentPageName !== "Home" && (
               <button
                 type="button"
                 onClick={handleExitCurrentTab}
-                className="mr-2 h-8 rounded-lg border px-2.5 text-[10px] font-bold uppercase tracking-[0.14em] transition-all hover:border-cyan-400 hover:text-cyan-400"
+                className="mr-1 sm:mr-2 h-8 w-8 sm:w-auto shrink-0 rounded-lg border px-0 sm:px-2.5 flex items-center justify-center text-[10px] font-bold uppercase tracking-[0.14em] transition-all hover:border-cyan-400 hover:text-cyan-400"
                 style={{ background: 'var(--tb-surface-2)', borderColor: 'var(--tb-border)', color: 'var(--tb-text-dim)' }}
               >
-                Exit
+                <X className="w-3.5 h-3.5 sm:hidden" />
+                <span className="hidden sm:inline">Exit</span>
               </button>
             )}
 
-            <div className="flex items-center gap-3">
-              <Link to="/" className="flex items-center gap-2.5 group">
-                <div className="w-8 h-8 rounded-lg overflow-hidden border border-cyan-500/40 shadow-[0_0_15px_rgba(0,229,255,0.4)] flex items-center justify-center bg-slate-950">
+            <div className="flex items-center gap-1 sm:gap-3 min-w-0">
+              <Link to="/" className="flex items-center gap-1 sm:gap-2.5 min-w-0 group">
+                <div className="w-6 h-6 sm:w-8 sm:h-8 shrink-0 rounded-lg overflow-hidden border border-cyan-500/40 shadow-[0_0_15px_rgba(0,229,255,0.4)] flex items-center justify-center bg-slate-950">
                   <img src="/logo-icon.svg" alt="TrustBreak AI Logo" className="w-full h-full object-cover" />
                 </div>
-                <span className="text-base sm:text-lg font-black tracking-tight font-display" style={{ color: 'var(--tb-text)' }}>
+                <span className="text-[13px] sm:text-lg font-black tracking-tight font-display whitespace-nowrap shrink-0" style={{ color: 'var(--tb-text)' }}>
                   TrustBreak AI
                 </span>
               </Link>
@@ -411,13 +412,13 @@ export default function Layout({ children, currentPageName }) {
               </Link>
             </div>
 
-            <div className="flex items-center gap-2 sm:gap-3">
+            <div className="flex items-center gap-1 sm:gap-2 shrink-0">
               <button
                 onClick={toggleTheme}
                 title={`Switch to ${theme === 'dark' ? 'Light' : 'Dark'} Mode`}
-                className="w-8 h-8 rounded-lg flex items-center justify-center border transition-all"
+                className="w-6 h-8 sm:w-8 sm:h-8 rounded-lg flex items-center justify-center border transition-all shrink-0"
                 style={{ background: 'var(--tb-surface-2)', borderColor: 'var(--tb-border)', color: 'var(--tb-text)' }}>
-                {theme === "dark" ? <Sun className="w-4 h-4 text-amber-400" /> : <Moon className="w-4 h-4 text-cyan-600" />}
+                {theme === "dark" ? <Sun className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-400" /> : <Moon className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-cyan-600" />}
               </button>
 
               <SeniorModeToggleSwitch variant="header" />
@@ -440,11 +441,11 @@ export default function Layout({ children, currentPageName }) {
                 </button>
               ) : (
                 /* Guest — show Sign In + Sign Up */
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-1 sm:gap-2 shrink-0">
                   <button
                     type="button"
                     onClick={openSignIn}
-                    className="h-9 px-3 rounded-xl text-xs font-bold border transition-all hover:border-cyan-400 hover:text-cyan-300"
+                    className="tb-auth-button h-8 sm:h-9 px-1 sm:px-3 rounded-lg sm:rounded-xl text-[13px] sm:text-sm font-bold border transition-all hover:border-cyan-400 hover:text-cyan-300 shrink-0"
                     style={{ background: 'var(--tb-surface-2)', borderColor: 'var(--tb-border)', color: 'var(--tb-text-dim)' }}
                   >
                     Sign In
@@ -452,7 +453,7 @@ export default function Layout({ children, currentPageName }) {
                   <button
                     type="button"
                     onClick={openSignUp}
-                    className="h-9 px-3.5 rounded-xl text-xs font-bold bg-gradient-to-r from-cyan-400 to-blue-500 text-slate-950 shadow-sm transition-all hover:brightness-110"
+                    className="tb-auth-button h-8 sm:h-9 px-2 sm:px-3.5 rounded-lg sm:rounded-xl text-[13px] sm:text-sm font-bold bg-gradient-to-r from-cyan-400 to-blue-500 text-slate-950 shadow-sm transition-all hover:brightness-110 shrink-0"
                   >
                     Sign Up
                   </button>
@@ -535,14 +536,14 @@ export default function Layout({ children, currentPageName }) {
       </div>
       
       {/* Top Command Bar */}
-      <header className="fixed top-0 left-0 right-0 z-40 h-14 border-b backdrop-blur-xl transition-colors duration-300"
+      <header className="tb-header fixed top-0 left-0 right-0 z-40 h-14 border-b backdrop-blur-xl transition-colors duration-300"
         style={{
           background: 'var(--tb-surface)',
           borderColor: 'var(--tb-border)'
         }}>
-        <div className="flex items-center justify-between h-full px-3 sm:px-6 max-w-7xl mx-auto w-full">
+        <div className="flex items-center justify-between gap-1 sm:gap-3 h-full px-2 sm:px-6 max-w-7xl mx-auto w-full">
           
-          <div className="flex items-center gap-2 sm:gap-3">
+          <div className="flex items-center gap-1 sm:gap-3 min-w-0">
             {/* UI Back Button for Secondary Pages */}
             {currentPageName !== "Home" && (
               <button
@@ -550,25 +551,25 @@ export default function Layout({ children, currentPageName }) {
                 onClick={handleExitCurrentTab}
                 aria-label="Go Back"
                 title="Go Back"
-                className="h-9 px-2.5 rounded-xl border flex items-center justify-center gap-1.5 transition-all cursor-pointer hover:border-cyan-400 active:scale-95 shrink-0"
+                className="h-8 w-8 sm:h-9 sm:w-auto sm:px-2.5 rounded-lg sm:rounded-xl border flex items-center justify-center gap-1 sm:gap-1.5 transition-all cursor-pointer hover:border-cyan-400 active:scale-95 shrink-0"
                 style={{
                   background: 'var(--tb-surface-2)',
                   borderColor: 'var(--tb-border)',
                   color: 'var(--tb-text)'
                 }}>
-                <ArrowLeft className="w-4 h-4 text-cyan-500 group-hover:-translate-x-0.5 transition-transform pointer-events-none" />
+                <ArrowLeft className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-cyan-500 group-hover:-translate-x-0.5 transition-transform pointer-events-none" />
                 <span className="text-xs font-bold hidden sm:inline pointer-events-none">Back</span>
               </button>
             )}
 
             {/* Brand Logo with updated logo-icon.svg asset */}
-            <div className="flex items-center gap-2.5 sm:gap-3">
-              <Link to={createPageUrl("Home")} className="flex items-center gap-2.5 group">
-                <div className="w-8 h-8 rounded-lg overflow-hidden border border-cyan-500/40 shadow-[0_0_12px_rgba(0,229,255,0.3)] group-hover:scale-105 transition-transform flex items-center justify-center bg-slate-950">
+            <div className="flex items-center gap-1 sm:gap-3 min-w-0">
+              <Link to={createPageUrl("Home")} className="flex items-center gap-1 sm:gap-2.5 min-w-0 group">
+                <div className="w-6 h-6 sm:w-8 sm:h-8 shrink-0 rounded-lg overflow-hidden border border-cyan-500/40 shadow-[0_0_12px_rgba(0,229,255,0.3)] group-hover:scale-105 transition-transform flex items-center justify-center bg-slate-950">
                   <img src="/logo-icon.svg" alt="TrustBreak AI Logo" className="w-full h-full object-cover" />
                 </div>
                 <div className="flex items-baseline gap-1.5">
-                  <span className="text-base sm:text-lg font-black tracking-tight font-display"
+                  <span className="text-[13px] sm:text-lg font-black tracking-tight font-display whitespace-nowrap shrink-0"
                     style={{ color: 'var(--tb-text)' }}>
                     TrustBreak AI
                   </span>
@@ -608,28 +609,28 @@ export default function Layout({ children, currentPageName }) {
           </div>
 
           {/* Right Header Utility Controls */}
-          <div className="flex items-center gap-1.5 sm:gap-2">
+          <div className="flex items-center gap-0.5 sm:gap-2 shrink-0">
             
-            {/* Theme Toggle Button (Light / Dark) */}
+            {/* Theme Toggle Button — moves into the mobile drawer below 400px */}
             <button
               type="button"
               onClick={toggleTheme}
               title={`Switch to ${theme === 'dark' ? 'Light' : 'Dark'} Mode`}
-              className="w-9 h-9 rounded-xl flex items-center justify-center border transition-all cursor-pointer hover:border-cyan-400 active:scale-95 shrink-0"
+              className="hidden min-[400px]:flex w-8 h-8 sm:w-9 sm:h-9 rounded-lg sm:rounded-xl items-center justify-center border transition-all cursor-pointer hover:border-cyan-400 active:scale-95 shrink-0"
               style={{
                 background: 'var(--tb-surface-2)',
                 borderColor: 'var(--tb-border)',
                 color: 'var(--tb-text)'
               }}>
               {theme === "dark" ? (
-                <Sun className="w-4 h-4 text-amber-400 pointer-events-none" />
+                <Sun className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-400 pointer-events-none" />
               ) : (
-                <Moon className="w-4 h-4 text-cyan-600 pointer-events-none" />
+                <Moon className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-cyan-600 pointer-events-none" />
               )}
             </button>
 
-            {/* Senior Safety Mode Physical Toggle Switch */}
-            <SeniorModeToggleSwitch variant="header" />
+            {/* Senior Safety Mode Physical Toggle Switch — also in the mobile drawer */}
+            <SeniorModeToggleSwitch variant="header" className="max-[399px]:hidden" />
 
             {/* Auth controls — authenticated or guest */}
             {isAuthenticated ? (
@@ -650,11 +651,11 @@ export default function Layout({ children, currentPageName }) {
               </button>
             ) : (
               /* Guest: Sign In + Sign Up buttons */
-              <div className="flex items-center gap-1.5">
+              <div className="flex items-center gap-1 sm:gap-2 shrink-0">
                 <button
                   type="button"
                   onClick={async () => { await triggerHaptic('light'); openSignIn(); }}
-                  className="h-9 px-3 rounded-xl text-xs font-bold border transition-all hover:border-cyan-400 hover:text-cyan-300 active:scale-95 shrink-0"
+                  className="tb-auth-button h-8 sm:h-9 px-1.5 sm:px-3 rounded-lg sm:rounded-xl text-[13px] sm:text-sm font-bold border transition-all hover:border-cyan-400 hover:text-cyan-300 active:scale-95 shrink-0"
                   style={{ background: 'var(--tb-surface-2)', borderColor: 'var(--tb-border)', color: 'var(--tb-text-dim)' }}
                 >
                   Sign In
@@ -662,7 +663,7 @@ export default function Layout({ children, currentPageName }) {
                 <button
                   type="button"
                   onClick={async () => { await triggerHaptic('light'); openSignUp(); }}
-                  className="h-9 px-3.5 rounded-xl text-xs font-bold bg-gradient-to-r from-cyan-400 to-blue-500 text-slate-950 shadow-sm transition-all hover:brightness-110 active:scale-95 shrink-0"
+                  className="tb-auth-button h-8 sm:h-9 px-2 sm:px-3.5 rounded-lg sm:rounded-xl text-[13px] sm:text-sm font-bold bg-gradient-to-r from-cyan-400 to-blue-500 text-slate-950 shadow-sm transition-all hover:brightness-110 active:scale-95 shrink-0"
                 >
                   Sign Up
                 </button>
@@ -676,7 +677,7 @@ export default function Layout({ children, currentPageName }) {
                 await triggerHaptic('light');
                 setMobileMenuOpen(!mobileMenuOpen);
               }}
-              className="md:hidden w-9 h-9 rounded-xl flex items-center justify-center border cursor-pointer active:scale-95 shrink-0"
+              className="md:hidden w-8 h-8 sm:w-9 sm:h-9 rounded-lg sm:rounded-xl flex items-center justify-center border cursor-pointer active:scale-95 shrink-0"
               aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
               style={{
                 background: 'var(--tb-surface-2)',
@@ -743,6 +744,26 @@ export default function Layout({ children, currentPageName }) {
                 Enlarges touch targets and converts risk analysis into simplified plain English.
               </p>
             </div>
+
+            {/* Appearance toggle — header icon is hidden on screens below 400px */}
+            <button
+              type="button"
+              onClick={toggleTheme}
+              className="w-full flex items-center justify-between gap-3 px-3 py-3 rounded-xl border transition-all"
+              style={{ background: 'var(--tb-surface-2)', borderColor: 'var(--tb-border)', color: 'var(--tb-text)' }}
+            >
+              <span className="flex items-center gap-2 text-xs font-bold">
+                {theme === 'dark' ? (
+                  <Sun className="w-4 h-4 text-amber-400" />
+                ) : (
+                  <Moon className="w-4 h-4 text-cyan-500" />
+                )}
+                Appearance
+              </span>
+              <span className="text-[10px] font-mono font-black tracking-wider" style={{ color: 'var(--tb-text-dim)' }}>
+                {theme === 'dark' ? 'DARK' : 'LIGHT'}
+              </span>
+            </button>
 
             <span className="text-[10px] font-bold uppercase tracking-wider px-2 block" style={{ color: 'var(--tb-text-muted)' }}>
               Detection Suites
@@ -821,13 +842,13 @@ export default function Layout({ children, currentPageName }) {
               <div className="mt-4 grid grid-cols-2 gap-2">
                 <button
                   onClick={() => { setMobileMenuOpen(false); openSignIn(); }}
-                  className="flex items-center justify-center gap-1.5 px-3 py-3 rounded-xl font-bold text-xs border border-slate-600 bg-slate-800 text-slate-200 hover:border-cyan-400 transition-all"
+                  className="tb-auth-button flex items-center justify-center gap-1.5 px-3 py-3 rounded-xl font-bold text-xs border border-slate-600 bg-slate-800 text-slate-200 hover:border-cyan-400 transition-all"
                 >
                   <User className="w-3.5 h-3.5" /> Sign In
                 </button>
                 <button
                   onClick={() => { setMobileMenuOpen(false); openSignUp(); }}
-                  className="flex items-center justify-center gap-1.5 px-3 py-3 rounded-xl font-bold text-xs bg-gradient-to-r from-cyan-400 to-blue-500 text-slate-950"
+                  className="tb-auth-button flex items-center justify-center gap-1.5 px-3 py-3 rounded-xl font-bold text-xs bg-gradient-to-r from-cyan-400 to-blue-500 text-slate-950"
                 >
                   <UserPlus className="w-3.5 h-3.5" /> Sign Up
                 </button>

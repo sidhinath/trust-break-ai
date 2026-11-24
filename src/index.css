@@ -135,7 +135,14 @@
     border-color: var(--tb-border);
   }
 
+  /* Block stray horizontal scrolling on phones. `clip` on the body keeps the
+     sticky header working (unlike `overflow-x: hidden` on the body itself). */
+  html {
+    overflow-x: hidden;
+  }
+
   body {
+    overflow-x: clip;
     background-color: var(--tb-bg);
     color: var(--tb-text);
     font-family: 'Inter', system-ui, -apple-system, sans-serif;
@@ -158,6 +165,22 @@
     background-color: #f8fafc;
     background-image: none;
   }
+}
+
+/* The fixed/sticky header must stay inside the viewport on small screens.
+   `clip` is used from lg up so absolutely positioned menus are not clipped. */
+.tb-header {
+  overflow-x: clip;
+}
+@media (max-width: 1023px) {
+  .tb-header {
+    overflow-x: hidden;
+  }
+}
+
+/* Sign In / Sign Up labels must never wrap at 360-430px. */
+.tb-auth-button {
+  white-space: nowrap;
 }
 
 /* Typography display */

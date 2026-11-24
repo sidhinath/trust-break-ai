@@ -67,23 +67,23 @@ export default function SeniorModeToggleSwitch({ variant = "default", className 
         aria-checked={active}
         aria-label="Toggle Senior & Family Safety Mode"
         onClick={handleToggle}
-        className={`h-10 px-3 rounded-xl border flex items-center justify-center gap-2 text-xs font-black transition-all cursor-pointer select-none active:scale-95 shrink-0 touch-manipulation relative overflow-hidden ${
+        className={`h-9 sm:h-10 px-1 sm:px-3 rounded-lg sm:rounded-xl border flex items-center justify-center gap-1 sm:gap-2 text-xs font-black transition-all cursor-pointer select-none active:scale-95 shrink-0 touch-manipulation relative overflow-hidden ${
           active
             ? "bg-emerald-500/20 border-emerald-400 text-emerald-700 dark:text-emerald-300 shadow-[0_0_12px_rgba(16,185,129,0.35)]"
             : "border-slate-300 dark:border-slate-700 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:border-slate-400"
         } ${className}`}
       >
-        <HeartHandshake className={`w-4 h-4 shrink-0 pointer-events-none ${active ? "text-emerald-500" : "text-slate-400"}`} />
+        <HeartHandshake className={`w-3.5 h-3.5 sm:w-4 sm:h-4 hidden sm:block shrink-0 pointer-events-none ${active ? "text-emerald-500" : "text-slate-400"}`} />
         
         <span className="hidden sm:inline font-extrabold tracking-tight pointer-events-none">
           {active ? "Senior Mode: ON" : "Senior Mode"}
         </span>
 
         {/* Sliding Switch Pill Track */}
-        <div className={`w-9 h-5 rounded-full p-0.5 transition-colors flex items-center pointer-events-none ${active ? "bg-emerald-500" : "bg-slate-300 dark:bg-slate-600"}`}>
+        <div className={`w-7 h-5 sm:w-9 rounded-full p-0.5 transition-colors flex items-center pointer-events-none ${active ? "bg-emerald-500" : "bg-slate-300 dark:bg-slate-600"}`}>
           <div
-            className={`w-4 h-4 rounded-full bg-white shadow-md transition-transform duration-200 ease-out transform pointer-events-none ${
-              active ? "translate-x-4" : "translate-x-0"
+            className={`w-3.5 h-3.5 sm:w-4 sm:h-4 rounded-full bg-white shadow-md transition-transform duration-200 ease-out transform pointer-events-none ${
+              active ? "translate-x-3 sm:translate-x-4" : "translate-x-0"
             }`}
           />
         </div>
