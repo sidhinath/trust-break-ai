@@ -10,14 +10,13 @@ import { triggerHaptic } from "@/lib/haptics";
 import { 
   MessageSquareWarning, Link2, Image, Map, AlertTriangle, User, Home, 
   Menu, X, Cpu, Lock, HeartHandshake, Sun, Moon, Mic, QrCode, Shield,
-  FileText, Settings, ArrowLeft, Zap, UserPlus
+  FileText, Settings, ArrowLeft, UserPlus
 } from "lucide-react";
 import SeniorModeToggleSwitch from "@/components/SeniorModeToggleSwitch";
 import { ConstellationField } from "@/shaders/constellation-field/ConstellationField";
 
 const detectionNav = [
   { name: "Command Center", page: "Home", icon: Home },
-  { name: "Universal Scanner", page: "ScanHub", icon: QrCode },
   { name: "Message Scanner", page: "MessageScanner", icon: MessageSquareWarning },
   { name: "Link Inspector", page: "LinkScanner", icon: Link2 },
   { name: "Vision Screenshot", page: "ScreenshotScanner", icon: Image },
@@ -175,15 +174,15 @@ export default function Layout({ children, currentPageName }) {
               const sharedText = urlObj.searchParams.get("text") || urlObj.searchParams.get("url") || urlObj.searchParams.get("share_text");
               if (sharedText) {
                 const isUrl = /^https?:\/\//i.test(sharedText.trim());
-                navigate(createPageUrl("ScanHub"), {
-                  state: { activeTab: isUrl ? "url" : "message", sharedContent: sharedText.trim() }
+                navigate(createPageUrl(isUrl ? "LinkScanner" : "MessageScanner"), {
+                  state: { sharedContent: sharedText.trim() }
                 });
               }
             } catch (e) {
               if (urlStr.startsWith("http://") || urlStr.startsWith("https://")) {
-                navigate(createPageUrl("ScanHub"), { state: { activeTab: "url", sharedContent: urlStr } });
+                navigate(createPageUrl("LinkScanner"), { state: { sharedContent: urlStr } });
               } else if (urlStr.length > 5) {
-                navigate(createPageUrl("ScanHub"), { state: { activeTab: "message", sharedContent: urlStr } });
+                navigate(createPageUrl("MessageScanner"), { state: { sharedContent: urlStr } });
               }
             }
           }
@@ -283,7 +282,7 @@ export default function Layout({ children, currentPageName }) {
 
   const bottomNavItems = [
     { name: "Home", page: "Home", icon: Home },
-    { name: "Scan", page: "ScanHub", icon: QrCode },
+    { name: "Scan", page: "MessageScanner", icon: MessageSquareWarning },
     { name: "Threats", page: "Threats", icon: Map },
     { name: "Reports", page: "Reports", icon: FileText },
     { name: "Settings", page: "Settings", icon: Settings },
@@ -401,15 +400,6 @@ export default function Layout({ children, currentPageName }) {
                   </div>
                 )}
               </div>
-
-              <Link
-                to={createPageUrl("ScanHub")}
-                className="hidden sm:inline-flex items-center gap-2 rounded-xl border px-3 py-2 text-[10px] font-black uppercase tracking-[0.18em] transition-all hover:border-cyan-400 hover:text-cyan-400"
-                style={{ background: 'var(--tb-surface-2)', borderColor: 'var(--tb-border)', color: 'var(--tb-text-dim)' }}
-              >
-                <Zap className="h-3.5 w-3.5 text-cyan-500" />
-                Universal Scanner
-              </Link>
             </div>
 
             <div className="flex items-center gap-1 sm:gap-2 shrink-0">
@@ -596,15 +586,6 @@ export default function Layout({ children, currentPageName }) {
                 }}>
                 <Menu className="w-4 h-4 text-cyan-500 group-hover:scale-110 transition-transform pointer-events-none" />
               </button>
-
-              <Link
-                to={createPageUrl("ScanHub")}
-                className="hidden xl:inline-flex items-center gap-2 rounded-xl border px-3 py-2 text-[10px] font-black uppercase tracking-[0.18em] transition-all hover:border-cyan-400 hover:text-cyan-400"
-                style={{ background: 'var(--tb-surface-2)', borderColor: 'var(--tb-border)', color: 'var(--tb-text-dim)' }}
-              >
-                <Zap className="h-3.5 w-3.5 text-cyan-500" />
-                Universal Scanner
-              </Link>
             </div>
           </div>
 
@@ -765,7 +746,7 @@ export default function Layout({ children, currentPageName }) {
               </span>
             </button>
 
-            <span className="text-[10px] font-bold uppercase tracking-wider px-2 block" style={{ color: 'var(--tb-text-muted)' }}>
+            <span className="text-[13px] font-bold uppercase tracking-wider px-2 block mt-6 mb-2 text-cyan-400">
               Detection Suites
             </span>
             {detectionNav.map(item => {
@@ -786,7 +767,7 @@ export default function Layout({ children, currentPageName }) {
               );
             })}
 
-            <span className="text-[10px] font-bold uppercase tracking-wider px-2 pt-2 block" style={{ color: 'var(--tb-text-muted)' }}>
+            <span className="text-[13px] font-bold uppercase tracking-wider px-2 block mt-6 mb-2 text-cyan-400">
               Intelligence & Radar
             </span>
             {intelligenceNav.map(item => {
@@ -807,7 +788,7 @@ export default function Layout({ children, currentPageName }) {
               );
             })}
 
-            <span className="text-[10px] font-bold uppercase tracking-wider px-2 pt-2 block" style={{ color: 'var(--tb-text-muted)' }}>
+            <span className="text-[13px] font-bold uppercase tracking-wider px-2 block mt-6 mb-2 text-cyan-400">
               Governance & Architecture
             </span>
             {governanceNav.map(item => {
@@ -872,8 +853,7 @@ export default function Layout({ children, currentPageName }) {
           {/* Detection */}
           <div className="space-y-1">
             {sidebarOpen && (
-              <span className="text-[10px] font-bold uppercase tracking-wider px-3 block mb-1"
-                style={{ color: 'var(--tb-text-muted)' }}>
+              <span className="text-[13px] font-bold uppercase tracking-wider px-3 block mt-6 mb-2 text-cyan-400">
                 Detection Suites
               </span>
             )}
@@ -903,8 +883,7 @@ export default function Layout({ children, currentPageName }) {
           {/* Intelligence & Business */}
           <div className="space-y-1 pt-1">
             {sidebarOpen && (
-              <span className="text-[10px] font-bold uppercase tracking-wider px-3 block mb-1"
-                style={{ color: 'var(--tb-text-muted)' }}>
+              <span className="text-[13px] font-bold uppercase tracking-wider px-3 block mt-6 mb-2 text-cyan-400">
                 Intelligence & Business
               </span>
             )}
@@ -934,8 +913,7 @@ export default function Layout({ children, currentPageName }) {
           {/* Architecture */}
           <div className="space-y-1 pt-1">
             {sidebarOpen && (
-              <span className="text-[10px] font-bold uppercase tracking-wider px-3 block mb-1"
-                style={{ color: 'var(--tb-text-muted)' }}>
+              <span className="text-[13px] font-bold uppercase tracking-wider px-3 block mt-6 mb-2 text-cyan-400">
                 Architecture & Trust
               </span>
             )}
