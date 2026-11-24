@@ -30,7 +30,7 @@ export default function ThreatReconstruction({ attackChain = [], attackerIntent 
             {isSafe ? (
               <ShieldCheck className="w-4 h-4 text-emerald-400" />
             ) : (
-              <ShieldAlert className="w-4 h-4 text-cyan-600 dark:text-cyan-400" />
+              <ShieldAlert className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
             )}
           </div>
           <div>
@@ -90,7 +90,7 @@ export default function ThreatReconstruction({ attackChain = [], attackerIntent 
               : item.severity === 'critical' ? 'var(--tb-red)' : item.severity === 'high' ? 'var(--tb-orange)' : 'var(--tb-neon)';
             const severityBg = isItemSafe
               ? 'rgba(16,185,129,0.14)'
-              : item.severity === 'critical' ? 'rgba(239,68,68,0.14)' : item.severity === 'high' ? 'rgba(245,158,11,0.12)' : 'rgba(0,229,255,0.1)';
+              : item.severity === 'critical' ? 'rgba(239,68,68,0.14)' : item.severity === 'high' ? 'rgba(245,158,11,0.12)' : 'rgba(16,185,129,0.1)';
 
             return (
               <motion.button
@@ -99,7 +99,7 @@ export default function ThreatReconstruction({ attackChain = [], attackerIntent 
                 whileTap={{ scale: 0.98 }}
                 onClick={() => setSelectedStage(isSelected ? null : index)}
                 className={`text-left p-3 rounded-xl border transition-all flex flex-col justify-between ${
-                  isSelected ? 'tb-card-highlight ring-1 ring-cyan-400' : ''
+                  isSelected ? 'tb-card-highlight ring-1 ring-emerald-400' : ''
                 }`}
                 style={{
                   background: isSelected ? undefined : 'var(--tb-surface-2)',
@@ -139,7 +139,7 @@ export default function ThreatReconstruction({ attackChain = [], attackerIntent 
               className="mt-3 p-4 rounded-xl border"
               style={{ background: "var(--tb-surface-2)", borderColor: "var(--tb-border)" }}>
               <div className="flex items-center gap-2 mb-1.5">
-                <span className="text-xs font-mono font-bold text-cyan-600 dark:text-cyan-400">
+                <span className="text-xs font-mono font-bold text-emerald-600 dark:text-emerald-400">
                   Stage {selectedStage + 1} Detail:
                 </span>
                 <span className="text-xs font-bold" style={{ color: "var(--tb-text)" }}>
@@ -156,3 +156,5 @@ export default function ThreatReconstruction({ attackChain = [], attackerIntent 
     </div>
   );
 }
+
+

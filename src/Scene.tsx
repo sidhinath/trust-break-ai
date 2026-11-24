@@ -1,4 +1,4 @@
-﻿import { LiquidMetalButton } from "@designcodeio/threeui";
+import { LiquidMetalButton } from "@designcodeio/threeui";
 import "@designcodeio/threeui/style.css";
 
 export function Scene() {
@@ -12,3 +12,5 @@ export function Scene() {
 }
 
 export default Scene;
+
+

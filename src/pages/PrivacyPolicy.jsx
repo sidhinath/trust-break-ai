@@ -32,7 +32,7 @@ export default function PrivacyPolicy() {
 
         {/* Section 1: Overview */}
         <section className="space-y-2">
-          <h2 className="text-sm font-bold uppercase tracking-wider text-cyan-600 dark:text-cyan-400 flex items-center gap-2">
+          <h2 className="text-sm font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400 flex items-center gap-2">
             1. Data Minimization & Collection Principles
           </h2>
           <p style={{ color: 'var(--tb-text-dim)' }}>
@@ -47,7 +47,7 @@ export default function PrivacyPolicy() {
 
         {/* Section 2: India DPDP Act 2023 Disclosures */}
         <section className="space-y-2">
-          <h2 className="text-sm font-bold uppercase tracking-wider text-cyan-600 dark:text-cyan-400 flex items-center gap-2">
+          <h2 className="text-sm font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400 flex items-center gap-2">
             2. Compliance with India’s Digital Personal Data Protection (DPDP) Act 2023
           </h2>
           <p style={{ color: 'var(--tb-text-dim)' }}>
@@ -62,7 +62,7 @@ export default function PrivacyPolicy() {
             </div>
             <div className="p-3 rounded-xl border space-y-1" style={{ background: 'var(--tb-surface-2)', borderColor: 'var(--tb-border)' }}>
               <span className="font-bold flex items-center gap-1.5" style={{ color: 'var(--tb-text)' }}>
-                <ShieldCheck className="w-3.5 h-3.5 text-cyan-500" /> Right to Erasure / Instant Wipe
+                <ShieldCheck className="w-3.5 h-3.5 text-emerald-500" /> Right to Erasure / Instant Wipe
               </span>
               <p style={{ color: 'var(--tb-text-dim)' }}>Instantly purge all historical scan logs via our self-service Privacy Center.</p>
             </div>
@@ -83,7 +83,7 @@ export default function PrivacyPolicy() {
 
         {/* Section 3: Data Protection of Children */}
         <section className="space-y-2">
-          <h2 className="text-sm font-bold uppercase tracking-wider text-cyan-600 dark:text-cyan-400">
+          <h2 className="text-sm font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">
             3. Data Protection of Children & Minors
           </h2>
           <p style={{ color: 'var(--tb-text-dim)' }}>
@@ -93,7 +93,7 @@ export default function PrivacyPolicy() {
 
         {/* Section 4: Data Processors & Infrastructure */}
         <section className="space-y-2">
-          <h2 className="text-sm font-bold uppercase tracking-wider text-cyan-600 dark:text-cyan-400">
+          <h2 className="text-sm font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">
             4. Infrastructure & Third-Party Processors
           </h2>
           <p style={{ color: 'var(--tb-text-dim)' }}>
@@ -107,8 +107,8 @@ export default function PrivacyPolicy() {
         </section>
 
         {/* Section 5: Grievance Officer & Legal Contact */}
-        <section className="p-4 rounded-xl border border-cyan-500/30 bg-cyan-500/5 space-y-3">
-          <h2 className="text-sm font-bold uppercase tracking-wider text-cyan-600 dark:text-cyan-400 flex items-center gap-2">
+        <section className="p-4 rounded-xl border border-emerald-500/30 bg-emerald-500/5 space-y-3">
+          <h2 className="text-sm font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400 flex items-center gap-2">
             <Mail className="w-4 h-4" /> Data Protection & Grievance Redressal Officer
           </h2>
           <p style={{ color: 'var(--tb-text-dim)' }}>
@@ -116,15 +116,15 @@ export default function PrivacyPolicy() {
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs font-mono">
             <div className="flex items-center gap-2">
-              <Building className="w-3.5 h-3.5 text-cyan-500" />
+              <Building className="w-3.5 h-3.5 text-emerald-500" />
               <span>TrustBreak AI Cyber Defense Systems</span>
             </div>
             <div className="flex items-center gap-2">
-              <Mail className="w-3.5 h-3.5 text-cyan-500" />
+              <Mail className="w-3.5 h-3.5 text-emerald-500" />
               <span>dpo@trustbreak.ai / privacy@trustbreak.ai</span>
             </div>
             <div className="flex items-center gap-2">
-              <MapPin className="w-3.5 h-3.5 text-cyan-500" />
+              <MapPin className="w-3.5 h-3.5 text-emerald-500" />
               <span>Outer Ring Road, Bengaluru, KA 560103, India</span>
             </div>
           </div>
@@ -134,3 +134,5 @@ export default function PrivacyPolicy() {
     </div>
   );
 }
+
+

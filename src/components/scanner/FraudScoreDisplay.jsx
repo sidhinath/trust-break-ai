@@ -125,7 +125,7 @@ export default function FraudScoreDisplay({
         return (
           <div className="tb-card p-5 space-y-3">
             <h3 className="text-xs font-bold uppercase tracking-wider flex items-center gap-2" style={{ color: 'var(--tb-text-dim)' }}>
-              <Sparkles className="w-3.5 h-3.5 text-cyan-500" />
+              <Sparkles className="w-3.5 h-3.5 text-emerald-500" />
               Structured Risk Indicators ({reasonCodes.length})
             </h3>
             <div className="flex flex-wrap gap-2">
@@ -166,7 +166,7 @@ export default function FraudScoreDisplay({
       {signals && Object.values(signals).some(Boolean) && (
         <div className="tb-card p-5 space-y-3">
           <h3 className="text-xs font-bold uppercase tracking-wider flex items-center gap-2" style={{ color: 'var(--tb-text-dim)' }}>
-            <Sparkles className="w-3.5 h-3.5 text-cyan-500" />
+            <Sparkles className="w-3.5 h-3.5 text-emerald-500" />
             Detected Manipulation Signals
           </h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
@@ -203,9 +203,9 @@ export default function FraudScoreDisplay({
             {signals.impersonation && (
               <div className="p-3 rounded-xl border flex items-start gap-2.5"
                 style={{ background: 'var(--tb-surface-2)', borderColor: 'var(--tb-border)' }}>
-                <Users className="w-4 h-4 text-cyan-500 shrink-0 mt-0.5" />
+                <Users className="w-4 h-4 text-emerald-500 shrink-0 mt-0.5" />
                 <div>
-                  <span className="text-xs font-bold text-cyan-600 dark:text-cyan-400 block">Brand Impersonation</span>
+                  <span className="text-xs font-bold text-emerald-600 dark:text-emerald-400 block">Brand Impersonation</span>
                   <p className="text-xs mt-0.5" style={{ color: 'var(--tb-text)' }}>{signals.impersonation}</p>
                 </div>
               </div>
@@ -217,7 +217,7 @@ export default function FraudScoreDisplay({
       {/* Detailed Evidence Points */}
       <div className="tb-card p-5 space-y-3">
         <h3 className="text-xs font-bold uppercase tracking-wider flex items-center gap-2" style={{ color: 'var(--tb-text-dim)' }}>
-          <Sparkles className="w-3.5 h-3.5 text-cyan-500" />
+          <Sparkles className="w-3.5 h-3.5 text-emerald-500" />
           Extracted Technical Evidence & Security Findings ({(reasons && reasons.length) || 4})
         </h3>
         <div className="space-y-2">
@@ -230,7 +230,7 @@ export default function FraudScoreDisplay({
                 transition={{ delay: i * 0.05 }}
                 className="flex items-start gap-2.5 p-2.5 rounded-lg border"
                 style={{ background: 'var(--tb-surface-2)', borderColor: 'var(--tb-border)' }}>
-                <span className={riskLevel === 'safe' ? 'text-emerald-500 font-bold text-sm' : 'text-cyan-500 font-bold text-sm'}>
+                <span className={riskLevel === 'safe' ? 'text-emerald-500 font-bold text-sm' : 'text-emerald-500 font-bold text-sm'}>
                   {riskLevel === 'safe' ? '✓' : '›'}
                 </span>
                 <span className="text-xs font-medium leading-relaxed" style={{ color: 'var(--tb-text)' }}>{reason}</span>
@@ -287,3 +287,5 @@ export default function FraudScoreDisplay({
     </motion.div>
   );
 }
+
+

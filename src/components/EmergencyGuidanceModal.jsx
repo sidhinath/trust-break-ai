@@ -137,12 +137,12 @@ export default function EmergencyGuidanceModal({ isOpen, onClose }) {
                 }}
                 className={`p-3 rounded-xl border text-left text-xs font-bold transition-all flex items-center justify-between cursor-pointer touch-manipulation ${
                   selectedScenario === s.id
-                    ? "border-2 border-cyan-500 bg-cyan-500/15 dark:bg-cyan-950/60 text-cyan-950 dark:text-cyan-200 font-black shadow-md ring-2 ring-cyan-500/30"
-                    : "border border-slate-300 dark:border-slate-700 bg-slate-100 dark:bg-slate-800/80 hover:border-cyan-500 text-slate-900 dark:text-slate-100"
+                    ? "border-2 border-emerald-500 bg-emerald-500/15 dark:bg-emerald-950/60 text-emerald-950 dark:text-emerald-200 font-black shadow-md ring-2 ring-emerald-500/30"
+                    : "border border-slate-300 dark:border-slate-700 bg-slate-100 dark:bg-slate-800/80 hover:border-emerald-500 text-slate-900 dark:text-slate-100"
                 }`}
               >
                 <span className="pointer-events-none">{s.title}</span>
-                {selectedScenario === s.id && <CheckCircle2 className="w-4 h-4 text-cyan-600 dark:text-cyan-400 shrink-0 pointer-events-none" />}
+                {selectedScenario === s.id && <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0 pointer-events-none" />}
               </button>
             ))}
           </div>
@@ -180,3 +180,5 @@ export default function EmergencyGuidanceModal({ isOpen, onClose }) {
     </div>
   );
 }
+
+

@@ -105,3 +105,5 @@ export function signInLocalUser(email, password) {
     user: buildUserFromEmail(normalizedEmail, savedUser.displayName || normalizedEmail.split('@')[0]),
   }
 }
+
+

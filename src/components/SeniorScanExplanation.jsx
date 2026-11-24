@@ -112,7 +112,7 @@ export default function SeniorScanExplanation({ result, rawInput = "", scanType 
 
       {/* Section 1: What TrustBreak AI Detected */}
       <div className="p-4 rounded-2xl border border-slate-300 dark:border-slate-800 bg-slate-100/80 dark:bg-slate-900/60 space-y-1.5">
-        <h4 className="font-black text-sm sm:text-base flex items-center gap-2 text-cyan-700 dark:text-cyan-400">
+        <h4 className="font-black text-sm sm:text-base flex items-center gap-2 text-emerald-700 dark:text-emerald-400">
           <HelpCircle className="w-4 h-4" />
           <span>What TrustBreak AI Detected</span>
         </h4>
@@ -154,3 +154,5 @@ export default function SeniorScanExplanation({ result, rawInput = "", scanType 
     </div>
   );
 }
+
+

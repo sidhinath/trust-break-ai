@@ -8,3 +8,5 @@ export function assertRequiredEnv() {
     console.warn(`[TrustBreak AI Runtime] Missing environment variables: ${missing.join(', ')}. Operating in local offline mode.`)
   }
 }
+
+

@@ -88,7 +88,7 @@ TrustBreak AI uses **Supabase Auth** with the following behavior:
 
 ### Public pages
 
-`Home`, `ScanHub` (hub shell), `Threats`, `Technology`, `BusinessModel`, `PrivacyPolicy`, `Terms`, `CookiePolicy`, `RefundPolicy`
+`Home`, `Threats`, `Technology`, `BusinessModel`, `PrivacyPolicy`, `Terms`, `CookiePolicy`, `RefundPolicy`
 
 ### Protected pages
 

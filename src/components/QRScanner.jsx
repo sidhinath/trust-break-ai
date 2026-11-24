@@ -386,3 +386,5 @@ export default function QRScanner({ onDecoded, onError }) {
     </div>
   );
 }
+
+

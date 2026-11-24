@@ -70,7 +70,7 @@ export default function ScamSimulationModal({ isOpen, onClose }) {
         {/* Header */}
         <div className="flex items-center justify-between border-b pb-3" style={{ borderColor: 'var(--tb-border)' }}>
           <div className="flex items-center gap-2.5 pointer-events-none">
-            <div className="w-10 h-10 rounded-xl bg-cyan-500/20 border border-cyan-500/40 flex items-center justify-center text-cyan-500 pointer-events-none">
+            <div className="w-10 h-10 rounded-xl bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center text-emerald-500 pointer-events-none">
               <Award className="w-5 h-5 pointer-events-none" />
             </div>
             <div className="pointer-events-none">
@@ -99,7 +99,7 @@ export default function ScamSimulationModal({ isOpen, onClose }) {
 
         {/* Scenario Display Card */}
         <div className="p-4 sm:p-5 rounded-2xl bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-800 space-y-2 pointer-events-none">
-          <span className="text-xs font-black uppercase tracking-wider text-cyan-600 dark:text-cyan-400 pointer-events-none">{currentScenario.title}</span>
+          <span className="text-xs font-black uppercase tracking-wider text-emerald-600 dark:text-emerald-400 pointer-events-none">{currentScenario.title}</span>
           <p className="text-sm font-bold leading-relaxed text-slate-900 dark:text-slate-100 p-3.5 rounded-xl bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 shadow-sm pointer-events-none">
             "{currentScenario.content}"
           </p>
@@ -156,7 +156,7 @@ export default function ScamSimulationModal({ isOpen, onClose }) {
             <button
               type="button"
               onClick={handleNext}
-              className="w-full h-12 rounded-2xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-black text-sm flex items-center justify-center gap-2 shadow-md transition-all cursor-pointer touch-manipulation"
+              className="w-full h-12 rounded-2xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-sm flex items-center justify-center gap-2 shadow-md transition-all cursor-pointer touch-manipulation"
             >
               <span className="pointer-events-none">{currentScenarioIndex < scenarios.length - 1 ? "Try Next Scenario" : "Finish Practice"}</span>
               <ArrowRight className="w-4 h-4 pointer-events-none" />
@@ -167,3 +167,5 @@ export default function ScamSimulationModal({ isOpen, onClose }) {
     </div>
   );
 }
+
+

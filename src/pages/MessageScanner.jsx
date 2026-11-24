@@ -138,7 +138,7 @@ export default function MessageScanner() {
           <div className="flex items-center justify-between">
             <span className="text-xs font-bold uppercase tracking-wider flex items-center gap-1.5"
               style={{ color: 'var(--tb-text-dim)' }}>
-              <Sparkles className="w-3.5 h-3.5 text-cyan-500" /> Benchmark Test Scenarios
+              <Sparkles className="w-3.5 h-3.5 text-emerald-500" /> Benchmark Test Scenarios
             </span>
             {message && (
               <button
@@ -154,13 +154,13 @@ export default function MessageScanner() {
               <button
                 key={threat.id}
                 onClick={() => handleSelectSample(threat.sampleInput)}
-                className="text-[11px] font-bold px-3 py-1.5 rounded-lg border hover:border-cyan-400/50 transition-all text-left cursor-pointer"
+                className="text-[11px] font-bold px-3 py-1.5 rounded-lg border hover:border-emerald-400/50 transition-all text-left cursor-pointer"
                 style={{
                   background: 'var(--tb-surface-2)',
                   borderColor: 'var(--tb-border)',
                   color: 'var(--tb-text)'
                 }}>
-                <span className="text-cyan-600 dark:text-cyan-400 font-mono mr-1">{threat.category}:</span>
+                <span className="text-emerald-600 dark:text-emerald-400 font-mono mr-1">{threat.category}:</span>
                 {threat.title}
               </button>
             ))}
@@ -168,7 +168,7 @@ export default function MessageScanner() {
         </div>
 
         {/* Text Input Area */}
-        <div className="rounded-xl border focus-within:border-cyan-500/50 transition-colors p-2"
+        <div className="rounded-xl border focus-within:border-emerald-500/50 transition-colors p-2"
           style={{ background: 'var(--tb-surface-2)', borderColor: 'var(--tb-border)' }}>
           <Textarea
             value={message}
@@ -184,7 +184,7 @@ export default function MessageScanner() {
           <Button
             onClick={() => handleScan()}
             disabled={scanning || investigating || !message.trim()}
-            className="h-12 rounded-xl font-bold transition-all shadow-md bg-cyan-500 hover:bg-cyan-400 text-slate-950 cursor-pointer">
+            className="h-12 rounded-xl font-bold transition-all shadow-md bg-emerald-500 hover:bg-emerald-400 text-slate-950 cursor-pointer">
             {scanning ? "Evaluating Threat Vectors..." : "Inspect & Reconstruct Threat"}
           </Button>
 
@@ -193,7 +193,7 @@ export default function MessageScanner() {
               onClick={() => handleTinyFishInvestigation(extractedUrl)}
               disabled={scanning || investigating || !message.trim()}
               variant="outline"
-              className="h-12 rounded-xl font-bold border-cyan-500/40 hover:bg-cyan-500/10 text-cyan-400 transition-all cursor-pointer">
+              className="h-12 rounded-xl font-bold border-emerald-500/40 hover:bg-emerald-500/10 text-emerald-400 transition-all cursor-pointer">
               {investigating ? "Live Agent Investigating..." : "🤖 TinyFish Live AI Agent"}
             </Button>
           )}
@@ -231,7 +231,7 @@ export default function MessageScanner() {
                 await triggerHaptic("light");
                 setShowTrustedContact(true);
               }}
-              className="h-11 px-4 rounded-xl bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-400 border border-cyan-500/40 font-bold text-xs flex items-center gap-2 transition-all cursor-pointer">
+              className="h-11 px-4 rounded-xl bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-400 border border-emerald-500/40 font-bold text-xs flex items-center gap-2 transition-all cursor-pointer">
               <Users className="w-4 h-4" />
               <span>Ask Trusted Contact / Family Member</span>
             </button>
@@ -270,3 +270,5 @@ export default function MessageScanner() {
     </ProtectedPage>
   );
 }
+
+

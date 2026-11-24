@@ -71,7 +71,7 @@ export default function Technology() {
       {/* Architecture Stepper */}
       <div className="tb-card p-6 space-y-4">
         <h3 className="text-xs font-bold uppercase tracking-wider flex items-center gap-2" style={{ color: 'var(--tb-text-dim)' }}>
-          <Layers className="w-4 h-4 text-cyan-500" /> End-to-End Processing Architecture
+          <Layers className="w-4 h-4 text-emerald-500" /> End-to-End Processing Architecture
         </h3>
 
         <div className="space-y-3">
@@ -81,7 +81,7 @@ export default function Technology() {
               className="p-4 rounded-xl border flex flex-col sm:flex-row sm:items-center justify-between gap-3"
               style={{ background: 'var(--tb-surface-2)', borderColor: 'var(--tb-border)' }}>
               <div className="flex items-start gap-3">
-                <span className="w-6 h-6 rounded-md font-mono text-xs font-bold text-cyan-600 dark:text-cyan-400 flex items-center justify-center border shrink-0 mt-0.5"
+                <span className="w-6 h-6 rounded-md font-mono text-xs font-bold text-emerald-600 dark:text-emerald-400 flex items-center justify-center border shrink-0 mt-0.5"
                   style={{ background: 'var(--tb-surface-3)', borderColor: 'var(--tb-border)' }}>
                   0{idx + 1}
                 </span>
@@ -99,9 +99,9 @@ export default function Technology() {
       </div>
 
       {/* Competitive Differentiation */}
-      <div className="tb-card p-6 space-y-4 border-cyan-500/30">
+      <div className="tb-card p-6 space-y-4 border-emerald-500/30">
         <div className="flex items-center gap-2">
-          <Sparkles className="w-4 h-4 text-cyan-500" />
+          <Sparkles className="w-4 h-4 text-emerald-500" />
           <h3 className="text-xs font-bold uppercase tracking-wider" style={{ color: 'var(--tb-text)' }}>
             Why TrustBreak AI? Key Technical Differentiators
           </h3>
@@ -114,8 +114,8 @@ export default function Technology() {
               <div key={i} className="p-4 rounded-xl border space-y-2"
                 style={{ background: 'var(--tb-surface-2)', borderColor: 'var(--tb-border)' }}>
                 <div className="flex items-center gap-2">
-                  <div className="w-7 h-7 rounded-lg bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center">
-                    <Icon className="w-3.5 h-3.5 text-cyan-500" />
+                  <div className="w-7 h-7 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center">
+                    <Icon className="w-3.5 h-3.5 text-emerald-500" />
                   </div>
                   <h4 className="text-xs font-bold" style={{ color: 'var(--tb-text)' }}>{item.title}</h4>
                 </div>
@@ -128,3 +128,5 @@ export default function Technology() {
     </div>
   );
 }
+
+

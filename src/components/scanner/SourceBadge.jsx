@@ -35,7 +35,7 @@ export default function SourceBadge({ source }) {
 
   if (source === "trustbreak-heuristics" || source === "offline-heuristic") {
     return (
-      <span className="inline-flex items-center gap-1 text-[10px] font-bold px-2.5 py-0.5 rounded-full font-mono border border-cyan-500/40 bg-cyan-500/10 text-cyan-600 dark:text-cyan-400">
+      <span className="inline-flex items-center gap-1 text-[10px] font-bold px-2.5 py-0.5 rounded-full font-mono border border-emerald-500/40 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
         <ShieldCheck className="w-3 h-3" />
         TrustBreak AI Threat Engine Online
       </span>
@@ -55,3 +55,5 @@ export default function SourceBadge({ source }) {
     </span>
   );
 }
+
+

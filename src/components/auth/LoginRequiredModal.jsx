@@ -91,7 +91,7 @@ export default function LoginRequiredModal({ isOpen, onClose, feature, onSignIn,
               <button
                 type="button"
                 onClick={handleSignIn}
-                className="w-full h-11 rounded-xl bg-gradient-to-r from-cyan-400 to-blue-500 text-sm font-bold text-slate-950 shadow-[0_0_20px_rgba(34,211,238,0.25)] hover:brightness-110 transition-all flex items-center justify-center gap-2"
+                className="w-full h-11 rounded-xl bg-gradient-to-r from-emerald-400 to-blue-500 text-sm font-bold text-slate-950 shadow-[0_0_20px_rgba(34,211,238,0.25)] hover:brightness-110 transition-all flex items-center justify-center gap-2"
               >
                 <LogIn className="h-4 w-4" />
                 Sign In
@@ -100,7 +100,7 @@ export default function LoginRequiredModal({ isOpen, onClose, feature, onSignIn,
               <button
                 type="button"
                 onClick={handleSignUp}
-                className="w-full h-11 rounded-xl border border-cyan-500/30 bg-cyan-500/8 text-sm font-bold text-cyan-300 hover:border-cyan-400 hover:bg-cyan-500/15 transition-all flex items-center justify-center gap-2"
+                className="w-full h-11 rounded-xl border border-emerald-500/30 bg-emerald-500/8 text-sm font-bold text-emerald-300 hover:border-emerald-400 hover:bg-emerald-500/15 transition-all flex items-center justify-center gap-2"
               >
                 <UserPlus className="h-4 w-4" />
                 Create Free Account
@@ -120,3 +120,5 @@ export default function LoginRequiredModal({ isOpen, onClose, feature, onSignIn,
     </AnimatePresence>
   );
 }
+
+

@@ -87,7 +87,7 @@ export default function Reports() {
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Search by URL, keyword, or threat type..."
-              className="w-full pl-9 pr-3 py-2 rounded-xl border text-xs outline-none transition-colors focus:border-cyan-500"
+              className="w-full pl-9 pr-3 py-2 rounded-xl border text-xs outline-none transition-colors focus:border-emerald-500"
               style={{
                 background: "var(--tb-surface-2)",
                 borderColor: "var(--tb-border)",
@@ -97,7 +97,7 @@ export default function Reports() {
           </div>
 
           <div className="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0 shrink-0">
-            <Filter className="w-3.5 h-3.5 text-cyan-400 mr-1" />
+            <Filter className="w-3.5 h-3.5 text-emerald-400 mr-1" />
             {[
               { id: "all", label: "All Logs" },
               { id: "high_risk", label: "High Risk" },
@@ -112,7 +112,7 @@ export default function Reports() {
                 onClick={() => setFilterType(f.id)}
                 className={`text-xs font-semibold px-3 py-1.5 rounded-lg border transition-all whitespace-nowrap ${
                   filterType === f.id
-                    ? "bg-cyan-500/15 border-cyan-400 text-cyan-400 font-bold"
+                    ? "bg-emerald-500/15 border-emerald-400 text-emerald-400 font-bold"
                     : "hover:border-slate-500 text-slate-400"
                 }`}
                 style={{
@@ -131,7 +131,7 @@ export default function Reports() {
         <ThreatListSkeleton count={6} />
       ) : filteredScans.length === 0 ? (
         <div className="tb-card p-12 text-center space-y-3">
-          <ShieldAlert className="w-10 h-10 text-cyan-400 mx-auto opacity-50" />
+          <ShieldAlert className="w-10 h-10 text-emerald-400 mx-auto opacity-50" />
           <h3 className="text-base font-bold" style={{ color: "var(--tb-text)" }}>
             No Scan Records Found
           </h3>
@@ -160,7 +160,7 @@ export default function Reports() {
               <div
                 key={scan.id || idx}
                 onClick={() => setSelectedReport(scan)}
-                className="tb-card p-4 hover:border-cyan-500/40 transition-all cursor-pointer flex items-center justify-between gap-3 group">
+                className="tb-card p-4 hover:border-emerald-500/40 transition-all cursor-pointer flex items-center justify-between gap-3 group">
                 <div className="flex items-center gap-3 min-w-0 flex-1">
                   <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 border ${
                     isScam ? "bg-rose-500/10 border-rose-500/30 text-rose-500" :
@@ -181,17 +181,17 @@ export default function Reports() {
                       {scan.source && <SourceBadge source={scan.source} />}
                     </div>
 
-                    <p className="text-xs font-bold truncate group-hover:text-cyan-400 transition-colors" style={{ color: "var(--tb-text)" }}>
+                    <p className="text-xs font-bold truncate group-hover:text-emerald-400 transition-colors" style={{ color: "var(--tb-text)" }}>
                       {scan.input_content || scan.analysis || "Scan Report Entry"}
                     </p>
 
                     <div className="flex items-center gap-2 text-[10px] text-slate-400 font-mono">
-                      <Clock className="w-3 h-3 text-cyan-500" />
+                      <Clock className="w-3 h-3 text-emerald-500" />
                       <span>{new Date(scan.created_at || scan.timestamp || Date.now()).toLocaleString()}</span>
                       {scan.threat_category && (
                         <>
                           <span>•</span>
-                          <span className="text-cyan-400">{scan.threat_category}</span>
+                          <span className="text-emerald-400">{scan.threat_category}</span>
                         </>
                       )}
                     </div>
@@ -199,7 +199,7 @@ export default function Reports() {
                 </div>
 
                 <div className="flex items-center gap-2 shrink-0">
-                  <Button variant="ghost" className="h-8 text-xs gap-1 text-cyan-400 hover:text-cyan-300">
+                  <Button variant="ghost" className="h-8 text-xs gap-1 text-emerald-400 hover:text-emerald-300">
                     Details <ChevronRight className="w-4 h-4" />
                   </Button>
                   <button
@@ -222,7 +222,7 @@ export default function Reports() {
       {/* Report Detail Modal */}
       {selectedReport && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fadeIn">
-          <div className="max-w-xl w-full tb-card p-6 space-y-4 max-h-[85vh] overflow-y-auto relative border-cyan-500/40">
+          <div className="max-w-xl w-full tb-card p-6 space-y-4 max-h-[85vh] overflow-y-auto relative border-emerald-500/40">
             <button
               onClick={() => setSelectedReport(null)}
               className="absolute top-4 right-4 p-1 rounded-lg hover:bg-slate-800 text-slate-400 hover:text-white">
@@ -255,7 +255,7 @@ export default function Reports() {
 
             {selectedReport.analysis && (
               <div className="space-y-1">
-                <h4 className="text-xs font-bold uppercase tracking-wider text-cyan-400">Threat Verdict & Analysis</h4>
+                <h4 className="text-xs font-bold uppercase tracking-wider text-emerald-400">Threat Verdict & Analysis</h4>
                 <p className="text-xs leading-relaxed" style={{ color: "var(--tb-text-dim)" }}>
                   {selectedReport.analysis}
                 </p>
@@ -264,7 +264,7 @@ export default function Reports() {
 
             {selectedReport.reasons && selectedReport.reasons.length > 0 && (
               <div className="space-y-2">
-                <h4 className="text-xs font-bold uppercase tracking-wider text-cyan-400">Flagged Security Indicators</h4>
+                <h4 className="text-xs font-bold uppercase tracking-wider text-emerald-400">Flagged Security Indicators</h4>
                 <div className="space-y-1.5">
                   {selectedReport.reasons.map((r, i) => (
                     <div key={i} className="p-2.5 rounded-lg border border-rose-500/20 bg-rose-500/5 text-xs text-rose-300 flex items-start gap-2">
@@ -277,7 +277,7 @@ export default function Reports() {
             )}
 
             <div className="pt-2 flex justify-end">
-              <Button onClick={() => setSelectedReport(null)} className="h-9 px-4 text-xs font-semibold bg-cyan-500 hover:bg-cyan-400 text-slate-950">
+              <Button onClick={() => setSelectedReport(null)} className="h-9 px-4 text-xs font-semibold bg-emerald-500 hover:bg-emerald-400 text-slate-950">
                 Close Report
               </Button>
             </div>
@@ -288,3 +288,5 @@ export default function Reports() {
     </ProtectedPage>
   );
 }
+
+

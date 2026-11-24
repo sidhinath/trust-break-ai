@@ -19,3 +19,5 @@ export async function triggerHaptic(type = 'light') {
     // Graceful fallback for web/non-capacitor browsers
   }
 }
+
+

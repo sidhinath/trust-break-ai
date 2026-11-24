@@ -3,7 +3,7 @@ import { QueryClientProvider } from '@tanstack/react-query'
 import { queryClientInstance } from '@/lib/query-client'
 import { AuthProvider, useAuth } from '@/lib/AuthContext'
 import { pagesConfig } from './pages.config'
-import { HashRouter, Route, Routes } from 'react-router-dom';
+import { HashRouter, Navigate, Route, Routes } from 'react-router-dom';
 import PageNotFound from './lib/PageNotFound';
 import AppErrorBoundary from '@/components/AppErrorBoundary'
 import OnboardingLanding from '@/components/auth/OnboardingLanding'
@@ -28,6 +28,8 @@ const AppRoutes = () => {
           <MainPage />
         </LayoutWrapper>
       } />
+      {/* Legacy hub links now land directly on a dedicated scanner. */}
+      <Route path="/ScanHub" element={<Navigate to="/MessageScanner" replace />} />
       {Object.entries(Pages).map(([path, Page]) => (
         <Route
           key={path}
@@ -105,3 +107,5 @@ function App() {
 }
 
 export default App
+
+

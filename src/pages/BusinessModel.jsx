@@ -13,7 +13,7 @@ export default function BusinessModel() {
     <div className="space-y-6 pb-8">
       {/* Header */}
       <div className="flex items-center gap-3">
-        <div className="w-10 h-10 rounded-xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-500 shrink-0">
+        <div className="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-500 shrink-0">
           <Building2 className="w-5 h-5" />
         </div>
         <div>
@@ -31,9 +31,9 @@ export default function BusinessModel() {
         <div className="tb-card p-4 space-y-1" style={{ background: 'var(--tb-surface)' }}>
           <div className="flex items-center justify-between text-xs font-bold uppercase tracking-wider" style={{ color: 'var(--tb-text-dim)' }}>
             Blended COGS / Scan
-            <Cpu className="w-4 h-4 text-cyan-500" />
+            <Cpu className="w-4 h-4 text-emerald-500" />
           </div>
-          <div className="text-2xl font-black font-mono text-cyan-600 dark:text-cyan-400">$0.000125</div>
+          <div className="text-2xl font-black font-mono text-emerald-600 dark:text-emerald-400">$0.000125</div>
           <p className="text-[11px] text-emerald-600 dark:text-emerald-400 font-semibold">Groq LPU + On-device DSP</p>
         </div>
 
@@ -49,7 +49,7 @@ export default function BusinessModel() {
         <div className="tb-card p-4 space-y-1" style={{ background: 'var(--tb-surface)' }}>
           <div className="flex items-center justify-between text-xs font-bold uppercase tracking-wider" style={{ color: 'var(--tb-text-dim)' }}>
             B2B API Price
-            <Zap className="w-4 h-4 text-cyan-500" />
+            <Zap className="w-4 h-4 text-emerald-500" />
           </div>
           <div className="text-2xl font-black font-mono" style={{ color: 'var(--tb-text)' }}>$0.005</div>
           <p className="text-[11px]" style={{ color: 'var(--tb-text-dim)' }}>Per FinTech verification call</p>
@@ -71,7 +71,7 @@ export default function BusinessModel() {
           onClick={() => setActiveTab("pricing")}
           className={`flex-1 py-2.5 px-3 rounded-lg text-xs font-bold transition-all flex items-center justify-center gap-2 ${
             activeTab === "pricing" 
-              ? "bg-cyan-500 text-slate-950 font-black shadow-md" 
+              ? "bg-emerald-500 text-slate-950 font-black shadow-md" 
               : "hover:bg-slate-500/10"
           }`}
           style={{ color: activeTab === "pricing" ? undefined : 'var(--tb-text-dim)' }}
@@ -82,7 +82,7 @@ export default function BusinessModel() {
           onClick={() => setActiveTab("unit-economics")}
           className={`flex-1 py-2.5 px-3 rounded-lg text-xs font-bold transition-all flex items-center justify-center gap-2 ${
             activeTab === "unit-economics" 
-              ? "bg-cyan-500 text-slate-950 font-black shadow-md" 
+              ? "bg-emerald-500 text-slate-950 font-black shadow-md" 
               : "hover:bg-slate-500/10"
           }`}
           style={{ color: activeTab === "unit-economics" ? undefined : 'var(--tb-text-dim)' }}
@@ -93,7 +93,7 @@ export default function BusinessModel() {
           onClick={() => setActiveTab("flywheel")}
           className={`flex-1 py-2.5 px-3 rounded-lg text-xs font-bold transition-all flex items-center justify-center gap-2 ${
             activeTab === "flywheel" 
-              ? "bg-cyan-500 text-slate-950 font-black shadow-md" 
+              ? "bg-emerald-500 text-slate-950 font-black shadow-md" 
               : "hover:bg-slate-500/10"
           }`}
           style={{ color: activeTab === "flywheel" ? undefined : 'var(--tb-text-dim)' }}
@@ -114,7 +114,7 @@ export default function BusinessModel() {
               className="w-12 h-6 rounded-full border p-0.5 relative transition-colors"
               style={{ background: 'var(--tb-surface-2)', borderColor: 'var(--tb-border)' }}
             >
-              <div className={`w-4.5 h-4.5 rounded-full bg-cyan-500 transition-transform ${billingCycle === "annual" ? "translate-x-6" : "translate-x-0"}`} />
+              <div className={`w-4.5 h-4.5 rounded-full bg-emerald-500 transition-transform ${billingCycle === "annual" ? "translate-x-6" : "translate-x-0"}`} />
             </button>
             <span className="text-xs font-bold flex items-center gap-1.5" style={{ color: billingCycle === "annual" ? "var(--tb-neon)" : "var(--tb-text-dim)" }}>
               Annual Billing <span className="text-[10px] bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 px-2 py-0.5 rounded-full border border-emerald-500/30">Save 20%</span>
@@ -148,8 +148,8 @@ export default function BusinessModel() {
             </div>
 
             {/* Pro */}
-            <div className="tb-card p-5 flex flex-col justify-between space-y-4 border-cyan-500/50 relative shadow-[0_0_25px_rgba(0,229,255,0.12)]" style={{ background: 'var(--tb-surface)' }}>
-              <div className="absolute -top-3 right-4 bg-cyan-500 text-slate-950 text-[10px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded-full shadow">
+            <div className="tb-card p-5 flex flex-col justify-between space-y-4 border-emerald-500/50 relative shadow-[0_0_25px_rgba(16,185,129,0.12)]" style={{ background: 'var(--tb-surface)' }}>
+              <div className="absolute -top-3 right-4 bg-emerald-500 text-slate-950 text-[10px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded-full shadow">
                 Most Popular
               </div>
               <div className="space-y-3">
@@ -157,20 +157,20 @@ export default function BusinessModel() {
                 <h3 className="text-lg font-bold font-display" style={{ color: 'var(--tb-text)' }}>TrustBreak AI Pro</h3>
                 <p className="text-xs" style={{ color: 'var(--tb-text-dim)' }}>Full multi-modal protection across all 5 vectors.</p>
                 <div className="py-2">
-                  <span className="text-3xl font-extrabold text-cyan-600 dark:text-cyan-400 font-mono">
+                  <span className="text-3xl font-extrabold text-emerald-600 dark:text-emerald-400 font-mono">
                     {billingCycle === "annual" ? "$4.08" : "$4.99"}
                   </span>
                   <span className="text-xs" style={{ color: 'var(--tb-text-dim)' }}> / month</span>
                 </div>
                 <ul className="space-y-2 text-xs" style={{ color: 'var(--tb-text-dim)' }}>
-                  <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-cyan-500 shrink-0" /> Everything in Free Tier</li>
-                  <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-cyan-500 shrink-0" /> Voice Deepfake & Audio Analyzer</li>
-                  <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-cyan-500 shrink-0" /> Real-Time Live Camera QR HUD</li>
-                  <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-cyan-500 shrink-0" /> Gemini 2.5 Flash Vision Screenshot OCR</li>
-                  <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-cyan-500 shrink-0" /> Sub-Second Groq LPU Inference</li>
+                  <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" /> Everything in Free Tier</li>
+                  <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" /> Voice Deepfake & Audio Analyzer</li>
+                  <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" /> Real-Time Live Camera QR HUD</li>
+                  <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" /> Gemini 2.5 Flash Vision Screenshot OCR</li>
+                  <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" /> Sub-Second Groq LPU Inference</li>
                 </ul>
               </div>
-              <Button className="w-full bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold h-10 rounded-xl shadow-md">Upgrade to Pro</Button>
+              <Button className="w-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold h-10 rounded-xl shadow-md">Upgrade to Pro</Button>
             </div>
 
             {/* Enterprise API */}
@@ -229,7 +229,7 @@ export default function BusinessModel() {
                   <td className="py-3 px-3">Groq Inc.</td>
                   <td className="py-3 px-3">620 ms</td>
                   <td className="py-3 px-3">$0.10</td>
-                  <td className="py-3 px-3 text-right font-mono text-cyan-600 dark:text-cyan-400 font-bold">$0.000100</td>
+                  <td className="py-3 px-3 text-right font-mono text-emerald-600 dark:text-emerald-400 font-bold">$0.000100</td>
                 </tr>
                 <tr>
                   <td className="py-3 px-3 font-semibold" style={{ color: 'var(--tb-text)' }}>URL / Typosquatting</td>
@@ -237,7 +237,7 @@ export default function BusinessModel() {
                   <td className="py-3 px-3">Supabase Edge</td>
                   <td className="py-3 px-3">120 ms</td>
                   <td className="py-3 px-3">$0.02</td>
-                  <td className="py-3 px-3 text-right font-mono text-cyan-600 dark:text-cyan-400 font-bold">$0.000020</td>
+                  <td className="py-3 px-3 text-right font-mono text-emerald-600 dark:text-emerald-400 font-bold">$0.000020</td>
                 </tr>
                 <tr>
                   <td className="py-3 px-3 font-semibold" style={{ color: 'var(--tb-text)' }}>Screenshot OCR</td>
@@ -245,7 +245,7 @@ export default function BusinessModel() {
                   <td className="py-3 px-3">Google Cloud</td>
                   <td className="py-3 px-3">950 ms</td>
                   <td className="py-3 px-3">$0.25</td>
-                  <td className="py-3 px-3 text-right font-mono text-cyan-600 dark:text-cyan-400 font-bold">$0.000250</td>
+                  <td className="py-3 px-3 text-right font-mono text-emerald-600 dark:text-emerald-400 font-bold">$0.000250</td>
                 </tr>
                 <tr>
                   <td className="py-3 px-3 font-semibold" style={{ color: 'var(--tb-text)' }}>Live Camera QR</td>
@@ -253,7 +253,7 @@ export default function BusinessModel() {
                   <td className="py-3 px-3">Client Device ($0)</td>
                   <td className="py-3 px-3">40 ms</td>
                   <td className="py-3 px-3">$0.02</td>
-                  <td className="py-3 px-3 text-right font-mono text-cyan-600 dark:text-cyan-400 font-bold">$0.000020</td>
+                  <td className="py-3 px-3 text-right font-mono text-emerald-600 dark:text-emerald-400 font-bold">$0.000020</td>
                 </tr>
                 <tr>
                   <td className="py-3 px-3 font-semibold" style={{ color: 'var(--tb-text)' }}>Voice Deepfake Audio</td>
@@ -261,7 +261,7 @@ export default function BusinessModel() {
                   <td className="py-3 px-3">Client DSP + Groq</td>
                   <td className="py-3 px-3">1100 ms</td>
                   <td className="py-3 px-3">$0.15</td>
-                  <td className="py-3 px-3 text-right font-mono text-cyan-600 dark:text-cyan-400 font-bold">$0.000150</td>
+                  <td className="py-3 px-3 text-right font-mono text-emerald-600 dark:text-emerald-400 font-bold">$0.000150</td>
                 </tr>
                 <tr className="font-bold border-t" style={{ background: 'var(--tb-surface-2)', borderColor: 'var(--tb-border)', color: 'var(--tb-text)' }}>
                   <td className="py-3 px-3" colSpan={4}>Blended Average Cost per User Scan</td>
@@ -285,7 +285,7 @@ export default function BusinessModel() {
 
             <div className="grid md:grid-cols-4 gap-4">
               <div className="p-4 rounded-xl border space-y-1" style={{ background: 'var(--tb-surface-2)', borderColor: 'var(--tb-border)' }}>
-                <span className="text-[10px] font-bold text-cyan-600 dark:text-cyan-400 uppercase tracking-wider block">Step 1</span>
+                <span className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider block">Step 1</span>
                 <h4 className="text-xs font-bold" style={{ color: 'var(--tb-text)' }}>Viral Consumer PLG</h4>
                 <p className="text-[11px]" style={{ color: 'var(--tb-text-dim)' }}>Free scanner drives rapid adoption across SMS, web, and mobile.</p>
               </div>
@@ -339,7 +339,7 @@ export default function BusinessModel() {
                     <td className="py-2.5 px-3 font-semibold" style={{ color: 'var(--tb-text)' }}>B2C Subscription ARR</td>
                     <td className="py-2.5 px-3">$235,000</td>
                     <td className="py-2.5 px-3">$1,874,000</td>
-                    <td className="py-2.5 px-3 text-right font-bold text-cyan-600 dark:text-cyan-400">$7,840,000</td>
+                    <td className="py-2.5 px-3 text-right font-bold text-emerald-600 dark:text-emerald-400">$7,840,000</td>
                   </tr>
                   <tr>
                     <td className="py-2.5 px-3 font-semibold" style={{ color: 'var(--tb-text)' }}>B2B API & Enterprise ARR</td>
@@ -362,3 +362,5 @@ export default function BusinessModel() {
     </div>
   );
 }
+
+

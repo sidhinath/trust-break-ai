@@ -1055,3 +1055,5 @@ export function analyzeScreenshotFallback(detectedText = '', options = {}) {
     reasonCodes: filterValidReasonCodes(textResult.reasonCodes || []),
   }
 }
+
+

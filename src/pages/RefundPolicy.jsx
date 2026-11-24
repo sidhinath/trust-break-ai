@@ -32,7 +32,7 @@ export default function RefundPolicy() {
 
         {/* Section 1: Free Tier & Hackathon Scope */}
         <section className="space-y-2">
-          <h2 className="text-sm font-bold uppercase tracking-wider text-cyan-600 dark:text-cyan-400">
+          <h2 className="text-sm font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">
             1. Free Tier & Evaluation Plan
           </h2>
           <p style={{ color: 'var(--tb-text-dim)' }}>
@@ -42,7 +42,7 @@ export default function RefundPolicy() {
 
         {/* Section 2: Pro & Enterprise API Tiers */}
         <section className="space-y-3">
-          <h2 className="text-sm font-bold uppercase tracking-wider text-cyan-600 dark:text-cyan-400">
+          <h2 className="text-sm font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">
             2. 14-Day Money-Back Guarantee for Paid API & Enterprise Tiers
           </h2>
           <p style={{ color: 'var(--tb-text-dim)' }}>
@@ -72,7 +72,7 @@ export default function RefundPolicy() {
 
         {/* Section 3: Instant Cancellation */}
         <section className="space-y-2">
-          <h2 className="text-sm font-bold uppercase tracking-wider text-cyan-600 dark:text-cyan-400">
+          <h2 className="text-sm font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">
             3. Self-Service Cancellation
           </h2>
           <p style={{ color: 'var(--tb-text-dim)' }}>
@@ -100,3 +100,5 @@ export default function RefundPolicy() {
     </div>
   );
 }
+
+

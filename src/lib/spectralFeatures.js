@@ -1,7 +1,7 @@
-﻿import FFT from 'fft.js'
+import FFT from 'fft.js'
 
 /**
- * TrustBreak AI — Voice & Deepfake Acoustic Feature Extraction
+ * TrustBreak AI � Voice & Deepfake Acoustic Feature Extraction
  *
  * Computes Spectral Flatness Measure (SFM) across audio frames using FFT.js.
  * SFM = (Geometric Mean of Power Spectrum) / (Arithmetic Mean of Power Spectrum)
@@ -86,3 +86,5 @@ export function combineVoiceThreatScore(textRiskScore, spectralFlatness) {
   const combined = (textRiskScore * 0.75) + (acousticSignal * 25)
   return Math.min(100, Math.max(0, Math.round(combined)))
 }
+
+

@@ -22,21 +22,21 @@ export default function ScanningAnimation({ label = "Analyzing threat vectors...
   const CurrentIcon = stages[stage]?.icon || Sparkles;
 
   return (
-    <div className="tb-card p-6 flex flex-col items-center justify-center space-y-4 text-center border-cyan-500/30 overflow-hidden relative">
+    <div className="tb-card p-6 flex flex-col items-center justify-center space-y-4 text-center border-emerald-500/30 overflow-hidden relative">
       <div className="relative w-20 h-20 flex items-center justify-center">
         <motion.div
           animate={{ scale: [1, 1.8, 1], opacity: [0.6, 0, 0.6] }}
           transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute inset-0 rounded-full border border-cyan-400/40 bg-cyan-400/10"
+          className="absolute inset-0 rounded-full border border-emerald-400/40 bg-emerald-400/10"
         />
         <motion.div
           animate={{ rotate: 360 }}
           transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
-          className="absolute inset-0 rounded-full border-t-2 border-cyan-400"
+          className="absolute inset-0 rounded-full border-t-2 border-emerald-400"
         />
-        <div className="w-12 h-12 rounded-xl border border-cyan-500/40 flex items-center justify-center z-10"
+        <div className="w-12 h-12 rounded-xl border border-emerald-500/40 flex items-center justify-center z-10"
           style={{ background: 'var(--tb-surface-2)' }}>
-          <CurrentIcon className="w-6 h-6 text-cyan-500 animate-pulse" />
+          <CurrentIcon className="w-6 h-6 text-emerald-500 animate-pulse" />
         </div>
       </div>
 
@@ -55,7 +55,7 @@ export default function ScanningAnimation({ label = "Analyzing threat vectors...
           <div
             key={i}
             className={`h-1.5 rounded-full transition-all duration-300 ${
-              i <= stage ? "w-8 bg-cyan-500 shadow-[0_0_8px_rgba(0,229,255,0.6)]" : "w-2 bg-slate-400/30"
+              i <= stage ? "w-8 bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.6)]" : "w-2 bg-slate-400/30"
             }`}
           />
         ))}
@@ -63,3 +63,4 @@ export default function ScanningAnimation({ label = "Analyzing threat vectors...
     </div>
   );
 }
+

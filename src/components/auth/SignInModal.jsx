@@ -107,16 +107,16 @@ export default function SignInModal({ isOpen, onClose, onSuccess, initialMode })
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 16, scale: 0.95 }}
             transition={{ duration: 0.22, ease: "easeOut" }}
-            className="w-full max-w-md rounded-2xl border border-cyan-500/30 bg-slate-950/98 p-6 shadow-[0_24px_64px_rgba(6,11,20,0.7)]"
+            className="w-full max-w-md rounded-2xl border border-emerald-500/30 bg-slate-950/98 p-6 shadow-[0_24px_64px_rgba(6,11,20,0.7)]"
           >
             {/* Header */}
             <div className="mb-5 flex items-start justify-between gap-3">
               <div>
                 <div className="flex items-center gap-2 mb-1">
-                  <div className="w-6 h-6 rounded-lg overflow-hidden border border-cyan-500/40 bg-slate-950 flex items-center justify-center">
+                  <div className="w-6 h-6 rounded-lg overflow-hidden border border-emerald-500/40 bg-slate-950 flex items-center justify-center">
                     <img src="/logo-icon.svg" alt="TrustBreak AI" className="w-full h-full object-cover" />
                   </div>
-                  <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-cyan-400">TrustBreak AI</p>
+                  <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-emerald-400">TrustBreak AI</p>
                 </div>
                 <h3 className="text-2xl font-black tracking-[-0.04em] text-white">
                   {mode === "signup" ? "Create account" : "Welcome back"}
@@ -131,25 +131,25 @@ export default function SignInModal({ isOpen, onClose, onSuccess, initialMode })
                 type="button"
                 aria-label="Close"
                 onClick={() => { resetForm(); onClose?.(); }}
-                className="flex h-8 w-8 items-center justify-center rounded-full border border-white/10 bg-white/5 text-slate-300 transition-colors hover:border-cyan-400 hover:text-white shrink-0"
+                className="flex h-8 w-8 items-center justify-center rounded-full border border-white/10 bg-white/5 text-slate-300 transition-colors hover:border-emerald-400 hover:text-white shrink-0"
               >
                 <X className="h-4 w-4" />
               </button>
             </div>
 
             {/* Mode Toggle */}
-            <div className="mb-5 flex rounded-xl border border-cyan-500/20 bg-cyan-500/5 p-1 text-xs font-semibold">
+            <div className="mb-5 flex rounded-xl border border-emerald-500/20 bg-emerald-500/5 p-1 text-xs font-semibold">
               <button
                 type="button"
                 onClick={() => handleModeSwitch("signin")}
-                className={`flex-1 rounded-lg px-3 py-2 transition-all ${mode === "signin" ? "bg-slate-900 text-cyan-300 shadow-sm" : "text-slate-400 hover:text-slate-200"}`}
+                className={`flex-1 rounded-lg px-3 py-2 transition-all ${mode === "signin" ? "bg-slate-900 text-emerald-300 shadow-sm" : "text-slate-400 hover:text-slate-200"}`}
               >
                 Sign In
               </button>
               <button
                 type="button"
                 onClick={() => handleModeSwitch("signup")}
-                className={`flex-1 rounded-lg px-3 py-2 transition-all ${mode === "signup" ? "bg-slate-900 text-cyan-300 shadow-sm" : "text-slate-400 hover:text-slate-200"}`}
+                className={`flex-1 rounded-lg px-3 py-2 transition-all ${mode === "signup" ? "bg-slate-900 text-emerald-300 shadow-sm" : "text-slate-400 hover:text-slate-200"}`}
               >
                 Create Account
               </button>
@@ -181,7 +181,7 @@ export default function SignInModal({ isOpen, onClose, onSuccess, initialMode })
                       onChange={(e) => setFullName(e.target.value)}
                       placeholder="Your full name"
                       autoComplete="name"
-                      className="w-full rounded-xl border border-slate-700 bg-slate-900/80 py-2.5 pl-10 pr-3 text-sm text-white placeholder:text-slate-500 focus:border-cyan-400 focus:outline-none transition-colors"
+                      className="w-full rounded-xl border border-slate-700 bg-slate-900/80 py-2.5 pl-10 pr-3 text-sm text-white placeholder:text-slate-500 focus:border-emerald-400 focus:outline-none transition-colors"
                     />
                   </div>
                 </div>
@@ -200,7 +200,7 @@ export default function SignInModal({ isOpen, onClose, onSuccess, initialMode })
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="you@example.com"
                     autoComplete="email"
-                    className="w-full rounded-xl border border-slate-700 bg-slate-900/80 py-2.5 pl-10 pr-3 text-sm text-white placeholder:text-slate-500 focus:border-cyan-400 focus:outline-none transition-colors"
+                    className="w-full rounded-xl border border-slate-700 bg-slate-900/80 py-2.5 pl-10 pr-3 text-sm text-white placeholder:text-slate-500 focus:border-emerald-400 focus:outline-none transition-colors"
                   />
                 </div>
               </div>
@@ -218,7 +218,7 @@ export default function SignInModal({ isOpen, onClose, onSuccess, initialMode })
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder={mode === "signup" ? "Create a strong password (6+ chars)" : "Enter your password"}
                     autoComplete={mode === "signup" ? "new-password" : "current-password"}
-                    className="w-full rounded-xl border border-slate-700 bg-slate-900/80 py-2.5 pl-10 pr-10 text-sm text-white placeholder:text-slate-500 focus:border-cyan-400 focus:outline-none transition-colors"
+                    className="w-full rounded-xl border border-slate-700 bg-slate-900/80 py-2.5 pl-10 pr-10 text-sm text-white placeholder:text-slate-500 focus:border-emerald-400 focus:outline-none transition-colors"
                   />
                   <button
                     type="button"
@@ -245,7 +245,7 @@ export default function SignInModal({ isOpen, onClose, onSuccess, initialMode })
 
               <Button
                 type="submit"
-                className="h-11 w-full rounded-xl bg-gradient-to-r from-cyan-400 to-blue-500 text-sm font-bold text-slate-950 shadow-[0_0_26px_rgba(34,211,238,0.3)] hover:brightness-110 disabled:opacity-60 transition-all"
+                className="h-11 w-full rounded-xl bg-gradient-to-r from-emerald-400 to-blue-500 text-sm font-bold text-slate-950 shadow-[0_0_26px_rgba(34,211,238,0.3)] hover:brightness-110 disabled:opacity-60 transition-all"
                 disabled={loading}
               >
                 {loading
@@ -274,9 +274,9 @@ export default function SignInModal({ isOpen, onClose, onSuccess, initialMode })
 
             <p className="mt-3 text-center text-[11px] text-slate-600">
               By continuing, you agree to our{" "}
-              <a href="#/Terms" className="text-cyan-600 hover:underline">Terms of Service</a>{" "}
+              <a href="#/Terms" className="text-emerald-600 hover:underline">Terms of Service</a>{" "}
               &amp;{" "}
-              <a href="#/PrivacyPolicy" className="text-cyan-600 hover:underline">Privacy Policy</a>.
+              <a href="#/PrivacyPolicy" className="text-emerald-600 hover:underline">Privacy Policy</a>.
             </p>
           </motion.div>
         </div>
@@ -284,3 +284,5 @@ export default function SignInModal({ isOpen, onClose, onSuccess, initialMode })
     </AnimatePresence>
   );
 }
+
+

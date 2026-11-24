@@ -67,7 +67,7 @@ export default function CookieConsentBanner() {
         <div className="flex items-center justify-between gap-2 pt-1">
           <Link
             to={createPageUrl("CookiePolicy")}
-            className="text-xs font-bold text-cyan-600 dark:text-cyan-400 hover:underline">
+            className="text-xs font-bold text-emerald-600 dark:text-emerald-400 hover:underline">
             Read Cookie Policy
           </Link>
 
@@ -83,7 +83,7 @@ export default function CookieConsentBanner() {
             <Button
               type="button"
               onClick={handleAcceptAll}
-              className="text-xs font-bold bg-cyan-500 hover:bg-cyan-400 text-slate-950 px-3.5 h-8 rounded-lg shadow">
+              className="text-xs font-bold bg-emerald-500 hover:bg-emerald-400 text-slate-950 px-3.5 h-8 rounded-lg shadow">
               Accept All
             </Button>
           </div>
@@ -92,3 +92,5 @@ export default function CookieConsentBanner() {
     </aside>
   );
 }
+
+

@@ -98,7 +98,7 @@ Located at `android/app/src/main/AndroidManifest.xml`:
 ## 4. Mobile Touch & Accessibility Optimizations
 
 * **Senior & Family Safety Mode**: On mobile screens, activating Senior Mode enlarges touch targets to a minimum of **48x48dp**, increases font sizes by 25%, and simplifies technical cybersecurity reports into plain-English advice.
-* **Responsive Command Center**: Side navigation drawers automatically collapse into an intuitive bottom navigation bar (`Home`, `Universal Scanner`, `Threats`, `Reports`, `Settings`).
+* **Responsive Command Center**: Side navigation drawers automatically collapse into an intuitive bottom navigation bar (`Home`, `Scan`, `Threats`, `Reports`, `Settings`), where `Scan` opens the dedicated Message Scanner.
 * **Zero-Signal Offline Continuity**: When users travel or lose mobile network coverage, the local heuristic engine takes over completely, scoring messages, URLs, and QR codes directly on the mobile device without network latency.
 
 ---

@@ -106,7 +106,7 @@ export default function ReportScam() {
                 setSuccess(false);
                 setForm({ report_type: "message", scam_content: "", phone_number: "", url: "", region: "India" });
               }}
-              className="text-xs font-bold bg-cyan-500 hover:bg-cyan-400 text-slate-950 px-4 h-9 rounded-lg">
+              className="text-xs font-bold bg-emerald-500 hover:bg-emerald-400 text-slate-950 px-4 h-9 rounded-lg">
               Submit Another Report
             </Button>
             <Button
@@ -176,7 +176,7 @@ export default function ReportScam() {
 
             <div className="space-y-1.5">
               <label className="text-xs font-bold uppercase tracking-wider flex items-center gap-1.5" style={{ color: 'var(--tb-text-dim)' }}>
-                <Globe className="w-3.5 h-3.5 text-cyan-400" /> Phishing URL (Optional)
+                <Globe className="w-3.5 h-3.5 text-emerald-400" /> Phishing URL (Optional)
               </label>
               <Input
                 value={form.url}
@@ -229,3 +229,5 @@ export default function ReportScam() {
     </ProtectedPage>
   );
 }
+
+

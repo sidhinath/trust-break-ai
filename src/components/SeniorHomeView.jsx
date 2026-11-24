@@ -48,18 +48,18 @@ export default function SeniorHomeView({ onSwitchToNormalMode }) {
         <button
           type="button"
           onClick={() => handleAction("MessageScanner")}
-          className="group relative p-6 rounded-3xl border-2 border-cyan-500/40 dark:border-cyan-500/60 bg-gradient-to-br from-cyan-500/10 via-cyan-500/5 to-transparent dark:from-cyan-950/70 dark:to-slate-950 hover:border-cyan-400 text-left shadow-md hover:shadow-cyan-500/15 transition-all active:scale-98 cursor-pointer flex flex-col justify-between min-h-[170px] touch-manipulation overflow-hidden"
+          className="group relative p-6 rounded-3xl border-2 border-emerald-500/40 dark:border-emerald-500/60 bg-gradient-to-br from-emerald-500/10 via-emerald-500/5 to-transparent dark:from-emerald-950/70 dark:to-slate-950 hover:border-emerald-400 text-left shadow-md hover:shadow-emerald-500/15 transition-all active:scale-98 cursor-pointer flex flex-col justify-between min-h-[170px] touch-manipulation overflow-hidden"
         >
           <div className="flex items-start justify-between w-full pointer-events-none">
-            <div className="w-14 h-14 rounded-2xl bg-cyan-500/20 text-cyan-600 dark:text-cyan-400 border border-cyan-500/40 flex items-center justify-center group-hover:scale-110 transition-transform shadow-sm pointer-events-none">
+            <div className="w-14 h-14 rounded-2xl bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 border border-emerald-500/40 flex items-center justify-center group-hover:scale-110 transition-transform shadow-sm pointer-events-none">
               <MessageSquareWarning className="w-8 h-8 pointer-events-none" />
             </div>
-            <span className="text-xs font-mono font-black px-3 py-1 rounded-full bg-cyan-500/20 text-cyan-700 dark:text-cyan-300 border border-cyan-500/40 pointer-events-none">
+            <span className="text-xs font-mono font-black px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 border border-emerald-500/40 pointer-events-none">
               1-TAP SCAN
             </span>
           </div>
           <div className="mt-4 pointer-events-none">
-            <h2 className="text-xl font-black font-display tracking-tight text-slate-900 dark:text-white group-hover:text-cyan-600 dark:group-hover:text-cyan-300 transition-colors pointer-events-none">
+            <h2 className="text-xl font-black font-display tracking-tight text-slate-900 dark:text-white group-hover:text-emerald-600 dark:group-hover:text-emerald-300 transition-colors pointer-events-none">
               CHECK A MESSAGE
             </h2>
             <p className="text-xs sm:text-sm font-bold text-slate-700 dark:text-slate-200 mt-1 leading-relaxed pointer-events-none">
@@ -171,13 +171,13 @@ export default function SeniorHomeView({ onSwitchToNormalMode }) {
         </div>
 
         {/* Ask Trusted Contact */}
-        <div className="p-5 rounded-3xl border-2 border-cyan-500/40 bg-gradient-to-br from-cyan-500/15 via-cyan-500/5 to-transparent dark:from-cyan-950/60 dark:to-slate-950 text-slate-900 dark:text-cyan-100 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-sm">
+        <div className="p-5 rounded-3xl border-2 border-emerald-500/40 bg-gradient-to-br from-emerald-500/15 via-emerald-500/5 to-transparent dark:from-emerald-950/60 dark:to-slate-950 text-slate-900 dark:text-emerald-100 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-sm">
           <div className="space-y-1">
-            <h3 className="font-black text-base flex items-center gap-2 text-cyan-800 dark:text-cyan-400">
+            <h3 className="font-black text-base flex items-center gap-2 text-emerald-800 dark:text-emerald-400">
               <Users className="w-5 h-5 pointer-events-none" />
               <span>Ask a Trusted Contact</span>
             </h3>
-            <p className="text-xs font-semibold text-slate-700 dark:text-cyan-200/90 leading-relaxed">
+            <p className="text-xs font-semibold text-slate-700 dark:text-emerald-200/90 leading-relaxed">
               Share scan findings with your family member or trusted guardian for safety verification.
             </p>
           </div>
@@ -187,7 +187,7 @@ export default function SeniorHomeView({ onSwitchToNormalMode }) {
               await triggerHaptic("light");
               setShowTrustedContactModal(true);
             }}
-            className="h-12 px-6 rounded-2xl bg-gradient-to-r from-cyan-500 to-cyan-600 hover:from-cyan-400 hover:to-cyan-500 text-slate-950 font-black text-xs shrink-0 flex items-center gap-2 shadow-md active:scale-95 transition-all cursor-pointer touch-manipulation"
+            className="h-12 px-6 rounded-2xl bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-400 hover:to-emerald-500 text-slate-950 font-black text-xs shrink-0 flex items-center gap-2 shadow-md active:scale-95 transition-all cursor-pointer touch-manipulation"
           >
             <span className="pointer-events-none">Share Findings</span>
             <ArrowRight className="w-4 h-4 pointer-events-none" />
@@ -202,3 +202,5 @@ export default function SeniorHomeView({ onSwitchToNormalMode }) {
     </div>
   );
 }
+
+

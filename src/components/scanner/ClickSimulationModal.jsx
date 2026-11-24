@@ -83,7 +83,7 @@ export default function ClickSimulationModal({ isOpen, onClose, url = "", steps 
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.95 }}
         className={`tb-card w-full max-w-xl p-6 relative overflow-hidden space-y-5 ${
-          isSafeMode ? 'border-emerald-500/30' : 'border-cyan-500/30'
+          isSafeMode ? 'border-emerald-500/30' : 'border-emerald-500/30'
         }`}>
         
         {/* Header */}
@@ -139,7 +139,7 @@ export default function ClickSimulationModal({ isOpen, onClose, url = "", steps 
                   onClick={() => setCurrentStep(i)}
                   className={`h-2 rounded-full transition-all ${
                     i === currentStep
-                      ? isSafeMode ? 'w-6 bg-emerald-500' : 'w-6 bg-cyan-500'
+                      ? isSafeMode ? 'w-6 bg-emerald-500' : 'w-6 bg-emerald-500'
                       : 'w-2 bg-slate-400/40'
                   }`}
                 />
@@ -195,7 +195,7 @@ export default function ClickSimulationModal({ isOpen, onClose, url = "", steps 
             <Button
               onClick={() => setCurrentStep(currentStep + 1)}
               className={`text-xs font-bold text-slate-950 px-4 h-9 rounded-lg ${
-                isSafeMode ? 'bg-emerald-500 hover:bg-emerald-400' : 'bg-cyan-500 hover:bg-cyan-400'
+                isSafeMode ? 'bg-emerald-500 hover:bg-emerald-400' : 'bg-emerald-500 hover:bg-emerald-400'
               }`}>
               Next Stage <ChevronRight className="w-3.5 h-3.5 ml-1" />
             </Button>
@@ -211,3 +211,5 @@ export default function ClickSimulationModal({ isOpen, onClose, url = "", steps 
     </div>
   );
 }
+
+

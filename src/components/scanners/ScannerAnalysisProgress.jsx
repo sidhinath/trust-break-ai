@@ -32,15 +32,15 @@ export default function ScannerAnalysisProgress({ isAnalyzing, title = "Multi-Mo
       role="status"
       aria-busy="true"
       aria-label="Threat Analysis in Progress"
-      className="tb-card p-6 space-y-4 border-cyan-500/40 bg-slate-950/80 shadow-[0_0_25px_rgba(0,229,255,0.15)] animate-pulse">
+      className="tb-card p-6 space-y-4 border-emerald-500/40 bg-slate-950/80 shadow-[0_0_25px_rgba(16,185,129,0.15)] animate-pulse">
       <div className="flex items-center justify-between border-b pb-3" style={{ borderColor: 'var(--tb-border)' }}>
         <div className="flex items-center gap-2.5">
-          <Loader2 className="w-5 h-5 text-cyan-400 animate-spin" />
-          <h3 className="text-sm font-bold text-cyan-400 font-display">
+          <Loader2 className="w-5 h-5 text-emerald-400 animate-spin" />
+          <h3 className="text-sm font-bold text-emerald-400 font-display">
             {title}
           </h3>
         </div>
-        <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-cyan-500/20 text-cyan-300 border border-cyan-500/30">
+        <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
           STAGE {stage + 1} OF 4
         </span>
       </div>
@@ -55,12 +55,12 @@ export default function ScannerAnalysisProgress({ isAnalyzing, title = "Multi-Mo
               {isDone ? (
                 <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
               ) : isCurrent ? (
-                <Loader2 className="w-4 h-4 text-cyan-400 animate-spin shrink-0" />
+                <Loader2 className="w-4 h-4 text-emerald-400 animate-spin shrink-0" />
               ) : (
                 <Circle className="w-4 h-4 text-slate-600 shrink-0" />
               )}
               <span className={`font-mono transition-colors ${
-                isDone ? "text-emerald-300" : isCurrent ? "text-cyan-200 font-bold" : "text-slate-500"
+                isDone ? "text-emerald-300" : isCurrent ? "text-emerald-200 font-bold" : "text-slate-500"
               }`}>
                 {stepText}
               </span>
@@ -78,3 +78,5 @@ export default function ScannerAnalysisProgress({ isAnalyzing, title = "Multi-Mo
     </div>
   );
 }
+
+

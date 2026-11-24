@@ -28,3 +28,4 @@ export default function ScannerHeader({ icon: Icon, title, description, color = 
     </motion.div>
   );
 }
+

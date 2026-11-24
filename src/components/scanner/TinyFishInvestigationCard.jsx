@@ -45,12 +45,12 @@ export default function TinyFishInvestigationCard({
   const statusConfig = {
     ready: {
       label: 'Ready for Automation',
-      badgeClass: 'bg-cyan-500/15 border-cyan-500/30 text-cyan-400',
+      badgeClass: 'bg-emerald-500/15 border-emerald-500/30 text-emerald-400',
       icon: Bot,
     },
     investigating: {
       label: 'Live Agent Investigating...',
-      badgeClass: 'bg-cyan-500/15 border-cyan-500/30 text-cyan-400 animate-pulse',
+      badgeClass: 'bg-emerald-500/15 border-emerald-500/30 text-emerald-400 animate-pulse',
       icon: RefreshCw,
     },
     completed: {
@@ -106,20 +106,20 @@ export default function TinyFishInvestigationCard({
     <motion.div
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
-      className="tb-card p-5 space-y-4 border-cyan-500/30 relative overflow-hidden"
+      className="tb-card p-5 space-y-4 border-emerald-500/30 relative overflow-hidden"
     >
       {/* Header Bar */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b" style={{ borderColor: 'var(--tb-border)' }}>
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-cyan-500/15 border border-cyan-500/30 flex items-center justify-center shrink-0">
-            <Bot className="w-5 h-5 text-cyan-400" />
+          <div className="w-10 h-10 rounded-xl bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center shrink-0">
+            <Bot className="w-5 h-5 text-emerald-400" />
           </div>
           <div>
             <div className="flex items-center gap-2">
               <h3 className="text-sm font-bold tracking-tight font-display" style={{ color: 'var(--tb-text)' }}>
                 TinyFish Live Agent Browser Automation
               </h3>
-              <span className="text-[10px] font-mono px-2 py-0.5 rounded-md bg-cyan-500/10 border border-cyan-500/20 text-cyan-400">
+              <span className="text-[10px] font-mono px-2 py-0.5 rounded-md bg-emerald-500/10 border border-emerald-500/20 text-emerald-400">
                 Server-Side AI Agent
               </span>
             </div>
@@ -134,7 +134,7 @@ export default function TinyFishInvestigationCard({
           <Button
             onClick={onInvestigate}
             disabled={isInvestigating || !targetUrl.trim()}
-            className="text-xs font-bold bg-cyan-500 hover:bg-cyan-400 text-slate-950 shrink-0 h-9 px-4 rounded-lg shadow-sm transition-all"
+            className="text-xs font-bold bg-emerald-500 hover:bg-emerald-400 text-slate-950 shrink-0 h-9 px-4 rounded-lg shadow-sm transition-all"
           >
             {isInvestigating ? (
               <>
@@ -156,7 +156,7 @@ export default function TinyFishInvestigationCard({
         <div className="p-2.5 rounded-lg font-mono text-xs truncate flex items-center justify-between"
           style={{ background: 'var(--tb-surface-2)', border: '1px solid var(--tb-border)', color: 'var(--tb-neon)' }}>
           <span className="truncate">Target: {targetUrl}</span>
-          <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 shrink-0 ml-2">
+          <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 shrink-0 ml-2">
             Stealth Browser Profile
           </span>
         </div>
@@ -185,11 +185,11 @@ export default function TinyFishInvestigationCard({
       {isInvestigating && (
         <div className="p-4 rounded-xl border space-y-4 relative overflow-hidden" style={{ background: 'var(--tb-surface-2)', borderColor: 'var(--tb-border)' }}>
           <div className="flex items-center justify-between border-b pb-2" style={{ borderColor: 'var(--tb-border)' }}>
-            <div className="flex items-center gap-2 text-xs font-mono font-bold text-cyan-400">
+            <div className="flex items-center gap-2 text-xs font-mono font-bold text-emerald-400">
               <Terminal className="w-4 h-4 animate-pulse" />
               <span>LIVE AGENT BROWSER STREAM TELEMETRY</span>
             </div>
-            <span className="text-[10px] font-mono text-cyan-400 animate-pulse flex items-center gap-1">
+            <span className="text-[10px] font-mono text-emerald-400 animate-pulse flex items-center gap-1">
               <Zap className="w-3 h-3" /> Step {activeStepIndex + 1} / 4
             </span>
           </div>
@@ -206,13 +206,13 @@ export default function TinyFishInvestigationCard({
                   key={idx}
                   className="p-2.5 rounded-lg border text-xs transition-all"
                   style={{
-                    background: isCompleted ? 'rgba(16,185,129,0.1)' : isActive ? 'rgba(0,229,255,0.15)' : 'var(--tb-surface-3)',
-                    borderColor: isCompleted ? 'rgba(16,185,129,0.3)' : isActive ? 'rgba(0,229,255,0.4)' : 'var(--tb-border)',
+                    background: isCompleted ? 'rgba(16,185,129,0.1)' : isActive ? 'rgba(16,185,129,0.15)' : 'var(--tb-surface-3)',
+                    borderColor: isCompleted ? 'rgba(16,185,129,0.3)' : isActive ? 'rgba(16,185,129,0.4)' : 'var(--tb-border)',
                     color: isCompleted ? 'var(--tb-green)' : isActive ? 'var(--tb-neon)' : 'var(--tb-text-dim)',
                   }}
                 >
                   <div className="flex items-center justify-between mb-1">
-                    <StepIcon className={`w-3.5 h-3.5 ${isActive ? 'animate-spin text-cyan-400' : isCompleted ? 'text-emerald-400' : ''}`} />
+                    <StepIcon className={`w-3.5 h-3.5 ${isActive ? 'animate-spin text-emerald-400' : isCompleted ? 'text-emerald-400' : ''}`} />
                     <span className="text-[10px] font-mono font-bold">{isCompleted ? '✓' : `0${idx + 1}`}</span>
                   </div>
                   <p className="font-bold text-[11px] leading-tight line-clamp-1">{step.title}</p>
@@ -223,7 +223,7 @@ export default function TinyFishInvestigationCard({
 
           {/* Detailed Active Step Console */}
           <div className="p-3 rounded-lg border text-xs font-mono space-y-1" style={{ background: 'var(--tb-surface-3)', borderColor: 'var(--tb-border)' }}>
-            <div className="text-cyan-400 font-bold flex items-center gap-1.5">
+            <div className="text-emerald-400 font-bold flex items-center gap-1.5">
               <RefreshCw className="w-3 h-3 animate-spin" />
               <span>{liveSteps[activeStepIndex].title}</span>
             </div>
@@ -238,7 +238,7 @@ export default function TinyFishInvestigationCard({
               initial={{ width: '5%' }}
               animate={{ width: `${(activeStepIndex + 1) * 25}%` }}
               transition={{ duration: 0.5 }}
-              className="h-full bg-gradient-to-r from-cyan-500 to-blue-600 rounded-full"
+              className="h-full bg-gradient-to-r from-emerald-500 to-blue-600 rounded-full"
             />
           </div>
         </div>
@@ -266,8 +266,8 @@ export default function TinyFishInvestigationCard({
       {investigation && !isInvestigating && (
         <div className="space-y-3 pt-1">
           {/* Step 1: Identity & Stated Purpose */}
-          <div className="tb-card p-3.5 space-y-2 border-cyan-500/20">
-            <span className="text-[11px] font-bold uppercase tracking-wider text-cyan-500 flex items-center gap-1.5">
+          <div className="tb-card p-3.5 space-y-2 border-emerald-500/20">
+            <span className="text-[11px] font-bold uppercase tracking-wider text-emerald-500 flex items-center gap-1.5">
               <Globe className="w-3.5 h-3.5" /> Step 1: Live DOM Identity & Stated Purpose
             </span>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-1">
@@ -288,8 +288,8 @@ export default function TinyFishInvestigationCard({
 
           {/* Step 2: Risk Indicators Audit */}
           <div className="tb-card p-3.5 space-y-2">
-            <span className="text-[11px] font-bold uppercase tracking-wider text-cyan-500 flex items-center gap-1.5">
-              <ShieldAlert className="w-3.5 h-3.5 text-cyan-500" /> Step 2: Interactive Element & Risk Indicator Audit
+            <span className="text-[11px] font-bold uppercase tracking-wider text-emerald-500 flex items-center gap-1.5">
+              <ShieldAlert className="w-3.5 h-3.5 text-emerald-500" /> Step 2: Interactive Element & Risk Indicator Audit
             </span>
 
             {investigation.riskIndicators && investigation.riskIndicators.length > 0 ? (
@@ -317,13 +317,13 @@ export default function TinyFishInvestigationCard({
           {/* Step 3: Key Agent Observations */}
           {investigation.observations && investigation.observations.length > 0 && (
             <div className="tb-card p-3.5 space-y-2">
-              <span className="text-[11px] font-bold uppercase tracking-wider text-cyan-500 flex items-center gap-1.5">
+              <span className="text-[11px] font-bold uppercase tracking-wider text-emerald-500 flex items-center gap-1.5">
                 <Eye className="w-3.5 h-3.5" /> Step 3: Headless Browser Observations ({investigation.observations.length})
               </span>
               <ul className="space-y-1.5 text-xs">
                 {investigation.observations.map((obs, idx) => (
                   <li key={idx} className="flex items-start gap-2 p-2.5 rounded-lg border" style={{ background: 'var(--tb-surface-2)', borderColor: 'var(--tb-border)', color: 'var(--tb-text)' }}>
-                    <span className="text-cyan-500 font-bold mt-0.5">•</span>
+                    <span className="text-emerald-500 font-bold mt-0.5">•</span>
                     <span className="leading-relaxed">{obs}</span>
                   </li>
                 ))}
@@ -335,12 +335,12 @@ export default function TinyFishInvestigationCard({
           {investigation.summary && (
             <div className="tb-card p-3.5 space-y-2">
               <div className="flex items-center justify-between">
-                <span className="text-[11px] font-bold uppercase tracking-wider text-cyan-500 flex items-center gap-1.5">
+                <span className="text-[11px] font-bold uppercase tracking-wider text-emerald-500 flex items-center gap-1.5">
                   <FileText className="w-3.5 h-3.5" /> Step 4: Full Agent Evidence Summary
                 </span>
                 <button
                   onClick={() => setShowRawOutput(!showRawOutput)}
-                  className="text-[10px] font-mono hover:text-cyan-500 flex items-center gap-1 transition-colors"
+                  className="text-[10px] font-mono hover:text-emerald-500 flex items-center gap-1 transition-colors"
                   style={{ color: 'var(--tb-text-dim)' }}
                 >
                   {showRawOutput ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}
@@ -381,3 +381,5 @@ export default function TinyFishInvestigationCard({
     </motion.div>
   )
 }
+
+

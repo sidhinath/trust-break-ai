@@ -119,20 +119,20 @@ export default function LinkScanner() {
         <div className="space-y-2">
           <span className="text-xs font-bold uppercase tracking-wider flex items-center gap-1.5"
             style={{ color: 'var(--tb-text-dim)' }}>
-            <Sparkles className="w-3.5 h-3.5 text-cyan-500" /> Benchmark Test Targets
+            <Sparkles className="w-3.5 h-3.5 text-emerald-500" /> Benchmark Test Targets
           </span>
           <div className="flex flex-wrap gap-2">
             {sampleLinks.map((sample, idx) => (
               <button
                 key={idx}
                 onClick={() => { setUrl(sample.url); handleScan(sample.url); }}
-                className="text-[11px] font-bold px-3 py-1.5 rounded-lg border hover:border-cyan-400/50 transition-all text-left cursor-pointer"
+                className="text-[11px] font-bold px-3 py-1.5 rounded-lg border hover:border-emerald-400/50 transition-all text-left cursor-pointer"
                 style={{
                   background: 'var(--tb-surface-2)',
                   borderColor: 'var(--tb-border)',
                   color: 'var(--tb-text)'
                 }}>
-                <span className="text-cyan-600 dark:text-cyan-400 font-mono mr-1">Target:</span>
+                <span className="text-emerald-600 dark:text-emerald-400 font-mono mr-1">Target:</span>
                 {sample.name}
               </button>
             ))}
@@ -145,13 +145,13 @@ export default function LinkScanner() {
             value={url}
             onChange={(e) => setUrl(e.target.value)}
             placeholder="Enter web address or URL... e.g. https://sbi-kyc-update-portal.online"
-            className="h-12 bg-transparent text-sm font-mono font-medium focus-visible:ring-1 focus-visible:ring-cyan-500/50"
+            className="h-12 bg-transparent text-sm font-mono font-medium focus-visible:ring-1 focus-visible:ring-emerald-500/50"
             style={{ color: 'var(--tb-text)', borderColor: 'var(--tb-border)' }}
           />
           <Button
             onClick={() => handleScan()}
             disabled={scanning || investigating || !url.trim()}
-            className="h-12 px-6 rounded-xl font-bold transition-all shadow-md bg-cyan-500 hover:bg-cyan-400 text-slate-950 shrink-0 cursor-pointer">
+            className="h-12 px-6 rounded-xl font-bold transition-all shadow-md bg-emerald-500 hover:bg-emerald-400 text-slate-950 shrink-0 cursor-pointer">
             {scanning ? "Analyzing..." : "Inspect Link"}
           </Button>
 
@@ -159,7 +159,7 @@ export default function LinkScanner() {
             onClick={() => handleTinyFishInvestigation()}
             disabled={scanning || investigating || !url.trim()}
             variant="outline"
-            className="h-12 px-4 rounded-xl font-bold border-cyan-500/40 hover:bg-cyan-500/10 text-cyan-400 transition-all shrink-0 cursor-pointer">
+            className="h-12 px-4 rounded-xl font-bold border-emerald-500/40 hover:bg-emerald-500/10 text-emerald-400 transition-all shrink-0 cursor-pointer">
             {investigating ? "Investigating..." : "🤖 TinyFish AI"}
           </Button>
         </div>
@@ -196,7 +196,7 @@ export default function LinkScanner() {
                 await triggerHaptic("light");
                 setShowTrustedContact(true);
               }}
-              className="h-11 px-4 rounded-xl bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-400 border border-cyan-500/40 font-bold text-xs flex items-center gap-2 transition-all cursor-pointer">
+              className="h-11 px-4 rounded-xl bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-400 border border-emerald-500/40 font-bold text-xs flex items-center gap-2 transition-all cursor-pointer">
               <Users className="w-4 h-4" />
               <span>Ask Trusted Contact / Family Member</span>
             </button>
@@ -280,3 +280,5 @@ export default function LinkScanner() {
     </ProtectedPage>
   );
 }
+
+

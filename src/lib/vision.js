@@ -368,3 +368,5 @@ export function normalizeVisionResult(parsed) {
     explanation: typeof parsed.explanation === 'string' ? parsed.explanation : null,
   }
 }
+
+

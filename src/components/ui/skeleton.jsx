@@ -10,7 +10,7 @@ function Skeleton({ className, style, ...props }) {
       role="status"
       aria-busy="true"
       aria-label="Loading element..."
-      className={cn("tb-skeleton-glow border border-cyan-500/10", className)}
+      className={cn("tb-skeleton-glow border border-emerald-500/10", className)}
       style={{
         background: 'var(--tb-surface-2)',
         borderColor: 'var(--tb-skeleton-border)',
@@ -438,3 +438,5 @@ export {
   SkeletonStats,
   SkeletonScannerResult
 };
+
+

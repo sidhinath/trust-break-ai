@@ -330,7 +330,7 @@ export default function Layout({ children, currentPageName }) {
               <button
                 type="button"
                 onClick={handleExitCurrentTab}
-                className="mr-1 sm:mr-2 h-8 w-8 sm:w-auto shrink-0 rounded-lg border px-0 sm:px-2.5 flex items-center justify-center text-[10px] font-bold uppercase tracking-[0.14em] transition-all hover:border-cyan-400 hover:text-cyan-400"
+                className="mr-1 sm:mr-2 h-8 w-8 sm:w-auto shrink-0 rounded-lg border px-0 sm:px-2.5 flex items-center justify-center text-[10px] font-bold uppercase tracking-[0.14em] transition-all hover:border-emerald-400 hover:text-emerald-400"
                 style={{ background: 'var(--tb-surface-2)', borderColor: 'var(--tb-border)', color: 'var(--tb-text-dim)' }}
               >
                 <X className="w-3.5 h-3.5 sm:hidden" />
@@ -340,7 +340,7 @@ export default function Layout({ children, currentPageName }) {
 
             <div className="flex items-center gap-1 sm:gap-3 min-w-0">
               <Link to="/" className="flex items-center gap-1 sm:gap-2.5 min-w-0 group">
-                <div className="w-6 h-6 sm:w-8 sm:h-8 shrink-0 rounded-lg overflow-hidden border border-cyan-500/40 shadow-[0_0_15px_rgba(0,229,255,0.4)] flex items-center justify-center bg-slate-950">
+                <div className="w-6 h-6 sm:w-8 sm:h-8 shrink-0 rounded-lg overflow-hidden border border-emerald-500/40 shadow-[0_0_15px_rgba(16,185,129,0.4)] flex items-center justify-center bg-slate-950">
                   <img src="/logo-icon.svg" alt="TrustBreak AI Logo" className="w-full h-full object-cover" />
                 </div>
                 <span className="text-[13px] sm:text-lg font-black tracking-tight font-display whitespace-nowrap shrink-0" style={{ color: 'var(--tb-text)' }}>
@@ -353,7 +353,7 @@ export default function Layout({ children, currentPageName }) {
                   type="button"
                   aria-label="Open policy menu"
                   onClick={() => setPolicyMenuOpen((prev) => !prev)}
-                  className="flex h-9 w-9 items-center justify-center rounded-xl border transition-all hover:border-cyan-400"
+                  className="flex h-9 w-9 items-center justify-center rounded-xl border transition-all hover:border-emerald-400"
                   style={{ background: 'var(--tb-surface-2)', borderColor: 'var(--tb-border)', color: 'var(--tb-text)' }}
                 >
                   <div className="flex flex-col items-center justify-center gap-[3px]">
@@ -375,7 +375,7 @@ export default function Layout({ children, currentPageName }) {
                           key={page}
                           to={createPageUrl(page)}
                           onClick={() => setPolicyMenuOpen(false)}
-                          className={`flex items-center gap-2 rounded-xl px-3 py-2 text-left text-xs font-bold transition-colors ${currentPageName === page ? 'text-cyan-500' : 'hover:text-cyan-500'}`}
+                          className={`flex items-center gap-2 rounded-xl px-3 py-2 text-left text-xs font-bold transition-colors ${currentPageName === page ? 'text-emerald-500' : 'hover:text-emerald-500'}`}
                           style={{ color: currentPageName === page ? 'var(--tb-text)' : 'var(--tb-text-dim)' }}
                         >
                           <Icon className="h-3.5 w-3.5" />
@@ -390,7 +390,7 @@ export default function Layout({ children, currentPageName }) {
                           key={page}
                           to={createPageUrl(page)}
                           onClick={() => setPolicyMenuOpen(false)}
-                          className={`rounded-xl px-3 py-2 text-left text-xs font-bold transition-colors ${currentPageName === page ? 'text-cyan-500' : 'hover:text-cyan-500'}`}
+                          className={`rounded-xl px-3 py-2 text-left text-xs font-bold transition-colors ${currentPageName === page ? 'text-emerald-500' : 'hover:text-emerald-500'}`}
                           style={{ color: currentPageName === page ? 'var(--tb-text)' : 'var(--tb-text-dim)' }}
                         >
                           {label}
@@ -408,7 +408,7 @@ export default function Layout({ children, currentPageName }) {
                 title={`Switch to ${theme === 'dark' ? 'Light' : 'Dark'} Mode`}
                 className="w-6 h-8 sm:w-8 sm:h-8 rounded-lg flex items-center justify-center border transition-all shrink-0"
                 style={{ background: 'var(--tb-surface-2)', borderColor: 'var(--tb-border)', color: 'var(--tb-text)' }}>
-                {theme === "dark" ? <Sun className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-400" /> : <Moon className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-cyan-600" />}
+                {theme === "dark" ? <Sun className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-400" /> : <Moon className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-emerald-600" />}
               </button>
 
               <SeniorModeToggleSwitch variant="header" />
@@ -419,12 +419,12 @@ export default function Layout({ children, currentPageName }) {
                   type="button"
                   onClick={() => setShowUserModal(true)}
                   title="View account details"
-                  className="h-9 px-2 rounded-xl flex items-center gap-2 border border-cyan-500/30 bg-cyan-500/10 hover:border-cyan-400 transition-all"
+                  className="h-9 px-2 rounded-xl flex items-center gap-2 border border-emerald-500/30 bg-emerald-500/10 hover:border-emerald-400 transition-all"
                 >
-                  <div className="w-6 h-6 rounded-lg bg-gradient-to-br from-cyan-400 to-blue-500 flex items-center justify-center text-[10px] font-black text-slate-950">
+                  <div className="w-6 h-6 rounded-lg bg-gradient-to-br from-emerald-400 to-blue-500 flex items-center justify-center text-[10px] font-black text-slate-950">
                     {getInitials(user)}
                   </div>
-                  <span className="hidden sm:inline text-xs font-bold text-cyan-300 max-w-[120px] truncate">
+                  <span className="hidden sm:inline text-xs font-bold text-emerald-300 max-w-[120px] truncate">
                     {user?.user_metadata?.full_name || user?.email?.split('@')[0] || 'Account'}
                   </span>
                   <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shrink-0" />
@@ -435,7 +435,7 @@ export default function Layout({ children, currentPageName }) {
                   <button
                     type="button"
                     onClick={openSignIn}
-                    className="tb-auth-button h-8 sm:h-9 px-1 sm:px-3 rounded-lg sm:rounded-xl text-[13px] sm:text-sm font-bold border transition-all hover:border-cyan-400 hover:text-cyan-300 shrink-0"
+                    className="tb-auth-button h-8 sm:h-9 px-1 sm:px-3 rounded-lg sm:rounded-xl text-[13px] sm:text-sm font-bold border transition-all hover:border-emerald-400 hover:text-emerald-300 shrink-0"
                     style={{ background: 'var(--tb-surface-2)', borderColor: 'var(--tb-border)', color: 'var(--tb-text-dim)' }}
                   >
                     Sign In
@@ -443,7 +443,7 @@ export default function Layout({ children, currentPageName }) {
                   <button
                     type="button"
                     onClick={openSignUp}
-                    className="tb-auth-button h-8 sm:h-9 px-2 sm:px-3.5 rounded-lg sm:rounded-xl text-[13px] sm:text-sm font-bold bg-gradient-to-r from-cyan-400 to-blue-500 text-slate-950 shadow-sm transition-all hover:brightness-110 shrink-0"
+                    className="tb-auth-button h-8 sm:h-9 px-2 sm:px-3.5 rounded-lg sm:rounded-xl text-[13px] sm:text-sm font-bold bg-gradient-to-r from-emerald-400 to-blue-500 text-slate-950 shadow-sm transition-all hover:brightness-110 shrink-0"
                   >
                     Sign Up
                   </button>
@@ -460,19 +460,19 @@ export default function Layout({ children, currentPageName }) {
           {/* Footer */}
           <footer className="mt-16 pt-8 pb-12 border-t text-xs space-y-4" style={{ borderColor: 'var(--tb-border)', color: 'var(--tb-text-dim)' }}>
             <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-              <div className="flex items-center gap-2 font-bold font-display text-sm text-cyan-600 dark:text-cyan-400">
-                <div className="w-5 h-5 rounded overflow-hidden bg-slate-950 border border-cyan-500/30">
+              <div className="flex items-center gap-2 font-bold font-display text-sm text-emerald-600 dark:text-emerald-400">
+                <div className="w-5 h-5 rounded overflow-hidden bg-slate-950 border border-emerald-500/30">
                   <img src="/logo-icon.svg" alt="TrustBreak AI Logo" className="w-full h-full object-cover" />
                 </div>
                 TrustBreak AI Cyber Defense Systems
               </div>
               <div className="flex flex-wrap items-center justify-center gap-4 font-medium text-[11px]">
-                <Link to="/PrivacyPolicy" className="hover:text-cyan-500 transition-colors">Privacy Policy</Link>
-                <Link to="/Terms" className="hover:text-cyan-500 transition-colors">Terms of Service</Link>
-                <Link to="/CookiePolicy" className="hover:text-cyan-500 transition-colors">Cookie Policy</Link>
-                <Link to="/RefundPolicy" className="hover:text-cyan-500 transition-colors">Refund Policy</Link>
-                <Link to="/PrivacyCenter" className="hover:text-cyan-500 transition-colors">Data Sovereignty</Link>
-                <Link to="/BusinessModel" className="hover:text-cyan-500 transition-colors">Pricing</Link>
+                <Link to="/PrivacyPolicy" className="hover:text-emerald-500 transition-colors">Privacy Policy</Link>
+                <Link to="/Terms" className="hover:text-emerald-500 transition-colors">Terms of Service</Link>
+                <Link to="/CookiePolicy" className="hover:text-emerald-500 transition-colors">Cookie Policy</Link>
+                <Link to="/RefundPolicy" className="hover:text-emerald-500 transition-colors">Refund Policy</Link>
+                <Link to="/PrivacyCenter" className="hover:text-emerald-500 transition-colors">Data Sovereignty</Link>
+                <Link to="/BusinessModel" className="hover:text-emerald-500 transition-colors">Pricing</Link>
               </div>
             </div>
             <div className="flex flex-col sm:flex-row items-center justify-between gap-2 text-[10px] font-mono border-t pt-4" style={{ borderColor: 'var(--tb-border)' }}>
@@ -541,13 +541,13 @@ export default function Layout({ children, currentPageName }) {
                 onClick={handleExitCurrentTab}
                 aria-label="Go Back"
                 title="Go Back"
-                className="h-8 w-8 sm:h-9 sm:w-auto sm:px-2.5 rounded-lg sm:rounded-xl border flex items-center justify-center gap-1 sm:gap-1.5 transition-all cursor-pointer hover:border-cyan-400 active:scale-95 shrink-0"
+                className="h-8 w-8 sm:h-9 sm:w-auto sm:px-2.5 rounded-lg sm:rounded-xl border flex items-center justify-center gap-1 sm:gap-1.5 transition-all cursor-pointer hover:border-emerald-400 active:scale-95 shrink-0"
                 style={{
                   background: 'var(--tb-surface-2)',
                   borderColor: 'var(--tb-border)',
                   color: 'var(--tb-text)'
                 }}>
-                <ArrowLeft className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-cyan-500 group-hover:-translate-x-0.5 transition-transform pointer-events-none" />
+                <ArrowLeft className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-emerald-500 group-hover:-translate-x-0.5 transition-transform pointer-events-none" />
                 <span className="text-xs font-bold hidden sm:inline pointer-events-none">Back</span>
               </button>
             )}
@@ -555,7 +555,7 @@ export default function Layout({ children, currentPageName }) {
             {/* Brand Logo with updated logo-icon.svg asset */}
             <div className="flex items-center gap-1 sm:gap-3 min-w-0">
               <Link to={createPageUrl("Home")} className="flex items-center gap-1 sm:gap-2.5 min-w-0 group">
-                <div className="w-6 h-6 sm:w-8 sm:h-8 shrink-0 rounded-lg overflow-hidden border border-cyan-500/40 shadow-[0_0_12px_rgba(0,229,255,0.3)] group-hover:scale-105 transition-transform flex items-center justify-center bg-slate-950">
+                <div className="w-6 h-6 sm:w-8 sm:h-8 shrink-0 rounded-lg overflow-hidden border border-emerald-500/40 shadow-[0_0_12px_rgba(16,185,129,0.3)] group-hover:scale-105 transition-transform flex items-center justify-center bg-slate-950">
                   <img src="/logo-icon.svg" alt="TrustBreak AI Logo" className="w-full h-full object-cover" />
                 </div>
                 <div className="flex items-baseline gap-1.5">
@@ -563,7 +563,7 @@ export default function Layout({ children, currentPageName }) {
                     style={{ color: 'var(--tb-text)' }}>
                     TrustBreak AI
                   </span>
-                  <span className="hidden sm:inline-block text-[10px] font-mono font-bold px-1.5 py-0.2 rounded bg-cyan-500/10 text-cyan-500 border border-cyan-500/30">
+                  <span className="hidden sm:inline-block text-[10px] font-mono font-bold px-1.5 py-0.2 rounded bg-emerald-500/10 text-emerald-500 border border-emerald-500/30">
                     PRO DEFENSE
                   </span>
                 </div>
@@ -578,13 +578,13 @@ export default function Layout({ children, currentPageName }) {
                 }}
                 aria-label={sidebarOpen ? "Close Sidebar Navigation" : "Open Sidebar Navigation"}
                 title={sidebarOpen ? "Close Sidebar Navigation" : "Open Sidebar Navigation"}
-                className="hidden md:flex w-9 h-9 rounded-xl items-center justify-center border transition-all cursor-pointer hover:border-cyan-400 active:scale-95 shrink-0"
+                className="hidden md:flex w-9 h-9 rounded-xl items-center justify-center border transition-all cursor-pointer hover:border-emerald-400 active:scale-95 shrink-0"
                 style={{
                   background: 'var(--tb-surface-2)',
                   borderColor: 'var(--tb-border)',
                   color: 'var(--tb-text)'
                 }}>
-                <Menu className="w-4 h-4 text-cyan-500 group-hover:scale-110 transition-transform pointer-events-none" />
+                <Menu className="w-4 h-4 text-emerald-500 group-hover:scale-110 transition-transform pointer-events-none" />
               </button>
             </div>
           </div>
@@ -597,7 +597,7 @@ export default function Layout({ children, currentPageName }) {
               type="button"
               onClick={toggleTheme}
               title={`Switch to ${theme === 'dark' ? 'Light' : 'Dark'} Mode`}
-              className="hidden min-[400px]:flex w-8 h-8 sm:w-9 sm:h-9 rounded-lg sm:rounded-xl items-center justify-center border transition-all cursor-pointer hover:border-cyan-400 active:scale-95 shrink-0"
+              className="hidden min-[400px]:flex w-8 h-8 sm:w-9 sm:h-9 rounded-lg sm:rounded-xl items-center justify-center border transition-all cursor-pointer hover:border-emerald-400 active:scale-95 shrink-0"
               style={{
                 background: 'var(--tb-surface-2)',
                 borderColor: 'var(--tb-border)',
@@ -606,7 +606,7 @@ export default function Layout({ children, currentPageName }) {
               {theme === "dark" ? (
                 <Sun className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-400 pointer-events-none" />
               ) : (
-                <Moon className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-cyan-600 pointer-events-none" />
+                <Moon className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-emerald-600 pointer-events-none" />
               )}
             </button>
 
@@ -620,9 +620,9 @@ export default function Layout({ children, currentPageName }) {
                 type="button"
                 onClick={async () => { await triggerHaptic('light'); setShowUserModal(true); }}
                 title="View account details"
-                className="flex items-center gap-2 h-9 px-2 rounded-xl border border-cyan-500/30 bg-cyan-500/10 hover:border-cyan-400 transition-all cursor-pointer active:scale-95 shrink-0"
+                className="flex items-center gap-2 h-9 px-2 rounded-xl border border-emerald-500/30 bg-emerald-500/10 hover:border-emerald-400 transition-all cursor-pointer active:scale-95 shrink-0"
               >
-                <div className="w-6 h-6 rounded-lg bg-gradient-to-br from-cyan-400 to-blue-500 flex items-center justify-center text-[10px] font-black text-slate-950 shrink-0">
+                <div className="w-6 h-6 rounded-lg bg-gradient-to-br from-emerald-400 to-blue-500 flex items-center justify-center text-[10px] font-black text-slate-950 shrink-0">
                   {getInitials(user)}
                 </div>
                 <span className="hidden lg:inline text-xs font-mono text-slate-300 max-w-[140px] truncate">
@@ -636,7 +636,7 @@ export default function Layout({ children, currentPageName }) {
                 <button
                   type="button"
                   onClick={async () => { await triggerHaptic('light'); openSignIn(); }}
-                  className="tb-auth-button h-8 sm:h-9 px-1.5 sm:px-3 rounded-lg sm:rounded-xl text-[13px] sm:text-sm font-bold border transition-all hover:border-cyan-400 hover:text-cyan-300 active:scale-95 shrink-0"
+                  className="tb-auth-button h-8 sm:h-9 px-1.5 sm:px-3 rounded-lg sm:rounded-xl text-[13px] sm:text-sm font-bold border transition-all hover:border-emerald-400 hover:text-emerald-300 active:scale-95 shrink-0"
                   style={{ background: 'var(--tb-surface-2)', borderColor: 'var(--tb-border)', color: 'var(--tb-text-dim)' }}
                 >
                   Sign In
@@ -644,7 +644,7 @@ export default function Layout({ children, currentPageName }) {
                 <button
                   type="button"
                   onClick={async () => { await triggerHaptic('light'); openSignUp(); }}
-                  className="tb-auth-button h-8 sm:h-9 px-2 sm:px-3.5 rounded-lg sm:rounded-xl text-[13px] sm:text-sm font-bold bg-gradient-to-r from-cyan-400 to-blue-500 text-slate-950 shadow-sm transition-all hover:brightness-110 active:scale-95 shrink-0"
+                  className="tb-auth-button h-8 sm:h-9 px-2 sm:px-3.5 rounded-lg sm:rounded-xl text-[13px] sm:text-sm font-bold bg-gradient-to-r from-emerald-400 to-blue-500 text-slate-950 shadow-sm transition-all hover:brightness-110 active:scale-95 shrink-0"
                 >
                   Sign Up
                 </button>
@@ -683,7 +683,7 @@ export default function Layout({ children, currentPageName }) {
           {/* Mobile Drawer Header */}
           <div className="flex items-center justify-between p-4 border-b shrink-0" style={{ borderColor: 'var(--tb-border)' }}>
             <div className="flex items-center gap-2.5">
-              <div className="w-8 h-8 rounded-lg overflow-hidden border border-cyan-500/40 shadow-sm flex items-center justify-center bg-slate-950">
+              <div className="w-8 h-8 rounded-lg overflow-hidden border border-emerald-500/40 shadow-sm flex items-center justify-center bg-slate-950">
                 <img src="/logo-icon.svg" alt="TrustBreak AI Logo" className="w-full h-full object-cover" />
               </div>
               <span className="font-black text-base font-display" style={{ color: 'var(--tb-text)' }}>
@@ -696,7 +696,7 @@ export default function Layout({ children, currentPageName }) {
               aria-label="Close menu"
               className="w-9 h-9 rounded-xl border flex items-center justify-center transition-all hover:bg-slate-500/20"
               style={{ background: 'var(--tb-surface-2)', borderColor: 'var(--tb-border)', color: 'var(--tb-text)' }}>
-              <X className="w-5 h-5 text-cyan-400" />
+              <X className="w-5 h-5 text-emerald-400" />
             </button>
           </div>
 
@@ -737,7 +737,7 @@ export default function Layout({ children, currentPageName }) {
                 {theme === 'dark' ? (
                   <Sun className="w-4 h-4 text-amber-400" />
                 ) : (
-                  <Moon className="w-4 h-4 text-cyan-500" />
+                  <Moon className="w-4 h-4 text-emerald-500" />
                 )}
                 Appearance
               </span>
@@ -746,7 +746,7 @@ export default function Layout({ children, currentPageName }) {
               </span>
             </button>
 
-            <span className="font-display text-[13px] font-bold uppercase tracking-wider px-2 block mt-6 mb-2 text-cyan-400">
+            <span className="font-display text-[13px] font-bold uppercase tracking-wider px-2 block mt-6 mb-2 text-emerald-400">
               Detection Suites
             </span>
             {detectionNav.map(item => {
@@ -758,7 +758,7 @@ export default function Layout({ children, currentPageName }) {
                   to={createPageUrl(item.page)}
                   onClick={() => setMobileMenuOpen(false)}
                   className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${
-                    active ? 'bg-cyan-500/15 text-cyan-500 border border-cyan-500/30' : 'hover:bg-slate-500/10'
+                    active ? 'bg-emerald-500/15 text-emerald-500 border border-emerald-500/30' : 'hover:bg-slate-500/10'
                   }`}
                   style={{ color: active ? undefined : 'var(--tb-text)' }}>
                   <Icon className="w-4 h-4" />
@@ -767,7 +767,7 @@ export default function Layout({ children, currentPageName }) {
               );
             })}
 
-            <span className="font-display text-[13px] font-bold uppercase tracking-wider px-2 block mt-6 mb-2 text-cyan-400">
+            <span className="font-display text-[13px] font-bold uppercase tracking-wider px-2 block mt-6 mb-2 text-emerald-400">
               Intelligence & Radar
             </span>
             {intelligenceNav.map(item => {
@@ -779,7 +779,7 @@ export default function Layout({ children, currentPageName }) {
                   to={createPageUrl(item.page)}
                   onClick={() => setMobileMenuOpen(false)}
                   className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${
-                    active ? 'bg-cyan-500/15 text-cyan-500 border border-cyan-500/30' : 'hover:bg-slate-500/10'
+                    active ? 'bg-emerald-500/15 text-emerald-500 border border-emerald-500/30' : 'hover:bg-slate-500/10'
                   }`}
                   style={{ color: active ? undefined : 'var(--tb-text)' }}>
                   <Icon className="w-4 h-4" />
@@ -788,7 +788,7 @@ export default function Layout({ children, currentPageName }) {
               );
             })}
 
-            <span className="font-display text-[13px] font-bold uppercase tracking-wider px-2 block mt-6 mb-2 text-cyan-400">
+            <span className="font-display text-[13px] font-bold uppercase tracking-wider px-2 block mt-6 mb-2 text-emerald-400">
               Governance & Architecture
             </span>
             {governanceNav.map(item => {
@@ -800,7 +800,7 @@ export default function Layout({ children, currentPageName }) {
                   to={createPageUrl(item.page)}
                   onClick={() => setMobileMenuOpen(false)}
                   className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${
-                    active ? 'bg-cyan-500/15 text-cyan-500 border border-cyan-500/30' : 'hover:bg-slate-500/10'
+                    active ? 'bg-emerald-500/15 text-emerald-500 border border-emerald-500/30' : 'hover:bg-slate-500/10'
                   }`}
                   style={{ color: active ? undefined : 'var(--tb-text)' }}>
                   <Icon className="w-4 h-4" />
@@ -812,9 +812,9 @@ export default function Layout({ children, currentPageName }) {
             {isAuthenticated ? (
               <button
                 onClick={() => { setMobileMenuOpen(false); setShowUserModal(true); }}
-                className="mt-4 w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl font-bold text-xs border border-cyan-500/30 bg-cyan-500/10 text-cyan-600 dark:text-cyan-400"
+                className="mt-4 w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl font-bold text-xs border border-emerald-500/30 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400"
               >
-                <div className="w-5 h-5 rounded-md bg-gradient-to-br from-cyan-400 to-blue-500 flex items-center justify-center text-[9px] font-black text-slate-950">
+                <div className="w-5 h-5 rounded-md bg-gradient-to-br from-emerald-400 to-blue-500 flex items-center justify-center text-[9px] font-black text-slate-950">
                   {getInitials(user)}
                 </div>
                 View Account Details
@@ -823,13 +823,13 @@ export default function Layout({ children, currentPageName }) {
               <div className="mt-4 grid grid-cols-2 gap-2">
                 <button
                   onClick={() => { setMobileMenuOpen(false); openSignIn(); }}
-                  className="tb-auth-button flex items-center justify-center gap-1.5 px-3 py-3 rounded-xl font-bold text-xs border border-slate-600 bg-slate-800 text-slate-200 hover:border-cyan-400 transition-all"
+                  className="tb-auth-button flex items-center justify-center gap-1.5 px-3 py-3 rounded-xl font-bold text-xs border border-slate-600 bg-slate-800 text-slate-200 hover:border-emerald-400 transition-all"
                 >
                   <User className="w-3.5 h-3.5" /> Sign In
                 </button>
                 <button
                   onClick={() => { setMobileMenuOpen(false); openSignUp(); }}
-                  className="tb-auth-button flex items-center justify-center gap-1.5 px-3 py-3 rounded-xl font-bold text-xs bg-gradient-to-r from-cyan-400 to-blue-500 text-slate-950"
+                  className="tb-auth-button flex items-center justify-center gap-1.5 px-3 py-3 rounded-xl font-bold text-xs bg-gradient-to-r from-emerald-400 to-blue-500 text-slate-950"
                 >
                   <UserPlus className="w-3.5 h-3.5" /> Sign Up
                 </button>
@@ -853,7 +853,7 @@ export default function Layout({ children, currentPageName }) {
           {/* Detection */}
           <div className="space-y-1">
             {sidebarOpen && (
-              <span className="font-display text-[13px] font-bold uppercase tracking-wider px-3 block mt-6 mb-2 text-cyan-400">
+              <span className="font-display text-[13px] font-bold uppercase tracking-wider px-3 block mt-6 mb-2 text-emerald-400">
                 Detection Suites
               </span>
             )}
@@ -869,7 +869,7 @@ export default function Layout({ children, currentPageName }) {
                     sidebarOpen ? 'px-3 justify-start' : 'px-0 justify-center'
                   } ${
                     active
-                      ? 'bg-cyan-500/10 text-cyan-500 border border-cyan-500/30 shadow-[0_0_12px_rgba(0,229,255,0.12)]'
+                      ? 'bg-emerald-500/10 text-emerald-500 border border-emerald-500/30 shadow-[0_0_12px_rgba(16,185,129,0.12)]'
                       : 'hover:bg-slate-500/10'
                   }`}
                   style={{ color: active ? undefined : 'var(--tb-text-dim)' }}>
@@ -883,7 +883,7 @@ export default function Layout({ children, currentPageName }) {
           {/* Intelligence & Business */}
           <div className="space-y-1 pt-1">
             {sidebarOpen && (
-              <span className="font-display text-[13px] font-bold uppercase tracking-wider px-3 block mt-6 mb-2 text-cyan-400">
+              <span className="font-display text-[13px] font-bold uppercase tracking-wider px-3 block mt-6 mb-2 text-emerald-400">
                 Intelligence & Business
               </span>
             )}
@@ -899,7 +899,7 @@ export default function Layout({ children, currentPageName }) {
                     sidebarOpen ? 'px-3 justify-start' : 'px-0 justify-center'
                   } ${
                     active
-                      ? 'bg-cyan-500/10 text-cyan-500 border border-cyan-500/30 shadow-[0_0_12px_rgba(0,229,255,0.12)]'
+                      ? 'bg-emerald-500/10 text-emerald-500 border border-emerald-500/30 shadow-[0_0_12px_rgba(16,185,129,0.12)]'
                       : 'hover:bg-slate-500/10'
                   }`}
                   style={{ color: active ? undefined : 'var(--tb-text-dim)' }}>
@@ -913,7 +913,7 @@ export default function Layout({ children, currentPageName }) {
           {/* Architecture */}
           <div className="space-y-1 pt-1">
             {sidebarOpen && (
-              <span className="font-display text-[13px] font-bold uppercase tracking-wider px-3 block mt-6 mb-2 text-cyan-400">
+              <span className="font-display text-[13px] font-bold uppercase tracking-wider px-3 block mt-6 mb-2 text-emerald-400">
                 Architecture & Trust
               </span>
             )}
@@ -929,7 +929,7 @@ export default function Layout({ children, currentPageName }) {
                     sidebarOpen ? 'px-3 justify-start' : 'px-0 justify-center'
                   } ${
                     active
-                      ? 'bg-cyan-500/10 text-cyan-500 border border-cyan-500/30 shadow-[0_0_12px_rgba(0,229,255,0.12)]'
+                      ? 'bg-emerald-500/10 text-emerald-500 border border-emerald-500/30 shadow-[0_0_12px_rgba(16,185,129,0.12)]'
                       : 'hover:bg-slate-500/10'
                   }`}
                   style={{ color: active ? undefined : 'var(--tb-text-dim)' }}>
@@ -972,19 +972,19 @@ export default function Layout({ children, currentPageName }) {
           {/* Transparent Legal Footer */}
           <footer className="mt-16 pt-8 pb-12 border-t text-xs space-y-4" style={{ borderColor: 'var(--tb-border)', color: 'var(--tb-text-dim)' }}>
             <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-              <div className="flex items-center gap-2 font-bold font-display text-sm text-cyan-600 dark:text-cyan-400">
-                <div className="w-5 h-5 rounded overflow-hidden bg-slate-950 border border-cyan-500/30">
+              <div className="flex items-center gap-2 font-bold font-display text-sm text-emerald-600 dark:text-emerald-400">
+                <div className="w-5 h-5 rounded overflow-hidden bg-slate-950 border border-emerald-500/30">
                   <img src="/logo-icon.svg" alt="TrustBreak AI Logo" className="w-full h-full object-cover" />
                 </div>
                 TrustBreak AI Cyber Defense Systems
               </div>
               
               <div className="flex flex-wrap items-center justify-center gap-4 font-medium text-[11px]">
-                <Link to={createPageUrl("PrivacyPolicy")} className="hover:text-cyan-500 transition-colors">Privacy Policy</Link>
-                <Link to={createPageUrl("Terms")} className="hover:text-cyan-500 transition-colors">Terms of Service</Link>
-                <Link to={createPageUrl("CookiePolicy")} className="hover:text-cyan-500 transition-colors">Cookie Policy</Link>
-                <Link to={createPageUrl("RefundPolicy")} className="hover:text-cyan-500 transition-colors">Refund Policy</Link>
-                <Link to={createPageUrl("PrivacyCenter")} className="hover:text-cyan-500 transition-colors">Data Sovereignty</Link>
+                <Link to={createPageUrl("PrivacyPolicy")} className="hover:text-emerald-500 transition-colors">Privacy Policy</Link>
+                <Link to={createPageUrl("Terms")} className="hover:text-emerald-500 transition-colors">Terms of Service</Link>
+                <Link to={createPageUrl("CookiePolicy")} className="hover:text-emerald-500 transition-colors">Cookie Policy</Link>
+                <Link to={createPageUrl("RefundPolicy")} className="hover:text-emerald-500 transition-colors">Refund Policy</Link>
+                <Link to={createPageUrl("PrivacyCenter")} className="hover:text-emerald-500 transition-colors">Data Sovereignty</Link>
               </div>
             </div>
 
@@ -1015,7 +1015,7 @@ export default function Layout({ children, currentPageName }) {
                 key={item.page}
                 to={createPageUrl(item.page)}
                 className={`flex flex-col items-center gap-0.5 py-1 px-2.5 rounded-lg transition-all ${
-                  active ? 'text-cyan-500 font-bold' : 'font-medium'
+                  active ? 'text-emerald-500 font-bold' : 'font-medium'
                 }`}
                 style={{ color: active ? undefined : 'var(--tb-text-dim)' }}>
                 <Icon className="w-4 h-4" />
@@ -1056,3 +1056,5 @@ export default function Layout({ children, currentPageName }) {
     </div>
   );
 }
+
+

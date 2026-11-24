@@ -114,3 +114,4 @@ export default function RecentScans({ scans = [] }) {
     </div>
   );
 }
+

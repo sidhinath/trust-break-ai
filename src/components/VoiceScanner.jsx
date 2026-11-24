@@ -323,14 +323,14 @@ export default function VoiceScanner() {
           <div className="p-4 rounded-xl border flex flex-col sm:flex-row items-center justify-between gap-4"
             style={{ background: "var(--tb-surface-2)", borderColor: "var(--tb-border)" }}>
             <div className="flex items-center gap-3 w-full sm:w-auto">
-              <FileAudio className="w-6 h-6 text-cyan-400" />
+              <FileAudio className="w-6 h-6 text-emerald-400" />
               <audio controls src={audioUrl} className="max-w-xs h-9" />
             </div>
 
             <Button
               onClick={analyzeAudio}
               disabled={analyzing}
-              className="w-full sm:w-auto bg-cyan-600 hover:bg-cyan-500 text-white font-bold"
+              className="w-full sm:w-auto bg-emerald-600 hover:bg-emerald-500 text-white font-bold"
             >
               {analyzing ? "Analyzing Waveform & Speech..." : "Analyze Audio"}
             </Button>
@@ -371,7 +371,7 @@ export default function VoiceScanner() {
                   Transcribed Audio Content
                 </span>
                 {extractUrlFromText(result.transcript) && (
-                  <span className="text-[11px] font-mono text-cyan-400 flex items-center gap-1 font-semibold">
+                  <span className="text-[11px] font-mono text-emerald-400 flex items-center gap-1 font-semibold">
                     <Bot className="w-3.5 h-3.5" /> URL Spoken
                   </span>
                 )}
@@ -386,7 +386,7 @@ export default function VoiceScanner() {
                   onClick={() => handleTinyFishInvestigation(result.transcript)}
                   disabled={investigating}
                   variant="outline"
-                  className="w-full h-10 rounded-xl font-bold border-cyan-500/40 hover:bg-cyan-500/10 text-cyan-400 transition-all text-xs">
+                  className="w-full h-10 rounded-xl font-bold border-emerald-500/40 hover:bg-emerald-500/10 text-emerald-400 transition-all text-xs">
                   {investigating ? "Live Agent Investigating..." : `🤖 TinyFish Live AI Agent: Inspect ${extractUrlFromText(result.transcript)}`}
                 </Button>
               )}
@@ -461,3 +461,5 @@ export default function VoiceScanner() {
     </div>
   );
 }
+
+

@@ -207,10 +207,10 @@ export default function ScamHeatmap() {
             className="tb-card p-4 relative overflow-hidden">
             <div className="flex items-center justify-between">
               <span className="text-[11px] font-bold" style={{ color: 'var(--tb-text-dim)' }}>Syndicated Threat Reports</span>
-              <span className="w-2 h-2 rounded-full bg-cyan-400 animate-ping" />
+              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
             </div>
             <p className="text-2xl sm:text-3xl font-black mt-1" style={{ color: 'var(--tb-text)' }}>{totalReportsCount}</p>
-            <span className="text-[10px] font-mono text-cyan-600 dark:text-cyan-400">Database Records</span>
+            <span className="text-[10px] font-mono text-emerald-600 dark:text-emerald-400">Database Records</span>
           </motion.div>
 
           <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.05 }}
@@ -230,10 +230,10 @@ export default function ScamHeatmap() {
       )}
 
       {/* Real-Time Live Scam Reports Stream */}
-      <section className="tb-card p-5 sm:p-6 space-y-4 border-cyan-500/30">
+      <section className="tb-card p-5 sm:p-6 space-y-4 border-emerald-500/30">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-xl bg-cyan-500/15 border border-cyan-500/30 flex items-center justify-center text-cyan-500">
+            <div className="w-8 h-8 rounded-xl bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center text-emerald-500">
               <Radio className="w-4 h-4 animate-pulse" />
             </div>
             <div>
@@ -280,7 +280,7 @@ export default function ScamHeatmap() {
                     animate={{ opacity: 1, y: 0, scale: 1 }}
                     exit={{ opacity: 0, height: 0 }}
                     transition={{ duration: 0.35 }}
-                    className="p-3.5 rounded-xl border flex flex-col sm:flex-row sm:items-center justify-between gap-3 transition-all hover:border-cyan-400/50"
+                    className="p-3.5 rounded-xl border flex flex-col sm:flex-row sm:items-center justify-between gap-3 transition-all hover:border-emerald-400/50"
                     style={{ background: 'var(--tb-surface-2)', borderColor: 'var(--tb-border)' }}>
                     
                     <div className="flex items-start gap-3 min-w-0">
@@ -296,7 +296,7 @@ export default function ScamHeatmap() {
                           <span className="text-[10px] font-mono px-2 py-0.2 rounded-full badge-scam font-bold">
                             {item.fraud_score}/100 Risk
                           </span>
-                          <span className="text-[10px] font-mono px-2 py-0.2 rounded bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 border border-cyan-500/30">
+                          <span className="text-[10px] font-mono px-2 py-0.2 rounded bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30">
                             {item.region}
                           </span>
                         </div>
@@ -307,7 +307,7 @@ export default function ScamHeatmap() {
                     </div>
 
                     <div className="flex sm:flex-col items-center sm:items-end justify-between text-right shrink-0 text-[10px] font-mono" style={{ color: 'var(--tb-text-muted)' }}>
-                      <span className="flex items-center gap-1 text-cyan-600 dark:text-cyan-400 font-bold">
+                      <span className="flex items-center gap-1 text-emerald-600 dark:text-emerald-400 font-bold">
                         <Clock className="w-3 h-3" /> {item.timestamp}
                       </span>
                       <span className="text-emerald-500 font-bold flex items-center gap-1">
@@ -326,3 +326,5 @@ export default function ScamHeatmap() {
     </ProtectedPage>
   );
 }
+
+

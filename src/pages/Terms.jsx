@@ -9,7 +9,7 @@ export default function Terms() {
         icon={FileText}
         title="Terms & Conditions of Service"
         description="Legal terms of use, probabilistic threat risk disclaimers, acceptable telemetry guidelines, and liability boundaries"
-        color="#06b6d4"
+        color="#10b981"
       />
 
       <div className="tb-card p-6 sm:p-8 space-y-6 text-xs leading-relaxed" style={{ color: 'var(--tb-text)' }}>
@@ -25,14 +25,14 @@ export default function Terms() {
               Effective Date: September 26, 2026 | Version 2.1
             </span>
           </div>
-          <span className="px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 border border-cyan-500/30">
+          <span className="px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30">
             Official Document
           </span>
         </div>
 
         {/* Section 1: Acceptance */}
         <section className="space-y-2">
-          <h2 className="text-sm font-bold uppercase tracking-wider text-cyan-600 dark:text-cyan-400">
+          <h2 className="text-sm font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">
             1. Acceptance of Terms
           </h2>
           <p style={{ color: 'var(--tb-text-dim)' }}>
@@ -57,7 +57,7 @@ export default function Terms() {
 
         {/* Section 3: Acceptable Use Policy */}
         <section className="space-y-2">
-          <h2 className="text-sm font-bold uppercase tracking-wider text-cyan-600 dark:text-cyan-400">
+          <h2 className="text-sm font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">
             3. Acceptable Use Policy
           </h2>
           <p style={{ color: 'var(--tb-text-dim)' }}>
@@ -72,7 +72,7 @@ export default function Terms() {
 
         {/* Section 4: Intellectual Property */}
         <section className="space-y-2">
-          <h2 className="text-sm font-bold uppercase tracking-wider text-cyan-600 dark:text-cyan-400">
+          <h2 className="text-sm font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">
             4. Intellectual Property Rights
           </h2>
           <p style={{ color: 'var(--tb-text-dim)' }}>
@@ -82,7 +82,7 @@ export default function Terms() {
 
         {/* Section 5: Limitation of Liability */}
         <section className="space-y-2">
-          <h2 className="text-sm font-bold uppercase tracking-wider text-cyan-600 dark:text-cyan-400 flex items-center gap-2">
+          <h2 className="text-sm font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400 flex items-center gap-2">
             <Scale className="w-4 h-4" /> 5. Limitation of Liability
           </h2>
           <p style={{ color: 'var(--tb-text-dim)' }}>
@@ -92,7 +92,7 @@ export default function Terms() {
 
         {/* Section 6: Governance & Jurisdiction */}
         <section className="space-y-2 border-t pt-4" style={{ borderColor: 'var(--tb-border)' }}>
-          <h2 className="text-sm font-bold uppercase tracking-wider text-cyan-600 dark:text-cyan-400">
+          <h2 className="text-sm font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">
             6. Governing Law & Jurisdiction
           </h2>
           <p style={{ color: 'var(--tb-text-dim)' }}>
@@ -104,3 +104,5 @@ export default function Terms() {
     </div>
   );
 }
+
+

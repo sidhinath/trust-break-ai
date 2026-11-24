@@ -20,7 +20,7 @@ function getAvatarColor(user) {
   let hash = 0;
   for (let i = 0; i < str.length; i++) hash = str.charCodeAt(i) + ((hash << 5) - hash);
   const colors = [
-    "from-cyan-500 to-blue-500",
+    "from-emerald-500 to-blue-500",
     "from-purple-500 to-pink-500",
     "from-emerald-500 to-teal-500",
     "from-amber-500 to-orange-500",
@@ -78,7 +78,7 @@ export default function UserModal({ isOpen, onClose, user }) {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95 }}
             transition={{ duration: 0.2, ease: "easeOut" }}
-            className="tb-card w-full max-w-md p-6 relative overflow-hidden space-y-5 border-cyan-500/30"
+            className="tb-card w-full max-w-md p-6 relative overflow-hidden space-y-5 border-emerald-500/30"
           >
             {/* Header */}
             <div className="flex items-center justify-between border-b pb-4" style={{ borderColor: "var(--tb-border)" }}>
@@ -119,13 +119,13 @@ export default function UserModal({ isOpen, onClose, user }) {
                 <div className="grid grid-cols-2 gap-2">
                   <button
                     onClick={handleSignIn}
-                    className="h-9 rounded-xl bg-gradient-to-r from-cyan-400 to-blue-500 text-xs font-bold text-slate-950 hover:brightness-110 transition-all"
+                    className="h-9 rounded-xl bg-gradient-to-r from-emerald-400 to-blue-500 text-xs font-bold text-slate-950 hover:brightness-110 transition-all"
                   >
                     Sign In
                   </button>
                   <button
                     onClick={handleSignUp}
-                    className="h-9 rounded-xl border border-cyan-500/40 bg-cyan-500/10 text-xs font-bold text-cyan-300 hover:border-cyan-400 transition-all"
+                    className="h-9 rounded-xl border border-emerald-500/40 bg-emerald-500/10 text-xs font-bold text-emerald-300 hover:border-emerald-400 transition-all"
                   >
                     Create Account
                   </button>
@@ -149,7 +149,7 @@ export default function UserModal({ isOpen, onClose, user }) {
 
                   <div className="space-y-2">
                     <div className="flex items-start gap-2.5">
-                      <Mail className="w-4 h-4 text-cyan-400 mt-0.5 shrink-0" />
+                      <Mail className="w-4 h-4 text-emerald-400 mt-0.5 shrink-0" />
                       <div className="min-w-0">
                         <span className="text-[10px] font-bold uppercase tracking-wider block" style={{ color: "var(--tb-text-dim)" }}>
                           Email Address
@@ -185,9 +185,9 @@ export default function UserModal({ isOpen, onClose, user }) {
                   <Button
                     variant="outline"
                     onClick={handleGoToProfile}
-                    className="w-full text-xs font-bold border-slate-700 hover:border-cyan-400 hover:bg-cyan-500/10"
+                    className="w-full text-xs font-bold border-slate-700 hover:border-emerald-400 hover:bg-emerald-500/10"
                   >
-                    <Shield className="w-3.5 h-3.5 mr-1.5 text-cyan-400" /> Full Profile
+                    <Shield className="w-3.5 h-3.5 mr-1.5 text-emerald-400" /> Full Profile
                   </Button>
                   <Button
                     variant="outline"
@@ -223,3 +223,5 @@ export default function UserModal({ isOpen, onClose, user }) {
     </AnimatePresence>
   );
 }
+
+

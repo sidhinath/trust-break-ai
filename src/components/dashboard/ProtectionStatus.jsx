@@ -8,7 +8,7 @@ export default function ProtectionStatus({ threatsBlocked = 0, safetyScore = 100
   const isHealthy = safetyScore >= 75;
 
   return (
-    <div className="tb-card p-5 sm:p-6 relative overflow-hidden border border-cyan-500/20 shadow-[0_0_35px_rgba(0,229,255,0.08)]">
+    <div className="tb-card p-5 sm:p-6 relative overflow-hidden border border-emerald-500/20 shadow-[0_0_35px_rgba(16,185,129,0.08)]">
       {/* ThreeUI Living Constellation / Particle Drift Background Field */}
       <div className="absolute inset-0 z-0 opacity-30 dark:opacity-40 pointer-events-none dark:mix-blend-screen">
         <ConstellationField
@@ -26,7 +26,7 @@ export default function ProtectionStatus({ threatsBlocked = 0, safetyScore = 100
       <div className="absolute inset-0 z-0 bg-gradient-to-r from-white/95 via-white/80 to-transparent dark:from-slate-950/90 dark:via-slate-950/65 pointer-events-none" />
 
       {/* Glow */}
-      <div className="absolute top-0 right-0 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute top-0 right-0 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
 
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 relative z-10">
         
@@ -52,13 +52,13 @@ export default function ProtectionStatus({ threatsBlocked = 0, safetyScore = 100
           <div className="pt-2 flex flex-wrap items-center gap-2.5">
             <Link
               to={createPageUrl("MessageScanner")}
-              className="inline-flex items-center justify-center gap-2 h-9 px-4 rounded-xl text-xs font-bold font-mono tracking-wide uppercase bg-gradient-to-r from-cyan-500 to-cyan-400 hover:from-cyan-400 hover:to-cyan-300 text-slate-950 shadow-[0_0_25px_rgba(0,229,255,0.4)] transition-all hover:scale-[1.02] active:scale-[0.98]">
+              className="inline-flex items-center justify-center gap-2 h-9 px-4 rounded-xl text-xs font-bold font-mono tracking-wide uppercase bg-gradient-to-r from-emerald-500 to-emerald-400 hover:from-emerald-400 hover:to-emerald-300 text-white shadow-[0_0_25px_rgba(16,185,129,0.4)] transition-all hover:scale-[1.02] active:scale-[0.98]">
               <Zap className="w-3.5 h-3.5 fill-current" />
               Scan Message
             </Link>
             <Link
               to={createPageUrl("LinkScanner")}
-              className="text-xs font-bold text-cyan-600 dark:text-cyan-400 hover:underline transition-colors flex items-center gap-1 px-2 py-1 rounded-lg hover:bg-cyan-500/10">
+              className="text-xs font-bold text-emerald-600 dark:text-emerald-400 hover:underline transition-colors flex items-center gap-1 px-2 py-1 rounded-lg hover:bg-emerald-500/10">
               Link →
             </Link>
             <Link
@@ -86,7 +86,7 @@ export default function ProtectionStatus({ threatsBlocked = 0, safetyScore = 100
               <span className="text-[10px] font-bold uppercase tracking-wider" style={{ color: 'var(--tb-text-dim)' }}>
                 Security Score
               </span>
-              <Activity className="w-3.5 h-3.5 text-cyan-500" />
+              <Activity className="w-3.5 h-3.5 text-emerald-500" />
             </div>
             <div className="my-1.5 flex items-baseline">
               <span className={`text-3xl font-black font-mono ${isHealthy ? 'score-safe' : 'score-suspicious'}`}>
@@ -142,3 +142,4 @@ export default function ProtectionStatus({ threatsBlocked = 0, safetyScore = 100
     </div>
   );
 }
+

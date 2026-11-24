@@ -12,7 +12,7 @@ export default function VoiceScannerPage() {
           icon={Mic}
           title="Voice & Deepfake Call Scam Detector"
           description="Inspect audio recordings and voicemails for voice cloning, synthesized vocoders, social engineering coercion, and financial traps"
-          color="#06b6d4"
+          color="#10b981"
         />
 
         <VoiceScanner />
@@ -20,3 +20,5 @@ export default function VoiceScannerPage() {
     </ProtectedPage>
   );
 }
+
+

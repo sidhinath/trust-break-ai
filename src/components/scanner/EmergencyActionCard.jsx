@@ -75,10 +75,10 @@ export default function EmergencyActionCard({ riskLevel = "safe", scanData = {} 
           style={{ background: "var(--tb-surface-2)", borderColor: "var(--tb-border)" }}>
           <div>
             <div className="flex items-center gap-2">
-              <span className="w-5 h-5 rounded-full bg-cyan-500 text-slate-950 font-black text-xs flex items-center justify-center">
+              <span className="w-5 h-5 rounded-full bg-emerald-500 text-slate-950 font-black text-xs flex items-center justify-center">
                 2
               </span>
-              <h4 className="text-xs font-bold uppercase tracking-wider text-cyan-600 dark:text-cyan-400">
+              <h4 className="text-xs font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">
                 VERIFY AUTHENTICITY
               </h4>
             </div>
@@ -88,7 +88,7 @@ export default function EmergencyActionCard({ riskLevel = "safe", scanData = {} 
           </div>
           <button
             onClick={handleCopyCyberHelpline}
-            className="text-[11px] font-bold text-cyan-600 dark:text-cyan-400 flex items-center gap-1 hover:underline pt-1">
+            className="text-[11px] font-bold text-emerald-600 dark:text-emerald-400 flex items-center gap-1 hover:underline pt-1">
             <PhoneCall className="w-3 h-3" />
             {copiedHelpline ? "Copied 1930 to clipboard!" : "National Cyber Helpline: 1930"}
           </button>
@@ -139,3 +139,5 @@ export default function EmergencyActionCard({ riskLevel = "safe", scanData = {} 
     </div>
   );
 }
+
+

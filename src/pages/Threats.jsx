@@ -217,7 +217,7 @@ export default function Threats() {
                 onClick={() => setActiveTab(tab.id)}
                 className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all ${
                   isSelected
-                    ? "bg-cyan-500 text-slate-950 shadow-md shadow-cyan-500/20"
+                    ? "bg-emerald-500 text-slate-950 shadow-md shadow-emerald-500/20"
                     : "hover:bg-slate-500/10 text-slate-400 hover:text-slate-200"
                 }`}
               >
@@ -238,10 +238,10 @@ export default function Threats() {
             className="tb-card p-4 relative overflow-hidden">
             <div className="flex items-center justify-between">
               <span className="text-[11px] font-bold" style={{ color: 'var(--tb-text-dim)' }}>Syndicated Threat Reports</span>
-              <span className="w-2 h-2 rounded-full bg-cyan-400 animate-ping" />
+              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
             </div>
             <p className="text-2xl sm:text-3xl font-black mt-1" style={{ color: 'var(--tb-text)' }}>{totalReportsCount}</p>
-            <span className="text-[10px] font-mono text-cyan-600 dark:text-cyan-400">Database & Live Telemetry</span>
+            <span className="text-[10px] font-mono text-emerald-600 dark:text-emerald-400">Database & Live Telemetry</span>
           </motion.div>
 
           <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.05 }}
@@ -262,10 +262,10 @@ export default function Threats() {
 
       {/* TAB 1: THREAT RADAR */}
       {activeTab === "radar" && (
-        <section className="tb-card p-5 sm:p-6 space-y-4 border-cyan-500/30">
+        <section className="tb-card p-5 sm:p-6 space-y-4 border-emerald-500/30">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-xl bg-cyan-500/15 border border-cyan-500/30 flex items-center justify-center text-cyan-500">
+              <div className="w-8 h-8 rounded-xl bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center text-emerald-500">
                 <Radio className="w-4 h-4 animate-pulse" />
               </div>
               <div>
@@ -295,7 +295,7 @@ export default function Threats() {
                 onClick={() => setSelectedFilter(filter)}
                 className={`px-3 py-1 rounded-lg text-xs font-bold capitalize transition-all ${
                   selectedFilter === filter
-                    ? "bg-cyan-500/20 text-cyan-400 border border-cyan-500/40"
+                    ? "bg-emerald-500/20 text-emerald-400 border border-emerald-500/40"
                     : "bg-slate-800/40 text-slate-400 border border-slate-700/50 hover:text-slate-200"
                 }`}>
                 {filter === "all" ? "All Threat Types" : filter === "link" ? "Phishing URLs" : filter === "phone" ? "Voice Calls" : filter === "qr" ? "QR Scams" : "SMS Messages"}
@@ -325,7 +325,7 @@ export default function Threats() {
                         initial={{ opacity: 0, y: -8 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, height: 0 }}
-                        className="p-3.5 rounded-xl border flex flex-col sm:flex-row sm:items-center justify-between gap-3 transition-all hover:border-cyan-400/50"
+                        className="p-3.5 rounded-xl border flex flex-col sm:flex-row sm:items-center justify-between gap-3 transition-all hover:border-emerald-400/50"
                         style={{ background: 'var(--tb-surface-2)', borderColor: 'var(--tb-border)' }}>
                         <div className="flex items-start gap-3 min-w-0">
                           <div className="w-9 h-9 rounded-xl bg-rose-500/15 border border-rose-500/30 flex items-center justify-center shrink-0 text-rose-500 mt-0.5 sm:mt-0">
@@ -339,7 +339,7 @@ export default function Threats() {
                               <span className="text-[10px] font-mono px-2 py-0.2 rounded-full badge-scam font-bold">
                                 {item.fraud_score}/100 Risk
                               </span>
-                              <span className="text-[10px] font-mono px-2 py-0.2 rounded bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 border border-cyan-500/30">
+                              <span className="text-[10px] font-mono px-2 py-0.2 rounded bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30">
                                 {item.region}
                               </span>
                             </div>
@@ -350,7 +350,7 @@ export default function Threats() {
                         </div>
 
                         <div className="flex sm:flex-col items-center sm:items-end justify-between text-right shrink-0 text-[10px] font-mono" style={{ color: 'var(--tb-text-muted)' }}>
-                          <span className={`flex items-center gap-1 font-bold ${item.is_live ? 'text-rose-500 animate-pulse' : 'text-cyan-600 dark:text-cyan-400'}`}>
+                          <span className={`flex items-center gap-1 font-bold ${item.is_live ? 'text-rose-500 animate-pulse' : 'text-emerald-600 dark:text-emerald-400'}`}>
                             {item.is_live && <span className="w-1.5 h-1.5 rounded-full bg-rose-500 animate-ping mr-0.5" />}
                             <Clock className="w-3 h-3" /> {item.timestamp}
                           </span>
@@ -370,9 +370,9 @@ export default function Threats() {
       {/* TAB 2: SCAM TELEMETRY */}
       {activeTab === "heatmap" && (
         <div className="space-y-4">
-          <div className="tb-card p-5 space-y-4 border-cyan-500/30">
+          <div className="tb-card p-5 space-y-4 border-emerald-500/30">
             <div className="flex items-center gap-2">
-              <Map className="w-5 h-5 text-cyan-400" />
+              <Map className="w-5 h-5 text-emerald-400" />
               <div>
                 <h2 className="text-base font-bold font-display" style={{ color: 'var(--tb-text)' }}>
                   Scam Telemetry & Vector Breakdown
@@ -399,11 +399,11 @@ export default function Threats() {
                     </span>
                   </div>
                   <div className="flex items-baseline justify-between">
-                    <span className="text-xl font-black font-mono text-cyan-400">{item.percent}</span>
+                    <span className="text-xl font-black font-mono text-emerald-400">{item.percent}</span>
                     <span className="text-[11px] font-mono" style={{ color: 'var(--tb-text-dim)' }}>{item.count}</span>
                   </div>
                   <div className="w-full bg-slate-800 h-1.5 rounded-full overflow-hidden">
-                    <div className="bg-cyan-400 h-full rounded-full" style={{ width: item.percent }} />
+                    <div className="bg-emerald-400 h-full rounded-full" style={{ width: item.percent }} />
                   </div>
                 </div>
               ))}
@@ -411,7 +411,7 @@ export default function Threats() {
           </div>
 
           <div className="tb-card p-5 space-y-3">
-            <h3 className="font-display text-xs font-bold uppercase tracking-wider text-cyan-400">Regional Incident Hotspots</h3>
+            <h3 className="font-display text-xs font-bold uppercase tracking-wider text-emerald-400">Regional Incident Hotspots</h3>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs font-mono">
               <div className="p-3 rounded-lg border bg-slate-900/50 border-slate-700/50">
                 <span className="text-slate-400 block text-[10px]">BENGALURU, KA</span>
@@ -427,7 +427,7 @@ export default function Threats() {
               </div>
               <div className="p-3 rounded-lg border bg-slate-900/50 border-slate-700/50">
                 <span className="text-slate-400 block text-[10px]">HYDERABAD / CHENNAI</span>
-                <span className="font-bold font-mono text-cyan-400 text-sm">17.5% Density</span>
+                <span className="font-bold font-mono text-emerald-400 text-sm">17.5% Density</span>
               </div>
             </div>
           </div>
@@ -437,9 +437,9 @@ export default function Threats() {
       {/* TAB 3: THREAT INTELLIGENCE */}
       {activeTab === "intelligence" && (
         <div className="space-y-4">
-          <div className="tb-card p-5 space-y-4 border-cyan-500/30">
+          <div className="tb-card p-5 space-y-4 border-emerald-500/30">
             <div className="flex items-center gap-2 border-b pb-3" style={{ borderColor: 'var(--tb-border)' }}>
-              <Globe className="w-5 h-5 text-cyan-400" />
+              <Globe className="w-5 h-5 text-emerald-400" />
               <div>
                 <h2 className="text-base font-bold font-display" style={{ color: 'var(--tb-text)' }}>
                   Syndicated Threat Feeds & Rule Engine
@@ -472,16 +472,16 @@ export default function Threats() {
               <div className="p-4 rounded-xl border space-y-2" style={{ background: 'var(--tb-surface-2)', borderColor: 'var(--tb-border)' }}>
                 <div className="flex items-center justify-between">
                   <span className="text-xs font-bold" style={{ color: 'var(--tb-text)' }}>Deterministic Rules</span>
-                  <span className="w-2 h-2 rounded-full bg-cyan-400" />
+                  <span className="w-2 h-2 rounded-full bg-emerald-400" />
                 </div>
-                <p className="text-xl font-black font-mono text-cyan-400">10 ENGINES</p>
+                <p className="text-xl font-black font-mono text-emerald-400">10 ENGINES</p>
                 <span className="text-[10px] block" style={{ color: 'var(--tb-text-dim)' }}>Zero-latency offline regex and acoustic heuristic checkers</span>
               </div>
             </div>
           </div>
 
           <div className="tb-card p-5 space-y-3">
-            <h3 className="text-xs font-bold uppercase tracking-wider text-cyan-400">Typosquatting & Lookalike Domain Rules</h3>
+            <h3 className="text-xs font-bold uppercase tracking-wider text-emerald-400">Typosquatting & Lookalike Domain Rules</h3>
             <div className="space-y-2 text-xs font-mono">
               {["sbi-kyc-verify-online.com", "hdfc-security-update.net", "icici-reward-claim.info", "paytm-cashback-auth.top"].map((domain, i) => (
                 <div key={i} className="p-2.5 rounded-lg border flex items-center justify-between" style={{ background: 'var(--tb-surface-2)', borderColor: 'var(--tb-border)' }}>
@@ -497,10 +497,10 @@ export default function Threats() {
       {/* TAB 4: COMMUNITY INTELLIGENCE */}
       {activeTab === "community" && (
         <div className="space-y-4">
-          <div className="tb-card p-5 space-y-4 border-cyan-500/30">
+          <div className="tb-card p-5 space-y-4 border-emerald-500/30">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b pb-3" style={{ borderColor: 'var(--tb-border)' }}>
               <div className="flex items-center gap-2">
-                <Users className="w-5 h-5 text-cyan-400" />
+                <Users className="w-5 h-5 text-emerald-400" />
                 <div>
                   <h2 className="text-base font-bold font-display" style={{ color: 'var(--tb-text)' }}>
                     Community Intelligence & Verified Submissions
@@ -532,7 +532,7 @@ export default function Threats() {
                 {liveStream.map((item) => (
                   <div key={item.id} className="p-4 rounded-xl border space-y-2" style={{ background: 'var(--tb-surface-2)', borderColor: 'var(--tb-border)' }}>
                     <div className="flex items-center justify-between text-xs">
-                      <span className="font-bold text-cyan-400">{item.threat_category}</span>
+                      <span className="font-bold text-emerald-400">{item.threat_category}</span>
                       <span className="text-[10px] font-mono text-emerald-400 flex items-center gap-1">
                         <ShieldCheck className="w-3 h-3" /> Community Verified
                       </span>
@@ -554,3 +554,5 @@ export default function Threats() {
     </div>
   );
 }
+
+

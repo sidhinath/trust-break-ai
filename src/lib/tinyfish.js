@@ -289,3 +289,5 @@ export async function runTinyFishInvestigation(targetUrl, options = {}) {
     return normalizeTinyFishResult(targetUrl, `Network or provider execution error: ${err.message}`, 'failed', 'NETWORK_ERROR')
   }
 }
+
+

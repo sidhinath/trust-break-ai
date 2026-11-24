@@ -42,7 +42,7 @@ const actions = [
     subtitle: "Deepfakes, vocoders & fraud calls",
     page: "VoiceScanner",
     icon: Mic,
-    color: "#06b6d4",
+    color: "#10b981",
     bg: "rgba(6, 182, 212, 0.12)",
   },
   {
@@ -92,7 +92,7 @@ export default function QuickActions() {
                   <Icon className="w-5 h-5" style={{ color: action.color }} />
                 </div>
                 <div>
-                  <h3 className="text-sm font-bold transition-colors group-hover:text-cyan-500"
+                  <h3 className="text-sm font-bold transition-colors group-hover:text-emerald-500"
                     style={{ color: 'var(--tb-text)' }}>
                     {action.title}
                   </h3>
@@ -110,3 +110,4 @@ export default function QuickActions() {
     </div>
   );
 }
+

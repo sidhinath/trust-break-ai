@@ -135,7 +135,7 @@ export default function QRScannerPage() {
                 Decoded Raw QR Content
               </span>
               {extractedUrl && (
-                <span className="text-[11px] font-mono text-cyan-400 flex items-center gap-1 font-semibold">
+                <span className="text-[11px] font-mono text-emerald-400 flex items-center gap-1 font-semibold">
                   <Bot className="w-3.5 h-3.5" /> URL Detected
                 </span>
               )}
@@ -150,7 +150,7 @@ export default function QRScannerPage() {
                 onClick={() => handleTinyFishInvestigation(extractedUrl)}
                 disabled={scanning || investigating}
                 variant="outline"
-                className="w-full h-10 rounded-xl font-bold border-cyan-500/40 hover:bg-cyan-500/10 text-cyan-400 transition-all text-xs">
+                className="w-full h-10 rounded-xl font-bold border-emerald-500/40 hover:bg-emerald-500/10 text-emerald-400 transition-all text-xs">
                 {investigating ? "Live Agent Investigating Domain..." : `🤖 TinyFish Live AI Agent: Inspect ${extractedUrl}`}
               </Button>
             )}
@@ -182,3 +182,5 @@ export default function QRScannerPage() {
     </ProtectedPage>
   );
 }
+
+

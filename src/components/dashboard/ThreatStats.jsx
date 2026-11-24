@@ -9,7 +9,7 @@ export default function ThreatStats({ reports = [], scans = [] }) {
   const totalSafe = scans.filter(s => s.risk_level === 'safe').length;
 
   const stats = [
-    { label: "Scans Performed", value: scans.length, icon: Eye, color: "var(--tb-neon)", bg: "rgba(0,229,255,0.12)" },
+    { label: "Scans Performed", value: scans.length, icon: Eye, color: "var(--tb-neon)", bg: "rgba(16,185,129,0.12)" },
     { label: "Scams Neutralized", value: totalScams, icon: AlertTriangle, color: "var(--tb-red)", bg: "rgba(239,68,68,0.12)" },
     { label: "Suspicious Flags", value: totalSuspicious, icon: TrendingUp, color: "var(--tb-orange)", bg: "rgba(245,158,11,0.12)" },
     { label: "Verified Safe", value: totalSafe, icon: ShieldCheck, color: "var(--tb-green)", bg: "rgba(16,185,129,0.12)" },
@@ -78,8 +78,8 @@ export default function ThreatStats({ reports = [], scans = [] }) {
         <div className="tb-card p-5 space-y-3">
           <div className="flex items-center justify-between">
             <h3 className="text-sm font-bold uppercase tracking-wider flex items-center gap-1.5"
-              style={{ color: '#22d3ee' }}>
-              <BarChart2 className="w-3.5 h-3.5 text-cyan-500" /> Vectors Scanned By Channel
+              style={{ color: '#10b981' }}>
+              <BarChart2 className="w-3.5 h-3.5 text-emerald-500" /> Vectors Scanned By Channel
             </h3>
             <span className="text-xs text-slate-400 font-mono">Live Telemetry</span>
           </div>
@@ -113,7 +113,7 @@ export default function ThreatStats({ reports = [], scans = [] }) {
         <div className="tb-card p-5 space-y-3">
           <div className="flex items-center justify-between">
             <h3 className="text-sm font-bold uppercase tracking-wider flex items-center gap-1.5"
-              style={{ color: '#22d3ee' }}>
+              style={{ color: '#10b981' }}>
               <Activity className="w-3.5 h-3.5 text-emerald-500" /> Detection Activity Trend
             </h3>
             <span className="text-xs text-slate-400 font-mono">Weekly Curve</span>
@@ -149,3 +149,4 @@ export default function ThreatStats({ reports = [], scans = [] }) {
     </div>
   );
 }
+

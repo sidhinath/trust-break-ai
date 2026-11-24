@@ -35,7 +35,7 @@ export default function Profile() {
   const safetyScore = scans.length === 0 ? 98 : Math.max(15, Math.round(100 - (scamRatio * 60) + (reports.length * 2)));
 
   const stats = [
-    { label: "Inspections Run", value: scans.length, icon: Eye, color: "var(--tb-neon)", bg: "rgba(0,229,255,0.1)" },
+    { label: "Inspections Run", value: scans.length, icon: Eye, color: "var(--tb-neon)", bg: "rgba(16,185,129,0.1)" },
     { label: "Threats Blocked", value: totalScams, icon: AlertTriangle, color: "var(--tb-red)", bg: "rgba(239,68,68,0.1)" },
     { label: "Safe Checks", value: totalSafe, icon: ShieldCheck, color: "var(--tb-green)", bg: "rgba(16,185,129,0.1)" },
     { label: "Intel Reports", value: reports.length, icon: Shield, color: "var(--tb-orange)", bg: "rgba(245,158,11,0.1)" },
@@ -55,7 +55,7 @@ export default function Profile() {
           className="tb-card p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           
           <div className="flex items-center gap-4">
-            <div className="w-16 h-16 rounded-2xl flex items-center justify-center shrink-0 bg-gradient-to-tr from-cyan-500 to-sky-400">
+            <div className="w-16 h-16 rounded-2xl flex items-center justify-center shrink-0 bg-gradient-to-tr from-emerald-500 to-sky-400">
               <User className="w-8 h-8 text-slate-950 font-black" />
             </div>
             <div>
@@ -141,8 +141,8 @@ export default function Profile() {
           to={createPageUrl("Technology")}
           className="tb-card p-4 flex items-center justify-between hover:border-slate-500 transition-all block">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center">
-              <Cpu className="w-4 h-4 text-cyan-500" />
+            <div className="w-9 h-9 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center">
+              <Cpu className="w-4 h-4 text-emerald-500" />
             </div>
             <div>
               <p className="text-sm font-bold" style={{ color: 'var(--tb-text)' }}>Technical Architecture & Engines</p>
@@ -165,3 +165,5 @@ export default function Profile() {
     </ProtectedPage>
   );
 }
+
+

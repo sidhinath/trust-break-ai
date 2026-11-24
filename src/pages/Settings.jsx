@@ -110,7 +110,7 @@ export default function Settings() {
       {/* ACCOUNT SECTION */}
       <div className="tb-card p-5 space-y-4">
         <div className="flex items-center gap-2 border-b pb-3" style={{ borderColor: "var(--tb-border)" }}>
-          <User className="w-4 h-4 text-cyan-400" />
+          <User className="w-4 h-4 text-emerald-400" />
           <h3 className="text-xs font-bold uppercase tracking-wider" style={{ color: "var(--tb-text)" }}>
             Account & Security Profile
           </h3>
@@ -141,12 +141,12 @@ export default function Settings() {
       <div className="tb-card p-5 space-y-4">
         <div className="flex items-center justify-between border-b pb-3" style={{ borderColor: "var(--tb-border)" }}>
           <div className="flex items-center gap-2">
-            <ShieldCheck className="w-4 h-4 text-cyan-400" />
+            <ShieldCheck className="w-4 h-4 text-emerald-400" />
             <h3 className="text-xs font-bold uppercase tracking-wider" style={{ color: "var(--tb-text)" }}>
               AI Engine & API Credentials
             </h3>
           </div>
-          <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-cyan-500/10 text-cyan-500 border border-cyan-500/30">
+          <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-500 border border-emerald-500/30">
             GROQ LPU + GEMINI 2.5 FLASH
           </span>
         </div>
@@ -165,7 +165,7 @@ export default function Settings() {
               value={groqKey}
               onChange={(e) => setGroqKey(e.target.value)}
               placeholder="gsk_..."
-              className="w-full h-10 px-3 text-xs font-mono rounded-xl border bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-800 focus:outline-none focus:border-cyan-500"
+              className="w-full h-10 px-3 text-xs font-mono rounded-xl border bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-800 focus:outline-none focus:border-emerald-500"
             />
           </div>
 
@@ -178,14 +178,14 @@ export default function Settings() {
               value={geminiKey}
               onChange={(e) => setGeminiKey(e.target.value)}
               placeholder="AIzaSy..."
-              className="w-full h-10 px-3 text-xs font-mono rounded-xl border bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-800 focus:outline-none focus:border-cyan-500"
+              className="w-full h-10 px-3 text-xs font-mono rounded-xl border bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-800 focus:outline-none focus:border-emerald-500"
             />
           </div>
 
           <div className="pt-2 flex items-center justify-between">
             <Button
               onClick={saveAiKeys}
-              className="h-9 px-4 text-xs font-bold bg-cyan-500 hover:bg-cyan-600 text-slate-950 rounded-xl shadow-sm">
+              className="h-9 px-4 text-xs font-bold bg-emerald-500 hover:bg-emerald-600 text-slate-950 rounded-xl shadow-sm">
               Save AI Credentials
             </Button>
             {savedKeysNotice && (
@@ -200,7 +200,7 @@ export default function Settings() {
       {/* PROTECTION PREFERENCES */}
       <div className="tb-card p-5 space-y-4">
         <div className="flex items-center gap-2 border-b pb-3" style={{ borderColor: "var(--tb-border)" }}>
-          <Shield className="w-4 h-4 text-cyan-400" />
+          <Shield className="w-4 h-4 text-emerald-400" />
           <h3 className="text-xs font-bold uppercase tracking-wider" style={{ color: "var(--tb-text)" }}>
             Protection Preferences
           </h3>
@@ -220,7 +220,7 @@ export default function Settings() {
               type="checkbox"
               checked={offlineMode}
               onChange={(e) => setOfflineMode(e.target.checked)}
-              className="w-4 h-4 rounded text-cyan-500 accent-cyan-500 cursor-pointer"
+              className="w-4 h-4 rounded text-emerald-500 accent-emerald-500 cursor-pointer"
             />
           </div>
 
@@ -237,7 +237,7 @@ export default function Settings() {
               type="checkbox"
               checked={notificationsEnabled}
               onChange={(e) => setNotificationsEnabled(e.target.checked)}
-              className="w-4 h-4 rounded text-cyan-500 accent-cyan-500 cursor-pointer"
+              className="w-4 h-4 rounded text-emerald-500 accent-emerald-500 cursor-pointer"
             />
           </div>
 
@@ -261,7 +261,7 @@ export default function Settings() {
           <div className="flex items-center justify-between p-3 rounded-xl border" style={{ background: "var(--tb-surface-2)", borderColor: "var(--tb-border)" }}>
             <div className="space-y-0.5">
               <span className="text-xs font-bold flex items-center gap-1.5" style={{ color: "var(--tb-text)" }}>
-                {themeMode === "dark" ? <Moon className="w-4 h-4 text-cyan-400" /> : <Sun className="w-4 h-4 text-amber-400" />} Theme Interface ({themeMode === "dark" ? "Dark Mode" : "Light Mode"})
+                {themeMode === "dark" ? <Moon className="w-4 h-4 text-emerald-400" /> : <Sun className="w-4 h-4 text-amber-400" />} Theme Interface ({themeMode === "dark" ? "Dark Mode" : "Light Mode"})
               </span>
               <span className="text-[11px] block" style={{ color: "var(--tb-text-dim)" }}>
                 Switch between high-contrast dark cybersecurity mode and clean light theme.
@@ -271,7 +271,7 @@ export default function Settings() {
               type="checkbox"
               checked={themeMode === "dark"}
               onChange={toggleThemeMode}
-              className="w-4 h-4 rounded text-cyan-500 accent-cyan-500 cursor-pointer"
+              className="w-4 h-4 rounded text-emerald-500 accent-emerald-500 cursor-pointer"
             />
           </div>
         </div>
@@ -280,7 +280,7 @@ export default function Settings() {
       {/* PRIVACY & PERMISSIONS */}
       <div className="tb-card p-5 space-y-4">
         <div className="flex items-center gap-2 border-b pb-3" style={{ borderColor: "var(--tb-border)" }}>
-          <Lock className="w-4 h-4 text-cyan-400" />
+          <Lock className="w-4 h-4 text-emerald-400" />
           <h3 className="text-xs font-bold uppercase tracking-wider" style={{ color: "var(--tb-text)" }}>
             Privacy & Permissions
           </h3>
@@ -290,7 +290,7 @@ export default function Settings() {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div className="p-3 rounded-xl border flex items-center justify-between" style={{ background: "var(--tb-surface-2)", borderColor: "var(--tb-border)" }}>
               <div className="flex items-center gap-2">
-                <Camera className="w-4 h-4 text-cyan-400" />
+                <Camera className="w-4 h-4 text-emerald-400" />
                 <span className="text-xs font-bold" style={{ color: "var(--tb-text)" }}>Camera Access</span>
               </div>
               <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">
@@ -300,7 +300,7 @@ export default function Settings() {
 
             <div className="p-3 rounded-xl border flex items-center justify-between" style={{ background: "var(--tb-surface-2)", borderColor: "var(--tb-border)" }}>
               <div className="flex items-center gap-2">
-                <Mic className="w-4 h-4 text-cyan-400" />
+                <Mic className="w-4 h-4 text-emerald-400" />
                 <span className="text-xs font-bold" style={{ color: "var(--tb-text)" }}>Microphone Access</span>
               </div>
               <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">
@@ -350,13 +350,13 @@ export default function Settings() {
                 setTimeout(() => setResetOnboardingNotice(false), 3000);
               }}
               variant="outline"
-              className="h-8 text-xs gap-1 border-slate-700 hover:bg-slate-800 text-cyan-400">
-              <Info className="w-3.5 h-3.5 text-cyan-400" /> Replay Onboarding
+              className="h-8 text-xs gap-1 border-slate-700 hover:bg-slate-800 text-emerald-400">
+              <Info className="w-3.5 h-3.5 text-emerald-400" /> Replay Onboarding
             </Button>
           </div>
 
           {resetOnboardingNotice && (
-            <p className="text-xs font-medium p-2 rounded-lg bg-cyan-500/10 border border-cyan-500/30 text-cyan-400">
+            <p className="text-xs font-medium p-2 rounded-lg bg-emerald-500/10 border border-emerald-500/30 text-emerald-400">
               Onboarding reset! You will see the intro screen on your next session or refresh.
             </p>
           )}
@@ -366,7 +366,7 @@ export default function Settings() {
       {/* APP INFO */}
       <div className="tb-card p-5 space-y-3">
         <div className="flex items-center gap-2 border-b pb-3" style={{ borderColor: "var(--tb-border)" }}>
-          <Info className="w-4 h-4 text-cyan-400" />
+          <Info className="w-4 h-4 text-emerald-400" />
           <h3 className="text-xs font-bold uppercase tracking-wider" style={{ color: "var(--tb-text)" }}>
             About TrustBreak AI
           </h3>
@@ -375,7 +375,7 @@ export default function Settings() {
         <div className="space-y-2 text-xs" style={{ color: "var(--tb-text-dim)" }}>
           <div className="flex justify-between py-1 border-b" style={{ borderColor: "var(--tb-border)" }}>
             <span>Application Version</span>
-            <span className="font-mono text-cyan-400 font-bold">1.0.0 (Capacitor Android)</span>
+            <span className="font-mono text-emerald-400 font-bold">1.0.0 (Capacitor Android)</span>
           </div>
           <div className="flex justify-between py-1 border-b" style={{ borderColor: "var(--tb-border)" }}>
             <span>Package Identifier</span>
@@ -391,3 +391,5 @@ export default function Settings() {
     </ProtectedPage>
   );
 }
+
+

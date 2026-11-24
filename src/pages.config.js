@@ -15,7 +15,6 @@ import PrivacyPolicy from './pages/PrivacyPolicy';
 import Terms from './pages/Terms';
 import CookiePolicy from './pages/CookiePolicy';
 import RefundPolicy from './pages/RefundPolicy';
-import ScanHub from './pages/ScanHub';
 import Reports from './pages/Reports';
 import Settings from './pages/Settings';
 import Threats from './pages/Threats';
@@ -24,7 +23,6 @@ import __Layout from './Layout.jsx';
 
 export const PAGES = {
     "Home": Home,
-    "ScanHub": ScanHub,
     "Threats": Threats,
     "Reports": Reports,
     "Settings": Settings,
@@ -52,3 +50,4 @@ export const pagesConfig = {
     Pages: PAGES,
     Layout: __Layout,
 };
+

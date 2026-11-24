@@ -283,7 +283,7 @@ export default function ScreenshotScanner() {
                     await triggerHaptic("light");
                     setShowTrustedContact(true);
                   }}
-                  className="h-11 px-4 rounded-xl bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-400 border border-cyan-500/40 font-bold text-xs flex items-center gap-2 transition-all cursor-pointer">
+                  className="h-11 px-4 rounded-xl bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-400 border border-emerald-500/40 font-bold text-xs flex items-center gap-2 transition-all cursor-pointer">
                   <Users className="w-4 h-4" />
                   <span>Ask Trusted Contact / Family Member</span>
                 </button>
@@ -425,12 +425,12 @@ export default function ScreenshotScanner() {
                       onClick={runVisionDiagnostics}
                       disabled={healthLoading}
                       variant="outline"
-                      className="h-10 rounded-xl font-bold text-xs border-cyan-500/40 text-cyan-500 hover:bg-cyan-500/10 cursor-pointer">
+                      className="h-10 rounded-xl font-bold text-xs border-emerald-500/40 text-emerald-500 hover:bg-emerald-500/10 cursor-pointer">
                       {healthLoading ? "Checking vision engine..." : "Run vision diagnostics"}
                     </Button>
                     <Link
                       to={createPageUrl("Settings")}
-                      className="h-10 px-4 rounded-xl border font-bold text-xs flex items-center justify-center transition-colors hover:border-cyan-400 hover:text-cyan-400"
+                      className="h-10 px-4 rounded-xl border font-bold text-xs flex items-center justify-center transition-colors hover:border-emerald-400 hover:text-emerald-400"
                       style={{ borderColor: 'var(--tb-border)', color: 'var(--tb-text-dim)' }}>
                       Configure Gemini Vision key
                     </Link>
@@ -449,9 +449,9 @@ export default function ScreenshotScanner() {
                   )}
 
                   {healthReport && (
-                    <details open className="text-[11px] rounded-lg border border-cyan-500/30 px-3 py-2"
+                    <details open className="text-[11px] rounded-lg border border-emerald-500/30 px-3 py-2"
                       style={{ background: 'var(--tb-surface-2)' }}>
-                      <summary className="cursor-pointer font-bold text-cyan-500">
+                      <summary className="cursor-pointer font-bold text-emerald-500">
                         Vision engine health: {healthReport.ok ? "reachable" : "not working"}
                       </summary>
                       <pre className="mt-2 overflow-x-auto whitespace-pre-wrap break-all leading-relaxed" style={{ color: 'var(--tb-text-dim)' }}>
@@ -472,7 +472,7 @@ export default function ScreenshotScanner() {
                     await triggerHaptic("light");
                     setShowTrustedContact(true);
                   }}
-                  className="h-11 px-4 rounded-xl bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-400 border border-cyan-500/40 font-bold text-xs flex items-center gap-2 transition-all cursor-pointer">
+                  className="h-11 px-4 rounded-xl bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-400 border border-emerald-500/40 font-bold text-xs flex items-center gap-2 transition-all cursor-pointer">
                   <Users className="w-4 h-4" />
                   <span>Ask Trusted Contact / Family Member</span>
                 </button>
@@ -486,7 +486,7 @@ export default function ScreenshotScanner() {
                       style={{ color: 'var(--tb-text-dim)' }}>
                       <FileSearch className="w-3.5 h-3.5 text-pink-500" /> Extracted OCR Text from Image
                     </span>
-                    <span className="text-[10px] font-mono text-cyan-600 dark:text-cyan-400">
+                    <span className="text-[10px] font-mono text-emerald-600 dark:text-emerald-400">
                       {result.source === 'gemini' ? 'Gemini Vision OCR' : 'OCR Text'}
                     </span>
                   </div>
@@ -500,7 +500,7 @@ export default function ScreenshotScanner() {
                       onClick={() => handleTinyFishInvestigation(result.detected_text)}
                       disabled={investigating}
                       variant="outline"
-                      className="w-full h-10 rounded-xl font-bold border-cyan-500/40 hover:bg-cyan-500/10 text-cyan-400 transition-all text-xs cursor-pointer">
+                      className="w-full h-10 rounded-xl font-bold border-emerald-500/40 hover:bg-emerald-500/10 text-emerald-400 transition-all text-xs cursor-pointer">
                       {investigating ? "Live Agent Investigating Domain..." : `🤖 TinyFish Live AI Agent: Inspect ${extractedUrl}`}
                     </Button>
                   )}
@@ -543,3 +543,5 @@ export default function ScreenshotScanner() {
     </ProtectedPage>
   );
 }
+
+

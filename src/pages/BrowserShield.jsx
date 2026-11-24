@@ -124,7 +124,7 @@ export default function BrowserShield() {
             </div>
           </div>
           <p className="text-xs leading-relaxed" style={{ color: "var(--tb-text-dim)" }}>
-            Inspects every outbound page navigation via <code className="text-cyan-400 font-mono">webNavigation.onCommitted</code>.
+            Inspects every outbound page navigation via <code className="text-emerald-400 font-mono">webNavigation.onCommitted</code>.
             High-risk pages trigger an isolated Shadow DOM warning banner without breaking page layouts.
           </p>
           <div className="flex items-center gap-2 pt-1 text-[11px] text-emerald-400 font-medium">
@@ -158,7 +158,7 @@ export default function BrowserShield() {
       </div>
 
       {/* Interactive Simulation: Pre-Click Interception */}
-      <div className="tb-card p-6 space-y-4 border-cyan-500/30">
+      <div className="tb-card p-6 space-y-4 border-emerald-500/30">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
           <div>
             <h3 className="text-sm font-bold" style={{ color: "var(--tb-text)" }}>
@@ -168,7 +168,7 @@ export default function BrowserShield() {
               Test how TrustBreak AI blocks known malicious domains before HTTP handshake
             </p>
           </div>
-          <span className="text-[11px] font-mono text-cyan-400 bg-cyan-500/10 px-2.5 py-1 rounded-full border border-cyan-500/20">
+          <span className="text-[11px] font-mono text-emerald-400 bg-emerald-500/10 px-2.5 py-1 rounded-full border border-emerald-500/20">
             Feature 8 Live Demo
           </span>
         </div>
@@ -260,7 +260,7 @@ export default function BrowserShield() {
             <div className="flex flex-col gap-2 pt-2">
               <Button
                 onClick={() => setSimulatingBlock(false)}
-                className="w-full bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold py-3"
+                className="w-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold py-3"
               >
                 Safe: Return to TrustBreak AI Command Center
               </Button>
@@ -286,21 +286,21 @@ export default function BrowserShield() {
               Install directly from repository folder into any Chromium browser (Chrome, Brave, Edge, Opera)
             </p>
           </div>
-          <span className="text-[11px] font-mono text-cyan-400">Developer Mode Ready</span>
+          <span className="text-[11px] font-mono text-emerald-400">Developer Mode Ready</span>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
           <div className="p-4 rounded-xl border space-y-1.5"
             style={{ background: "var(--tb-surface-2)", borderColor: "var(--tb-border)" }}>
-            <span className="text-[11px] font-bold text-cyan-400 block">Step 1</span>
+            <span className="text-[11px] font-bold text-emerald-400 block">Step 1</span>
             <p className="text-xs font-medium" style={{ color: "var(--tb-text)" }}>
-              Open <code className="text-cyan-400 font-mono">chrome://extensions</code> in your browser URL bar.
+              Open <code className="text-emerald-400 font-mono">chrome://extensions</code> in your browser URL bar.
             </p>
           </div>
 
           <div className="p-4 rounded-xl border space-y-1.5"
             style={{ background: "var(--tb-surface-2)", borderColor: "var(--tb-border)" }}>
-            <span className="text-[11px] font-bold text-cyan-400 block">Step 2</span>
+            <span className="text-[11px] font-bold text-emerald-400 block">Step 2</span>
             <p className="text-xs font-medium" style={{ color: "var(--tb-text)" }}>
               Toggle on the <strong>Developer mode</strong> switch at the top-right corner.
             </p>
@@ -308,11 +308,11 @@ export default function BrowserShield() {
 
           <div className="p-4 rounded-xl border space-y-1.5"
             style={{ background: "var(--tb-surface-2)", borderColor: "var(--tb-border)" }}>
-            <span className="text-[11px] font-bold text-cyan-400 block">Step 3</span>
+            <span className="text-[11px] font-bold text-emerald-400 block">Step 3</span>
             <p className="text-xs font-medium" style={{ color: "var(--tb-text)" }}>
-              Click <strong>Load unpacked</strong> and select the <code className="text-cyan-400 font-mono">dist-extension/</code> build folder
-              (or <code className="text-cyan-400 font-mono">extension/</code> for source development). Run{" "}
-              <code className="text-cyan-400 font-mono">npm run build:extension</code> first.
+              Click <strong>Load unpacked</strong> and select the <code className="text-emerald-400 font-mono">dist-extension/</code> build folder
+              (or <code className="text-emerald-400 font-mono">extension/</code> for source development). Run{" "}
+              <code className="text-emerald-400 font-mono">npm run build:extension</code> first.
             </p>
           </div>
         </div>
@@ -322,7 +322,7 @@ export default function BrowserShield() {
       <div className="tb-card p-5 space-y-3">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <Terminal className="w-4 h-4 text-cyan-400" />
+            <Terminal className="w-4 h-4 text-emerald-400" />
             <h3 className="text-xs font-bold uppercase tracking-wider" style={{ color: "var(--tb-text)" }}>
               Live Pre-Click Blocklist Feed (OpenPhish / URLhaus Sync)
             </h3>
@@ -355,3 +355,5 @@ export default function BrowserShield() {
     </ProtectedPage>
   );
 }
+
+

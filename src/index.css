@@ -22,10 +22,10 @@
     --tb-border-hover: #cbd5e1;
     --tb-card-bg: #ffffff;
     --tb-card-shadow: 0 4px 16px -2px rgba(15, 23, 42, 0.05), 0 1px 3px 0 rgba(15, 23, 42, 0.03);
-    --tb-highlight-bg: #e0f2fe;
-    --tb-highlight-border: #0284c7;
-    --tb-neon: #0284c7;
-    --tb-neon-dim: #0369a1;
+    --tb-highlight-bg: #ecfdf5;
+    --tb-highlight-border: #059669;
+    --tb-neon: #10b981;
+    --tb-neon-dim: #059669;
     --tb-green: #059669;
     --tb-red: #dc2626;
     --tb-orange: #d97706;
@@ -59,13 +59,13 @@
     --tb-surface-2: #0d1729;
     --tb-surface-3: #111f32;
     --tb-border: rgba(99, 140, 200, 0.12);
-    --tb-border-hover: rgba(0, 229, 255, 0.22);
+    --tb-border-hover: rgba(16, 185, 129, 0.22);
     --tb-card-bg: linear-gradient(180deg, rgba(10, 18, 32, 0.94) 0%, rgba(6, 12, 22, 0.98) 100%);
     --tb-card-shadow: 0 8px 24px -12px rgba(2, 6, 23, 0.85);
-    --tb-highlight-bg: rgba(0, 229, 255, 0.08);
-    --tb-highlight-border: rgba(0, 229, 255, 0.22);
-    --tb-neon: #56d9ff;
-    --tb-neon-dim: #2bb7d8;
+    --tb-highlight-bg: rgba(16, 185, 129, 0.08);
+    --tb-highlight-border: rgba(16, 185, 129, 0.22);
+    --tb-neon: #10b981;
+    --tb-neon-dim: #059669;
     --tb-green: #10b981;
     --tb-red: #ef4444;
     --tb-orange: #f59e0b;
@@ -74,8 +74,8 @@
     --tb-text-muted: #64748b;
 
     --tb-skeleton-base: rgba(15, 27, 51, 0.8);
-    --tb-skeleton-highlight: rgba(0, 229, 255, 0.12);
-    --tb-skeleton-border: rgba(0, 229, 255, 0.1);
+    --tb-skeleton-highlight: rgba(16, 185, 129, 0.12);
+    --tb-skeleton-border: rgba(16, 185, 129, 0.1);
   }
 
   .light {
@@ -96,10 +96,10 @@
     --tb-border-hover: #cbd5e1;
     --tb-card-bg: #ffffff;
     --tb-card-shadow: 0 4px 16px -2px rgba(15, 23, 42, 0.05), 0 1px 3px 0 rgba(15, 23, 42, 0.03);
-    --tb-highlight-bg: #e0f2fe;
-    --tb-highlight-border: #0284c7;
-    --tb-neon: #0284c7;
-    --tb-neon-dim: #0369a1;
+    --tb-highlight-bg: #ecfdf5;
+    --tb-highlight-border: #059669;
+    --tb-neon: #10b981;
+    --tb-neon-dim: #059669;
     --tb-green: #059669;
     --tb-red: #dc2626;
     --tb-orange: #d97706;
@@ -227,9 +227,9 @@ code, pre, .font-mono {
 
 /* Badges */
 .badge-safe {
-  background: rgba(16, 185, 129, 0.12);
+  background: rgba(16, 185, 129, 0.15);
   border: 1px solid rgba(16, 185, 129, 0.3);
-  color: #059669;
+  color: #10b981;
 }
 .dark .badge-safe {
   color: #34d399;
@@ -387,3 +387,4 @@ textarea::placeholder {
   color: #64748b !important;
   opacity: 0.65 !important;
 }
+
