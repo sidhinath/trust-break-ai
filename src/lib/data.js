@@ -99,6 +99,34 @@ export async function listScanHistory(limit = 100) {
   return deduplicated.slice(0, limit)
 }
 
+export async function deleteScanHistory(id) {
+  // Remove from localStorage immediately so it never reappears on reload
+  try {
+    const existing = getLocalScanHistory()
+    const updated = existing.filter((item) => item.id !== id)
+    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updated))
+  } catch (err) {
+    console.warn('[data] Failed to delete local scan history:', err)
+  }
+
+  // Remove from Supabase
+  try {
+    await supabase
+      .from('scan_history')
+      .delete()
+      .eq('id', id)
+  } catch (err) {
+    console.warn('[data] deleteScanHistory Supabase notice:', err?.message || err)
+  }
+
+  // Notify any listening components
+  if (typeof window !== 'undefined') {
+    window.dispatchEvent(new CustomEvent('trustbreak_scan_deleted', { detail: { id } }))
+  }
+
+  return { id, deleted: true }
+}
+
 export async function createScanHistory(payload) {
   const localScan = mapScan({
     id: `scan-${Date.now()}-${Math.random().toString(36).substr(2, 6)}`,

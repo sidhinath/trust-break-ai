@@ -1,6 +1,8 @@
 import React from "react";
-import { MessageSquareWarning, Link2, Image, ShieldCheck } from "lucide-react";
+import { useQueryClient } from "@tanstack/react-query";
+import { MessageSquareWarning, Link2, Image, ShieldCheck, Trash2 } from "lucide-react";
 import { motion } from "framer-motion";
+import { deleteScanHistory } from "@/lib/data";
 
 const iconMap = {
   message: MessageSquareWarning,
@@ -9,6 +11,24 @@ const iconMap = {
 };
 
 export default function RecentScans({ scans = [] }) {
+  const queryClient = useQueryClient();
+
+  const handleDelete = async (id) => {
+    // Optimistic removal from the query cache so the row vanishes immediately
+    queryClient.setQueryData(['scanHistory'], (old = []) =>
+      Array.isArray(old) ? old.filter((s) => s.id !== id) : old
+    );
+
+    try {
+      await deleteScanHistory(id);
+    } catch (err) {
+      // Roll back on failure
+      queryClient.invalidateQueries({ queryKey: ['scanHistory'] });
+      console.warn('[RecentScans] Delete failed:', err);
+    }
+
+    queryClient.invalidateQueries({ queryKey: ['scanHistory'] });
+  };
   if (!scans || scans.length === 0) {
     return (
       <div className="tb-card p-8 text-center space-y-3">
@@ -76,6 +96,17 @@ export default function RecentScans({ scans = [] }) {
                   {new Date(scan.created_date || scan.created_at || Date.now()).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}
                 </span>
               </div>
+
+              <button
+                onClick={(e) => {
+                  e.stopPropagation()
+                  handleDelete(scan.id)
+                }}
+                className="w-8 h-8 shrink-0 rounded-lg flex items-center justify-center text-slate-400 hover:bg-rose-500 hover:text-rose-400 transition-colors active:scale-95"
+                aria-label="Delete inspection"
+              >
+                <Trash2 className="w-4 h-4" />
+              </button>
             </div>
           </motion.div>
         );

@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
-import { listScanHistory } from "@/lib/data";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { listScanHistory, deleteScanHistory } from "@/lib/data";
 import { 
   FileText, Search, Filter, ShieldAlert, AlertTriangle, 
-  X, MessageSquareWarning, Link2, QrCode, Image as ImageIcon, Mic, Clock, ChevronRight
+  X, MessageSquareWarning, Link2, QrCode, Image as ImageIcon, Mic, Clock, ChevronRight, Trash2
 } from "lucide-react";
 import ScannerHeader from "@/components/scanner/ScannerHeader";
 import SourceBadge from "@/components/scanner/SourceBadge";
@@ -27,6 +27,22 @@ export default function Reports() {
   const [search, setSearch] = useState("");
   const [filterType, setFilterType] = useState("all");
   const [selectedReport, setSelectedReport] = useState(null);
+  const queryClient = useQueryClient();
+
+  const handleDelete = async (id) => {
+    queryClient.setQueryData(["scanHistory"], (old = []) =>
+      Array.isArray(old) ? old.filter((s) => s.id !== id) : old
+    );
+
+    try {
+      await deleteScanHistory(id);
+    } catch (err) {
+      queryClient.invalidateQueries({ queryKey: ["scanHistory"] });
+      console.warn('[Reports] Delete failed:', err);
+    }
+
+    queryClient.invalidateQueries({ queryKey: ["scanHistory"] });
+  };
 
   const { data: scans = [], isLoading } = useQuery({
     queryKey: ["scanHistory"],
@@ -186,6 +202,16 @@ export default function Reports() {
                   <Button variant="ghost" className="h-8 text-xs gap-1 text-cyan-400 hover:text-cyan-300">
                     Details <ChevronRight className="w-4 h-4" />
                   </Button>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      handleDelete(scan.id)
+                    }}
+                    className="w-8 h-8 shrink-0 rounded-lg flex items-center justify-center text-slate-400 hover:bg-rose-500 hover:text-rose-400 transition-colors active:scale-95"
+                    aria-label="Delete inspection"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </button>
                 </div>
               </div>
             );
