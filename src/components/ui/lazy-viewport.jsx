@@ -25,11 +25,7 @@ export function LazyViewport({
     let timerId = null;
 
     const scheduleReveal = () => {
-      if (typeof window !== "undefined" && "requestIdleCallback" in window) {
-        idleId = window.requestIdleCallback(() => setInView(true), { timeout: 150 });
-      } else {
-        timerId = setTimeout(() => setInView(true), 100);
-      }
+      timerId = setTimeout(() => setInView(true), 300);
     };
 
     const observer = new IntersectionObserver(

@@ -45,7 +45,8 @@ function clearGuest() {
 export function AuthProvider({ children }) {
   const [supabaseUser, setSupabaseUser] = useState(null)
   const [guestUser, setGuestUser] = useState(() => getStoredGuest())
-  const [loading, setLoading] = useState(true)
+  // Never block first paint waiting for Supabase session resolution; auth updates asynchronously
+  const [loading, setLoading] = useState(false)
 
   // Auth modal state — centralised so any component can open it
   const [authModalOpen, setAuthModalOpen] = useState(false)

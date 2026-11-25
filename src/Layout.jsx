@@ -219,8 +219,8 @@ export default function Layout({ children, currentPageName }) {
     });
   };
 
-  const handleExitCurrentTab = async () => {
-    await triggerHaptic('light');
+  const handleExitCurrentTab = () => {
+    triggerHaptic('light').catch(() => {});
     if (window.history.length > 1 && window.history.state && window.history.state.idx > 0) {
       navigate(-1);
       return;
@@ -261,8 +261,8 @@ export default function Layout({ children, currentPageName }) {
     };
   }, []);
 
-  const toggleTheme = async () => {
-    await triggerHaptic('light');
+  const toggleTheme = () => {
+    triggerHaptic('light').catch(() => {});
     const next = theme === "dark" ? "light" : "dark";
     setTheme(next);
     const root = document.documentElement;
@@ -430,21 +430,22 @@ export default function Layout({ children, currentPageName }) {
                 />
               ) : (
                 /* Guest — show Sign In + Sign Up */
-                <div className="flex items-center gap-1 sm:gap-2 shrink-0">
+                <div className="relative z-50 flex items-center gap-1 sm:gap-2 shrink-0">
                   <button
                     type="button"
-                    onClick={openSignIn}
-                    className="tb-auth-button h-8 sm:h-9 px-1 sm:px-3 rounded-lg sm:rounded-xl text-[13px] sm:text-sm font-bold border touch-manipulation min-h-[44px] min-w-[44px] transition-transform duration-75 active:scale-95 hover:border-emerald-400 hover:text-emerald-300 shrink-0"
-                    style={{ background: 'var(--tb-surface-2)', borderColor: 'var(--tb-border)', color: 'var(--tb-text-dim)' }}
+                    onClick={() => { triggerHaptic('light').catch(() => {}); openSignIn(); }}
+                    className="tb-auth-button relative z-50 h-8 sm:h-9 px-1 sm:px-3 rounded-lg sm:rounded-xl text-[13px] sm:text-sm font-bold border touch-manipulation min-h-[44px] min-w-[44px] transition-transform duration-75 active:scale-95 hover:border-emerald-400 hover:text-emerald-300 shrink-0 cursor-pointer"
+                    style={{ background: 'var(--tb-surface-2)', borderColor: 'var(--tb-border)', color: 'var(--tb-text-dim)', touchAction: 'manipulation' }}
                   >
-                    Sign In
+                    <span className="pointer-events-none">Sign In</span>
                   </button>
                   <button
                     type="button"
-                    onClick={openSignUp}
-                    className="tb-auth-button h-8 sm:h-9 px-2 sm:px-3.5 rounded-lg sm:rounded-xl text-[13px] sm:text-sm font-bold bg-gradient-to-r from-emerald-400 to-blue-500 text-slate-950 shadow-sm touch-manipulation min-h-[44px] min-w-[44px] transition-transform duration-75 active:scale-95 hover:brightness-110 shrink-0"
+                    onClick={() => { triggerHaptic('light').catch(() => {}); openSignUp(); }}
+                    style={{ touchAction: 'manipulation' }}
+                    className="tb-auth-button relative z-50 h-8 sm:h-9 px-2 sm:px-3.5 rounded-lg sm:rounded-xl text-[13px] sm:text-sm font-bold bg-gradient-to-r from-emerald-400 to-blue-500 text-slate-950 shadow-sm touch-manipulation min-h-[44px] min-w-[44px] transition-transform duration-75 active:scale-95 hover:brightness-110 shrink-0 cursor-pointer"
                   >
-                    Sign Up
+                    <span className="pointer-events-none">Sign Up</span>
                   </button>
                 </div>
               )}
@@ -538,11 +539,12 @@ export default function Layout({ children, currentPageName }) {
                 onClick={handleExitCurrentTab}
                 aria-label="Go Back"
                 title="Go Back"
-                className="h-8 w-8 sm:h-9 sm:w-auto sm:px-2.5 rounded-lg sm:rounded-xl border flex items-center justify-center gap-1 sm:gap-1.5 touch-manipulation min-h-[44px] min-w-[44px] transition-transform duration-75 active:scale-95 cursor-pointer hover:border-emerald-400 shrink-0"
+                className="relative z-50 h-8 w-8 sm:h-9 sm:w-auto sm:px-2.5 rounded-lg sm:rounded-xl border flex items-center justify-center gap-1 sm:gap-1.5 touch-manipulation min-h-[44px] min-w-[44px] transition-transform duration-75 active:scale-95 cursor-pointer hover:border-emerald-400 shrink-0"
                 style={{
                   background: 'var(--tb-surface-2)',
                   borderColor: 'var(--tb-border)',
-                  color: 'var(--tb-text)'
+                  color: 'var(--tb-text)',
+                  touchAction: 'manipulation',
                 }}>
                 <ArrowLeft className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-emerald-500 group-hover:-translate-x-0.5 transition-transform pointer-events-none" />
                 <span className="text-xs font-bold hidden sm:inline pointer-events-none">Back</span>
@@ -569,8 +571,8 @@ export default function Layout({ children, currentPageName }) {
               {/* Desktop & Tablet Sidebar Open/Close Toggle Button placed beside the brand */}
               <button
                 type="button"
-                onClick={async () => {
-                  await triggerHaptic('light');
+                onClick={() => {
+                  triggerHaptic('light').catch(() => {});
                   toggleSidebar();
                 }}
                 aria-label={sidebarOpen ? "Close Sidebar Navigation" : "Open Sidebar Navigation"}
@@ -622,21 +624,22 @@ export default function Layout({ children, currentPageName }) {
               />
             ) : (
               /* Guest: Sign In + Sign Up buttons */
-              <div className="flex items-center gap-1 sm:gap-2 shrink-0">
+              <div className="relative z-50 flex items-center gap-1 sm:gap-2 shrink-0">
                 <button
                   type="button"
-                  onClick={async () => { await triggerHaptic('light'); openSignIn(); }}
-                  className="tb-auth-button h-8 sm:h-9 px-1.5 sm:px-3 rounded-lg sm:rounded-xl text-[13px] sm:text-sm font-bold border touch-manipulation min-h-[44px] min-w-[44px] transition-transform duration-75 active:scale-95 hover:border-emerald-400 hover:text-emerald-300 shrink-0"
-                  style={{ background: 'var(--tb-surface-2)', borderColor: 'var(--tb-border)', color: 'var(--tb-text-dim)' }}
+                  onClick={() => { triggerHaptic('light').catch(() => {}); openSignIn(); }}
+                  className="tb-auth-button relative z-50 h-8 sm:h-9 px-1.5 sm:px-3 rounded-lg sm:rounded-xl text-[13px] sm:text-sm font-bold border touch-manipulation min-h-[44px] min-w-[44px] transition-transform duration-75 active:scale-95 hover:border-emerald-400 hover:text-emerald-300 shrink-0 cursor-pointer"
+                  style={{ background: 'var(--tb-surface-2)', borderColor: 'var(--tb-border)', color: 'var(--tb-text-dim)', touchAction: 'manipulation' }}
                 >
-                  Sign In
+                  <span className="pointer-events-none">Sign In</span>
                 </button>
                 <button
                   type="button"
-                  onClick={async () => { await triggerHaptic('light'); openSignUp(); }}
-                  className="tb-auth-button h-8 sm:h-9 px-2 sm:px-3.5 rounded-lg sm:rounded-xl text-[13px] sm:text-sm font-bold bg-gradient-to-r from-emerald-400 to-blue-500 text-slate-950 shadow-sm touch-manipulation min-h-[44px] min-w-[44px] transition-transform duration-75 active:scale-95 hover:brightness-110 shrink-0"
+                  onClick={() => { triggerHaptic('light').catch(() => {}); openSignUp(); }}
+                  style={{ touchAction: 'manipulation' }}
+                  className="tb-auth-button relative z-50 h-8 sm:h-9 px-2 sm:px-3.5 rounded-lg sm:rounded-xl text-[13px] sm:text-sm font-bold bg-gradient-to-r from-emerald-400 to-blue-500 text-slate-950 shadow-sm touch-manipulation min-h-[44px] min-w-[44px] transition-transform duration-75 active:scale-95 hover:brightness-110 shrink-0 cursor-pointer"
                 >
-                  Sign Up
+                  <span className="pointer-events-none">Sign Up</span>
                 </button>
               </div>
             )}
@@ -644,16 +647,17 @@ export default function Layout({ children, currentPageName }) {
             {/* Mobile Menu Hamburger */}
             <button
               type="button"
-              onClick={async () => {
-                await triggerHaptic('light');
-                setMobileMenuOpen(!mobileMenuOpen);
+              onClick={() => {
+                triggerHaptic('light').catch(() => {});
+                setMobileMenuOpen((prev) => !prev);
               }}
-              className="md:hidden w-8 h-8 sm:w-9 sm:h-9 rounded-lg sm:rounded-xl flex items-center justify-center border touch-manipulation min-h-[44px] min-w-[44px] transition-transform duration-75 active:scale-95 shrink-0"
+              className="relative z-50 md:hidden w-8 h-8 sm:w-9 sm:h-9 rounded-lg sm:rounded-xl flex items-center justify-center border touch-manipulation min-h-[44px] min-w-[44px] transition-transform duration-75 active:scale-95 shrink-0 cursor-pointer"
               aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
               style={{
                 background: 'var(--tb-surface-2)',
                 borderColor: 'var(--tb-border)',
-                color: 'var(--tb-text)'
+                color: 'var(--tb-text)',
+                touchAction: 'manipulation',
               }}>
               {mobileMenuOpen ? (
                 <X className="w-4 h-4 pointer-events-none" />
