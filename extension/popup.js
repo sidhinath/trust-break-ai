@@ -53,6 +53,13 @@ function setErrorState(riskBadge, scoreVal, analysisText, reasonsList, resultBox
   scoreVal.className = "score-val";
   analysisText.textContent = message;
   reasonsList.innerHTML = "";
+  const diagToggle = document.getElementById("diagToggle");
+  if (diagToggle) diagToggle.style.display = "none";
+  const debugBox = document.getElementById("debugBox");
+  if (debugBox) {
+    debugBox.textContent = "";
+    debugBox.classList.remove("show");
+  }
   resultBox.classList.add("show");
 }
 
@@ -108,7 +115,14 @@ document.addEventListener("DOMContentLoaded", async () => {
   const reasonsList = document.getElementById("reasonsList");
   const debugBox = document.getElementById("debugBox");
 
-  let activeTab = null;
+  const diagToggle = document.getElementById("diagToggle");
+  if (diagToggle && debugBox) {
+    diagToggle.style.display = "none";
+    diagToggle.addEventListener("click", () => {
+      const isVisible = debugBox.classList.toggle("show");
+      diagToggle.textContent = isVisible ? "Technical Diagnostics ▴" : "Technical Diagnostics ▾";
+    });
+  }
   try {
     const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
     activeTab = tab || null;
@@ -126,9 +140,12 @@ document.addEventListener("DOMContentLoaded", async () => {
     scanBtn.disabled = true;
     scanBtn.textContent = "Analyzing Threat...";
     resultBox.classList.remove("show");
+    const diagToggle = document.getElementById("diagToggle");
+    if (diagToggle) diagToggle.style.display = "none";
     if (debugBox) {
       debugBox.textContent = "";
       debugBox.classList.remove("show");
+      diagToggle.textContent = "Technical Diagnostics ▾";
     }
 
     const isUrl = /^https?:\/\//i.test(text);
@@ -207,6 +224,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
       resultBox.classList.add("show");
       renderDebug(debugBox, data, engine, degraded, score);
+      if (diagToggle) diagToggle.style.display = "inline-flex";
 
       console.log("[TrustBreak AI Popup] Verdict", {
         score,
