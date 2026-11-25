@@ -40,13 +40,14 @@ export default function LoginRequiredModal({ isOpen, onClose, feature, onSignIn,
   return (
     <AnimatePresence>
       {isOpen && (
-        <div className="fixed inset-0 z-[55] flex items-center justify-center bg-black/70 p-4 backdrop-blur-md">
+        <div className="fixed inset-0 z-[70] flex items-center justify-center p-4 bg-black/85 backdrop-blur-sm">
           <motion.div
             initial={{ opacity: 0, scale: 0.92, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.92, y: 20 }}
             transition={{ duration: 0.22, ease: "easeOut" }}
-            className="relative w-full max-w-sm rounded-2xl border border-amber-500/30 bg-slate-950/98 p-6 shadow-[0_24px_64px_rgba(6,11,20,0.8)]"
+            style={{ backgroundColor: "#0b1120", color: "#ffffff" }}
+            className="relative w-full max-w-md max-h-[90vh] overflow-y-auto rounded-2xl border border-slate-800 bg-[#0b1120] dark:bg-[#0b1120] text-white p-6 shadow-2xl"
           >
             {/* Close */}
             {onClose && (
@@ -67,10 +68,10 @@ export default function LoginRequiredModal({ isOpen, onClose, feature, onSignIn,
               </div>
 
               <div className="space-y-1.5">
-                <h3 className="text-xl font-black tracking-tight text-white">
+                <h3 className="text-xl font-black tracking-tight text-white" style={{ color: "#ffffff" }}>
                   Sign In Required
                 </h3>
-                <p className="text-sm text-slate-400 leading-relaxed max-w-[260px] mx-auto">
+                <p className="text-sm text-slate-400 leading-relaxed max-w-[260px] mx-auto" style={{ color: "#94a3b8" }}>
                   {feature
                     ? `Please sign in to use the ${feature}.`
                     : "Please sign in to continue using this feature."}
@@ -81,8 +82,8 @@ export default function LoginRequiredModal({ isOpen, onClose, feature, onSignIn,
             {/* Feature badge */}
             {feature && (
               <div className="mb-5 rounded-xl border border-slate-700/60 bg-slate-900/60 px-3 py-2 text-center">
-                <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500">Feature</span>
-                <p className="text-sm font-bold text-white mt-0.5">{feature}</p>
+                <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500" style={{ color: "#94a3b8" }}>Feature</span>
+                <p className="text-sm font-bold text-white mt-0.5" style={{ color: "#ffffff" }}>{feature}</p>
               </div>
             )}
 
@@ -91,7 +92,8 @@ export default function LoginRequiredModal({ isOpen, onClose, feature, onSignIn,
               <button
                 type="button"
                 onClick={handleSignIn}
-                className="touch-manipulation min-h-[44px] min-w-[44px] w-full h-11 rounded-xl bg-gradient-to-r from-emerald-400 to-blue-500 text-sm font-bold text-slate-950 shadow-[0_0_20px_rgba(34,211,238,0.25)] hover:brightness-110 transition-transform duration-75 active:scale-95 flex items-center justify-center gap-2"
+                style={{ color: "#ffffff" }}
+                className="touch-manipulation min-h-[44px] min-w-[44px] w-full h-11 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-sm font-semibold text-white shadow-[0_0_20px_rgba(16,185,129,0.28)] transition-transform duration-75 active:scale-95 flex items-center justify-center gap-2 cursor-pointer"
               >
                 <LogIn className="h-4 w-4" />
                 Sign In

@@ -101,13 +101,14 @@ export default function SignInModal({ isOpen, onClose, onSuccess, initialMode })
   return (
     <AnimatePresence>
       {isOpen && (
-        <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/70 p-4 backdrop-blur-md">
+        <div className="fixed inset-0 z-[70] flex items-center justify-center p-4 bg-black/85 backdrop-blur-sm">
           <motion.div
             initial={{ opacity: 0, y: 16, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 16, scale: 0.95 }}
             transition={{ duration: 0.22, ease: "easeOut" }}
-            className="w-full max-w-md rounded-2xl border border-emerald-500/30 bg-slate-950/98 p-6 shadow-[0_24px_64px_rgba(6,11,20,0.7)]"
+            style={{ backgroundColor: "#0b1120", color: "#ffffff" }}
+            className="w-full max-w-md max-h-[90vh] overflow-y-auto rounded-2xl border border-slate-800 bg-[#0b1120] dark:bg-[#0b1120] text-white p-6 shadow-2xl"
           >
             {/* Header */}
             <div className="mb-5 flex items-start justify-between gap-3">
@@ -118,10 +119,10 @@ export default function SignInModal({ isOpen, onClose, onSuccess, initialMode })
                   </div>
                   <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-emerald-400">TrustBreak AI</p>
                 </div>
-                <h3 className="text-2xl font-black tracking-[-0.04em] text-white">
+                <h3 className="text-2xl font-black tracking-[-0.04em] text-white" style={{ color: "#ffffff" }}>
                   {mode === "signup" ? "Create account" : "Welcome back"}
                 </h3>
-                <p className="mt-1 text-xs text-slate-400">
+                <p className="mt-1 text-xs text-slate-400" style={{ color: "#94a3b8" }}>
                   {mode === "signup"
                     ? "Set up your free TrustBreak AI workspace"
                     : "Sign in to access all security features"}
@@ -245,7 +246,8 @@ export default function SignInModal({ isOpen, onClose, onSuccess, initialMode })
 
               <Button
                 type="submit"
-                className="h-11 w-full rounded-xl bg-gradient-to-r from-emerald-400 to-blue-500 text-sm font-bold text-slate-950 shadow-[0_0_26px_rgba(34,211,238,0.3)] hover:brightness-110 disabled:opacity-60 transition-transform duration-75 active:scale-95"
+                style={{ color: "#ffffff" }}
+                className="h-11 w-full rounded-xl bg-emerald-500 hover:bg-emerald-400 text-sm font-semibold text-white shadow-[0_0_24px_rgba(16,185,129,0.28)] disabled:opacity-60 transition-transform duration-75 active:scale-95"
                 disabled={loading}
               >
                 {loading
