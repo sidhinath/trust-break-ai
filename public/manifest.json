@@ -1,14 +1,29 @@
 {
-  "name": "TrustBreak AI",
-  "short_name": "TrustBreak",
+  "name": "TrustBreak AI — Scam Defense",
+  "short_name": "TrustBreak AI",
+  "description": "Explainable, multi-modal scam protection for messages, links, screenshots, QR codes, and voice calls.",
   "start_url": "/",
+  "scope": "/",
   "display": "standalone",
-  "background_color": "#070d1a",
-  "theme_color": "#121c33",
+  "orientation": "portrait-primary",
+  "background_color": "#070c16",
+  "theme_color": "#10b981",
   "icons": [
     {
-      "src": "/favicon.svg",
-      "sizes": "64x64",
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/logo-icon.svg",
+      "sizes": "192x192 512x512",
       "type": "image/svg+xml",
       "purpose": "any"
     }

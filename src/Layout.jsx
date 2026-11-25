@@ -17,6 +17,8 @@ import {
 } from "lucide-react";
 import SeniorModeToggleSwitch from "@/components/SeniorModeToggleSwitch";
 import { ConstellationField } from "@/shaders/constellation-field/ConstellationField";
+import { usePWAInstall } from "@/hooks/usePWAInstall";
+import { Download } from "lucide-react";
 
 const detectionNav = [
   { name: "Command Center", page: "Home", icon: Home },
@@ -71,6 +73,7 @@ export default function Layout({ children, currentPageName }) {
   const [policyMenuOpen, setPolicyMenuOpen] = useState(false);
   const [loginPrompt, setLoginPrompt] = useState(null); // { feature } | null
   const pendingPageRef = useRef(null);
+  const { isInstallable, isInstalled, promptInstall } = usePWAInstall();
   const { user, isAuthenticated, openSignIn, openSignUp, signOut } = useAuth();
   const { data: sidebarScans = [] } = useQuery({
     queryKey: ["scanHistory"],
@@ -740,6 +743,28 @@ export default function Layout({ children, currentPageName }) {
               </span>
             </button>
 
+            {/* PWA Install App Button in Mobile Drawer */}
+            {!isInstalled && (
+              <button
+                type="button"
+                onClick={async () => {
+                  const res = await promptInstall();
+                  if (res?.manual) {
+                    alert("To install TrustBreak AI:\n• iOS Safari: Tap Share ➔ 'Add to Home Screen'\n• Chrome/Android: Tap three dots ➔ 'Install App'");
+                  }
+                }}
+                className="w-full flex items-center justify-between gap-3 px-3 py-3 rounded-xl border border-emerald-500/30 bg-emerald-500/10 text-emerald-400 touch-manipulation min-h-[44px] min-w-[44px] transition-transform duration-75 active:scale-95"
+              >
+                <span className="flex items-center gap-2 text-xs font-bold text-emerald-400">
+                  <Download className="w-4 h-4 text-emerald-400" />
+                  📲 Install App
+                </span>
+                <span className="text-[9px] font-mono font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300">
+                  PWA
+                </span>
+              </button>
+            )}
+
             <span className="font-display text-[13px] font-bold uppercase tracking-wider px-2 block mt-6 mb-2 text-emerald-400">
               Detection Suites
             </span>
@@ -901,6 +926,29 @@ export default function Layout({ children, currentPageName }) {
         {/* Sidebar Footer Posture Badge & Compact Legal Links */}
         {sidebarOpen ? (
           <div className="mt-4 pt-2 space-y-2.5 shrink-0">
+            {/* Install PWA Button on Desktop Sidebar */}
+            {!isInstalled && (
+              <button
+                type="button"
+                onClick={async () => {
+                  const res = await promptInstall();
+                  if (res?.manual) {
+                    alert("To install TrustBreak AI:\n• Chrome/Edge: Click the install icon in the address bar or menu ➔ 'Install TrustBreak AI'");
+                  }
+                }}
+                className="w-full flex items-center justify-between gap-2 px-3 py-2 rounded-xl border border-emerald-500/30 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 touch-manipulation min-h-[38px] transition-all duration-150 active:scale-[0.98] text-xs font-bold"
+                title="Install TrustBreak AI as Desktop/PWA Application"
+              >
+                <div className="flex items-center gap-2 min-w-0">
+                  <Download className="w-3.5 h-3.5 shrink-0 text-emerald-500" />
+                  <span className="truncate">📲 Install App</span>
+                </div>
+                <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-700 dark:text-emerald-300">
+                  PWA
+                </span>
+              </button>
+            )}
+
             <div className="p-3.5 rounded-xl border border-emerald-200 bg-emerald-50/70 dark:border-emerald-500/25 dark:bg-emerald-500/10 space-y-1 shadow-[inset_0_1px_0_rgba(16,185,129,0.12)]">
               <div className="flex items-center gap-2">
                 <span className="w-2 h-2 rounded-full bg-emerald-500 dark:bg-emerald-400 shadow-[0_0_8px_#10b981] animate-pulse shrink-0" />
@@ -930,11 +978,28 @@ export default function Layout({ children, currentPageName }) {
             </div>
           </div>
         ) : (
-          <div
-            className="flex items-center justify-center p-2 rounded-xl border border-emerald-200 bg-emerald-50/70 dark:border-emerald-500/25 dark:bg-emerald-500/10 mt-4 shrink-0"
-            title="Autonomous Cyber Defense Active"
-          >
-            <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 dark:bg-emerald-400 shadow-[0_0_8px_#10b981] animate-pulse" />
+          <div className="flex flex-col items-center gap-2 mt-4 shrink-0">
+            {!isInstalled && (
+              <button
+                type="button"
+                onClick={async () => {
+                  const res = await promptInstall();
+                  if (res?.manual) {
+                    alert("To install TrustBreak AI:\n• Chrome/Edge: Click the install icon in the address bar or menu ➔ 'Install TrustBreak AI'");
+                  }
+                }}
+                className="flex items-center justify-center p-2 rounded-xl border border-emerald-500/30 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-500 cursor-pointer transition-transform active:scale-95"
+                title="📲 Install TrustBreak AI"
+              >
+                <Download className="w-4 h-4 text-emerald-500" />
+              </button>
+            )}
+            <div
+              className="flex items-center justify-center p-2 rounded-xl border border-emerald-200 bg-emerald-50/70 dark:border-emerald-500/25 dark:bg-emerald-500/10"
+              title="Autonomous Cyber Defense Active"
+            >
+              <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 dark:bg-emerald-400 shadow-[0_0_8px_#10b981] animate-pulse" />
+            </div>
           </div>
         )}
       </aside>
