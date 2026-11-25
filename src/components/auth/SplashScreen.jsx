@@ -3,11 +3,11 @@ import { motion } from 'framer-motion';
 
 export default function SplashScreen() {
   return (
-    <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-[#0b1120] text-[#f8fafc] select-none">
+    <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-[#0b1120] text-[#f8fafc] select-none pointer-events-none">
       <motion.div
-        initial={{ opacity: 0, scale: 0.9 }}
+        initial={{ opacity: 0, scale: 0.94 }}
         animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.45, ease: "easeOut" }}
+        transition={{ duration: 0.25, ease: "easeOut" }}
         className="flex flex-col items-center gap-5 text-center px-6 max-w-sm w-full"
       >
         {/* Logo Container (dark surface so white SVG wordmark has high contrast) */}

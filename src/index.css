@@ -407,6 +407,8 @@ textarea::placeholder {
 
 /* Eliminate the ~300ms mobile tap delay on every interactive surface. */
 @layer base {
+  html,
+  body,
   button,
   a,
   [role="button"],
@@ -452,6 +454,13 @@ textarea::placeholder {
   [style*="backdrop-filter"] {
     backdrop-filter: none !important;
     -webkit-backdrop-filter: none !important;
+  }
+
+  .tb-header {
+    background-color: rgba(255, 255, 255, 0.96) !important;
+  }
+  .dark .tb-header {
+    background-color: rgba(7, 12, 22, 0.96) !important;
   }
 
   /* Simplify large decorative glows/shadows on mobile. */

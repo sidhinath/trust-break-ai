@@ -58,17 +58,28 @@ export function AuthProvider({ children }) {
 
   // ── Supabase session listener ──────────────────────────────────────────────
   useEffect(() => {
+    let settled = false;
+    const finishLoading = () => {
+      if (!settled) {
+        settled = true;
+        setLoading(false);
+      }
+    };
+
+    // Never block the initial mobile UI for more than 550ms while resolving session
+    const splashTimer = setTimeout(finishLoading, 550);
+
     // Get initial session
     supabase.auth.getSession().then(({ data: { session } }) => {
       if (session?.user) {
-        setSupabaseUser(session.user)
-        clearGuest()
-        setGuestUser(null)
+        setSupabaseUser(session.user);
+        clearGuest();
+        setGuestUser(null);
       }
-      setLoading(false)
+      finishLoading();
     }).catch(() => {
-      setLoading(false)
-    })
+      finishLoading();
+    });
 
     // Listen for auth changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
@@ -79,9 +90,13 @@ export function AuthProvider({ children }) {
       } else {
         setSupabaseUser(null)
       }
+      finishLoading();
     })
 
-    return () => subscription.unsubscribe()
+    return () => {
+      clearTimeout(splashTimer);
+      subscription.unsubscribe();
+    }
   }, [])
 
   // ── Derived state ──────────────────────────────────────────────────────────
