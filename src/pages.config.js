@@ -1,34 +1,40 @@
 import Home from './pages/Home';
-import { lazy } from 'react';
 import __Layout from './Layout.jsx';
+import { lazyWithRetry } from '@/lib/lazyWithRetry';
 
 // Home is eager-loaded so the initial mobile paint is instant. Every other
 // route is code-split with React.lazy + Suspense (see App.jsx) so route
 // switching never has to parse the whole app up front.
-const lazyPage = (p) => lazy(() => import(p));
-
+//
+// Imports MUST be written inline (not passed as a variable) so Vite/Rollup can
+// statically analyse them and emit real per-route chunks. A dynamic
+// `import(variable)` stays unresolved in the production bundle and 404s.
+//
+// lazyWithRetry retries a failed chunk fetch once, then performs a single
+// guarded hard reload — recovering mobile clients that cached the previous
+// build manifest after a new Vercel deployment.
 export const PAGES = {
     "Home": Home,
-    "Threats": lazyPage('./pages/Threats'),
-    "Reports": lazyPage('./pages/Reports'),
-    "Settings": lazyPage('./pages/Settings'),
-    "LinkScanner": lazyPage('./pages/LinkScanner'),
-    "MessageScanner": lazyPage('./pages/MessageScanner'),
-    "ScreenshotScanner": lazyPage('./pages/ScreenshotScanner'),
-    "QRScanner": lazyPage('./pages/QRScannerPage'),
-    "VoiceScanner": lazyPage('./pages/VoiceScanner'),
-    "BrowserShield": lazyPage('./pages/BrowserShield'),
-    "ScamHeatmap": lazyPage('./pages/ScamHeatmap'),
-    "ReportScam": lazyPage('./pages/ReportScam'),
-    "BusinessModel": lazyPage('./pages/BusinessModel'),
-    "Technology": lazyPage('./pages/Technology'),
-    "PrivacyCenter": lazyPage('./pages/PrivacyCenter'),
-    "PrivacyPolicy": lazyPage('./pages/PrivacyPolicy'),
-    "Terms": lazyPage('./pages/Terms'),
-    "CookiePolicy": lazyPage('./pages/CookiePolicy'),
-    "RefundPolicy": lazyPage('./pages/RefundPolicy'),
-    "Profile": lazyPage('./pages/Profile'),
-    "Scene": lazyPage('./Scene'),
+    "Threats": lazyWithRetry(() => import('./pages/Threats')),
+    "Reports": lazyWithRetry(() => import('./pages/Reports')),
+    "Settings": lazyWithRetry(() => import('./pages/Settings')),
+    "LinkScanner": lazyWithRetry(() => import('./pages/LinkScanner')),
+    "MessageScanner": lazyWithRetry(() => import('./pages/MessageScanner')),
+    "ScreenshotScanner": lazyWithRetry(() => import('./pages/ScreenshotScanner')),
+    "QRScanner": lazyWithRetry(() => import('./pages/QRScannerPage')),
+    "VoiceScanner": lazyWithRetry(() => import('./pages/VoiceScanner')),
+    "BrowserShield": lazyWithRetry(() => import('./pages/BrowserShield')),
+    "ScamHeatmap": lazyWithRetry(() => import('./pages/ScamHeatmap')),
+    "ReportScam": lazyWithRetry(() => import('./pages/ReportScam')),
+    "BusinessModel": lazyWithRetry(() => import('./pages/BusinessModel')),
+    "Technology": lazyWithRetry(() => import('./pages/Technology')),
+    "PrivacyCenter": lazyWithRetry(() => import('./pages/PrivacyCenter')),
+    "PrivacyPolicy": lazyWithRetry(() => import('./pages/PrivacyPolicy')),
+    "Terms": lazyWithRetry(() => import('./pages/Terms')),
+    "CookiePolicy": lazyWithRetry(() => import('./pages/CookiePolicy')),
+    "RefundPolicy": lazyWithRetry(() => import('./pages/RefundPolicy')),
+    "Profile": lazyWithRetry(() => import('./pages/Profile')),
+    "Scene": lazyWithRetry(() => import('./Scene')),
 }
 
 export const pagesConfig = {
@@ -36,4 +42,3 @@ export const pagesConfig = {
     Pages: PAGES,
     Layout: __Layout,
 };
-

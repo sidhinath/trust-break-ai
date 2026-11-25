@@ -125,6 +125,7 @@ export default function Profile() {
         <Link
           to={createPageUrl("PrivacyCenter")}
           className="touch-manipulation min-h-[44px] min-w-[44px] tb-card p-4 flex items-center justify-between hover:border-slate-500 transition-transform duration-75 active:scale-95 block" role="button"
+        >
           <div className="flex items-center gap-3">
             <div className="w-9 h-9 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center">
               <Lock className="w-4 h-4 text-emerald-500" />
@@ -140,6 +141,7 @@ export default function Profile() {
         <Link
           to={createPageUrl("Technology")}
           className="touch-manipulation min-h-[44px] min-w-[44px] tb-card p-4 flex items-center justify-between hover:border-slate-500 transition-transform duration-75 active:scale-95 block" role="button"
+        >
           <div className="flex items-center gap-3">
             <div className="w-9 h-9 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center">
               <Cpu className="w-4 h-4 text-emerald-500" />

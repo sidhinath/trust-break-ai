@@ -76,7 +76,7 @@ const AI_TIMEOUT_MS = parseInt(process.env.AI_TIMEOUT_MS || '9000', 10)
 function getVisionTimeouts() {
   return {
     total: parseInt(process.env.VISION_TIMEOUT_MS || '45000', 10),
-    model: parseInt(process.env.VISION_MODEL_TIMEOUT_MS || '20000', 10),
+    model: parseInt(process.env.VISION_MODEL_TIMEOUT_MS || '45000', 10),
     hedge: parseInt(process.env.VISION_HEDGE_DELAY_MS || '6000', 10),
   }
 }
@@ -636,7 +636,8 @@ const GEMINI_ENDPOINT = 'https://generativelanguage.googleapis.com/v1beta/models
  * happened. No silent catches: every branch writes to `diag.attempts`.
  *
  * Recovery built in:
- *  - 429/503 (transient overload) → one retry after a short pause
+ *  - 503 (temporary overload) → one retry after 1.5s
+ *  - 429 (quota) → one retry after 600ms
  *  - 400 about `thinkingConfig` → retry once without it
  *  - 404 "use models/X" (model retired) → records `suggestedModel` so the
  *    caller can try Google's replacement immediately

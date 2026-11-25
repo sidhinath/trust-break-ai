@@ -12,18 +12,18 @@ import { filterValidReasonCodes } from './reasonCodes.js'
 /**
  * Models are tried in order, newest first.
  *
- * Google retires models for new API keys without warning: `gemini-2.5-flash`,
- * `gemini-2.0-flash` and `gemini-2.5-flash-lite` now answer 404 "no longer
- * available to new users" and point at `gemini-3.8-flash`. If a model is
- * retired again, `callGeminiVision()` follows the `models/<name>` hint in the
+ * `gemini-2.5-flash` and `gemini-2.0-flash` are retired for new API keys and
+ * answer 404, so they are no longer part of the chain. The supported Gemini
+ * Vision models are the three 3.x entries below; `gemini-flash-latest` stays as
+ * a floating alias in case Google renames the newest version again. If a model
+ * is retired, `callGeminiVision()` follows the `models/<name>` hint in the
  * error message, so vision keeps working without a code change.
  */
 export const VISION_MODELS = [
   'gemini-3.8-flash',
+  'gemini-3.6-flash',
   'gemini-3.5-flash-lite',
   'gemini-flash-latest',
-  'gemini-2.5-flash',
-  'gemini-2.0-flash',
 ]
 
 /**
