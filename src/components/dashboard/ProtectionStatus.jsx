@@ -4,7 +4,7 @@ import { createPageUrl } from "@/utils";
 import { ShieldAlert, Zap, QrCode, Mic } from "lucide-react";
 import { ConstellationField } from "@/shaders/constellation-field/ConstellationField";
 
-const RING_RADIUS = 44;
+const RING_RADIUS = 58;
 const RING_CIRCUMFERENCE = 2 * Math.PI * RING_RADIUS;
 
 export default function ProtectionStatus({ threatsBlocked = 0, safetyScore = 100, totalScans = 0 }) {
@@ -82,22 +82,22 @@ export default function ProtectionStatus({ threatsBlocked = 0, safetyScore = 100
         </div>
 
         {/* Unified Security Telemetry Card */}
-        <div className="relative w-full lg:w-[360px] shrink-0 overflow-hidden rounded-2xl border border-slate-800/80 bg-[#0d1424]/90 p-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]">
+        <div className="relative w-full lg:w-[400px] shrink-0 overflow-hidden rounded-2xl border border-slate-800/80 bg-[#0d1424]/90 p-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]">
           {/* Inner top highlight + ambient emerald wash (decorative) */}
           <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-emerald-400/50 to-transparent" />
           <div className="pointer-events-none absolute -top-12 right-0 h-40 w-40 bg-[radial-gradient(circle,rgba(16,185,129,0.12),transparent_70%)]" />
 
-          <div className="relative flex flex-col items-stretch gap-4 min-[480px]:flex-row">
+          <div className="relative grid grid-cols-1 min-[480px]:grid-cols-[auto_1fr] items-center gap-4">
 
             {/* Left — Radial Security Score */}
-            <div className="flex flex-col items-center justify-center gap-2.5 px-1 min-[480px]:border-r min-[480px]:border-slate-800/70 min-[480px]:pr-4">
+            <div className="flex flex-col items-center justify-center gap-2 px-1 min-[480px]:border-r min-[480px]:border-slate-800/70 min-[480px]:pr-4">
               <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-slate-400">
                 Security Score
               </span>
 
-              <div className="relative h-[104px] w-[104px]">
+              <div className="relative h-[140px] w-[140px]">
                 <svg
-                  viewBox="0 0 104 104"
+                  viewBox="0 0 140 140"
                   className="h-full w-full -rotate-90"
                   role="img"
                   aria-label={`Security score ${safetyScore} out of 100`}
@@ -117,16 +117,16 @@ export default function ProtectionStatus({ threatsBlocked = 0, safetyScore = 100
                   </defs>
 
                   {/* Track */}
-                  <circle cx="52" cy="52" r={RING_RADIUS} fill="none" stroke="#1e293b" strokeWidth="7" />
+                  <circle cx="70" cy="70" r={RING_RADIUS} fill="none" stroke="#1e293b" strokeWidth="8" />
 
                   {/* Progress */}
                   <circle
-                    cx="52"
-                    cy="52"
+                    cx="70"
+                    cy="70"
                     r={RING_RADIUS}
                     fill="none"
                     stroke="url(#tb-score-ring-gradient)"
-                    strokeWidth="7"
+                    strokeWidth="8"
                     strokeLinecap="round"
                     strokeDasharray={RING_CIRCUMFERENCE}
                     strokeDashoffset={ringOffset}
@@ -137,56 +137,56 @@ export default function ProtectionStatus({ threatsBlocked = 0, safetyScore = 100
                 </svg>
 
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <span className="font-mono text-[30px] font-black leading-none tracking-tight tabular-nums text-[#10b981]">
+                  <span className="font-mono text-[26px] font-bold leading-none tracking-tight tabular-nums text-[#10b981]">
                     {safetyScore}
                   </span>
-                  <span className="mb-0.5 ml-0.5 font-mono text-[11px] font-bold leading-none text-slate-500">
+                  <span className="mb-0.5 ml-0.5 font-mono text-[13px] font-bold leading-none text-slate-400">
                     /100
                   </span>
                 </div>
               </div>
 
-              <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/25 bg-emerald-500/10 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wide text-emerald-400">
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/25 bg-emerald-500/10 px-3.5 py-1.5 text-[10px] font-semibold uppercase tracking-wide text-emerald-400 whitespace-nowrap">
                 <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 shadow-[0_0_6px_#10b981]" />
                 {isHealthy ? "Strong Awareness" : "Review Alerts"}
               </span>
             </div>
 
             {/* Right — Stacked Compact Stat Rows */}
-            <div className="flex flex-1 flex-col justify-center gap-2.5 min-[480px]:min-w-[180px]">
+            <div className="flex flex-1 flex-col justify-center gap-2 min-[480px]:pl-2">
 
               {/* Threats Flagged */}
-              <div className="flex items-center gap-3 rounded-xl border border-slate-800/70 bg-slate-900/40 px-3 py-2.5">
+              <div className="flex items-center gap-2.5 rounded-xl border border-slate-800/70 bg-slate-900/40 px-3 py-2.5">
                 <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-rose-500/10 text-rose-400 ring-1 ring-inset ring-rose-500/20">
                   <ShieldAlert className="h-4 w-4" strokeWidth={2.2} />
                 </span>
                 <div className="min-w-0 flex-1">
-                  <p className="text-[12px] font-bold uppercase leading-tight tracking-wider text-slate-300">
-                    Threats Flagged
+                  <p className="whitespace-nowrap text-[11px] font-bold uppercase leading-tight tracking-wider text-slate-300">
+                    THREATS FLAGGED
                   </p>
-                  <p className="truncate text-[10px] font-medium leading-tight text-slate-500">
+                  <p className="text-[10px] font-medium leading-tight text-slate-500">
                     High-risk attacks
                   </p>
                 </div>
-                <span className="shrink-0 font-mono text-[26px] font-black leading-none tabular-nums text-[#f43f5e]">
+                <span className="shrink-0 font-mono text-[24px] font-black leading-none tabular-nums text-[#f43f5e]">
                   {threatsBlocked}
                 </span>
               </div>
 
               {/* Total Scans */}
-              <div className="flex items-center gap-3 rounded-xl border border-slate-800/70 bg-slate-900/40 px-3 py-2.5">
+              <div className="flex items-center gap-2.5 rounded-xl border border-slate-800/70 bg-slate-900/40 px-3 py-2.5">
                 <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-amber-500/10 text-amber-400 ring-1 ring-inset ring-amber-500/20">
                   <Zap className="h-4 w-4" strokeWidth={2.2} />
                 </span>
                 <div className="min-w-0 flex-1">
-                  <p className="text-[12px] font-bold uppercase leading-tight tracking-wider text-slate-300">
-                    Total Scans
+                  <p className="whitespace-nowrap text-[11px] font-bold uppercase leading-tight tracking-wider text-slate-300">
+                    TOTAL SCANS
                   </p>
-                  <p className="truncate text-[10px] font-medium leading-tight text-slate-500">
+                  <p className="text-[10px] font-medium leading-tight text-slate-500">
                     Multi-modal runs
                   </p>
                 </div>
-                <span className="shrink-0 font-mono text-[26px] font-black leading-none tabular-nums text-[#f8fafc]">
+                <span className="shrink-0 font-mono text-[24px] font-black leading-none tabular-nums text-[#f8fafc]">
                   {totalScans}
                 </span>
               </div>

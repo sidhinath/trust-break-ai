@@ -3,6 +3,7 @@ import { Link, useNavigate, useLocation } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import { useAuth } from "@/lib/AuthContext";
 import UserModal from "@/components/auth/UserModal";
+import ProfileMenu from "@/components/auth/ProfileMenu";
 import LoginRequiredModal from "@/components/auth/LoginRequiredModal";
 import CookieConsentBanner from "@/components/CookieConsentBanner";
 import { App as CapacitorApp } from "@capacitor/app";
@@ -70,7 +71,7 @@ export default function Layout({ children, currentPageName }) {
   const [policyMenuOpen, setPolicyMenuOpen] = useState(false);
   const [loginPrompt, setLoginPrompt] = useState(null); // { feature } | null
   const pendingPageRef = useRef(null);
-  const { user, isAuthenticated, openSignIn, openSignUp } = useAuth();
+  const { user, isAuthenticated, openSignIn, openSignUp, signOut } = useAuth();
 
   // Helper: get avatar initials
   const getInitials = (u) => {
@@ -323,7 +324,7 @@ export default function Layout({ children, currentPageName }) {
         </div>
 
         {/* Public Page Header */}
-        <header className="tb-header sticky top-0 z-40 h-16 border-b backdrop-blur-xl transition-colors duration-300"
+        <header className="tb-header sticky top-0 z-50 h-16 border-b backdrop-blur-xl transition-colors duration-300"
           style={{ background: 'var(--tb-surface)', borderColor: 'var(--tb-border)' }}>
           <div className="flex items-center justify-between gap-1 sm:gap-3 h-full px-2 sm:px-6 max-w-7xl mx-auto w-full">
             {currentPageName !== "Home" && (
@@ -414,21 +415,14 @@ export default function Layout({ children, currentPageName }) {
               <SeniorModeToggleSwitch variant="header" />
 
               {isAuthenticated ? (
-                /* Authenticated — show avatar button */
-                <button
-                  type="button"
-                  onClick={() => setShowUserModal(true)}
-                  title="View account details"
-                  className="h-9 px-2 rounded-xl flex items-center gap-2 border border-emerald-500/30 bg-emerald-500/10 touch-manipulation min-h-[44px] min-w-[44px] transition-transform duration-75 active:scale-95 hover:border-emerald-400"
-                >
-                  <div className="w-6 h-6 rounded-lg bg-gradient-to-br from-emerald-400 to-blue-500 flex items-center justify-center text-[10px] font-black text-slate-950">
-                    {getInitials(user)}
-                  </div>
-                  <span className="hidden sm:inline text-xs font-bold text-emerald-300 max-w-[120px] truncate">
-                    {user?.user_metadata?.full_name || user?.email?.split('@')[0] || 'Account'}
-                  </span>
-                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shrink-0" />
-                </button>
+                /* Authenticated — show profile pill + dropdown menu */
+                <ProfileMenu
+                  user={user}
+                  onOpenModal={() => setShowUserModal(true)}
+                  onSignOut={signOut}
+                  labelMode="name"
+                  currentPageName={currentPageName}
+                />
               ) : (
                 /* Guest — show Sign In + Sign Up */
                 <div className="flex items-center gap-1 sm:gap-2 shrink-0">
@@ -526,7 +520,7 @@ export default function Layout({ children, currentPageName }) {
       </div>
       
       {/* Top Command Bar */}
-      <header className="tb-header fixed top-0 left-0 right-0 z-40 h-14 border-b backdrop-blur-xl transition-colors duration-300"
+      <header className="tb-header fixed top-0 left-0 right-0 z-50 h-14 border-b backdrop-blur-xl transition-colors duration-300"
         style={{
           background: 'var(--tb-surface)',
           borderColor: 'var(--tb-border)'
@@ -615,21 +609,14 @@ export default function Layout({ children, currentPageName }) {
 
             {/* Auth controls — authenticated or guest */}
             {isAuthenticated ? (
-              /* Authenticated: avatar button with email + green pulse */
-              <button
-                type="button"
-                onClick={async () => { await triggerHaptic('light'); setShowUserModal(true); }}
-                title="View account details"
-                className="touch-manipulation min-h-[44px] min-w-[44px] flex items-center gap-2 h-9 px-2 rounded-xl border border-emerald-500/30 bg-emerald-500/10 hover:border-emerald-400 transition-transform duration-75 active:scale-95 cursor-pointer shrink-0"
-              >
-                <div className="w-6 h-6 rounded-lg bg-gradient-to-br from-emerald-400 to-blue-500 flex items-center justify-center text-[10px] font-black text-slate-950 shrink-0">
-                  {getInitials(user)}
-                </div>
-                <span className="hidden lg:inline text-xs font-mono text-slate-300 max-w-[140px] truncate">
-                  {user?.email}
-                </span>
-                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shrink-0" />
-              </button>
+              /* Authenticated: profile pill + dropdown menu */
+              <ProfileMenu
+                user={user}
+                onOpenModal={() => setShowUserModal(true)}
+                onSignOut={signOut}
+                labelMode="email"
+                currentPageName={currentPageName}
+              />
             ) : (
               /* Guest: Sign In + Sign Up buttons */
               <div className="flex items-center gap-1 sm:gap-2 shrink-0">
@@ -677,7 +664,7 @@ export default function Layout({ children, currentPageName }) {
 
       {/* Mobile Navigation Drawer with Explicit Close & Senior Mode Controls */}
       {mobileMenuOpen && (
-        <div className="fixed inset-0 z-50 md:hidden flex flex-col backdrop-blur-2xl transition-all duration-300"
+        <div className="fixed inset-0 z-[60] md:hidden flex flex-col backdrop-blur-2xl transition-all duration-300"
           style={{ background: theme === 'dark' ? 'rgba(6,11,20,0.98)' : 'rgba(248,250,252,0.98)' }}>
           
           {/* Mobile Drawer Header */}
