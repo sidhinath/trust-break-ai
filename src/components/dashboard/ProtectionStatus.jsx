@@ -1,11 +1,16 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
-import { ShieldAlert, Zap, Activity, QrCode, Mic } from "lucide-react";
+import { ShieldAlert, Zap, QrCode, Mic } from "lucide-react";
 import { ConstellationField } from "@/shaders/constellation-field/ConstellationField";
+
+const RING_RADIUS = 44;
+const RING_CIRCUMFERENCE = 2 * Math.PI * RING_RADIUS;
 
 export default function ProtectionStatus({ threatsBlocked = 0, safetyScore = 100, totalScans = 0 }) {
   const isHealthy = safetyScore >= 75;
+  const scoreProgress = Math.min(100, Math.max(0, Number(safetyScore) || 0));
+  const ringOffset = RING_CIRCUMFERENCE * (1 - scoreProgress / 100);
 
   return (
     <div className="tb-card p-5 sm:p-6 relative overflow-hidden border border-emerald-500/20 shadow-[0_0_35px_rgba(16,185,129,0.08)]">
@@ -76,67 +81,118 @@ export default function ProtectionStatus({ threatsBlocked = 0, safetyScore = 100
           </div>
         </div>
 
-        {/* Right Security Awareness Score & Metrics */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 shrink-0">
-          
-          {/* Security Score */}
-          <div className="p-4 rounded-xl border flex flex-col justify-between"
-            style={{ background: 'var(--tb-surface-2)', borderColor: 'var(--tb-border)' }}>
-            <div className="flex items-center justify-between">
-              <span className="text-[10px] font-bold uppercase tracking-wider" style={{ color: 'var(--tb-text-dim)' }}>
+        {/* Unified Security Telemetry Card */}
+        <div className="relative w-full lg:w-[360px] shrink-0 overflow-hidden rounded-2xl border border-slate-800/80 bg-[#0d1424]/90 p-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]">
+          {/* Inner top highlight + ambient emerald wash (decorative) */}
+          <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-emerald-400/50 to-transparent" />
+          <div className="pointer-events-none absolute -top-12 right-0 h-40 w-40 bg-[radial-gradient(circle,rgba(16,185,129,0.12),transparent_70%)]" />
+
+          <div className="relative flex flex-col items-stretch gap-4 min-[480px]:flex-row">
+
+            {/* Left — Radial Security Score */}
+            <div className="flex flex-col items-center justify-center gap-2.5 px-1 min-[480px]:border-r min-[480px]:border-slate-800/70 min-[480px]:pr-4">
+              <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-slate-400">
                 Security Score
               </span>
-              <Activity className="w-3.5 h-3.5 text-emerald-500" />
-            </div>
-            <div className="my-1.5 flex items-baseline">
-              <span className={`text-3xl font-black font-mono ${isHealthy ? 'score-safe' : 'score-suspicious'}`}>
-                {safetyScore}
-              </span>
-              <span className="text-xs font-bold ml-1" style={{ color: 'var(--tb-text-muted)' }}>/100</span>
-            </div>
-            <span className="text-[10px] truncate" style={{ color: 'var(--tb-text-dim)' }}>
-              {isHealthy ? "Strong Awareness" : "Review Alerts"}
-            </span>
-          </div>
 
-          {/* Threats Blocked */}
-          <div className="p-4 rounded-xl border flex flex-col justify-between"
-            style={{ background: 'var(--tb-surface-2)', borderColor: 'var(--tb-border)' }}>
-            <div className="flex items-center justify-between">
-              <span className="text-[10px] font-bold uppercase tracking-wider" style={{ color: 'var(--tb-text-dim)' }}>
-                Threats Flagged
-              </span>
-              <ShieldAlert className="w-3.5 h-3.5 text-rose-500" />
-            </div>
-            <div className="my-1.5">
-              <span className="text-3xl font-black font-mono text-rose-500 dark:text-rose-400">
-                {threatsBlocked}
-              </span>
-            </div>
-            <span className="text-[10px] truncate" style={{ color: 'var(--tb-text-dim)' }}>
-              High-risk attacks
-            </span>
-          </div>
+              <div className="relative h-[104px] w-[104px]">
+                <svg
+                  viewBox="0 0 104 104"
+                  className="h-full w-full -rotate-90"
+                  role="img"
+                  aria-label={`Security score ${safetyScore} out of 100`}
+                >
+                  <defs>
+                    <linearGradient id="tb-score-ring-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stopColor="#34d399" />
+                      <stop offset="100%" stopColor="#10b981" />
+                    </linearGradient>
+                    <filter id="tb-score-ring-glow" x="-50%" y="-50%" width="200%" height="200%">
+                      <feGaussianBlur stdDeviation="2.5" result="blur" />
+                      <feMerge>
+                        <feMergeNode in="blur" />
+                        <feMergeNode in="SourceGraphic" />
+                      </feMerge>
+                    </filter>
+                  </defs>
 
-          {/* Total Inspections */}
-          <div className="p-4 rounded-xl border flex flex-col justify-between col-span-2 sm:col-span-1"
-            style={{ background: 'var(--tb-surface-2)', borderColor: 'var(--tb-border)' }}>
-            <div className="flex items-center justify-between">
-              <span className="text-[10px] font-bold uppercase tracking-wider" style={{ color: 'var(--tb-text-dim)' }}>
-                Total Scans
-              </span>
-              <Zap className="w-3.5 h-3.5 text-amber-500" />
-            </div>
-            <div className="my-1.5">
-              <span className="text-3xl font-black font-mono" style={{ color: 'var(--tb-text)' }}>
-                {totalScans}
-              </span>
-            </div>
-            <span className="text-[10px] truncate" style={{ color: 'var(--tb-text-dim)' }}>
-              Multi-modal runs
-            </span>
-          </div>
+                  {/* Track */}
+                  <circle cx="52" cy="52" r={RING_RADIUS} fill="none" stroke="#1e293b" strokeWidth="7" />
 
+                  {/* Progress */}
+                  <circle
+                    cx="52"
+                    cy="52"
+                    r={RING_RADIUS}
+                    fill="none"
+                    stroke="url(#tb-score-ring-gradient)"
+                    strokeWidth="7"
+                    strokeLinecap="round"
+                    strokeDasharray={RING_CIRCUMFERENCE}
+                    strokeDashoffset={ringOffset}
+                    filter="url(#tb-score-ring-glow)"
+                    className="tb-score-ring"
+                    style={{ '--tb-ring-circumference': String(RING_CIRCUMFERENCE) }}
+                  />
+                </svg>
+
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <span className="font-mono text-[30px] font-black leading-none tracking-tight tabular-nums text-[#10b981]">
+                    {safetyScore}
+                  </span>
+                  <span className="mb-0.5 ml-0.5 font-mono text-[11px] font-bold leading-none text-slate-500">
+                    /100
+                  </span>
+                </div>
+              </div>
+
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/25 bg-emerald-500/10 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wide text-emerald-400">
+                <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 shadow-[0_0_6px_#10b981]" />
+                {isHealthy ? "Strong Awareness" : "Review Alerts"}
+              </span>
+            </div>
+
+            {/* Right — Stacked Compact Stat Rows */}
+            <div className="flex flex-1 flex-col justify-center gap-2.5 min-[480px]:min-w-[180px]">
+
+              {/* Threats Flagged */}
+              <div className="flex items-center gap-3 rounded-xl border border-slate-800/70 bg-slate-900/40 px-3 py-2.5">
+                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-rose-500/10 text-rose-400 ring-1 ring-inset ring-rose-500/20">
+                  <ShieldAlert className="h-4 w-4" strokeWidth={2.2} />
+                </span>
+                <div className="min-w-0 flex-1">
+                  <p className="text-[12px] font-bold uppercase leading-tight tracking-wider text-slate-300">
+                    Threats Flagged
+                  </p>
+                  <p className="truncate text-[10px] font-medium leading-tight text-slate-500">
+                    High-risk attacks
+                  </p>
+                </div>
+                <span className="shrink-0 font-mono text-[26px] font-black leading-none tabular-nums text-[#f43f5e]">
+                  {threatsBlocked}
+                </span>
+              </div>
+
+              {/* Total Scans */}
+              <div className="flex items-center gap-3 rounded-xl border border-slate-800/70 bg-slate-900/40 px-3 py-2.5">
+                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-amber-500/10 text-amber-400 ring-1 ring-inset ring-amber-500/20">
+                  <Zap className="h-4 w-4" strokeWidth={2.2} />
+                </span>
+                <div className="min-w-0 flex-1">
+                  <p className="text-[12px] font-bold uppercase leading-tight tracking-wider text-slate-300">
+                    Total Scans
+                  </p>
+                  <p className="truncate text-[10px] font-medium leading-tight text-slate-500">
+                    Multi-modal runs
+                  </p>
+                </div>
+                <span className="shrink-0 font-mono text-[26px] font-black leading-none tabular-nums text-[#f8fafc]">
+                  {totalScans}
+                </span>
+              </div>
+
+            </div>
+          </div>
         </div>
       </div>
     </div>

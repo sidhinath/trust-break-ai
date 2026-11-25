@@ -388,6 +388,23 @@ textarea::placeholder {
   opacity: 0.65 !important;
 }
 
+/* Security Score radial ring — one-shot draw on mount (no continuous repaint). */
+@keyframes tb-score-ring-draw {
+  from {
+    stroke-dashoffset: var(--tb-ring-circumference, 276.46);
+  }
+}
+
+.tb-score-ring {
+  animation: tb-score-ring-draw 1.1s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tb-score-ring {
+    animation: none !important;
+  }
+}
+
 /* ══════════════════════════════════════════════════════════════════
    TrustBreak AI — Instant Touch & 60fps Mobile Optimizations
    ══════════════════════════════════════════════════════════════════ */
