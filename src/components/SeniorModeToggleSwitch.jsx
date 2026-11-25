@@ -8,7 +8,7 @@ import { triggerHaptic } from "@/lib/haptics";
  * Designed specifically for elderly users with clear visual ON/OFF states.
  * Guarantees 100% surface touch target registration on Android WebViews and mobile devices.
  */
-export default function SeniorModeToggleSwitch({ variant = "default", className = "" }) {
+export default function SeniorModeToggleSwitch({ variant = "default", className = "", isHindi: isHindiProp }) {
   const [active, setActive] = useState(() => {
     try {
       return (
@@ -19,6 +19,14 @@ export default function SeniorModeToggleSwitch({ variant = "default", className 
       return false;
     }
   });
+  const [storedLang, setStoredLang] = useState(() => {
+    try {
+      return localStorage.getItem("trustbreak_senior_lang") || "en-IN";
+    } catch {
+      return "en-IN";
+    }
+  });
+  const isHindi = isHindiProp ?? storedLang.toLowerCase().includes("hi");
 
   useEffect(() => {
     const syncState = () => {
@@ -27,13 +35,23 @@ export default function SeniorModeToggleSwitch({ variant = "default", className 
         localStorage.getItem("trustbreak_senior_mode") === "true";
       setActive(isSenior);
     };
+    const syncLang = () => {
+      try {
+        setStoredLang(localStorage.getItem("trustbreak_senior_lang") || "en-IN");
+      } catch {}
+    };
     syncState();
+    syncLang();
 
     window.addEventListener("trustbreak_senior_mode_change", syncState);
+    window.addEventListener("trustbreak_senior_lang_change", syncLang);
     window.addEventListener("storage", syncState);
+    window.addEventListener("storage", syncLang);
     return () => {
       window.removeEventListener("trustbreak_senior_mode_change", syncState);
+      window.removeEventListener("trustbreak_senior_lang_change", syncLang);
       window.removeEventListener("storage", syncState);
+      window.removeEventListener("storage", syncLang);
     };
   }, []);
 
@@ -124,23 +142,36 @@ export default function SeniorModeToggleSwitch({ variant = "default", className 
             <div className="flex items-center gap-2 pointer-events-none">
               <span className={`text-[10px] font-mono font-black uppercase tracking-widest px-2 py-0.5 rounded-md border pointer-events-none ${
                 active ? "bg-white/20 text-white border-white/30" : "bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border-emerald-500/30"
-              }`}>
-                {active ? "ACTIVE PROTECTION" : "ACCESSIBLE MODE"}
+              }`}
+              style={active ? { color: "#ffffff" } : undefined}>
+                {isHindi
+                  ? active
+                    ? "सुरक्षा चालू है"
+                    : "सुलभ मोड"
+                  : active
+                  ? "ACTIVE PROTECTION"
+                  : "ACCESSIBLE MODE"}
               </span>
               {active && <span className="w-2 h-2 rounded-full bg-emerald-300 animate-ping pointer-events-none" />}
             </div>
-            <h2 className="text-lg sm:text-xl font-black font-display tracking-tight mt-0.5 pointer-events-none">
-              SENIOR & FAMILY SAFETY MODE
+            <h2
+              className="text-lg sm:text-xl font-black font-display tracking-tight mt-0.5 pointer-events-none"
+              style={active ? { color: "#ffffff" } : undefined}
+            >
+              {isHindi ? "वरिष्ठ और परिवार सुरक्षा मोड" : "SENIOR & FAMILY SAFETY MODE"}
             </h2>
           </div>
         </div>
 
         {/* Large Sliding Switch Control */}
         <div className="flex items-center gap-3 shrink-0 pointer-events-none">
-          <span className={`text-xs sm:text-sm font-mono font-black tracking-wider uppercase hidden sm:inline pointer-events-none ${
-            active ? "text-emerald-100" : "text-slate-600 dark:text-slate-400"
-          }`}>
-            {active ? "MODE ON" : "MODE OFF"}
+          <span
+            className={`text-xs sm:text-sm font-mono font-black tracking-wider uppercase hidden sm:inline pointer-events-none ${
+              active ? "text-emerald-100" : "text-slate-600 dark:text-slate-400"
+            }`}
+            style={active ? { color: "#ecfdf5" } : undefined}
+          >
+            {isHindi ? (active ? "मोड चालू" : "मोड बंद") : active ? "MODE ON" : "MODE OFF"}
           </span>
 
           <div className={`w-14 h-8 sm:w-16 sm:h-9 rounded-full p-1 transition-colors flex items-center shadow-inner pointer-events-none ${

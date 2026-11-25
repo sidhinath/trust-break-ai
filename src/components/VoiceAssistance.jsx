@@ -11,16 +11,54 @@ import { triggerHaptic } from "@/lib/haptics";
  * 3. Web Audio API synthesized chime fallback.
  * 4. Controls: Read Aloud, Pause, Stop, Rate control, Language selection (English & Hindi).
  */
-export default function VoiceAssistance({ textToRead, title = "Listen to Explanation", autoClean = true }) {
+export default function VoiceAssistance({
+  textToRead,
+  title = "Listen to Explanation",
+  autoClean = true,
+  language: controlledLang,
+  onLanguageChange,
+}) {
   const [speaking, setSpeaking] = useState(false);
   const [paused, setPaused] = useState(false);
   const [supported, setSupported] = useState(true);
   const [rate, setRate] = useState(1.0);
-  const [lang, setLang] = useState("en-IN");
+  const [internalLang, setInternalLang] = useState(() => {
+    try {
+      return localStorage.getItem("trustbreak_senior_lang") || "en-IN";
+    } catch {
+      return "en-IN";
+    }
+  });
+  const lang = controlledLang ?? internalLang;
+  const isHindi = lang.toLowerCase().includes("hi");
   const [voices, setVoices] = useState([]);
   const utteranceRef = useRef(null);
   const audioCtxRef = useRef(null);
   const speechTimeoutRef = useRef(null);
+
+  useEffect(() => {
+    const syncLang = () => {
+      try {
+        const saved = localStorage.getItem("trustbreak_senior_lang") || "en-IN";
+        setInternalLang(saved);
+      } catch {}
+    };
+    window.addEventListener("trustbreak_senior_lang_change", syncLang);
+    window.addEventListener("storage", syncLang);
+    return () => {
+      window.removeEventListener("trustbreak_senior_lang_change", syncLang);
+      window.removeEventListener("storage", syncLang);
+    };
+  }, []);
+
+  const handleLangChange = (nextLang) => {
+    setInternalLang(nextLang);
+    try {
+      localStorage.setItem("trustbreak_senior_lang", nextLang);
+    } catch {}
+    window.dispatchEvent(new Event("trustbreak_senior_lang_change"));
+    onLanguageChange?.(nextLang);
+  };
 
   useEffect(() => {
     const hasAndroidNativeTTS = Boolean(window.AndroidNativeTTS && window.AndroidNativeTTS.isAvailable);
@@ -259,11 +297,11 @@ export default function VoiceAssistance({ textToRead, title = "Listen to Explana
             <Globe className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400 pointer-events-none" />
             <select
               value={lang}
-              onChange={(e) => setLang(e.target.value)}
+              onChange={(e) => handleLangChange(e.target.value)}
               className="bg-white dark:bg-slate-900 border border-emerald-500/40 text-emerald-950 dark:text-emerald-100 rounded-xl px-2 py-1.5 font-semibold text-xs focus:ring-2 focus:ring-emerald-500 outline-none shadow-sm cursor-pointer touch-manipulation min-h-[38px]"
             >
               <option value="en-IN">English (India)</option>
-              <option value="hi-IN">Hindi (हिंदी)</option>
+              <option value="hi-IN">Hindi (हिन्दी)</option>
               <option value="en-US">English (US)</option>
             </select>
           </label>
@@ -289,19 +327,31 @@ export default function VoiceAssistance({ textToRead, title = "Listen to Explana
           <button
             type="button"
             onClick={speak}
+            style={{ color: "#ffffff" }}
             className="h-12 px-6 rounded-2xl bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-500 hover:to-emerald-600 text-white font-black text-xs sm:text-sm flex items-center justify-center gap-2 shadow-md transition-transform duration-75 active:scale-95 cursor-pointer touch-manipulation min-w-[140px]"
           >
             <Play className="w-4 h-4 fill-current pointer-events-none" />
-            <span className="pointer-events-none">{paused ? "Resume Reading" : "Read Aloud"}</span>
+            <span className="pointer-events-none">
+              {paused
+                ? isHindi
+                  ? "पढ़ना जारी रखें"
+                  : "Resume Reading"
+                : isHindi
+                ? "जोर से पढ़ें"
+                : "Read Aloud"}
+            </span>
           </button>
         ) : (
           <button
             type="button"
             onClick={pause}
+            style={{ color: "#ffffff" }}
             className="h-12 px-6 rounded-2xl bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-500 hover:to-amber-600 text-white font-black text-xs sm:text-sm flex items-center justify-center gap-2 shadow-md transition-transform duration-75 active:scale-95 cursor-pointer touch-manipulation min-w-[140px]"
           >
             <Pause className="w-4 h-4 fill-current pointer-events-none" />
-            <span className="pointer-events-none">Pause Voice</span>
+            <span className="pointer-events-none">
+              {isHindi ? "आवाज़ रोकें" : "Pause Voice"}
+            </span>
           </button>
         )}
 
@@ -309,10 +359,13 @@ export default function VoiceAssistance({ textToRead, title = "Listen to Explana
           <button
             type="button"
             onClick={stop}
+            style={{ color: "#ffffff" }}
             className="h-12 px-6 rounded-2xl bg-gradient-to-r from-rose-600 to-rose-700 hover:from-rose-500 hover:to-rose-600 text-white font-black text-xs sm:text-sm flex items-center justify-center gap-2 shadow-md transition-transform duration-75 active:scale-95 cursor-pointer touch-manipulation min-w-[130px]"
           >
             <Square className="w-4 h-4 fill-current pointer-events-none" />
-            <span className="pointer-events-none">Stop Reading</span>
+            <span className="pointer-events-none">
+              {isHindi ? "बंद करें" : "Stop Reading"}
+            </span>
           </button>
         )}
       </div>

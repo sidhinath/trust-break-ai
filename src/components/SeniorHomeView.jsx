@@ -70,13 +70,30 @@ export default function SeniorHomeView() {
   const [analyzingPhoto, setAnalyzingPhoto] = useState(false);
   const [photoError, setPhotoError] = useState("");
   const [photoResult, setPhotoResult] = useState(null);
-  const [resultLang, setResultLang] = useState("en"); // 'en' | 'hi'
+  const [selectedLang, setSelectedLang] = useState(() => {
+    try {
+      return localStorage.getItem("trustbreak_senior_lang") || "en-IN";
+    } catch {
+      return "en-IN";
+    }
+  });
+  const isHindi = selectedLang.toLowerCase().includes("hi");
+
+  const handleLanguageChange = (nextLang) => {
+    setSelectedLang(nextLang);
+    try {
+      localStorage.setItem("trustbreak_senior_lang", nextLang);
+    } catch {}
+    window.dispatchEvent(new Event("trustbreak_senior_lang_change"));
+  };
 
   const [showEmergencyModal, setShowEmergencyModal] = useState(false);
   const [showSimulationModal, setShowSimulationModal] = useState(false);
   const [showTrustedContactModal, setShowTrustedContactModal] = useState(false);
 
-  const homeSpeechText = `
+  const homeSpeechText = isHindi
+    ? `ट्रस्टब्रेक एआई वरिष्ठ सुरक्षा मोड में आपका स्वागत है। किसी भी संदिग्ध संदेश या लिंक को बड़े बॉक्स में पेस्ट करें और पेस्ट करें और जाँचें दबाएं। या स्क्रीनशॉट और QR जाँचें दबाकर फोटो चुनें। अगर पैसे कट गए हैं या OTP बता दिया है, तो तुरंत 1930 पर कॉल करें।`
+    : `
     Welcome to TrustBreak AI Senior Mode.
     Paste any suspicious message or link into the big box, then tap Paste and Check.
     Or tap Check Screenshot or QR to pick a photo right here on this screen.
@@ -226,23 +243,38 @@ export default function SeniorHomeView() {
     if (dropped) acceptSelectedImage(dropped);
   };
 
-  const safetySteps = [
-    {
-      num: "1",
-      title: "Copy or Screenshot",
-      desc: "any suspicious SMS, WhatsApp message, or link.",
-    },
-    {
-      num: "2",
-      title: 'Tap "Paste & Check"',
-      desc: "to let AI check for fraud in seconds.",
-    },
-    {
-      num: "3",
-      title: "Ask Family or Call 1930",
-      desc: "before sending money or sharing an OTP.",
-    },
-  ];
+  const safetySteps = isHindi
+    ? [
+        {
+          num: "1",
+          text: "किसी भी संदिग्ध SMS, WhatsApp संदेश या लिंक को कॉपी करें या स्क्रीनशॉट लें।",
+        },
+        {
+          num: "2",
+          text: "AI द्वारा तुरंत धोखाधड़ी की जाँच करने के लिए 'पेस्ट करें और जाँचें' दबाएं।",
+        },
+        {
+          num: "3",
+          text: "पैसे भेजने या OTP बताने से पहले परिवार से पूछें या 1930 पर कॉल करें।",
+        },
+      ]
+    : [
+        {
+          num: "1",
+          title: "Copy or Screenshot",
+          desc: "any suspicious SMS, WhatsApp message, or link.",
+        },
+        {
+          num: "2",
+          title: 'Tap "Paste & Check"',
+          desc: "to let AI check for fraud in seconds.",
+        },
+        {
+          num: "3",
+          title: "Ask Family or Call 1930",
+          desc: "before sending money or sharing an OTP.",
+        },
+      ];
 
   // Build senior-friendly English/Hindi result data
   const resolvedRisk = photoResult
@@ -252,7 +284,7 @@ export default function SeniorHomeView() {
   const getResultPresentation = () => {
     if (!photoResult || !resolvedRisk) return null;
 
-    if (resultLang === "hi") {
+    if (isHindi) {
       const hi = HINDI_COPY[resolvedRisk] || HINDI_COPY.suspicious;
       return {
         headline: hi.headline,
@@ -312,10 +344,15 @@ export default function SeniorHomeView() {
       />
 
       {/* Prominent Active Mode Large Toggle Switch Banner */}
-      <SeniorModeToggleSwitch variant="large" className="w-full" />
+      <SeniorModeToggleSwitch variant="large" className="w-full" isHindi={isHindi} />
 
       {/* Voice Assistance Bar */}
-      <VoiceAssistance textToRead={homeSpeechText} title="🔊 Voice Guide for Home Screen" />
+      <VoiceAssistance
+        textToRead={homeSpeechText}
+        title={isHindi ? "🔊 होम स्क्रीन के लिए वॉयस गाइड" : "🔊 Voice Guide for Home Screen"}
+        language={selectedLang}
+        onLanguageChange={handleLanguageChange}
+      />
 
       {/* Top Full-Width 2-Column Bento Section (60% Left / 40% Right on desktop) */}
       <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,60fr)_minmax(0,40fr)] gap-4 items-stretch w-full">
@@ -334,25 +371,32 @@ export default function SeniorHomeView() {
             <div className="flex items-center justify-between gap-2 flex-wrap">
               <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-mono font-bold uppercase tracking-wider bg-emerald-50 text-emerald-700 border border-emerald-200 dark:bg-emerald-500/10 dark:text-emerald-400 dark:border-emerald-500/30">
                 <span className="w-2 h-2 rounded-full bg-emerald-500 dark:bg-emerald-400 animate-pulse" />
-                Easy Scam Checker
+                {isHindi ? "आसान स्कैन चेकर" : "EASY SCAN CHECKER"}
               </span>
               {isDragging && (
                 <span className="text-xs font-bold text-emerald-600 dark:text-emerald-400 flex items-center gap-1">
-                  <Upload className="w-3.5 h-3.5" /> Drop photo to check
+                  <Upload className="w-3.5 h-3.5" />{" "}
+                  {isHindi ? "जाँचने के लिए फोटो यहाँ छोड़ें" : "Drop photo to check"}
                 </span>
               )}
             </div>
 
             <h2 className="text-xl sm:text-2xl font-black font-display tracking-tight text-slate-950 dark:text-white leading-snug">
-              Received a suspicious message, link, or photo?
+              {isHindi
+                ? "क्या आपको कोई संदिग्ध संदेश, लिंक या फोटो मिला है?"
+                : "Received a suspicious message, link, or photo?"}
             </h2>
 
             {!photoPreview ? (
               <textarea
                 value={seniorInput}
                 onChange={(e) => setSeniorInput(e.target.value)}
-                placeholder="Paste anything here..."
-                aria-label="Paste suspicious message or link here"
+                placeholder={isHindi ? "यहाँ कुछ भी पेस्ट करें..." : "Paste anything here..."}
+                aria-label={
+                  isHindi
+                    ? "यहाँ संदिग्ध संदेश या लिंक पेस्ट करें"
+                    : "Paste suspicious message or link here"
+                }
                 rows={4}
                 className="w-full min-h-[128px] rounded-xl border border-slate-300 bg-slate-50 dark:border-slate-700/80 dark:bg-slate-900/75 p-4 text-base text-slate-900 dark:text-slate-100 placeholder:text-slate-500 dark:placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 resize-none leading-relaxed"
               />
@@ -361,7 +405,7 @@ export default function SeniorHomeView() {
               <div className="rounded-xl border border-slate-300 dark:border-slate-700/80 bg-slate-50 dark:bg-slate-900/75 p-4 space-y-3">
                 <div className="flex items-center justify-between gap-2">
                   <span className="text-xs font-bold text-slate-700 dark:text-slate-300 truncate">
-                    Selected Photo: {photoFile?.name}
+                    {isHindi ? "चुनी गई फोटो:" : "Selected Photo:"} {photoFile?.name}
                   </span>
                   <span className="text-[11px] font-mono text-slate-500 dark:text-slate-400 shrink-0">
                     {photoFile ? `${(photoFile.size / 1024).toFixed(0)} KB` : ""}
@@ -390,7 +434,7 @@ export default function SeniorHomeView() {
                 onClick={handlePasteAndCheck}
                 className="touch-manipulation min-h-[56px] px-5 py-3 rounded-xl bg-gradient-to-r from-emerald-500 to-emerald-400 hover:from-emerald-400 hover:to-emerald-300 text-slate-950 font-black text-sm sm:text-base shadow-[0_0_24px_rgba(16,185,129,0.28)] transition-transform duration-75 active:scale-[0.98] cursor-pointer flex items-center justify-center gap-2"
               >
-                <span>📋 Paste &amp; Check</span>
+                <span>📋 {isHindi ? "पेस्ट करें और जाँचें" : "Paste & Check"}</span>
               </button>
 
               <button
@@ -398,7 +442,7 @@ export default function SeniorHomeView() {
                 onClick={handleTriggerPhotoPicker}
                 className="touch-manipulation min-h-[56px] px-5 py-3 rounded-xl border-2 border-slate-300 bg-slate-100 hover:border-emerald-400 hover:bg-emerald-50 text-slate-900 dark:border-slate-700 dark:bg-slate-900/80 dark:hover:border-emerald-500/60 dark:hover:bg-slate-800/80 dark:text-white font-black text-sm sm:text-base transition-transform duration-75 active:scale-[0.98] cursor-pointer flex items-center justify-center gap-2"
               >
-                <span>📷 Check Screenshot / QR</span>
+                <span>📷 {isHindi ? "स्क्रीनशॉट / QR जाँचें" : "Check Screenshot / QR"}</span>
               </button>
             </div>
           ) : (
@@ -412,10 +456,10 @@ export default function SeniorHomeView() {
                 {analyzingPhoto ? (
                   <>
                     <Loader2 className="w-5 h-5 animate-spin" />
-                    <span>Analyzing Photo...</span>
+                    <span>{isHindi ? "फोटो की जाँच हो रही है..." : "Analyzing Photo..."}</span>
                   </>
                 ) : (
-                  <span>🔍 Analyze Photo Now</span>
+                  <span>{isHindi ? "🔍 अभी फोटो जाँचें" : "🔍 Analyze Photo Now"}</span>
                 )}
               </button>
 
@@ -426,7 +470,7 @@ export default function SeniorHomeView() {
                 className="touch-manipulation min-h-[56px] px-5 py-3 rounded-xl border-2 border-slate-300 bg-slate-100 hover:border-rose-400 hover:bg-rose-50 text-slate-900 dark:border-slate-700 dark:bg-slate-900/80 dark:hover:border-rose-500/60 dark:hover:bg-slate-800/80 dark:text-white font-black text-sm sm:text-base transition-transform duration-75 active:scale-[0.98] cursor-pointer flex items-center justify-center gap-2"
               >
                 <Trash2 className="w-4 h-4" />
-                <span>Remove / Choose Another</span>
+                <span>{isHindi ? "हटाएं / दूसरी चुनें" : "Remove / Choose Another"}</span>
               </button>
             </div>
           )}
@@ -436,7 +480,7 @@ export default function SeniorHomeView() {
         <div className="bg-white dark:bg-[#0d1424]/90 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 flex flex-col justify-between gap-5 shadow-sm">
           <div className="space-y-4">
             <h3 className="text-lg sm:text-xl font-black font-display tracking-tight text-slate-950 dark:text-white">
-              How to Stay Safe (3 Easy Steps)
+              {isHindi ? "सुरक्षित रहने के 3 आसान तरीके" : "How to Stay Safe (3 Easy Steps)"}
             </h3>
 
             <div className="space-y-3.5">
@@ -449,18 +493,28 @@ export default function SeniorHomeView() {
                     {step.num}
                   </div>
                   <p className="text-sm leading-relaxed text-slate-700 dark:text-slate-300">
-                    <strong className="font-bold text-slate-950 dark:text-white">
-                      {step.title}
-                    </strong>{" "}
-                    {step.desc}
+                    {step.text ? (
+                      <span className="font-semibold text-slate-900 dark:text-slate-100">
+                        {step.text}
+                      </span>
+                    ) : (
+                      <>
+                        <strong className="font-bold text-slate-950 dark:text-white">
+                          {step.title}
+                        </strong>{" "}
+                        {step.desc}
+                      </>
+                    )}
                   </p>
                 </div>
               ))}
             </div>
           </div>
 
-          <p className="text-xs font-semibold text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-200 dark:border-emerald-500/25 rounded-xl px-3.5 py-2.5">
-            Never rush. Real banks and government officials never demand urgent UPI transfers or OTPs.
+          <p className="text-xs font-semibold text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-200 dark:border-emerald-500/25 rounded-xl px-3.5 py-2.5 leading-relaxed">
+            {isHindi
+              ? "कभी जल्दबाजी न करें। असली बैंक या सरकारी अधिकारी कभी भी तुरंत UPI ट्रांसफर या OTP नहीं मांगते।"
+              : "Never rush. Real banks and government officials never demand urgent UPI transfers or OTPs."}
           </p>
         </div>
       </div>
@@ -491,13 +545,13 @@ export default function SeniorHomeView() {
               </h3>
             </div>
 
-            {/* Language Toggle (English / हिंदी) */}
+            {/* Language Toggle (English / हिन्दी) */}
             <div className="flex items-center gap-1 p-1 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-900 shrink-0 self-start sm:self-center">
               <button
                 type="button"
-                onClick={() => setResultLang("en")}
+                onClick={() => handleLanguageChange("en-IN")}
                 className={`px-3 py-2 rounded-lg text-xs font-bold transition-colors cursor-pointer touch-manipulation ${
-                  resultLang === "en"
+                  !isHindi
                     ? "bg-emerald-500 text-slate-950"
                     : "text-slate-700 dark:text-slate-300 hover:text-emerald-600"
                 }`}
@@ -506,20 +560,25 @@ export default function SeniorHomeView() {
               </button>
               <button
                 type="button"
-                onClick={() => setResultLang("hi")}
+                onClick={() => handleLanguageChange("hi-IN")}
                 className={`px-3 py-2 rounded-lg text-xs font-bold transition-colors cursor-pointer touch-manipulation ${
-                  resultLang === "hi"
+                  isHindi
                     ? "bg-emerald-500 text-slate-950"
                     : "text-slate-700 dark:text-slate-300 hover:text-emerald-600"
                 }`}
               >
-                हिंदी (Hindi)
+                हिन्दी (Hindi)
               </button>
             </div>
           </div>
 
           {/* Voice Readout Control */}
-          <VoiceAssistance textToRead={resultSpeechText} title="🔊 Read Result Aloud" />
+          <VoiceAssistance
+            textToRead={resultSpeechText}
+            title={isHindi ? "🔊 परिणाम जोर से सुनें" : "🔊 Read Result Aloud"}
+            language={selectedLang}
+            onLanguageChange={handleLanguageChange}
+          />
 
           {/* Calm Summary & 2-3 Easy Bullet Points */}
           <div className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/60 space-y-3">
@@ -562,10 +621,12 @@ export default function SeniorHomeView() {
           </div>
           <div className="pointer-events-none">
             <h3 className="text-base font-black font-display text-slate-950 dark:text-white group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
-              Ask a Family Member
+              {isHindi ? "परिवार के सदस्य से पूछें" : "Ask a Family Member"}
             </h3>
             <p className="text-xs sm:text-sm font-medium text-slate-600 dark:text-slate-300 mt-1 leading-relaxed">
-              Share scan findings with your trusted guardian before taking action.
+              {isHindi
+                ? "कोई भी कदम उठाने से पहले स्कैन रिपोर्ट अपने भरोसेमंद परिवारजन को भेजें।"
+                : "Share scan findings with your trusted guardian before taking action."}
             </p>
           </div>
         </button>
@@ -584,15 +645,17 @@ export default function SeniorHomeView() {
               <ShieldAlert className="w-5 h-5" />
             </div>
             <span className="text-[10px] font-mono font-black uppercase px-2.5 py-1 rounded-full bg-rose-500/15 text-rose-700 dark:text-rose-300 border border-rose-500/30">
-              24/7 Helpline
+              {isHindi ? "24/7 हेल्पलाइन" : "24/7 Helpline"}
             </span>
           </div>
           <div className="pointer-events-none">
             <h3 className="text-base font-black font-display text-rose-700 dark:text-rose-400 group-hover:text-rose-600 dark:group-hover:text-rose-300 transition-colors">
-              Emergency: Call 1930
+              {isHindi ? "आपातकालीन मदद: 1930 पर कॉल करें" : "Emergency: Call 1930"}
             </h3>
             <p className="text-xs sm:text-sm font-medium text-slate-700 dark:text-slate-200 mt-1 leading-relaxed">
-              Lost money or shared an OTP? Open step-by-step recovery help now.
+              {isHindi
+                ? "पैसे कट गए या OTP बता दिया? तुरंत मदद के लिए स्टेप-बाय-स्टेप गाइड खोलें।"
+                : "Lost money or shared an OTP? Open step-by-step recovery help now."}
             </p>
           </div>
         </button>
@@ -614,10 +677,12 @@ export default function SeniorHomeView() {
           </div>
           <div className="pointer-events-none">
             <h3 className="text-base font-black font-display text-slate-950 dark:text-white group-hover:text-amber-600 dark:group-hover:text-amber-400 transition-colors">
-              Simple Scam Quiz
+              {isHindi ? "आसान स्कैम क्विज़" : "Simple Scam Quiz"}
             </h3>
             <p className="text-xs sm:text-sm font-medium text-slate-600 dark:text-slate-300 mt-1 leading-relaxed">
-              Practice spotting fake SMS and fraud calls with easy examples.
+              {isHindi
+                ? "आसान उदाहरणों से फर्जी SMS और फ्रॉड कॉल पहचानने का अभ्यास करें।"
+                : "Practice spotting fake SMS and fraud calls with easy examples."}
             </p>
           </div>
         </button>
