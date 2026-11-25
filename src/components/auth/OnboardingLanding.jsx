@@ -59,7 +59,7 @@ export default function OnboardingLanding({ onComplete, onGuest }) {
             initial={{ opacity: 0, scale: 0.85, y: 15 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             transition={{ duration: 0.6, ease: 'easeOut' }}
-            className="w-72 max-w-[300px] mx-auto rounded-3xl bg-white shadow-[0_20px_40px_rgba(37,99,235,0.12)] border border-slate-200/80 p-3 flex items-center justify-center"
+            className="w-72 max-w-[300px] mx-auto rounded-3xl bg-[#0b1120] shadow-[0_20px_40px_rgba(16,185,129,0.18)] border border-emerald-500/30 p-3 flex items-center justify-center"
           >
             <img src="/logo-with-text.svg" alt="TrustBreak AI" className="w-full h-auto object-contain rounded-2xl" />
           </motion.div>
