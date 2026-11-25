@@ -20,10 +20,8 @@ import { filterValidReasonCodes } from './reasonCodes.js'
  * error message, so vision keeps working without a code change.
  */
 export const VISION_MODELS = [
-  'gemini-3.8-flash',
-  'gemini-3.6-flash',
   'gemini-3.5-flash-lite',
-  'gemini-flash-latest',
+  'gemini-3.8-flash',
 ]
 
 /**
@@ -354,12 +352,19 @@ export function normalizeVisionResult(parsed) {
     : scoreToRisk(score)
   const detectedText = String(parsed.detected_text || '')
 
+  const indicators = Array.isArray(parsed.reasons) ? parsed.reasons.map((r) => String(r)) : []
+  const summary = String(parsed.analysis || parsed.ai_analysis || '')
+
   return {
+    score,
+    verdict: risk,
+    summary,
+    indicators,
     fraud_score: score,
     risk_level: risk,
     confidence: parsed.confidence || (score > 70 ? 'high' : 'medium'),
-    reasons: Array.isArray(parsed.reasons) ? parsed.reasons.map((r) => String(r)) : [],
-    analysis: String(parsed.analysis || parsed.ai_analysis || ''),
+    reasons: indicators,
+    analysis: summary,
     ai_analysis: String(parsed.ai_analysis || parsed.analysis || ''),
     detected_text: detectedText,
     attack_intent: parsed.attack_intent || inferAttackerIntent(detectedText, '', risk),

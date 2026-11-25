@@ -26,6 +26,14 @@ import {
   resolveGeminiKey,
 } from '../src/lib/vision.js'
 import { getSupabaseAnonKey, getSupabaseServiceKey, getSupabaseUrl } from '../src/lib/supabaseKeys.js'
+import {
+  buildScanCacheKey,
+  getCachedScanResult,
+  setCachedScanResult,
+  enforceRateLimit,
+  fetchWithRetry,
+} from './_lib/resilience.js'
+import { TEXT_MODEL_CHAIN, runTextAnalysisWithRouter } from '../src/lib/aiRouter.js'
 import crypto from 'node:crypto'
 
 // ---------------------------------------------------------------------------
@@ -345,12 +353,7 @@ function recordThreatIndicator(indicatorHash, indicatorType, riskScore, reasonCo
 // Groq AI analysis
 // ---------------------------------------------------------------------------
 
-const GROQ_MODELS = [
-  'llama-3.3-70b-versatile',
-  'openai/gpt-oss-20b',
-  'llama-3.1-8b-instant',
-  'openai/gpt-oss-safeguard-20b',
-]
+// Text model fallback chain is centralized in src/lib/aiRouter.js (`TEXT_MODEL_CHAIN`).
 
 const REASON_CODES_INSTRUCTION = `
 - reasonCodes (array of strings, choose ONLY from this exact list, pick all that apply):
@@ -517,108 +520,40 @@ ${REASON_CODES_INSTRUCTION}`
     return null
   }
 
-  for (const model of GROQ_MODELS) {
-    const startedAt = Date.now()
-    try {
-      const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
-        method: 'POST',
-        headers: {
-          Authorization: `Bearer ${keyInfo.key}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          model,
-          temperature: 0.1,
-          response_format: { type: 'json_object' },
-          messages: [
-            {
-              role: 'system',
-              content: 'You are TrustBreak AI. Always respond in strict, valid JSON format only.',
-            },
-            {
-              role: 'user',
-              content: prompt,
-            },
-          ],
-        }),
-      })
+  const geminiKey = resolveGeminiKey(req)?.key || null
+  const routerResult = await runTextAnalysisWithRouter({
+    prompt,
+    groqKey: keyInfo.key,
+    geminiKey,
+    diagnostics: diag,
+  })
 
-      if (!response.ok) {
-        const errorBody = await response.text().catch(() => '')
-        const detail = {
-          model,
-          status: response.status,
-          ok: false,
-          durationMs: Date.now() - startedAt,
-          error: `${model}=${response.status}${errorBody ? ` (${errorBody.slice(0, 200)})` : ''}`,
-        }
-        if (diag) diag.attempts.push(detail)
-        console.warn(
-          `[TrustBreak AI] Groq model ${model} failed: HTTP ${detail.status} in ${detail.durationMs}ms — ${detail.error || 'no body'}`
-        )
-        continue
-      }
-      const data = await response.json()
-      const text = data?.choices?.[0]?.message?.content
-      const parsed = parseJsonFromText(text)
-      if (parsed && typeof parsed.fraud_score !== 'undefined') {
-        const score = Math.max(0, Math.min(100, Number(parsed.fraud_score || 0)))
-        const risk = ['safe', 'suspicious', 'scam'].includes(parsed.risk_level) ? parsed.risk_level : scoreToRisk(score)
-        const contentStr = type === 'message' ? payload.message : (payload.url || '')
-        const verdict = safeParseVerdict(text)
+  if (routerResult) {
+    if (diag) diag.status = 'ok'
+    const risk = routerResult.verdict
+    const contentStr = type === 'message' ? payload.message : (payload.url || '')
+    const sigs = routerResult.signals || extractAttackSignals(contentStr)
 
-        if (diag) {
-          diag.status = 'ok'
-          diag.attempts.push({ model, status: 200, ok: true, durationMs: Date.now() - startedAt })
-        }
-
-        return {
-          fraud_score: score,
-          risk_level: risk,
-          confidence: parsed.confidence || (score > 70 ? 'high' : 'medium'),
-          reasons: Array.isArray(parsed.reasons) ? parsed.reasons.map((r) => String(r)) : [],
-          analysis: String(parsed.analysis || parsed.ai_analysis || ''),
-          ai_analysis: String(parsed.ai_analysis || parsed.analysis || ''),
-          attack_intent: String(parsed.attack_intent || inferAttackerIntent(contentStr, '', risk)),
-          signals: parsed.signals || extractAttackSignals(contentStr),
-          threat_reconstruction: reconstructAttackChain(contentStr, type === 'link' ? payload.url : '', risk),
-          similar_patterns: findSimilarScams(contentStr),
-          reasonCodes: (verdict?.reasonCodes && verdict.reasonCodes.length > 0)
-            ? verdict.reasonCodes
-            : inferReasonCodes(contentStr, type === 'link' ? payload.url : '', parsed.signals || extractAttackSignals(contentStr), risk),
-          explanation: verdict?.explanation || null,
-          source: 'groq',
-          engine: 'groq',
-          degraded: false,
-          emergency_actions: {
-            stop: 'Do NOT click any links, enter PINs, or share verification codes.',
-            verify: 'Call the organization using their known official hotline.',
-            report: 'Record this threat in the TrustBreak AI community database.',
-            secure: 'Freeze affected cards or rotate credentials immediately if compromised.'
-          }
-        }
-      }
-      if (diag) {
-        diag.attempts.push({
-          model,
-          status: 200,
-          ok: false,
-          durationMs: Date.now() - startedAt,
-          error: 'model returned no parseable JSON verdict',
-        })
-      }
-      console.warn(`[TrustBreak AI] Groq model ${model} returned an unparseable verdict`)
-    } catch (err) {
-      if (diag) {
-        diag.attempts.push({
-          model,
-          ok: false,
-          durationMs: Date.now() - startedAt,
-          error: err?.message || 'request failed',
-        })
-      }
-      console.warn(`[TrustBreak AI] Groq model ${model} request failed: ${err?.message || err}`)
-      continue
+    return {
+      ...routerResult,
+      attack_intent: routerResult.attack_intent || inferAttackerIntent(contentStr, '', risk),
+      signals: sigs,
+      threat_reconstruction: reconstructAttackChain(contentStr, type === 'link' ? payload.url : '', risk),
+      similar_patterns: findSimilarScams(contentStr),
+      reasonCodes:
+        routerResult.reasonCodes && routerResult.reasonCodes.length > 0
+          ? routerResult.reasonCodes
+          : inferReasonCodes(contentStr, type === 'link' ? payload.url : '', sigs, risk),
+      explanation: routerResult.summary || routerResult.analysis || null,
+      source: routerResult.source || 'groq',
+      engine: routerResult.source || 'groq',
+      degraded: false,
+      emergency_actions: {
+        stop: 'Do NOT click any links, enter PINs, or share verification codes.',
+        verify: 'Call the organization using their known official hotline.',
+        report: 'Record this threat in the TrustBreak AI community database.',
+        secure: 'Freeze affected cards or rotate credentials immediately if compromised.',
+      },
     }
   }
 
@@ -675,9 +610,8 @@ async function callGeminiVision({ apiKey, model, base64, mimeType, diag }) {
     }
 
     if (response.status === 429 || response.status === 503) {
-      // 503 = temporary server overload — wait 1.5s and retry once.
-      // 429 = quota — a shorter pause is enough; retry once as well.
-      const retryDelayMs = response.status === 503 ? 1500 : 600
+      // 429 (Rate Limit) or 503 (Busy) — wait 1.5s and retry once.
+      const retryDelayMs = 1500
       attempt.transientRetry = true
       attempt.retryDelayMs = retryDelayMs
       await new Promise((resolve) => setTimeout(resolve, retryDelayMs))
@@ -927,7 +861,7 @@ async function analyzeScreenshotWithGroqVision({ base64, mimeType, req, diag }) 
     const attempt = { model, ok: false, status: null, durationMs: 0 }
     try {
       const response = await withTimeout(
-        fetch('https://api.groq.com/openai/v1/chat/completions', {
+        fetchWithRetry('https://api.groq.com/openai/v1/chat/completions', {
           method: 'POST',
           headers: {
             Authorization: `Bearer ${keyInfo.key}`,
@@ -1069,6 +1003,10 @@ export default async function handler(req, res) {
     return
   }
 
+  if (!enforceRateLimit(req, res, { scope: 'analyze', max: 10 })) {
+    return
+  }
+
   const { type, payload } = req.body || {}
 
   if (!type) {
@@ -1089,11 +1027,20 @@ export default async function handler(req, res) {
 
   try {
     if (type === 'message') {
+      const rawMessage = payload?.message || ''
+      const messageCacheKey = buildScanCacheKey('message', rawMessage)
+      const cachedMessage = getCachedScanResult(messageCacheKey)
+      if (cachedMessage) {
+        res.status(200).json(cachedMessage)
+        return
+      }
+
       // Community feed pre-check for messages
-      const msgText = normalize(payload?.message || '')
+      const msgText = normalize(rawMessage)
       const msgHash = hashDomain(msgText.substring(0, 200))
       const communityHit = await checkCommunityFeed(msgHash)
       if (communityHit) {
+        setCachedScanResult(messageCacheKey, communityHit)
         res.status(200).json(communityHit)
         return
       }
@@ -1116,6 +1063,7 @@ export default async function handler(req, res) {
         if (groq.fraud_score >= 61) {
           recordThreatIndicator(msgHash, 'message', groq.fraud_score, groq.reasonCodes || [])
         }
+        setCachedScanResult(messageCacheKey, groq)
         if (debug) groq.ai_diagnostics = aiDiagnostics
         res.status(200).json(groq)
         return
@@ -1144,6 +1092,13 @@ export default async function handler(req, res) {
     }
 
     if (type === 'link') {
+      const linkCacheKey = buildScanCacheKey('link', payload?.url || '')
+      const cachedLink = getCachedScanResult(linkCacheKey)
+      if (cachedLink) {
+        res.status(200).json(cachedLink)
+        return
+      }
+
       const domain = extractDomain(payload?.url || '')
       
       // Community feed pre-check
@@ -1204,6 +1159,7 @@ export default async function handler(req, res) {
         if (combined.fraud_score >= 61 && domain) {
           recordThreatIndicator(hashDomain(domain), 'link', combined.fraud_score, combined.reasonCodes || [])
         }
+        setCachedScanResult(linkCacheKey, combined)
         if (debug) combined.ai_diagnostics = aiDiagnostics
         console.log('[TrustBreak AI][verdict]', {
           type,

@@ -3,6 +3,17 @@ import {
   scoreToRisk,
 } from '../src/lib/scanner.js'
 import { filterValidReasonCodes } from '../src/lib/reasonCodes.js'
+import {
+  buildScanCacheKey,
+  getCachedScanResult,
+  setCachedScanResult,
+  enforceRateLimit,
+  fetchWithRetry,
+} from './_lib/resilience.js'
+import {
+  runMultimodalAnalysisWithRouter,
+  runTextAnalysisWithRouter,
+} from '../src/lib/aiRouter.js'
 
 export const config = {
   api: {
@@ -38,6 +49,10 @@ export default async function handler(req, res) {
     return
   }
 
+  if (!enforceRateLimit(req, res, { scope: 'analyze-voice', max: 10 })) {
+    return
+  }
+
   try {
     const { audio_base64, mime_type, transcript_text } = req.body || {}
 
@@ -52,6 +67,19 @@ export default async function handler(req, res) {
     let transcript = transcript_text || ''
     let aiResult = null
 
+    const voiceCacheKey = transcript_text
+      ? buildScanCacheKey('voice', transcript_text)
+      : audio_base64
+      ? buildScanCacheKey('voice-audio', audio_base64.slice(0, 4096) + ':' + audio_base64.length)
+      : null
+    if (voiceCacheKey) {
+      const cachedVoice = getCachedScanResult(voiceCacheKey)
+      if (cachedVoice) {
+        res.status(200).json(cachedVoice)
+        return
+      }
+    }
+
     const headerGemini = req?.headers?.['x-gemini-api-key']
     const headerGroq = req?.headers?.['x-groq-api-key']
     const rawGemini = (headerGemini && typeof headerGemini === 'string' && !headerGemini.includes('placeholder')) ? headerGemini : process.env.GEMINI_API_KEY || process.env.VITE_GEMINI_API_KEY
@@ -59,10 +87,9 @@ export default async function handler(req, res) {
     const geminiKey = rawGemini && !rawGemini.includes('placeholder') && !rawGemini.includes('your_gemini') ? rawGemini.trim() : null
     const groqKey = rawGroq && !rawGroq.includes('placeholder') && !rawGroq.includes('your_groq') ? rawGroq.trim() : null
 
-    // 1. Try Gemini 1.5 Flash Multimodal Audio AI if Gemini key is set
+    // 1. Try centralized Multimodal Router (gemini-3.5-flash-lite -> gemini-3.8-flash)
     if (geminiKey) {
       try {
-        const apiKey = geminiKey
         const prompt = `You are TrustBreak AI, an elite voice call scam, deepfake, voice cloning, and social engineering threat detector.
 Analyze this audio recording or transcript for synthesized voice indicators, emergency extortion traps, banking impersonation, OTP coercion, and financial fraud.
 Return strict JSON only with keys:
@@ -87,47 +114,22 @@ Return strict JSON only with keys:
           parts.push({ text: `Transcript to analyze: """${transcript}"""` })
         }
 
-        const geminiResp = await fetch(
-          `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`,
-          {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              contents: [{ parts }],
-              generationConfig: {
-                temperature: 0.2,
-                responseMimeType: 'application/json',
-              },
-            }),
-          }
-        )
-
-        if (geminiResp.ok) {
-          const data = await geminiResp.json()
-          const text = data?.candidates?.[0]?.content?.parts?.map((p) => p.text || '').join(' ') || ''
-          const parsed = JSON.parse(text)
-          if (parsed && typeof parsed.fraud_score !== 'undefined') {
-            const score = Math.max(0, Math.min(100, Number(parsed.fraud_score || 0)))
-            aiResult = {
-              transcript: parsed.transcript || transcript,
-              fraud_score: score,
-              risk_level: ['safe', 'suspicious', 'scam'].includes(parsed.risk_level) ? parsed.risk_level : scoreToRisk(score),
-              confidence: parsed.confidence || 'high',
-              reasons: Array.isArray(parsed.reasons) ? parsed.reasons.map(String) : [],
-              analysis: String(parsed.analysis || parsed.ai_analysis || ''),
-              ai_analysis: String(parsed.analysis || parsed.ai_analysis || ''),
-              attack_intent: String(parsed.attack_intent || ''),
-              reasonCodes: filterValidReasonCodes(parsed.reasonCodes || []),
-              source: 'gemini',
-            }
+        const routedVoice = await runMultimodalAnalysisWithRouter({
+          parts,
+          geminiKey,
+        })
+        if (routedVoice) {
+          aiResult = {
+            ...routedVoice,
+            transcript: routedVoice.transcript || transcript,
           }
         }
       } catch (err) {
-        console.warn('[analyze-voice] Gemini audio failed:', err.message)
+        console.warn('[analyze-voice] Gemini multimodal router failed:', err.message)
       }
     }
 
-    // 2. Try Groq Whisper + Llama 3.3 if Gemini was not used or failed
+    // 2. Try Groq Whisper + centralized Text Router if multimodal was not used or failed
     if (!aiResult && groqKey) {
       if (!transcript && audio_base64) {
         try {
@@ -139,9 +141,9 @@ Return strict JSON only with keys:
           formData.append('file', blob, `audio.${ext}`)
           formData.append('model', 'whisper-large-v3')
 
-          const whisperResp = await fetch('https://api.groq.com/openai/v1/audio/transcriptions', {
+          const whisperResp = await fetchWithRetry('https://api.groq.com/openai/v1/audio/transcriptions', {
             method: 'POST',
-            headers: { Authorization: `Bearer ${process.env.GROQ_API_KEY}` },
+            headers: { Authorization: `Bearer ${groqKey}` },
             body: formData,
           })
 
@@ -156,55 +158,29 @@ Return strict JSON only with keys:
 
       if (transcript) {
         try {
-          const groqResp = await fetch('https://api.groq.com/openai/v1/chat/completions', {
-            method: 'POST',
-            headers: {
-              Authorization: `Bearer ${process.env.GROQ_API_KEY}`,
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              model: 'llama-3.3-70b-versatile',
-              temperature: 0.1,
-              response_format: { type: 'json_object' },
-              messages: [
-                { role: 'system', content: 'You are TrustBreak AI. Always respond in strict JSON.' },
-                {
-                  role: 'user',
-                  content: `Analyze this transcribed call for voice scams, deepfakes, impersonation, urgency pressure, and financial fraud.
+          const textPrompt = `Analyze this transcribed call for voice scams, deepfakes, impersonation, urgency pressure, and financial fraud.
 Transcript: """${transcript}"""
-Return strict JSON with keys: fraud_score (0-100), risk_level ("safe"|"suspicious"|"scam"), confidence, reasons (array), analysis, attack_intent, reasonCodes (array).`,
-                },
-              ],
-            }),
+Return strict JSON with keys: fraud_score (0-100), risk_level ("safe"|"suspicious"|"scam"), confidence, reasons (array), analysis, attack_intent, reasonCodes (array).`
+          const routedText = await runTextAnalysisWithRouter({
+            prompt: textPrompt,
+            groqKey,
+            geminiKey,
           })
-
-          if (groqResp.ok) {
-            const data = await groqResp.json()
-            const text = data?.choices?.[0]?.message?.content
-            const parsed = JSON.parse(text)
-            if (parsed && typeof parsed.fraud_score !== 'undefined') {
-              const score = Math.max(0, Math.min(100, Number(parsed.fraud_score || 0)))
-              aiResult = {
-                transcript,
-                fraud_score: score,
-                risk_level: ['safe', 'suspicious', 'scam'].includes(parsed.risk_level) ? parsed.risk_level : scoreToRisk(score),
-                confidence: parsed.confidence || 'high',
-                reasons: Array.isArray(parsed.reasons) ? parsed.reasons.map(String) : [],
-                analysis: String(parsed.analysis || ''),
-                ai_analysis: String(parsed.analysis || ''),
-                attack_intent: String(parsed.attack_intent || ''),
-                reasonCodes: filterValidReasonCodes(parsed.reasonCodes || []),
-                source: 'groq-whisper',
-              }
+          if (routedText) {
+            aiResult = {
+              ...routedText,
+              transcript,
+              source: routedText.source === 'groq' ? 'groq-whisper' : routedText.source,
             }
           }
         } catch (err) {
-          console.warn('[analyze-voice] Groq Llama failed:', err.message)
+          console.warn('[analyze-voice] Text router failed:', err.message)
         }
       }
     }
 
     if (aiResult) {
+      if (voiceCacheKey) setCachedScanResult(voiceCacheKey, aiResult)
       res.status(200).json(aiResult)
       return
     }

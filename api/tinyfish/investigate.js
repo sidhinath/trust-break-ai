@@ -1,6 +1,7 @@
 import { runTinyFishInvestigation } from '../../src/lib/tinyfish.js'
 import { analyzeUrlContent, scoreToRisk } from '../../src/lib/scanner.js'
 import { filterValidReasonCodes } from '../../src/lib/reasonCodes.js'
+import { enforceRateLimit } from '../_lib/resilience.js'
 
 // Simple in-memory rate limiting map for abuse prevention
 const rateLimitMap = new Map()
@@ -135,13 +136,7 @@ export default async function handler(req, res) {
   }
 
   // Rate Limiting
-  const clientIp = req.headers['x-forwarded-for']?.split(',')[0]?.trim() || req.socket?.remoteAddress || '127.0.0.1'
-  if (!checkRateLimit(clientIp)) {
-    res.status(429).json({
-      status: 'error',
-      errorCode: 'RATE_LIMIT_EXCEEDED',
-      message: 'Rate limit exceeded. Maximum 10 investigations per minute.',
-    })
+  if (!enforceRateLimit(req, res, { scope: 'investigate', max: 10 })) {
     return
   }
 

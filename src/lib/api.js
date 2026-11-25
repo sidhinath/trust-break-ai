@@ -18,6 +18,12 @@ import {
   normalizeVisionResult,
   parseJsonFromText,
 } from './vision.js'
+import {
+  TEXT_MODEL_CHAIN,
+  runTextAnalysisWithRouter,
+  runMultimodalAnalysisWithRouter,
+  routerFetchWithRetry,
+} from './aiRouter.js'
 
 function getGroqKey() {
   let key = ''
@@ -87,59 +93,31 @@ Return STRICT JSON only with keys:
     return null
   }
 
-  const models = ['llama-3.3-70b-versatile', 'llama3-70b-8192', 'mixtral-8x7b-32768']
-  for (const model of models) {
-    try {
-      const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
-        method: 'POST',
-        headers: {
-          Authorization: `Bearer ${apiKey}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          model,
-          temperature: 0.1,
-          response_format: { type: 'json_object' },
-          messages: [
-            { role: 'system', content: 'You are TrustBreak AI. Respond in strict JSON only.' },
-            { role: 'user', content: prompt },
-          ],
-        }),
-      })
-
-      if (!response.ok) continue
-      const data = await response.json()
-      const text = data?.choices?.[0]?.message?.content
-      if (!text) continue
-      const parsed = JSON.parse(text)
-      if (parsed && typeof parsed.fraud_score !== 'undefined') {
-        const score = Math.max(0, Math.min(100, Number(parsed.fraud_score || 0)))
-        const risk = ['safe', 'suspicious', 'scam'].includes(parsed.risk_level) ? parsed.risk_level : scoreToRisk(score)
-        const contentStr = type === 'message' ? payload.message : (payload.url || '')
-
-        return {
-          fraud_score: score,
-          risk_level: risk,
-          confidence: parsed.confidence || (score > 70 ? 'high' : 'medium'),
-          reasons: Array.isArray(parsed.reasons) ? parsed.reasons.map((r) => String(r)) : [],
-          analysis: String(parsed.analysis || ''),
-          ai_analysis: String(parsed.analysis || ''),
-          attack_intent: String(parsed.attack_intent || inferAttackerIntent(contentStr, '', risk)),
-          signals: extractAttackSignals(contentStr),
-          threat_reconstruction: reconstructAttackChain(contentStr, type === 'link' ? payload.url : '', risk),
-          similar_patterns: findSimilarScams(contentStr),
-          reasonCodes: filterValidReasonCodes(parsed.reasonCodes || inferReasonCodes(contentStr, type === 'link' ? payload.url : '', {}, risk)),
-          source: 'groq',
-          emergency_actions: {
-            stop: 'Do NOT click any links, enter PINs, or share verification codes.',
-            verify: 'Call the organization using their official verified hotline.',
-            report: 'Record this threat in the TrustBreak AI community database.',
-            secure: 'Freeze affected cards or rotate credentials immediately if compromised.'
-          }
-        }
-      }
-    } catch {
-      continue
+  const routerResult = await runTextAnalysisWithRouter({
+    prompt,
+    groqKey: apiKey,
+    geminiKey: getGeminiKey(),
+  })
+  if (routerResult) {
+    const risk = routerResult.verdict
+    const contentStr = type === 'message' ? payload.message : (payload.url || '')
+    return {
+      ...routerResult,
+      attack_intent: routerResult.attack_intent || inferAttackerIntent(contentStr, '', risk),
+      signals: extractAttackSignals(contentStr),
+      threat_reconstruction: reconstructAttackChain(contentStr, type === 'link' ? payload.url : '', risk),
+      similar_patterns: findSimilarScams(contentStr),
+      reasonCodes: filterValidReasonCodes(
+        routerResult.reasonCodes?.length
+          ? routerResult.reasonCodes
+          : inferReasonCodes(contentStr, type === 'link' ? payload.url : '', {}, risk)
+      ),
+      emergency_actions: {
+        stop: 'Do NOT click any links, enter PINs, or share verification codes.',
+        verify: 'Call the organization using their official verified hotline.',
+        report: 'Record this threat in the TrustBreak AI community database.',
+        secure: 'Freeze affected cards or rotate credentials immediately if compromised.',
+      },
     }
   }
   return null
@@ -258,49 +236,18 @@ Return strict JSON only with keys:
     return null
   }
 
-  const models = ['gemini-1.5-flash', 'gemini-1.5-pro', 'gemini-2.0-flash-exp']
-  for (const model of models) {
-    try {
-      const response = await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`,
-        {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            contents: [{ parts }],
-            generationConfig: {
-              temperature: 0.2,
-              responseMimeType: 'application/json',
-            },
-          }),
-        }
-      )
-
-      if (!response.ok) continue
-      const data = await response.json()
-      const text = data?.candidates?.[0]?.content?.parts?.map((p) => p.text || '').join(' ') || ''
-      if (!text) continue
-      const parsed = JSON.parse(text)
-      if (parsed && typeof parsed.fraud_score !== 'undefined') {
-        const score = Math.max(0, Math.min(100, Number(parsed.fraud_score || 0)))
-        const risk = ['safe', 'suspicious', 'scam'].includes(parsed.risk_level) ? parsed.risk_level : scoreToRisk(score)
-
-        return {
-          transcript: String(parsed.transcript || payload.transcript_text || 'Audio recording analyzed'),
-          fraud_score: score,
-          risk_level: risk,
-          confidence: parsed.confidence || (score > 70 ? 'high' : 'medium'),
-          reasons: Array.isArray(parsed.reasons) ? parsed.reasons.map((r) => String(r)) : [],
-          analysis: String(parsed.analysis || parsed.ai_analysis || ''),
-          ai_analysis: String(parsed.ai_analysis || parsed.analysis || ''),
-          attack_intent: String(parsed.attack_intent || inferAttackerIntent(parsed.transcript || '', '', risk)),
-          threat_reconstruction: reconstructAttackChain(parsed.transcript || 'Voice recording analysis', '', risk),
-          reasonCodes: filterValidReasonCodes(parsed.reasonCodes || []),
-          source: 'gemini',
-        }
-      }
-    } catch {
-      continue
+  const routed = await runMultimodalAnalysisWithRouter({
+    parts,
+    geminiKey: apiKey,
+  })
+  if (routed) {
+    const risk = routed.verdict
+    const transcriptText = String(routed.transcript || payload.transcript_text || 'Audio recording analyzed')
+    return {
+      ...routed,
+      transcript: transcriptText,
+      attack_intent: routed.attack_intent || inferAttackerIntent(transcriptText, '', risk),
+      threat_reconstruction: reconstructAttackChain(transcriptText || 'Voice recording analysis', '', risk),
     }
   }
   return null
@@ -343,10 +290,10 @@ async function analyzeVoiceWithClientGroq(payload) {
 
   if (!transcript) return null
 
-  const models = ['llama-3.3-70b-versatile', 'llama3-70b-8192', 'mixtral-8x7b-32768']
-  for (const model of models) {
+  const groqSteps = TEXT_MODEL_CHAIN.filter((s) => s.provider === 'groq')
+  for (const { model } of groqSteps) {
     try {
-      const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+      const response = await routerFetchWithRetry('https://api.groq.com/openai/v1/chat/completions', {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${apiKey}`,
