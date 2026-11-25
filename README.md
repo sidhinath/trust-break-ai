@@ -1,227 +1,223 @@
-# TrustBreak AI
+# TrustBreak AI — Autonomous Scam Defense Platform
 
-> **Autonomous Multi-Modal AI Cybersecurity & Digital Scam Prevention Platform**
+> **Explainable, Multi-Modal Cyber Defense Against Social Engineering, Phishing, Deepfakes & Fraud**
 
-[![Live Demo](https://img.shields.io/badge/Live%20Demo-trust--break--ai.vercel.app-00e5ff?style=for-the-badge&logo=vercel&logoColor=white)](https://trust-break-ai.vercel.app)
-[![Repository](https://img.shields.io/badge/GitHub-sidhinath%2Ftrust--break--ai-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/sidhinath/trust-break-ai.git)
-[![License](https://img.shields.io/badge/License-MIT-10b981?style=for-the-badge)](https://opensource.org/licenses/MIT)
+[![Live Demo](https://img.shields.io/badge/Live%20Production-trust--break--ai.vercel.app-10b981?style=for-the-badge&logo=vercel&logoColor=white)](https://trust-break-ai.vercel.app)
+[![GitHub Repository](https://img.shields.io/badge/GitHub-sidhinath%2Ftrust--break--ai-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/sidhinath/trust-break-ai.git)
+[![PWA Ready](https://img.shields.io/badge/PWA-Installable%20(Android%20%7C%20iOS%20%7C%20Desktop)-34d399?style=for-the-badge&logo=pwa&logoColor=white)](https://trust-break-ai.vercel.app)
+[![License](https://img.shields.io/badge/License-MIT-059669?style=for-the-badge)](https://opensource.org/licenses/MIT)
 
-**Live App:** https://trust-break-ai.vercel.app  
-**Source Code:** https://github.com/sidhinath/trust-break-ai.git
-
----
-
-## Overview
-
-TrustBreak AI is a full-stack, multi-modal cyber-defense platform that detects, explains, and mitigates social engineering threats across **messages, links, screenshots, QR codes, and voice calls** in real time.
-
-Instead of giving users an unexplained "scam" label, TrustBreak AI returns an explainable verdict with:
-
-- A fraud score from `0–100`
-- A risk level (`safe`, `suspicious`, `scam`)
-- Standardized reason codes
-- A plain-English explanation
-- The attacker's likely intent
-
-The platform combines fast LLM inference, multimodal vision, speech transcription, live web investigation, deterministic local heuristics, and a Supabase-backed data layer. It also includes a **Senior & Family Safety Mode**, a **Chrome MV3 Browser Shield extension**, and an **Android build via Capacitor**.
+**Live Web Application:** [https://trust-break-ai.vercel.app](https://trust-break-ai.vercel.app)  
+**Source Repository:** [https://github.com/sidhinath/trust-break-ai.git](https://github.com/sidhinath/trust-break-ai.git)
 
 ---
 
-## AI Models Used
+## 🌟 Executive Summary
 
-TrustBreak AI uses a **primary model + automatic fallback chain** so the platform keeps working if a provider is unavailable, rate-limited, or missing an API key.
+**TrustBreak AI** is a production-grade, multi-modal cyber-defense platform designed to detect, explain, and mitigate modern digital deception in real time. From sophisticated spear-phishing SMS (smishing) and deceptive QR code redirections (quishing) to AI-generated voice cloning and weaponized payment portals, TrustBreak AI breaks down attacks into explainable, actionable insights.
 
-| Provider | Model | Purpose |
-|---|---|---|
-| **Groq** | `llama-3.3-70b-versatile` | Primary text analysis for messages, URLs, and community scam reports |
-| **Groq** | `llama-3.1-8b-instant` | Fast fallback for text analysis |
-| **Groq** | `llama3-70b-8192`, `llama3-8b-8192` | Legacy Llama fallbacks |
-| **Groq** | `mixtral-8x7b-32768` | Additional fallback model |
-| **Groq** | `whisper-large-v3` | Speech-to-text transcription for voice and audio scans |
-| **Google Gemini** | `gemini-2.5-flash` | Primary multimodal vision model for screenshots and OCR |
-| **Google Gemini** | `gemini-2.0-flash`, `gemini-1.5-flash`, `gemini-1.5-pro` | Vision fallback chain |
-| **Google Gemini** | `gemini-1.5-flash` | Audio/deepfake call and voice-cloning analysis |
-| **OpenAI** | `gpt-4.1-mini` | Optional vision fallback for screenshot analysis |
-| **TinyFish** | Web automation agent | Live headless-browser investigation of suspicious websites |
-| **Local engine** | Deterministic heuristic rules + `fft.js` | Offline fallback, URL/domain rules, and acoustic spectral analysis |
+Instead of presenting an opaque or arbitrary warning label, TrustBreak AI delivers **transparent, explainable security verdicts**:
+- **Dynamic Threat Score (`0–100`)** calibrated by multi-layered heuristic and LLM telemetry.
+- **Categorical Risk Tiering** (`Safe`, `Suspicious`, `High Risk / Malicious`).
+- **Standardized MITRE ATT&CK & Reason Codes** with forensic indicator breakdowns.
+- **Plain-Language Explanations** detailing attacker psychology, deceptive tricks, and step-by-step guidance.
+- **Instant Emergency Actions** including 1-tap blocking, evidence export, and direct integration with India's **1930 Cyber Crime Helpline**.
 
-### How the fallback chain works
-
-1. **Text scans** → Groq Llama 3.3 70B → smaller Groq models → local heuristic engine.
-2. **Screenshot scans** → Gemini 2.5 Flash → Gemini fallback models → OpenAI GPT-4.1-mini → local OCR/heuristics.
-3. **Voice scans** → Gemini audio analysis → Groq Whisper transcription + Llama analysis → local acoustic heuristics.
-4. **Web investigation** → TinyFish live browser agent, with graceful failure if the service is unavailable.
-
-The app remains usable without AI keys: it automatically falls back to on-device heuristic analysis.
+Built with a high-contrast **Emerald Green (`#10b981`) Cybersecurity Design System**, smooth Dark/Light theme switching, zero mobile input freezes, and an offline-first architecture, TrustBreak AI provides continuous defense across Web, Mobile PWA, and Desktop.
 
 ---
 
-## Key Features
+## 🛡️ Multi-Modal Protection Engines
 
-- **Multi-modal scanning** — SMS/email text, URLs, screenshots, QR codes, and voice recordings
-- **Explainable AI verdicts** — fraud score, risk level, confidence, reasons, attack intent, and fixed reason codes
-- **Voice & deepfake detection** — Groq Whisper transcription plus acoustic spectral analysis with `fft.js`
-- **Screenshot & OCR analysis** — Gemini vision with OpenAI fallback
-- **QR code inspector** — camera scanning or image upload using `jsQR`
-- **Browser Shield** — Chrome Manifest V3 extension for pre-click URL protection
-- **Live threat intelligence** — community reports, Supabase Realtime updates, and a live threat radar
-- **Senior & Family Safety Mode** — larger touch targets, high contrast, and simplified explanations
-- **Dual persistence** — Supabase database with local-first `localStorage` fallback
-- **Offline resilience** — deterministic local rules keep core scanning available without network access
-- **Authentication** — Supabase email/password auth, email confirmation, guest browsing, and protected routes
-- **Cross-platform** — responsive web app plus Android support through Capacitor
+TrustBreak AI unifies comprehensive digital scam detection under specialized analysis suites:
 
----
-
-## Authentication & Access Control
-
-TrustBreak AI uses **Supabase Auth** with the following behavior:
-
-- **Sign Up** with full name, email, and password
-- **Email confirmation** before the first sign-in (configurable in Supabase)
-- **Sign In / Sign Out** from the navbar and account modal
-- **Guest mode** — visitors can skip onboarding and browse public pages
-- **Protected routes** — scanners, reports, settings, profile, and other sensitive pages require a real account
-- **Pre-navigation login prompt** — guests are prompted before opening a protected feature
-- **Session persistence** — sessions survive page reloads through Supabase's persisted session and automatic token refresh
-- **Resume after login** — after signing in from a protected-route prompt, the user is taken to the page they originally requested
-
-### Public pages
-
-`Home`, `Threats`, `Technology`, `BusinessModel`, `PrivacyPolicy`, `Terms`, `CookiePolicy`, `RefundPolicy`
-
-### Protected pages
-
-`MessageScanner`, `LinkScanner`, `ScreenshotScanner`, `QRScanner`, `VoiceScanner`, `BrowserShield`, `ScamHeatmap`, `ReportScam`, `Reports`, `Settings`, `Profile`, `PrivacyCenter`
-
----
-
-## Tech Stack
-
-| Layer | Technology |
-|---|---|
-| Frontend | React 18, Vite 6, React Router |
-| Styling / UI | Tailwind CSS, Radix UI, shadcn/ui components, Framer Motion, Lucide icons |
-| Data fetching | TanStack React Query |
-| Charts / Maps | Recharts, React Leaflet |
-| Authentication | Supabase Auth |
-| Database | Supabase PostgreSQL, Row Level Security, Realtime, Storage |
-| AI / Inference | Groq, Google Gemini, OpenAI, TinyFish |
-| Voice / Audio | Web Audio API, `fft.js`, Groq Whisper |
-| QR / Vision | `jsQR`, browser camera APIs, Gemini vision |
-| Backend | Vercel Serverless Functions (`/api`) |
-| Deployment | Vercel Edge CDN + daily Vercel Cron |
-| Mobile | Capacitor (Android) |
-| Browser Extension | Chrome Manifest V3 |
-
----
-
-## Architecture
-
-```text
-User Input
-   │
-   ├── Message / URL ──────► Groq Llama 3.3 70B ──► Fallback Groq models ──► Local heuristics
-   ├── Screenshot / QR ────► Gemini 2.5 Flash ────► Gemini fallbacks ──────► OpenAI GPT-4.1-mini
-   ├── Voice / Audio ──────► Gemini audio ────────► Whisper + Llama ───────► Acoustic heuristics
-   └── Suspicious Website ─► TinyFish browser agent ───────────────────────► Local URL rules
-                                    │
-                                    ▼
-                     Explainable verdict + reason codes
-                                    │
-                                    ▼
-              Supabase (Auth, PostgreSQL, Realtime, Storage)
-                                    │
-                                    ▼
-                    Web app · Android app · Chrome extension
+```
+                                  TRUSTBREAK AI MULTI-MODAL GATEWAY
+                                                  │
+         ┌───────────────────┬────────────────────┼────────────────────┬───────────────────┐
+         ▼                   ▼                    ▼                    ▼                   ▼
+  💬 Message Scanner   🔗 Link Inspector   📸 Vision OCR       🎙️ Voice & Audio    📱 QR Inspector
+  (SMS, WhatsApp,     (Homoglyph/Typos,   (Payment screens,   (Deepfake clones,   (Deceptive URLs,
+   Telegram, Smish)    SSL, Redirection)   Fake KYC, Urgency)  Biometric analysis) UPI payment traps)
+         │                   │                    │                    │                   │
+         └───────────────────┴────────────────────┼────────────────────┴───────────────────┘
+                                                  ▼
+                                     CENTRALIZED `aiRouter`
+                           (Deduplication Cache + Multi-Provider Fallback)
+                                                  │
+                 ┌────────────────────────────────┴──────────────────────────────┐
+                 ▼                                                               ▼
+        [TEXT / LINK / QR PIPELINE]                                  [MULTIMODAL / AUDIO PIPELINE]
+    1. Primary: openai/gpt-oss-20b (Groq)                       1. Primary: gemini-3.5-flash-lite (Google)
+    2. Fallback 1: llama-3.1-8b-instant (Groq)                  2. Fallback 1: gemini-3.8-flash (Google)
+    3. Fallback 2: gemini-3.5-flash-lite (Google)               3. Fallback 2: Client-side FFT & Audio Heuristics
+    4. Offline: Deterministic Heuristic Engine
+                                                  │
+                                                  ▼
+                                       NORMALIZED JSON VERDICT
+                        (Score, Risk Tier, Reason Codes, Plain Explanations)
 ```
 
-Serverless endpoints:
+### 1. Message Scanner (Smishing & Social Engineering)
+- Inspects SMS, WhatsApp, Telegram, and email communications for linguistic urgency, psychological coercion, impersonation (banks, postal services, tax authorities), and credential harvesting.
+- Extracts and isolates embedded URLs and phone numbers for deep inspection.
 
-- `/api/analyze` — text, URL, screenshot, and report analysis
-- `/api/analyze-voice` — voice transcription and deepfake/scam analysis
-- `/api/blocklist-lite` — pre-click interceptor blocklist
-- `/api/tinyfish/investigate` — live web investigation
-- `/api/health` — health check
-- `/api/cron/sync-feeds` — daily threat-feed synchronization
+### 2. Link & URL Inspector
+- Evaluates URLs against known threat feeds, internationalized domain names (IDN homoglyph attacks), open redirectors, typosquatting patterns, and deceptive subdomains (e.g., `paypal.com.verify-login.ru`).
+- Performs live header verification, protocol integrity validation, and suspicious TLD flagging (`.top`, `.xyz`, `.click`, `.buzz`).
+
+### 3. Screenshot Vision OCR (Multimodal Image Scanner)
+- Upload or capture screenshots of mobile screens, suspicious chats, fake payment receipts, banking portals, or fake electricity bill cut-off notices.
+- Utilizes Google Gemini's multimodal vision engine to extract text, identify fake branding elements, detect forged security seals, and spotlight extortion cues.
+- Includes automatic client-side image compression to ensure instant uploads on slow mobile cellular networks.
+
+### 4. QR Code Inspector (Quishing Defense)
+- Real-time in-browser camera scanning or image drag-and-drop powered by `jsQR`.
+- Safely extracts the encapsulated payload (URL, UPI payment string, Wi-Fi configuration, or vCard) and subjects it to full multi-modal threat analysis *before* execution.
+- Identifies malicious payment request strings that attempt to drain accounts via unauthorized UPI intent links.
+
+### 5. Voice & Audio Deepfake Detector
+- Analyzes voice call recordings, suspicious voicemails, and audio messages to protect users against synthetic voice cloning, CEO fraud, and virtual kidnapping scams.
+- Employs Web Audio API and `fft.js` for acoustic spectral analysis (frequency variance, pitch consistency, synthetic silence detection) combined with automated speech-to-text transcription.
+
+### 6. Threat Radar & Bento Intelligence
+- Asymmetric 3-column Bento grid featuring live global threat telemetry, regional threat distributions, radar scans, and community-reported attack vectors.
+- Supabase-backed live threat feed with instant search, category filters, and verifiable community upvoting.
 
 ---
 
-## Getting Started
+## 👨‍👩‍👧‍👦 Senior & Family Safety Mode
+
+TrustBreak AI features a dedicated, accessible interface mode tailored specifically for elderly citizens, non-technical family members, and digitally vulnerable users.
+
+- **Bilingual Interface (English & हिन्दी):** Complete real-time localization across all buttons, explanations, badges, and scanner prompts.
+- **Voice Guide (`Read Aloud` / `बोलकर समझाएं`):** Integrated text-to-speech audio narration using native Web Speech Synthesis with automatic language detection (English or Hindi voice).
+- **Simplified 1-Tap Scans:** Direct camera photo upload, clipboard paste, and large 56px touch targets optimized for tremor or motor difficulty.
+- **Plain-English Explanations:** Strips complex technical jargon (e.g., "heuristic entropy variance") and presents clear, comforting guidance (e.g., *"This message is fake. Do not click the link or send any money."*).
+- **Direct 1930 Helpline Access:** Instant 1-tap phone dialer button to reach India's **National Cyber Crime Helpline (1930)** and access national complaint guidelines.
+
+---
+
+## ⚡ Centralized AI Router Architecture (`aiRouter`)
+
+TrustBreak AI features an enterprise-grade, multi-provider model routing layer located at `src/lib/aiRouter.js` and `api/_lib/resilience.js`. This architecture guarantees high availability, zero vendor lock-in, and immunity against API rate limits or regional outages.
+
+### 1. Dual Fallback Chains
+- **Text / Link / QR / Extension Pipeline:**
+  1. **Primary:** `openai/gpt-oss-20b` (Groq LPU — near-instant inference speed)
+  2. **Fallback 1:** `llama-3.1-8b-instant` (Groq LPU — high daily token quota)
+  3. **Fallback 2:** `gemini-3.5-flash-lite` (Google Gemini — cross-provider failover)
+  4. **Fallback 3:** Local Deterministic Heuristic Engine (zero network dependency)
+- **Vision / Screenshot / Audio Pipeline:**
+  1. **Primary:** `gemini-3.5-flash-lite` (Google Gemini — high multimodal throughput & 500 RPD)
+  2. **Fallback 1:** `gemini-3.8-flash` (Google Gemini — enterprise multimodal backup)
+  3. **Fallback 2:** Client-Side Acoustic & Optical Heuristics
+
+### 2. High-Resilience & Anti-Crash Mechanisms
+- **24-Hour Deduplication Cache:** Every scanned URL or message is hashed (SHA-256). Identical repeated scans return immediately from the local/edge cache, eliminating duplicate external API calls during viral phishing waves.
+- **Automatic 1.5s Jitter Retry on 429/503:** If Groq or Gemini returns HTTP 429 (Rate Limit) or 503 (Provider Overload), the engine pauses for 1.5 seconds and retries seamlessly before triggering cross-provider failover.
+- **Per-IP Rate Limiting:** All `/api/*` endpoints are protected with lightweight, in-memory sliding-window rate limiters to prevent API abuse.
+- **Unified Normalized JSON Schema:** Regardless of which model or provider responds, the payload is normalized into a strict schema (`score`, `verdict`, `category`, `summary`, `indicators`, `recommendation`), ensuring that the frontend UI never breaks or receives malformed data.
+
+---
+
+## 📲 Progressive Web App (PWA) & Mobile Ready
+
+TrustBreak AI is a certified, fully installable **Progressive Web App (PWA)**:
+
+- **Cross-Platform Standalone Mode:** Installable directly to the home screen or desktop without third-party app stores on **Android, iOS, macOS, Windows, and Linux**.
+- **Native Install Interception:** Intercepts `beforeinstallprompt` to surface a clean, accessible **"📲 Install App"** button inside the sidebar, mobile navigation drawer, and Settings page.
+- **Zero Input Freeze on Mobile:** Initial splash screen unmounts instantly (`<600ms`), while heavy Recharts and Leaflet graphics hydrate asynchronously in the background. Mobile header buttons (`← Back`, `Sign In`, `Menu`) remain 100% responsive from the first frame (`0.0s`).
+- **Offline Shell & Caching:** Standard Service Worker (`public/sw.js`) caches static assets, logos, fonts, and core views for instant loading under intermittent or disconnected network states.
+
+---
+
+## 🧩 Chrome Browser Shield Extension (Manifest V3)
+
+TrustBreak AI includes an official Manifest V3 Chrome extension located in the `extension/` directory, extending real-time phishing protection directly into everyday browsing.
+
+### Features:
+- Real-time pre-click link inspection and background threat analysis.
+- Live DOM context scanning using Groq LPU models.
+- Direct 1-click bridge to open detailed threat reports in the TrustBreak AI Web App.
+
+### Installation Instructions:
+1. Build the production extension package:
+   ```bash
+   npm run build:extension
+   ```
+2. Open Google Chrome (or Brave / Microsoft Edge / Opera) and navigate to:
+   ```text
+   chrome://extensions
+   ```
+3. Toggle the **Developer mode** switch in the upper-right corner.
+4. Click **Load unpacked** in the top-left toolbar.
+5. Select the `dist-extension/` directory generated by the build (or select `extension/` for live source development).
+
+---
+
+## 🛠️ Technology Stack
+
+| Domain | Technologies & Libraries |
+|---|---|
+| **Core Framework** | React 18, Vite 6, React Router (HashRouter for edge/PWA compatibility) |
+| **Styling & Design System** | Tailwind CSS 3, Radix UI primitives, Lucide React, Framer Motion |
+| **AI Inference & LLMs** | Groq LPU (`gpt-oss-20b`, `llama-3.1-8b-instant`, `whisper-large-v3`), Google Gemini (`gemini-3.5-flash-lite`, `gemini-3.8-flash`) |
+| **Data Layer & Realtime** | Supabase (PostgreSQL, Row Level Security, Supabase Auth, Supabase Realtime) |
+| **State & Async Querying** | TanStack React Query v5 |
+| **Computer Vision & Audio** | `jsQR`, Canvas API, Web Audio API, `fft.js` |
+| **Edge Serverless Backend** | Vercel Serverless Functions (`/api`), Vercel Cron |
+| **Mobile & Extension** | Progressive Web App (PWA) + Capacitor Android + Chrome Manifest V3 Extension |
+
+---
+
+## 🚀 Local Development & Setup
 
 ### Prerequisites
+- **Node.js:** v18.0.0+ (Node 20 or 22 LTS recommended)
+- **Package Manager:** `npm` (v9+)
+- **API Keys (Optional but recommended):**
+  - Groq API Key ([console.groq.com](https://console.groq.com))
+  - Google Gemini API Key ([aistudio.google.com](https://aistudio.google.com))
+  - Supabase Project ([supabase.com](https://supabase.com))
 
-- Node.js 18+ (Node 20 recommended)
-- npm
-- A Supabase project (for authentication and data persistence)
-- Optional: Groq, Gemini, OpenAI, and TinyFish API keys for full AI functionality
-
-### 1. Clone the repository
-
+### 1. Clone & Install Dependencies
 ```bash
 git clone https://github.com/sidhinath/trust-break-ai.git
 cd trust-break-ai
-```
-
-### 2. Install dependencies
-
-```bash
 npm install
 ```
 
-### 3. Configure environment variables
-
-Copy `.env.example` to `.env` and fill in the values.
-
-**Client-safe variables** (bundled into the frontend):
-
-```env
-VITE_SUPABASE_URL="https://your-project-ref.supabase.co"
-VITE_SUPABASE_ANON_KEY="your-supabase-publishable-or-anon-key"
+### 2. Configure Environment Variables
+Copy `.env.example` to create your local `.env`:
+```bash
+cp .env.example .env
 ```
 
-**Server-only variables** (never prefix with `VITE_`):
-
+Populate the required configuration keys:
 ```env
-SUPABASE_URL="https://your-project-ref.supabase.co"
-SUPABASE_ANON_KEY="your-supabase-anon-key"
+# Client-Safe Variables (Frontend Bundled)
+VITE_SUPABASE_URL="https://your-project.supabase.co"
+VITE_SUPABASE_ANON_KEY="your-anon-key"
+
+# Serverless & Edge API Keys (Never commit to public VCS)
+GROQ_API_KEY="gsk_your_groq_api_key"
+GEMINI_API_KEY="AIzaSy_your_gemini_api_key"
+SUPABASE_URL="https://your-project.supabase.co"
 SUPABASE_SERVICE_ROLE_KEY="your-service-role-key"
 
-GROQ_API_KEY="your-groq-api-key"
-GEMINI_API_KEY="your-gemini-api-key"
-OPENAI_API_KEY="your-openai-api-key"          # optional
-TINYFISH_API_KEY="your-tinyfish-api-key"      # optional
-
-CRON_SECRET="your-high-entropy-secret"
+# Operational Feature Flags
 ENABLE_VOICE_SCANNER="true"
 ENABLE_PRE_CLICK_INTERCEPTOR="true"
 ```
 
-> Never commit `.env` or expose the service-role key in client code.
-
-### 4. Apply the Supabase schema
-
-Run the SQL setup against your Supabase project. The scripts require a Supabase Personal Access Token and project ref:
-
-```bash
-# PowerShell
-$env:SUPABASE_PAT="your-supabase-personal-access-token"
-$env:SUPABASE_PROJECT_REF="your-project-ref"
-npm run supabase:setup
-```
-
-This creates and configures the `scan_history`, `scam_reports`, and `threat_indicators` tables, RLS policies, and related functions.
-
-### 5. Start the development server
-
+### 3. Run Development Server
 ```bash
 npm run dev
 ```
+Navigate to `http://localhost:5173` to explore the application locally.
 
-Open http://localhost:5173.
-
-### 6. Production build
-
+### 4. Build for Production
 ```bash
 npm run build
 npm run preview
@@ -229,125 +225,33 @@ npm run preview
 
 ---
 
-## Available Scripts
+## 📜 Available NPM Scripts
 
 | Command | Description |
 |---|---|
-| `npm run dev` | Start the Vite development server |
-| `npm run build` | Create a production build |
-| `npm run build:extension` | Validate and build the Browser Shield extension into `dist-extension/` |
-| `npm run verify:blocklist` | Verify the deployed Pre-Click Interceptor blocklist endpoint |
-| `npm run preview` | Preview the production build locally |
-| `npm run lint` | Run ESLint |
-| `npm run lint:fix` | Auto-fix lint issues |
-| `npm test` | Run the scanner, TinyFish, and extension test suites |
-| `npm run typecheck` | Run TypeScript checks |
-| `npm run dev:vercel` | Run the project with Vercel CLI (includes `/api` functions) |
-| `npm run supabase:setup` | Apply `supabase/full-setup.sql` |
-| `npm run supabase:sql` | Apply a specific SQL file |
-| `npm run supabase:reset` | Reset the Supabase setup |
+| `npm run dev` | Launches Vite local development server with HMR |
+| `npm run build` | Compiles frontend assets, PWA manifest, and service worker into `dist/` |
+| `npm run preview` | Starts local HTTP server previewing the compiled production bundle |
+| `npm run build:extension` | Validates MV3 CSP constraints and packages the Chrome extension to `dist-extension/` |
+| `npm test` | Runs internal automated test suites for scanners and heuristic logic |
+| `npm run lint` | Analyzes codebase for formatting and lint violations |
+| `npm run supabase:setup` | Provisions database tables, RLS policies, and telemetry schemas in Supabase |
 
 ---
 
-## Mobile & Browser Extension
+## 🔒 Security, Privacy & DPDP Act 2023 Compliance
 
-### Android (Capacitor)
-
-```bash
-npm run build
-npx cap sync android
-npx cap open android
-```
-
-### Chrome extension
-
-The Manifest V3 Browser Shield extension lives in `extension/`. Build a clean,
-production-ready folder with:
-
-```bash
-npm run build:extension
-```
-
-This creates `dist-extension/` after validating the manifest, referenced files,
-icons, and MV3 CSP constraints.
-
-1. Open `chrome://extensions`
-2. Enable **Developer mode**
-3. Click **Load unpacked**
-4. Select the `dist-extension/` directory (or `extension/` for source development)
-
-Full per-browser instructions for Chrome, Brave, Edge, and Opera are in
-[`extension/INSTALL.md`](./extension/INSTALL.md).
+TrustBreak AI is built around a **Privacy Sovereignty Architecture**:
+- **Zero Raw PII Storage:** Scanned messages, voice clips, and screenshot buffers are processed ephemerally in volatile memory and purged immediately after risk classification.
+- **Client-Side Image Hashing:** Visual inputs are pre-hashed and compressed on the client device before network transit.
+- **DPDP Act (2023) Alignment:** Configured in compliance with India's **Digital Personal Data Protection Act, 2023**, respecting data minimization, explicit user consent banners, and clear user-requested data purging controls.
+- **Headquartered & Engineered:** Designed and engineered in **Greater Noida, Uttar Pradesh, India**.
 
 ---
 
-## Deployment
+## 📄 License & Attribution
 
-The production app is deployed on **Vercel**:
+Distributed under the **MIT License**. See [LICENSE](LICENSE) for complete terms and rights.
 
-**Live:** https://trust-break-ai.vercel.app
-
-Deployment steps:
-
-1. Import the repository into Vercel.
-2. Add all required environment variables in **Project Settings → Environment Variables**.
-3. Deploy the `main` branch.
-4. Apply the Supabase schema if it has not been applied yet.
-5. Configure the Supabase **Site URL** and **Redirect URLs** for your production domain.
-6. Verify `/api/health` after deployment.
-
-`vercel.json` configures security headers, SPA rewrites, serverless function limits, and the daily cron job.
-
----
-
-## Project Structure
-
-```text
-TrustBreak AI/
-├── api/                     # Vercel serverless functions
-│   ├── analyze.js           # Text, URL, screenshot, report analysis
-│   ├── analyze-voice.js     # Voice transcription and deepfake analysis
-│   ├── blocklist-lite.js    # Pre-click blocklist endpoint
-│   ├── tinyfish/            # Live web investigation
-│   └── cron/                # Daily threat-feed sync
-├── extension/               # Chrome MV3 Browser Shield extension (see INSTALL.md)
-├── dist-extension/          # Built, load-unpacked-ready extension (generated)
-├── src/
-│   ├── components/          # UI, scanners, auth, dashboard components
-│   ├── hooks/               # Reusable hooks, including protected-feature gating
-│   ├── lib/                 # Auth, Supabase, API, scanner, and data utilities
-│   ├── pages/               # Application pages
-│   ├── App.jsx              # Routing and global providers
-│   └── Layout.jsx           # Navigation, auth controls, protected-route gate
-├── supabase/                # SQL schema, RLS policies, and seed data
-├── docs/                    # PRD, deployment, security, and demo documentation
-├── tests/                   # Node test suites
-└── vercel.json              # Vercel configuration
-```
-
----
-
-## Documentation
-
-More detailed documentation is available in [`docs/`](./docs):
-
-- Product Requirements Document
-- Architecture and technology overview
-- Deployment and infrastructure guide
-- Security and privacy documentation
-- Demo guide and final demo checklist
-- Business model and roadmap
-
----
-
-## License
-
-**MIT License** © 2024–2026 TrustBreak AI
-
----
-
-## Links
-
-- **Live Demo:** https://trust-break-ai.vercel.app
-- **GitHub Repository:** https://github.com/sidhinath/trust-break-ai.git
-- **Issues:** https://github.com/sidhinath/trust-break-ai/issues
+**TrustBreak AI** — *Autonomous Multi-Modal Scam Defense for Everyone.*  
+Website: [https://trust-break-ai.vercel.app](https://trust-break-ai.vercel.app) | Issues & Roadmap: [GitHub Issues](https://github.com/sidhinath/trust-break-ai/issues)
