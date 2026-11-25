@@ -1,113 +1,156 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
-import { MessageSquareWarning, Link2, Image, AlertTriangle, ArrowRight, QrCode, Mic, Shield } from "lucide-react";
+import {
+  MessageSquareWarning,
+  Link2,
+  Image,
+  AlertTriangle,
+  ArrowRight,
+  QrCode,
+  Mic,
+  Shield,
+  Globe,
+} from "lucide-react";
 import { motion } from "framer-motion";
 
-const actions = [
+const primaryScanners = [
   {
     title: "Scan Message",
     subtitle: "SMS, WhatsApp, Email smishing",
     page: "MessageScanner",
     icon: MessageSquareWarning,
-    color: "#00e5ff",
-    bg: "rgba(0, 229, 255, 0.12)",
+    tag: "NLP",
   },
   {
     title: "Scan Link / URL",
     subtitle: "Domain inspection & typosquatting",
     page: "LinkScanner",
     icon: Link2,
-    color: "#a78bfa",
-    bg: "rgba(167, 139, 250, 0.12)",
+    tag: "DNS",
   },
   {
     title: "Scan Screenshot",
     subtitle: "Multi-modal vision OCR & logos",
     page: "ScreenshotScanner",
     icon: Image,
-    color: "#f472b6",
-    bg: "rgba(244, 114, 182, 0.12)",
+    tag: "VISION",
   },
   {
     title: "QR Code Inspector",
     subtitle: "Decode & inspect suspicious QRs",
     page: "QRScanner",
     icon: QrCode,
-    color: "#8b5cf6",
-    bg: "rgba(139, 92, 246, 0.12)",
+    tag: "QR",
   },
+];
+
+const utilityActions = [
   {
     title: "Voice & Audio Scam",
-    subtitle: "Deepfakes, vocoders & fraud calls",
     page: "VoiceScanner",
     icon: Mic,
-    color: "#10b981",
-    bg: "rgba(6, 182, 212, 0.12)",
   },
   {
     title: "Browser Shield & Ext",
-    subtitle: "Real-time navigation & pre-click block",
     page: "BrowserShield",
     icon: Shield,
-    color: "#10b981",
-    bg: "rgba(16, 185, 129, 0.12)",
   },
   {
     title: "Global Threat Intelligence",
-    subtitle: "Live community threat telemetry",
     page: "ScamHeatmap",
-    icon: AlertTriangle,
-    color: "#f59e0b",
-    bg: "rgba(245, 158, 11, 0.12)",
+    icon: Globe,
   },
   {
     title: "Report Scam Threat",
-    subtitle: "Syndicate indicators to database",
     page: "ReportScam",
     icon: AlertTriangle,
-    color: "#ef4444",
-    bg: "rgba(239, 68, 68, 0.12)",
-  }
+  },
 ];
 
 export default function QuickActions() {
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-      {actions.map((action) => {
-        const Icon = action.icon;
-        return (
-          <motion.div
-            key={action.page}
-            whileHover={{ y: -3 }}
-            whileTap={{ scale: 0.98 }}
-            transition={{ duration: 0.15 }}>
+    <div className="space-y-3.5">
+      {/* Top Tier — 4 Primary Scanner Cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
+        {primaryScanners.map((scanner) => {
+          const Icon = scanner.icon;
+          return (
+            <motion.div
+              key={scanner.page}
+              whileHover={{ y: -3 }}
+              whileTap={{ scale: 0.98 }}
+              transition={{ duration: 0.15 }}
+              className="h-full"
+            >
+              <Link
+                to={createPageUrl(scanner.page)}
+                className="touch-manipulation min-h-[44px] h-full bg-[#0d1424]/90 border border-slate-800/80 rounded-2xl p-5 flex flex-col justify-between gap-4 group transition-all duration-200 hover:border-emerald-500/50 hover:shadow-[0_0_24px_rgba(16,185,129,0.14)] active:scale-[0.98]"
+              >
+                <div className="flex items-start justify-between gap-3">
+                  <div
+                    className="w-11 h-11 rounded-xl flex items-center justify-center shrink-0 border border-emerald-500/25 transition-transform duration-200 group-hover:scale-105"
+                    style={{ background: "rgba(16, 185, 129, 0.12)" }}
+                  >
+                    <Icon className="w-5 h-5" style={{ color: "#10b981" }} />
+                  </div>
+                  <span className="text-[10px] font-mono font-bold uppercase tracking-wider px-2 py-0.5 rounded-md bg-emerald-500/10 text-emerald-400 border border-emerald-500/25 shrink-0">
+                    {scanner.tag}
+                  </span>
+                </div>
+
+                <div className="flex items-end justify-between gap-2">
+                  <div className="min-w-0">
+                    <h3
+                      className="text-base font-bold text-white group-hover:text-emerald-400 transition-colors leading-snug"
+                      style={{ color: "#f8fafc" }}
+                    >
+                      {scanner.title}
+                    </h3>
+                    <p
+                      className="text-[13px] text-slate-300 mt-1 leading-snug"
+                      style={{ color: "#cbd5e1" }}
+                    >
+                      {scanner.subtitle}
+                    </p>
+                  </div>
+                  <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-emerald-400 group-hover:translate-x-1 transition-all duration-150 shrink-0 mb-0.5" />
+                </div>
+              </Link>
+            </motion.div>
+          );
+        })}
+      </div>
+
+      {/* Bottom Tier — Compact Utility Action Strip */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5">
+        {utilityActions.map((item) => {
+          const Icon = item.icon;
+          return (
             <Link
-              to={createPageUrl(action.page)}
-              className="touch-manipulation min-h-[44px] min-w-[44px] tb-card p-4 flex items-center justify-between group transition-transform duration-75 active:scale-95 block h-full">
-              <div className="flex items-center gap-3">
+              key={item.page}
+              to={createPageUrl(item.page)}
+              className="touch-manipulation min-h-[44px] py-3 px-4 rounded-xl bg-[#0d1424]/80 border border-slate-800/80 hover:border-emerald-500/45 hover:shadow-[0_0_16px_rgba(16,185,129,0.1)] flex items-center justify-between gap-2.5 group transition-all duration-150 active:scale-[0.98]"
+            >
+              <div className="flex items-center gap-2.5 min-w-0">
                 <div
-                  className="w-11 h-11 rounded-xl flex items-center justify-center shrink-0 transition-transform group-hover:scale-105"
-                  style={{ background: action.bg }}>
-                  <Icon className="w-5 h-5" style={{ color: action.color }} />
+                  className="w-7 h-7 rounded-lg flex items-center justify-center shrink-0 border border-emerald-500/20"
+                  style={{ background: "rgba(16, 185, 129, 0.1)" }}
+                >
+                  <Icon className="w-3.5 h-3.5" style={{ color: "#10b981" }} />
                 </div>
-                <div>
-                  <h3 className="text-sm font-bold transition-colors group-hover:text-emerald-500"
-                    style={{ color: 'var(--tb-text)' }}>
-                    {action.title}
-                  </h3>
-                  <p className="text-[11px] font-medium mt-0.5"
-                    style={{ color: 'var(--tb-text-dim)' }}>
-                    {action.subtitle}
-                  </p>
-                </div>
+                <span
+                  className="text-xs font-semibold text-slate-200 group-hover:text-emerald-400 transition-colors truncate"
+                  style={{ color: "#e2e8f0" }}
+                >
+                  {item.title}
+                </span>
               </div>
-              <ArrowRight className="w-4 h-4 text-slate-400 group-hover:translate-x-1 transition-transform duration-75 shrink-0 ml-2" />
+              <ArrowRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-emerald-400 group-hover:translate-x-1 transition-all duration-150 shrink-0" />
             </Link>
-          </motion.div>
-        );
-      })}
+          );
+        })}
+      </div>
     </div>
   );
 }
-
