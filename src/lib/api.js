@@ -539,8 +539,8 @@ export function analyzeReport(payload) {
 // Longest edge used when downscaling an upload before it is sent to the vision
 // engine. Keeps the JSON body well inside serverless request limits (a 10MB PNG
 // becomes a ~250KB JPEG) and cuts round-trip time without hurting OCR accuracy.
-const VISION_MAX_EDGE = 1280
-const VISION_JPEG_QUALITY = 0.82
+const VISION_MAX_EDGE = 1024
+const VISION_JPEG_QUALITY = 0.75
 
 async function imageToVisionBase64(file) {
   if (typeof document === 'undefined' || typeof Image === 'undefined') {

@@ -674,8 +674,12 @@ async function callGeminiVision({ apiKey, model, base64, mimeType, diag }) {
     }
 
     if (response.status === 429 || response.status === 503) {
+      // 503 = temporary server overload — wait 1.5s and retry once.
+      // 429 = quota — a shorter pause is enough; retry once as well.
+      const retryDelayMs = response.status === 503 ? 1500 : 600
       attempt.transientRetry = true
-      await new Promise((resolve) => setTimeout(resolve, 600))
+      attempt.retryDelayMs = retryDelayMs
+      await new Promise((resolve) => setTimeout(resolve, retryDelayMs))
       response = await send(body)
       raw = await response.text()
     }

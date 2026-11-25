@@ -955,9 +955,9 @@ describe('Vision Scanner — /api/analyze screenshot branch', () => {
       const elapsed = Date.now() - startedAt
 
       assert.strictEqual(res.body.fraud_score, 77)
-      assert.strictEqual(res.body.model, 'gemini-3.5-flash-lite')
+      assert.strictEqual(res.body.model, 'gemini-3.6-flash')
       assert.ok(elapsed < 1500, `Hedge should answer fast, took ${elapsed}ms`)
-      assert.ok(requestedModels.includes('gemini-3.5-flash-lite'), 'The fallback model must be tried in parallel')
+      assert.ok(requestedModels.includes('gemini-3.6-flash'), 'The fallback model must be tried in parallel')
     } finally {
       globalThis.fetch = originalFetch
       if (originalKey === undefined) delete process.env.GEMINI_API_KEY
