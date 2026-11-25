@@ -1,16 +1,38 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { createPageUrl } from "@/utils";
-import { ShieldAlert, Zap, QrCode, Mic } from "lucide-react";
+import { ShieldAlert, Zap, QrCode, Mic, Link2, Image, Search } from "lucide-react";
 import { ConstellationField } from "@/shaders/constellation-field/ConstellationField";
 
 const RING_RADIUS = 58;
 const RING_CIRCUMFERENCE = 2 * Math.PI * RING_RADIUS;
 
 export default function ProtectionStatus({ threatsBlocked = 0, safetyScore = 100, totalScans = 0 }) {
+  const [quickInput, setQuickInput] = useState("");
+  const navigate = useNavigate();
   const isHealthy = safetyScore >= 75;
   const scoreProgress = Math.min(100, Math.max(0, Number(safetyScore) || 0));
   const ringOffset = RING_CIRCUMFERENCE * (1 - scoreProgress / 100);
+
+  const handleQuickScan = (e) => {
+    e.preventDefault();
+    const trimmed = quickInput.trim();
+    if (!trimmed) {
+      navigate(createPageUrl("MessageScanner"));
+      return;
+    }
+    const isUrl = /^(https?:\/\/|www\.)/i.test(trimmed);
+    navigate(createPageUrl(isUrl ? "LinkScanner" : "MessageScanner"), {
+      state: { sharedContent: trimmed },
+    });
+  };
+
+  const quickTriggers = [
+    { label: "Link", page: "LinkScanner", icon: Link2 },
+    { label: "QR", page: "QRScanner", icon: QrCode },
+    { label: "Screenshot", page: "ScreenshotScanner", icon: Image },
+    { label: "Voice", page: "VoiceScanner", icon: Mic },
+  ];
 
   return (
     <div className="tb-card p-5 sm:p-6 relative overflow-hidden border border-emerald-500/20 shadow-[0_0_35px_rgba(16,185,129,0.08)]">
@@ -35,49 +57,86 @@ export default function ProtectionStatus({ threatsBlocked = 0, safetyScore = 100
 
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 relative z-10">
         
-        {/* Left Posture Pitch */}
-        <div className="space-y-3 max-w-lg">
-          <div className="flex items-center gap-2">
-            <span className={`w-2.5 h-2.5 rounded-full ${isHealthy ? 'bg-emerald-500 shadow-[0_0_10px_#10b981]' : 'bg-amber-500'} animate-pulse`} />
-            <span className={`text-xs font-mono font-bold tracking-wider uppercase ${isHealthy ? 'text-emerald-600 dark:text-emerald-400' : 'text-amber-600 dark:text-amber-400'}`}>
-              {isHealthy ? "PROTECTED — No immediate threat detected" : "ATTENTION — Security Alerts Found"}
+        {/* Left Posture Pitch & Quick-Scan Bar */}
+        <div className="space-y-3.5 flex-1 min-w-0 max-w-xl">
+          <div
+            className={`inline-flex items-center gap-2 px-3 py-1 rounded-full border backdrop-blur-md ${
+              isHealthy
+                ? "bg-emerald-500/10 border-emerald-500/30 text-emerald-400"
+                : "bg-amber-500/10 border-amber-500/30 text-amber-400"
+            }`}
+          >
+            <span
+              className={`w-2 h-2 rounded-full ${
+                isHealthy
+                  ? "bg-emerald-400 shadow-[0_0_8px_#10b981]"
+                  : "bg-amber-400 shadow-[0_0_8px_#f59e0b]"
+              } animate-pulse`}
+            />
+            <span className="text-[11px] font-mono font-bold tracking-wider uppercase">
+              {isHealthy
+                ? "PROTECTED — No immediate threat detected"
+                : "ATTENTION — Security Alerts Found"}
             </span>
           </div>
 
-          <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight font-display"
-            style={{ color: 'var(--tb-text)' }}>
-            Your Digital Safety Layer
+          <h1 className="text-2xl sm:text-4xl font-extrabold tracking-tight font-display leading-tight">
+            <span className="text-white">AI-Powered </span>
+            <span className="bg-gradient-to-r from-emerald-400 to-teal-300 bg-clip-text text-transparent">
+              Scam Defense
+            </span>
           </h1>
 
-          <p className="text-xs sm:text-sm font-medium leading-relaxed"
-            style={{ color: 'var(--tb-text-dim)' }}>
+          <p
+            className="text-xs sm:text-sm font-medium leading-relaxed max-w-md"
+            style={{ color: "var(--tb-text-dim)" }}
+          >
             TrustBreak AI protects users before they trust, click, scan, pay or respond.
           </p>
 
-          <div className="pt-2 flex flex-wrap items-center gap-2.5">
-            <Link
-              to={createPageUrl("MessageScanner")}
-              className="inline-flex items-center justify-center gap-2 touch-manipulation min-h-[44px] min-w-[44px] px-4 rounded-xl text-xs font-bold font-mono tracking-wide uppercase bg-gradient-to-r from-emerald-500 to-emerald-400 hover:from-emerald-400 hover:to-emerald-300 text-white shadow-[0_0_25px_rgba(16,185,129,0.4)] transition-transform duration-75 active:scale-95">
+          {/* Interactive Glassmorphic Quick-Scan Bar */}
+          <form
+            onSubmit={handleQuickScan}
+            className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 rounded-2xl border border-slate-700/70 bg-slate-900/80 p-1.5 backdrop-blur-xl shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]"
+          >
+            <div className="flex items-center gap-2 flex-1 min-w-0 px-2.5">
+              <Search className="w-4 h-4 text-emerald-400 shrink-0" />
+              <input
+                type="text"
+                value={quickInput}
+                onChange={(e) => setQuickInput(e.target.value)}
+                placeholder="Paste suspicious SMS, URL, or payment link..."
+                aria-label="Paste suspicious SMS, URL, or payment link"
+                className="w-full bg-transparent text-xs sm:text-sm text-slate-100 placeholder:text-slate-400 focus:outline-none py-2 min-w-0"
+                style={{ color: "#f8fafc" }}
+              />
+            </div>
+
+            <button
+              type="submit"
+              className="touch-manipulation min-h-[42px] px-4 rounded-xl text-xs font-bold font-mono tracking-wide uppercase bg-gradient-to-r from-emerald-500 to-emerald-400 hover:from-emerald-400 hover:to-emerald-300 text-slate-950 shadow-[0_0_20px_rgba(16,185,129,0.35)] transition-all duration-150 active:scale-95 flex items-center justify-center gap-1.5 shrink-0 cursor-pointer"
+            >
               <Zap className="w-3.5 h-3.5 fill-current" />
-              Scan Message
-            </Link>
-            <Link
-              to={createPageUrl("LinkScanner")}
-              className="text-xs font-bold text-emerald-600 dark:text-emerald-400 hover:underline touch-manipulation min-h-[44px] min-w-[44px] transition-transform duration-75 active:scale-95 flex items-center gap-1 px-2 py-1 min-h-[44px] min-w-[44px] rounded-lg hover:bg-emerald-500/10">
-              Link →
-            </Link>
-            <Link
-              to={createPageUrl("QRScanner")}
-              className="text-xs font-bold text-purple-600 dark:text-purple-400 hover:underline touch-manipulation min-h-[44px] min-w-[44px] transition-transform duration-75 active:scale-95 flex items-center gap-1 px-2 py-1 min-h-[44px] min-w-[44px] rounded-lg hover:bg-purple-500/10">
-              <QrCode className="w-3.5 h-3.5" />
-              QR →
-            </Link>
-            <Link
-              to={createPageUrl("VoiceScanner")}
-              className="text-xs font-bold text-teal-600 dark:text-teal-400 hover:underline touch-manipulation min-h-[44px] min-w-[44px] transition-transform duration-75 active:scale-95 flex items-center gap-1 px-2 py-1 min-h-[44px] min-w-[44px] rounded-lg hover:bg-teal-500/10">
-              <Mic className="w-3.5 h-3.5" />
-              Voice →
-            </Link>
+              Scan Now
+            </button>
+          </form>
+
+          {/* Compact Quick-Action Icon Triggers */}
+          <div className="flex flex-wrap items-center gap-2 pt-0.5">
+            {quickTriggers.map((trigger) => {
+              const Icon = trigger.icon;
+              return (
+                <Link
+                  key={trigger.page}
+                  to={createPageUrl(trigger.page)}
+                  className="touch-manipulation min-h-[36px] inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-slate-800/80 bg-slate-900/60 hover:border-emerald-500/40 hover:bg-emerald-500/10 text-xs font-semibold text-slate-300 hover:text-emerald-400 transition-all duration-150 active:scale-95"
+                  style={{ color: "#cbd5e1" }}
+                >
+                  <Icon className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+                  <span>{trigger.label}</span>
+                </Link>
+              );
+            })}
           </div>
         </div>
 

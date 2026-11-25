@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
 import { createPageUrl } from "@/utils";
+import { listScanHistory } from "@/lib/data";
 import { useAuth } from "@/lib/AuthContext";
 import UserModal from "@/components/auth/UserModal";
 import ProfileMenu from "@/components/auth/ProfileMenu";
@@ -53,8 +55,6 @@ const governanceNav = [
   { name: "Security & Settings", page: "Settings", icon: Settings },
   { name: "Architecture & Technology", page: "Technology", icon: Cpu },
   { name: "Privacy Sovereignty", page: "PrivacyCenter", icon: Lock },
-  { name: "Privacy Policy", page: "PrivacyPolicy", icon: Shield },
-  { name: "Terms of Service", page: "Terms", icon: FileText },
   { name: "Security Profile", page: "Profile", icon: User },
 ];
 
@@ -72,6 +72,11 @@ export default function Layout({ children, currentPageName }) {
   const [loginPrompt, setLoginPrompt] = useState(null); // { feature } | null
   const pendingPageRef = useRef(null);
   const { user, isAuthenticated, openSignIn, openSignUp, signOut } = useAuth();
+  const { data: sidebarScans = [] } = useQuery({
+    queryKey: ["scanHistory"],
+    queryFn: () => listScanHistory(20),
+    enabled: isAuthenticated,
+  });
 
   // Helper: get avatar initials
   const getInitials = (u) => {
@@ -821,123 +826,117 @@ export default function Layout({ children, currentPageName }) {
       )}
 
       {/* Desktop Toggleable Sidebar */}
-      <aside className={`hidden md:flex fixed left-0 top-14 bottom-0 flex-col border-r z-30 py-4 overflow-y-auto no-scrollbar justify-between backdrop-blur-xl transition-transform duration-300 ${
-        sidebarOpen ? 'w-72 2xl:w-80 px-3.5' : 'w-16 px-2'
-      }`}
+      <aside
+        className={`hidden md:flex fixed left-0 top-14 bottom-0 flex-col border-r z-30 py-3 overflow-y-auto no-scrollbar justify-between backdrop-blur-xl transition-transform duration-300 ${
+          sidebarOpen ? "w-72 2xl:w-80 px-3" : "w-16 px-2"
+        }`}
         style={{
-          background: 'var(--tb-surface)',
-          borderColor: 'var(--tb-border)'
-        }}>
-        
-        <nav className="flex flex-col gap-4">
-          
-          {/* Detection */}
-          <div className="space-y-1">
-            {sidebarOpen && (
-              <span className="font-display text-[13px] font-bold uppercase tracking-wider px-3 block mt-6 mb-2 text-emerald-400">
-                Detection Suites
-              </span>
-            )}
-            {detectionNav.map(item => {
-              const Icon = item.icon;
-              const active = currentPageName === item.page;
-              return (
-                <Link
-                  key={item.page}
-                  to={createPageUrl(item.page)}
-                  title={item.name}
-                  className={`flex items-center gap-3 py-2.5 rounded-xl touch-manipulation min-h-[44px] min-w-[44px] transition-transform duration-75 active:scale-95 text-xs font-bold ${
-                    sidebarOpen ? 'px-3 justify-start' : 'px-0 justify-center'
-                  } ${
-                    active
-                      ? 'bg-emerald-500/10 text-emerald-500 border border-emerald-500/30 shadow-[0_0_12px_rgba(16,185,129,0.12)]'
-                      : 'hover:bg-slate-500/10'
-                  }`}
-                  style={{ color: active ? undefined : 'var(--tb-text-dim)' }}>
-                  <Icon className="w-4 h-4 shrink-0" />
-                  {sidebarOpen && <span className="truncate">{item.name}</span>}
-                </Link>
-              );
-            })}
-          </div>
+          background: "#070c16",
+          borderColor: "rgba(30, 41, 59, 0.8)",
+        }}
+      >
+        <nav className="flex flex-col gap-3">
+          {[
+            { title: "DETECTION SUITES", items: detectionNav },
+            { title: "INTELLIGENCE & BUSINESS", items: intelligenceNav },
+            { title: "ARCHITECTURE & TRUST", items: governanceNav },
+          ].map((section, sectionIdx) => (
+            <div key={section.title} className={`space-y-0.5 ${sectionIdx > 0 ? "pt-1" : ""}`}>
+              {sidebarOpen && (
+                <span
+                  className={`font-display text-[11px] font-bold uppercase tracking-wider px-3 block ${
+                    sectionIdx === 0 ? "mt-1" : "mt-2.5"
+                  } mb-1.5 text-emerald-400`}
+                >
+                  {section.title}
+                </span>
+              )}
+              {section.items.map((item) => {
+                const Icon = item.icon;
+                const active = currentPageName === item.page;
+                const isHistory = item.page === "Reports";
+                const isBrowserShield = item.page === "BrowserShield";
 
-          {/* Intelligence & Business */}
-          <div className="space-y-1 pt-1">
-            {sidebarOpen && (
-              <span className="font-display text-[13px] font-bold uppercase tracking-wider px-3 block mt-6 mb-2 text-emerald-400">
-                Intelligence & Business
-              </span>
-            )}
-            {intelligenceNav.map(item => {
-              const Icon = item.icon;
-              const active = currentPageName === item.page;
-              return (
-                <Link
-                  key={item.page}
-                  to={createPageUrl(item.page)}
-                  title={item.name}
-                  className={`flex items-center gap-3 py-2.5 rounded-xl touch-manipulation min-h-[44px] min-w-[44px] transition-transform duration-75 active:scale-95 text-xs font-bold ${
-                    sidebarOpen ? 'px-3 justify-start' : 'px-0 justify-center'
-                  } ${
-                    active
-                      ? 'bg-emerald-500/10 text-emerald-500 border border-emerald-500/30 shadow-[0_0_12px_rgba(16,185,129,0.12)]'
-                      : 'hover:bg-slate-500/10'
-                  }`}
-                  style={{ color: active ? undefined : 'var(--tb-text-dim)' }}>
-                  <Icon className="w-4 h-4 shrink-0" />
-                  {sidebarOpen && <span className="truncate">{item.name}</span>}
-                </Link>
-              );
-            })}
-          </div>
+                return (
+                  <Link
+                    key={item.page}
+                    to={createPageUrl(item.page)}
+                    title={item.name}
+                    className={`group flex items-center gap-3 py-2 rounded-lg touch-manipulation min-h-[38px] text-[13.5px] transition-all duration-150 active:scale-[0.98] ${
+                      sidebarOpen ? "px-3 justify-between" : "px-0 justify-center"
+                    } ${
+                      active
+                        ? "border-l-[3px] border-emerald-400 bg-gradient-to-r from-emerald-500/15 to-transparent font-bold text-white"
+                        : "font-medium text-slate-300 hover:bg-slate-800/50 hover:text-white hover:translate-x-0.5"
+                    }`}
+                    style={{ color: active ? "#f8fafc" : "#cbd5e1" }}
+                  >
+                    <div className="flex items-center gap-3 min-w-0">
+                      <Icon
+                        className={`w-4 h-4 shrink-0 transition-colors ${
+                          active
+                            ? "text-emerald-400 drop-shadow-[0_0_6px_rgba(16,185,129,0.7)]"
+                            : "text-slate-400 group-hover:text-emerald-400"
+                        }`}
+                      />
+                      {sidebarOpen && <span className="truncate">{item.name}</span>}
+                    </div>
 
-          {/* Architecture */}
-          <div className="space-y-1 pt-1">
-            {sidebarOpen && (
-              <span className="font-display text-[13px] font-bold uppercase tracking-wider px-3 block mt-6 mb-2 text-emerald-400">
-                Architecture & Trust
-              </span>
-            )}
-            {governanceNav.map(item => {
-              const Icon = item.icon;
-              const active = currentPageName === item.page;
-              return (
-                <Link
-                  key={item.page}
-                  to={createPageUrl(item.page)}
-                  title={item.name}
-                  className={`flex items-center gap-3 py-2.5 rounded-xl touch-manipulation min-h-[44px] min-w-[44px] transition-transform duration-75 active:scale-95 text-xs font-bold ${
-                    sidebarOpen ? 'px-3 justify-start' : 'px-0 justify-center'
-                  } ${
-                    active
-                      ? 'bg-emerald-500/10 text-emerald-500 border border-emerald-500/30 shadow-[0_0_12px_rgba(16,185,129,0.12)]'
-                      : 'hover:bg-slate-500/10'
-                  }`}
-                  style={{ color: active ? undefined : 'var(--tb-text-dim)' }}>
-                  <Icon className="w-4 h-4 shrink-0" />
-                  {sidebarOpen && <span className="truncate">{item.name}</span>}
-                </Link>
-              );
-            })}
-          </div>
+                    {sidebarOpen && isHistory && (
+                      <span className="px-1.5 py-0.5 rounded-full text-[10px] font-mono font-bold bg-slate-800/90 text-slate-300 border border-slate-700/80 shrink-0">
+                        {sidebarScans.length}
+                      </span>
+                    )}
 
+                    {sidebarOpen && isBrowserShield && (
+                      <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md text-[9px] font-mono font-bold uppercase tracking-wider bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 shrink-0">
+                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 shadow-[0_0_6px_#10b981]" />
+                        NEW
+                      </span>
+                    )}
+                  </Link>
+                );
+              })}
+            </div>
+          ))}
         </nav>
 
-        {/* Sidebar Footer Posture Badge */}
+        {/* Sidebar Footer Posture Badge & Compact Legal Links */}
         {sidebarOpen ? (
-          <div className="p-3.5 rounded-xl border border-emerald-500/20 bg-emerald-500/10 space-y-1 mt-4">
-            <div className="flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-emerald-400 shadow-[0_0_8px_#10b981] animate-pulse" />
-              <span className="text-xs font-bold text-emerald-600 dark:text-emerald-400">
-                Autonomous Defense
-              </span>
+          <div className="mt-4 pt-2 space-y-2.5 shrink-0">
+            <div className="p-3.5 rounded-xl border border-emerald-500/25 bg-emerald-500/10 space-y-1 shadow-[inset_0_1px_0_rgba(16,185,129,0.12)]">
+              <div className="flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-emerald-400 shadow-[0_0_8px_#10b981] animate-pulse shrink-0" />
+                <span className="text-xs font-bold text-emerald-400">
+                  Autonomous Defense
+                </span>
+              </div>
+              <p className="text-[12px] leading-snug text-slate-300" style={{ color: "#cbd5e1" }}>
+                Groq LPU + Gemini Vision telemetry active
+              </p>
             </div>
-            <p className="text-[11px] leading-normal" style={{ color: 'var(--tb-text-dim)' }}>
-              Groq LPU + Gemini Vision telemetry active
-            </p>
+
+            <div className="flex items-center justify-center gap-2 text-[11px] text-slate-400 px-2">
+              <Link
+                to={createPageUrl("PrivacyPolicy")}
+                className="hover:text-emerald-400 transition-colors"
+              >
+                Privacy Policy
+              </Link>
+              <span aria-hidden="true">·</span>
+              <Link
+                to={createPageUrl("Terms")}
+                className="hover:text-emerald-400 transition-colors"
+              >
+                Terms of Service
+              </Link>
+            </div>
           </div>
         ) : (
-          <div className="flex items-center justify-center p-2 rounded-xl border border-emerald-500/20 bg-emerald-500/10 mt-4" title="Autonomous Cyber Defense Active">
+          <div
+            className="flex items-center justify-center p-2 rounded-xl border border-emerald-500/25 bg-emerald-500/10 mt-4 shrink-0"
+            title="Autonomous Cyber Defense Active"
+          >
             <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 shadow-[0_0_8px_#10b981] animate-pulse" />
           </div>
         )}
