@@ -235,7 +235,7 @@ export default function ScreenshotScanner() {
         style={{ background: 'var(--tb-surface-2)', borderColor: 'var(--tb-border)' }}>
         <button
           onClick={() => { setActiveTab("screenshot"); setResult(null); setQrResult(null); }}
-          className={`flex-1 py-2 rounded-lg text-xs font-bold transition-all flex items-center justify-center gap-2 cursor-pointer ${
+          className={`flex-1 py-2 touch-manipulation min-h-[44px] min-w-[44px] rounded-lg text-xs font-bold transition-transform duration-75 active:scale-95 flex items-center justify-center gap-2 cursor-pointer ${
             activeTab === "screenshot"
               ? "bg-pink-500 text-white shadow-sm font-extrabold"
               : "hover:text-pink-400 text-slate-400"
@@ -245,7 +245,7 @@ export default function ScreenshotScanner() {
         </button>
         <button
           onClick={() => { setActiveTab("qr"); setResult(null); setQrResult(null); }}
-          className={`flex-1 py-2 rounded-lg text-xs font-bold transition-all flex items-center justify-center gap-2 cursor-pointer ${
+          className={`flex-1 py-2 touch-manipulation min-h-[44px] min-w-[44px] rounded-lg text-xs font-bold transition-transform duration-75 active:scale-95 flex items-center justify-center gap-2 cursor-pointer ${
             activeTab === "qr"
               ? "bg-purple-500 text-white shadow-sm font-extrabold"
               : "hover:text-purple-400 text-slate-400"
@@ -283,7 +283,7 @@ export default function ScreenshotScanner() {
                     await triggerHaptic("light");
                     setShowTrustedContact(true);
                   }}
-                  className="h-11 px-4 rounded-xl bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-400 border border-emerald-500/40 font-bold text-xs flex items-center gap-2 transition-all cursor-pointer">
+                  className="touch-manipulation min-h-[44px] min-w-[44px] h-11 px-4 rounded-xl bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-400 border border-emerald-500/40 font-bold text-xs flex items-center gap-2 transition-transform duration-75 active:scale-95 cursor-pointer">
                   <Users className="w-4 h-4" />
                   <span>Ask Trusted Contact / Family Member</span>
                 </button>
@@ -321,7 +321,7 @@ export default function ScreenshotScanner() {
             {!preview ? (
               <button
                 onClick={() => fileRef.current?.click()}
-                className="w-full h-52 rounded-2xl border-2 border-dashed flex flex-col items-center justify-center gap-3 transition-all hover:border-pink-500 hover:bg-pink-500/5 group cursor-pointer"
+                className="touch-manipulation min-h-[44px] min-w-[44px] w-full h-52 rounded-2xl border-2 border-dashed flex flex-col items-center justify-center gap-3 transition-transform duration-75 active:scale-95 hover:border-pink-500 hover:bg-pink-500/5 group cursor-pointer"
                 style={{ borderColor: 'var(--tb-border)', background: 'var(--tb-surface-2)' }}>
                 <div className="w-12 h-12 rounded-xl bg-pink-500/10 border border-pink-500/20 flex items-center justify-center group-hover:scale-110 transition-transform">
                   <Upload className="w-6 h-6 text-pink-500" />
@@ -345,7 +345,7 @@ export default function ScreenshotScanner() {
                 />
                 <button
                   onClick={clearFile}
-                  className="absolute top-4 right-4 w-8 h-8 rounded-full bg-slate-900/80 hover:bg-rose-500 text-white flex items-center justify-center transition-colors border border-white/20 cursor-pointer">
+                  className="absolute top-4 right-4 w-8 h-8 rounded-full bg-slate-900/80 hover:bg-rose-500 text-white flex items-center justify-center touch-manipulation transition-transform duration-75 active:scale-95 transition-colors border border-white/20 cursor-pointer">
                   <X className="w-4 h-4" />
                 </button>
               </div>
@@ -356,7 +356,7 @@ export default function ScreenshotScanner() {
             <Button
               onClick={handleScan}
               disabled={scanning || !file}
-              className="w-full h-12 rounded-xl font-bold text-white transition-all shadow-md bg-pink-600 hover:bg-pink-500 cursor-pointer">
+              className="w-full h-12 rounded-xl font-bold text-white transition-transform duration-75 active:scale-95 shadow-md bg-pink-600 hover:bg-pink-500 cursor-pointer">
               {scanning ? "Processing Visual Evidence..." : "Analyze Screenshot with Vision Engine"}
             </Button>
           </div>
@@ -418,19 +418,19 @@ export default function ScreenshotScanner() {
                     <Button
                       onClick={handleScan}
                       disabled={scanning}
-                      className="h-10 rounded-xl font-bold text-white bg-amber-600 hover:bg-amber-500 transition-all text-xs cursor-pointer">
+                      className="touch-manipulation min-h-[44px] min-w-[44px] h-10 rounded-xl font-bold text-white bg-amber-600 hover:bg-amber-500 transition-transform duration-75 active:scale-95 text-xs cursor-pointer">
                       <RefreshCw className="w-3.5 h-3.5 mr-1.5" /> Retry analysis
                     </Button>
                     <Button
                       onClick={runVisionDiagnostics}
                       disabled={healthLoading}
                       variant="outline"
-                      className="h-10 rounded-xl font-bold text-xs border-emerald-500/40 text-emerald-500 hover:bg-emerald-500/10 cursor-pointer">
+                      className="touch-manipulation min-h-[44px] min-w-[44px] h-10 rounded-xl font-bold text-xs border-emerald-500/40 text-emerald-500 hover:bg-emerald-500/10 transition-transform duration-75 active:scale-95 cursor-pointer">
                       {healthLoading ? "Checking vision engine..." : "Run vision diagnostics"}
                     </Button>
                     <Link
                       to={createPageUrl("Settings")}
-                      className="h-10 px-4 rounded-xl border font-bold text-xs flex items-center justify-center transition-colors hover:border-emerald-400 hover:text-emerald-400"
+                      className="touch-manipulation min-h-[44px] min-w-[44px] h-10 px-4 rounded-xl border font-bold text-xs flex items-center justify-center transition-transform duration-75 active:scale-95 hover:border-emerald-400 hover:text-emerald-400"
                       style={{ borderColor: 'var(--tb-border)', color: 'var(--tb-text-dim)' }}>
                       Configure Gemini Vision key
                     </Link>
@@ -472,7 +472,7 @@ export default function ScreenshotScanner() {
                     await triggerHaptic("light");
                     setShowTrustedContact(true);
                   }}
-                  className="h-11 px-4 rounded-xl bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-400 border border-emerald-500/40 font-bold text-xs flex items-center gap-2 transition-all cursor-pointer">
+                  className="touch-manipulation min-h-[44px] min-w-[44px] h-11 px-4 rounded-xl bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-400 border border-emerald-500/40 font-bold text-xs flex items-center gap-2 transition-transform duration-75 active:scale-95 cursor-pointer">
                   <Users className="w-4 h-4" />
                   <span>Ask Trusted Contact / Family Member</span>
                 </button>
@@ -500,7 +500,7 @@ export default function ScreenshotScanner() {
                       onClick={() => handleTinyFishInvestigation(result.detected_text)}
                       disabled={investigating}
                       variant="outline"
-                      className="w-full h-10 rounded-xl font-bold border-emerald-500/40 hover:bg-emerald-500/10 text-emerald-400 transition-all text-xs cursor-pointer">
+                      className="touch-manipulation min-h-[44px] min-w-[44px] w-full h-10 rounded-xl font-bold border-emerald-500/40 hover:bg-emerald-500/10 text-emerald-400 transition-transform duration-75 active:scale-95 text-xs cursor-pointer">
                       {investigating ? "Live Agent Investigating Domain..." : `🤖 TinyFish Live AI Agent: Inspect ${extractedUrl}`}
                     </Button>
                   )}

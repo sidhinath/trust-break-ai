@@ -1,3 +1,4 @@
+import { Suspense } from 'react'
 import { Toaster } from "@/components/ui/toaster"
 import { QueryClientProvider } from '@tanstack/react-query'
 import { queryClientInstance } from '@/lib/query-client'
@@ -9,6 +10,7 @@ import AppErrorBoundary from '@/components/AppErrorBoundary'
 import OnboardingLanding from '@/components/auth/OnboardingLanding'
 import SplashScreen from '@/components/auth/SplashScreen'
 import SignInModal from '@/components/auth/SignInModal'
+import { SkeletonCard } from "@/components/ui/skeleton"
 
 const Router = HashRouter;
 
@@ -25,7 +27,9 @@ const AppRoutes = () => {
     <Routes>
       <Route path="/" element={
         <LayoutWrapper currentPageName={mainPageKey}>
-          <MainPage />
+          <Suspense fallback={<SkeletonCard className="h-[560px]" />}>
+            <MainPage />
+          </Suspense>
         </LayoutWrapper>
       } />
       {/* Legacy hub links now land directly on a dedicated scanner. */}
@@ -36,7 +40,9 @@ const AppRoutes = () => {
           path={`/${path}`}
           element={
             <LayoutWrapper currentPageName={path}>
-              <Page />
+              <Suspense fallback={<SkeletonCard className="h-[560px]" />}>
+                <Page />
+              </Suspense>
             </LayoutWrapper>
           }
         />

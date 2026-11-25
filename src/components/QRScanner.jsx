@@ -206,7 +206,7 @@ export default function QRScanner({ onDecoded, onError }) {
         <button
           type="button"
           onClick={() => { setMode("camera"); setLocalError(""); }}
-          className={`flex items-center gap-2 text-xs font-bold px-3 py-1.5 rounded-lg transition-all ${
+          className={`flex items-center gap-2 text-xs font-bold touch-manipulation min-h-[44px] min-w-[44px] px-3 py-1.5 rounded-lg transition-transform duration-75 active:scale-95 ${
             mode === "camera"
               ? "bg-violet-600 text-white shadow-lg shadow-violet-600/30"
               : "hover:bg-violet-500/10 text-slate-400"
@@ -218,7 +218,7 @@ export default function QRScanner({ onDecoded, onError }) {
         <button
           type="button"
           onClick={() => { setMode("upload"); setCameraError(""); }}
-          className={`flex items-center gap-2 text-xs font-bold px-3 py-1.5 rounded-lg transition-all ${
+          className={`flex items-center gap-2 text-xs font-bold touch-manipulation min-h-[44px] min-w-[44px] px-3 py-1.5 rounded-lg transition-transform duration-75 active:scale-95 ${
             mode === "upload"
               ? "bg-violet-600 text-white shadow-lg shadow-violet-600/30"
               : "hover:bg-violet-500/10 text-slate-400"
@@ -329,7 +329,7 @@ export default function QRScanner({ onDecoded, onError }) {
             <button
               type="button"
               onClick={() => fileRef.current?.click()}
-              className="w-full h-52 rounded-2xl border-2 border-dashed flex flex-col items-center justify-center gap-3 transition-all hover:border-violet-500 hover:bg-violet-500/5 group"
+              className="w-full h-52 rounded-2xl border-2 border-dashed flex flex-col items-center justify-center touch-manipulation min-h-[44px] min-w-[44px] gap-3 transition-transform duration-75 active:scale-95 hover:border-violet-500 hover:bg-violet-500/5 group"
               style={{ borderColor: "var(--tb-border)", background: "var(--tb-surface-2)" }}
             >
               <div className="w-12 h-12 rounded-xl bg-violet-500/10 border border-violet-500/20 flex items-center justify-center group-hover:scale-110 transition-transform">

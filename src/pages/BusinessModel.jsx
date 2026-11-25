@@ -69,7 +69,7 @@ export default function BusinessModel() {
       <div className="flex gap-2 p-1.5 tb-card border" style={{ background: 'var(--tb-surface-2)', borderColor: 'var(--tb-border)' }}>
         <button
           onClick={() => setActiveTab("pricing")}
-          className={`flex-1 py-2.5 px-3 rounded-lg text-xs font-bold transition-all flex items-center justify-center gap-2 ${
+          className={`flex-1 py-2.5 px-3 touch-manipulation min-h-[44px] min-w-[44px] rounded-lg text-xs font-bold transition-transform duration-75 active:scale-95 flex items-center justify-center gap-2 ${
             activeTab === "pricing" 
               ? "bg-emerald-500 text-slate-950 font-black shadow-md" 
               : "hover:bg-slate-500/10"
@@ -80,7 +80,7 @@ export default function BusinessModel() {
         </button>
         <button
           onClick={() => setActiveTab("unit-economics")}
-          className={`flex-1 py-2.5 px-3 rounded-lg text-xs font-bold transition-all flex items-center justify-center gap-2 ${
+          className={`flex-1 py-2.5 px-3 touch-manipulation min-h-[44px] min-w-[44px] rounded-lg text-xs font-bold transition-transform duration-75 active:scale-95 flex items-center justify-center gap-2 ${
             activeTab === "unit-economics" 
               ? "bg-emerald-500 text-slate-950 font-black shadow-md" 
               : "hover:bg-slate-500/10"
@@ -91,7 +91,7 @@ export default function BusinessModel() {
         </button>
         <button
           onClick={() => setActiveTab("flywheel")}
-          className={`flex-1 py-2.5 px-3 rounded-lg text-xs font-bold transition-all flex items-center justify-center gap-2 ${
+          className={`flex-1 py-2.5 px-3 touch-manipulation min-h-[44px] min-w-[44px] rounded-lg text-xs font-bold transition-transform duration-75 active:scale-95 flex items-center justify-center gap-2 ${
             activeTab === "flywheel" 
               ? "bg-emerald-500 text-slate-950 font-black shadow-md" 
               : "hover:bg-slate-500/10"

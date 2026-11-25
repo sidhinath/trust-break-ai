@@ -72,7 +72,7 @@ export default function ProtectedPage({ children, feature }) {
           <button
             type="button"
             onClick={openSignIn}
-            className="w-full h-12 rounded-xl bg-gradient-to-r from-emerald-400 to-blue-500 text-sm font-bold text-slate-950 shadow-[0_0_24px_rgba(34,211,238,0.25)] hover:brightness-110 transition-all flex items-center justify-center gap-2"
+            className="w-full h-12 rounded-xl bg-gradient-to-r from-emerald-400 to-blue-500 text-sm font-bold text-slate-950 shadow-[0_0_24px_rgba(34,211,238,0.25)] hover:brightness-110 transition-transform duration-75 active:scale-95 flex items-center justify-center gap-2"
           >
             <LogIn className="h-4 w-4" />
             Sign In to Continue
@@ -81,7 +81,7 @@ export default function ProtectedPage({ children, feature }) {
           <button
             type="button"
             onClick={openSignUp}
-            className="w-full h-12 rounded-xl border border-emerald-500/30 bg-emerald-500/8 text-sm font-bold text-emerald-300 hover:border-emerald-400 hover:bg-emerald-500/15 transition-all flex items-center justify-center gap-2"
+            className="w-full h-12 rounded-xl border border-emerald-500/30 bg-emerald-500/8 text-sm font-bold text-emerald-300 hover:border-emerald-400 hover:bg-emerald-500/15 transition-transform duration-75 active:scale-95 flex items-center justify-center gap-2"
           >
             <UserPlus className="h-4 w-4" />
             Create Free Account

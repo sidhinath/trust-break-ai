@@ -119,13 +119,13 @@ export default function UserModal({ isOpen, onClose, user }) {
                 <div className="grid grid-cols-2 gap-2">
                   <button
                     onClick={handleSignIn}
-                    className="h-9 rounded-xl bg-gradient-to-r from-emerald-400 to-blue-500 text-xs font-bold text-slate-950 hover:brightness-110 transition-all"
+                    className="touch-manipulation min-h-[44px] min-w-[44px] h-9 rounded-xl bg-gradient-to-r from-emerald-400 to-blue-500 text-xs font-bold text-slate-950 hover:brightness-110 transition-transform duration-75 active:scale-95"
                   >
                     Sign In
                   </button>
                   <button
                     onClick={handleSignUp}
-                    className="h-9 rounded-xl border border-emerald-500/40 bg-emerald-500/10 text-xs font-bold text-emerald-300 hover:border-emerald-400 transition-all"
+                    className="touch-manipulation min-h-[44px] min-w-[44px] h-9 rounded-xl border border-emerald-500/40 bg-emerald-500/10 text-xs font-bold text-emerald-300 hover:border-emerald-400 transition-transform duration-75 active:scale-95"
                   >
                     Create Account
                   </button>

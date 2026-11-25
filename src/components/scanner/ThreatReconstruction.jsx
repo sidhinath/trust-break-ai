@@ -98,7 +98,7 @@ export default function ThreatReconstruction({ attackChain = [], attackerIntent 
                 whileHover={{ y: -2 }}
                 whileTap={{ scale: 0.98 }}
                 onClick={() => setSelectedStage(isSelected ? null : index)}
-                className={`text-left p-3 rounded-xl border transition-all flex flex-col justify-between ${
+                className={`touch-manipulation min-h-[44px] min-w-[44px] text-left p-3 rounded-xl border transition-transform duration-75 active:scale-95 flex flex-col justify-between ${
                   isSelected ? 'tb-card-highlight ring-1 ring-emerald-400' : ''
                 }`}
                 style={{

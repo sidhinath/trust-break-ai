@@ -110,7 +110,7 @@ export default function Reports() {
               <button
                 key={f.id}
                 onClick={() => setFilterType(f.id)}
-                className={`text-xs font-semibold px-3 py-1.5 rounded-lg border transition-all whitespace-nowrap ${
+                className={`touch-manipulation min-h-[44px] min-w-[44px] text-xs font-semibold px-3 py-1.5 rounded-lg border transition-transform duration-75 active:scale-95 whitespace-nowrap ${
                   filterType === f.id
                     ? "bg-emerald-500/15 border-emerald-400 text-emerald-400 font-bold"
                     : "hover:border-slate-500 text-slate-400"
@@ -160,7 +160,8 @@ export default function Reports() {
               <div
                 key={scan.id || idx}
                 onClick={() => setSelectedReport(scan)}
-                className="tb-card p-4 hover:border-emerald-500/40 transition-all cursor-pointer flex items-center justify-between gap-3 group">
+                role="button"
+                className="touch-manipulation min-h-[44px] min-w-[44px] tb-card p-4 hover:border-emerald-500/40 transition-transform duration-75 active:scale-95 cursor-pointer flex items-center justify-between gap-3 group">
                 <div className="flex items-center gap-3 min-w-0 flex-1">
                   <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 border ${
                     isScam ? "bg-rose-500/10 border-rose-500/30 text-rose-500" :

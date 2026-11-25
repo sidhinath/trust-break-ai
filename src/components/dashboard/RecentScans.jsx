@@ -102,7 +102,7 @@ export default function RecentScans({ scans = [] }) {
                   e.stopPropagation()
                   handleDelete(scan.id)
                 }}
-                className="w-8 h-8 shrink-0 rounded-lg flex items-center justify-center text-slate-400 hover:bg-rose-500 hover:text-rose-400 transition-colors active:scale-95"
+                className="touch-manipulation min-h-[44px] min-w-[44px] shrink-0 rounded-lg flex items-center justify-center text-slate-400 hover:bg-rose-500 hover:text-rose-400 transition-transform duration-75 active:scale-95"
                 aria-label="Delete inspection"
               >
                 <Trash2 className="w-4 h-4" />

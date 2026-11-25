@@ -108,7 +108,7 @@ export default function OnboardingLanding({ onComplete, onGuest }) {
             transition={{ duration: 0.5, delay: 0.3 }}
             whileTap={{ scale: 0.97 }}
             onClick={handleSignUp}
-            className="w-full h-14 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-base tracking-wide flex items-center justify-center gap-2 shadow-[0_10px_25px_rgba(37,99,235,0.3)] transition-all"
+            className="w-full h-14 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-base tracking-wide flex items-center justify-center gap-2 shadow-[0_10px_25px_rgba(37,99,235,0.3)] transition-transform duration-75 active:scale-95"
           >
             <UserPlus className="w-5 h-5" />
             CREATE FREE ACCOUNT
@@ -121,7 +121,7 @@ export default function OnboardingLanding({ onComplete, onGuest }) {
             transition={{ duration: 0.5, delay: 0.38 }}
             whileTap={{ scale: 0.97 }}
             onClick={handleSignIn}
-            className="w-full h-12 rounded-2xl border-2 border-slate-200 bg-white hover:border-blue-300 hover:bg-blue-50 text-slate-800 font-bold text-sm flex items-center justify-center gap-2 shadow-sm transition-all"
+            className="w-full h-12 rounded-2xl border-2 border-slate-200 bg-white hover:border-blue-300 hover:bg-blue-50 text-slate-800 font-bold text-sm flex items-center justify-center gap-2 shadow-sm transition-transform duration-75 active:scale-95"
           >
             <LogIn className="w-4 h-4 text-blue-600" />
             Sign In to Existing Account

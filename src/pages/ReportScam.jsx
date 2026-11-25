@@ -219,7 +219,7 @@ export default function ReportScam() {
           <Button
             type="submit"
             disabled={submitting || !form.scam_content.trim() || !agreedConsent}
-            className="w-full h-12 rounded-xl font-bold text-slate-950 transition-all shadow-md bg-amber-500 hover:bg-amber-400 disabled:opacity-50">
+            className="w-full h-12 rounded-xl font-bold text-slate-950 transition-transform duration-75 active:scale-95 shadow-md bg-amber-500 hover:bg-amber-400 disabled:opacity-50">
             {submitting ? "Syndicating to Community Threat Intelligence..." : "Submit Scam Incident Report"}
           </Button>
 

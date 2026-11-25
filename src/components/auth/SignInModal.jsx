@@ -131,7 +131,7 @@ export default function SignInModal({ isOpen, onClose, onSuccess, initialMode })
                 type="button"
                 aria-label="Close"
                 onClick={() => { resetForm(); onClose?.(); }}
-                className="flex h-8 w-8 items-center justify-center rounded-full border border-white/10 bg-white/5 text-slate-300 transition-colors hover:border-emerald-400 hover:text-white shrink-0"
+                className="flex h-8 w-8 items-center justify-center rounded-full border border-white/10 bg-white/5 text-slate-300 touch-manipulation min-h-[44px] min-w-[44px] transition-transform duration-75 active:scale-95 hover:border-emerald-400 hover:text-white shrink-0"
               >
                 <X className="h-4 w-4" />
               </button>
@@ -142,14 +142,14 @@ export default function SignInModal({ isOpen, onClose, onSuccess, initialMode })
               <button
                 type="button"
                 onClick={() => handleModeSwitch("signin")}
-                className={`flex-1 rounded-lg px-3 py-2 transition-all ${mode === "signin" ? "bg-slate-900 text-emerald-300 shadow-sm" : "text-slate-400 hover:text-slate-200"}`}
+                className={`flex-1 rounded-lg touch-manipulation min-h-[44px] min-w-[44px] px-3 py-2 transition-transform duration-75 active:scale-95 ${mode === "signin" ? "bg-slate-900 text-emerald-300 shadow-sm" : "text-slate-400 hover:text-slate-200"}`}
               >
                 Sign In
               </button>
               <button
                 type="button"
                 onClick={() => handleModeSwitch("signup")}
-                className={`flex-1 rounded-lg px-3 py-2 transition-all ${mode === "signup" ? "bg-slate-900 text-emerald-300 shadow-sm" : "text-slate-400 hover:text-slate-200"}`}
+                className={`flex-1 rounded-lg touch-manipulation min-h-[44px] min-w-[44px] px-3 py-2 transition-transform duration-75 active:scale-95 ${mode === "signup" ? "bg-slate-900 text-emerald-300 shadow-sm" : "text-slate-400 hover:text-slate-200"}`}
               >
                 Create Account
               </button>
@@ -223,7 +223,7 @@ export default function SignInModal({ isOpen, onClose, onSuccess, initialMode })
                   <button
                     type="button"
                     onClick={() => setShowPassword(s => !s)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300 transition-colors"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 touch-manipulation transition-transform duration-75 active:scale-95 hover:text-slate-300 transition-colors"
                     tabIndex={-1}
                   >
                     {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
@@ -245,7 +245,7 @@ export default function SignInModal({ isOpen, onClose, onSuccess, initialMode })
 
               <Button
                 type="submit"
-                className="h-11 w-full rounded-xl bg-gradient-to-r from-emerald-400 to-blue-500 text-sm font-bold text-slate-950 shadow-[0_0_26px_rgba(34,211,238,0.3)] hover:brightness-110 disabled:opacity-60 transition-all"
+                className="h-11 w-full rounded-xl bg-gradient-to-r from-emerald-400 to-blue-500 text-sm font-bold text-slate-950 shadow-[0_0_26px_rgba(34,211,238,0.3)] hover:brightness-110 disabled:opacity-60 transition-transform duration-75 active:scale-95"
                 disabled={loading}
               >
                 {loading
@@ -266,7 +266,7 @@ export default function SignInModal({ isOpen, onClose, onSuccess, initialMode })
               type="button"
               onClick={handleGuest}
               disabled={loading}
-              className="w-full rounded-xl border border-slate-700 bg-slate-900/50 px-3 py-2.5 text-sm font-semibold text-slate-300 transition-all hover:border-slate-500 hover:text-white disabled:opacity-60 flex items-center justify-center gap-2"
+              className="w-full rounded-xl border border-slate-700 bg-slate-900/50 px-3 py-2.5 text-sm font-semibold text-slate-300 touch-manipulation min-h-[44px] min-w-[44px] transition-transform duration-75 active:scale-95 hover:border-slate-500 hover:text-white disabled:opacity-60 flex items-center justify-center gap-2"
             >
               <Sparkles className="h-4 w-4 text-slate-400" />
               Continue as Guest
@@ -274,9 +274,9 @@ export default function SignInModal({ isOpen, onClose, onSuccess, initialMode })
 
             <p className="mt-3 text-center text-[11px] text-slate-600">
               By continuing, you agree to our{" "}
-              <a href="#/Terms" className="text-emerald-600 hover:underline">Terms of Service</a>{" "}
+              <a href="#/Terms" className="touch-manipulation text-emerald-600 hover:underline">Terms of Service</a>{" "}
               &amp;{" "}
-              <a href="#/PrivacyPolicy" className="text-emerald-600 hover:underline">Privacy Policy</a>.
+              <a href="#/PrivacyPolicy" className="touch-manipulation text-emerald-600 hover:underline">Privacy Policy</a>.
             </p>
           </motion.div>
         </div>

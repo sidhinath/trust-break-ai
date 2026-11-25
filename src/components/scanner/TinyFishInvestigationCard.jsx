@@ -134,7 +134,7 @@ export default function TinyFishInvestigationCard({
           <Button
             onClick={onInvestigate}
             disabled={isInvestigating || !targetUrl.trim()}
-            className="text-xs font-bold bg-emerald-500 hover:bg-emerald-400 text-slate-950 shrink-0 h-9 px-4 rounded-lg shadow-sm transition-all"
+            className="text-xs font-bold touch-manipulation min-h-[44px] min-w-[44px] bg-emerald-500 hover:bg-emerald-400 text-slate-950 shrink-0 h-9 px-4 rounded-lg shadow-sm transition-transform duration-75 active:scale-95"
           >
             {isInvestigating ? (
               <>

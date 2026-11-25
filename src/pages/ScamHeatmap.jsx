@@ -280,7 +280,7 @@ export default function ScamHeatmap() {
                     animate={{ opacity: 1, y: 0, scale: 1 }}
                     exit={{ opacity: 0, height: 0 }}
                     transition={{ duration: 0.35 }}
-                    className="p-3.5 rounded-xl border flex flex-col sm:flex-row sm:items-center justify-between gap-3 transition-all hover:border-emerald-400/50"
+                    className="p-3.5 rounded-xl border flex flex-col sm:flex-row sm:items-center justify-between gap-3 transition-transform duration-75 active:scale-95 hover:border-emerald-400/50"
                     style={{ background: 'var(--tb-surface-2)', borderColor: 'var(--tb-border)' }}>
                     
                     <div className="flex items-start gap-3 min-w-0">

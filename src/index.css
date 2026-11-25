@@ -388,3 +388,67 @@ textarea::placeholder {
   opacity: 0.65 !important;
 }
 
+/* ══════════════════════════════════════════════════════════════════
+   TrustBreak AI — Instant Touch & 60fps Mobile Optimizations
+   ══════════════════════════════════════════════════════════════════ */
+
+/* Eliminate the ~300ms mobile tap delay on every interactive surface. */
+@layer base {
+  button,
+  a,
+  [role="button"],
+  input,
+  select,
+  textarea,
+  label,
+  [tabindex]:not([tabindex="-1"]) {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* Cards: only GPU-composited properties may transition — never layout props. */
+  .tb-card {
+    transition: transform 0.2s ease, opacity 0.2s ease;
+  }
+}
+
+/* Reusable touch utilities. */
+@layer utilities {
+  .tb-touch-target {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  .tb-tap-feedback {
+    transition: transform 75ms ease;
+  }
+  .tb-tap-feedback:active {
+    transform: scale(0.95);
+  }
+  /* Decorative gradients / glows / overlays must never intercept touches. */
+  .tb-decorative {
+    pointer-events: none !important;
+    user-select: none !important;
+    -webkit-user-select: none !important;
+  }
+}
+
+/* Mobile viewports (< 768px): drop expensive backdrop blurs and simplify glows
+   so the mobile GPU isn't strained during scroll and touch. */
+@media (width <= 767px) {
+  [class*="backdrop-blur"],
+  [style*="backdrop-filter"] {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+
+  /* Simplify large decorative glows/shadows on mobile. */
+  [class*="blur-3xl"],
+  [class*="blur-2xl"],
+  [class*="shadow-[0_0_35px]"],
+  [class*="shadow-[0_0_40px]"] {
+    filter: none !important;
+    -webkit-filter: none !important;
+    box-shadow: var(--tb-card-shadow) !important;
+  }
+}
+

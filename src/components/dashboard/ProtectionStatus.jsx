@@ -52,24 +52,24 @@ export default function ProtectionStatus({ threatsBlocked = 0, safetyScore = 100
           <div className="pt-2 flex flex-wrap items-center gap-2.5">
             <Link
               to={createPageUrl("MessageScanner")}
-              className="inline-flex items-center justify-center gap-2 h-9 px-4 rounded-xl text-xs font-bold font-mono tracking-wide uppercase bg-gradient-to-r from-emerald-500 to-emerald-400 hover:from-emerald-400 hover:to-emerald-300 text-white shadow-[0_0_25px_rgba(16,185,129,0.4)] transition-all hover:scale-[1.02] active:scale-[0.98]">
+              className="inline-flex items-center justify-center gap-2 touch-manipulation min-h-[44px] min-w-[44px] px-4 rounded-xl text-xs font-bold font-mono tracking-wide uppercase bg-gradient-to-r from-emerald-500 to-emerald-400 hover:from-emerald-400 hover:to-emerald-300 text-white shadow-[0_0_25px_rgba(16,185,129,0.4)] transition-transform duration-75 active:scale-95">
               <Zap className="w-3.5 h-3.5 fill-current" />
               Scan Message
             </Link>
             <Link
               to={createPageUrl("LinkScanner")}
-              className="text-xs font-bold text-emerald-600 dark:text-emerald-400 hover:underline transition-colors flex items-center gap-1 px-2 py-1 rounded-lg hover:bg-emerald-500/10">
+              className="text-xs font-bold text-emerald-600 dark:text-emerald-400 hover:underline touch-manipulation min-h-[44px] min-w-[44px] transition-transform duration-75 active:scale-95 flex items-center gap-1 px-2 py-1 min-h-[44px] min-w-[44px] rounded-lg hover:bg-emerald-500/10">
               Link →
             </Link>
             <Link
               to={createPageUrl("QRScanner")}
-              className="text-xs font-bold text-purple-600 dark:text-purple-400 hover:underline transition-colors flex items-center gap-1 px-2 py-1 rounded-lg hover:bg-purple-500/10">
+              className="text-xs font-bold text-purple-600 dark:text-purple-400 hover:underline touch-manipulation min-h-[44px] min-w-[44px] transition-transform duration-75 active:scale-95 flex items-center gap-1 px-2 py-1 min-h-[44px] min-w-[44px] rounded-lg hover:bg-purple-500/10">
               <QrCode className="w-3.5 h-3.5" />
               QR →
             </Link>
             <Link
               to={createPageUrl("VoiceScanner")}
-              className="text-xs font-bold text-teal-600 dark:text-teal-400 hover:underline transition-colors flex items-center gap-1 px-2 py-1 rounded-lg hover:bg-teal-500/10">
+              className="text-xs font-bold text-teal-600 dark:text-teal-400 hover:underline touch-manipulation min-h-[44px] min-w-[44px] transition-transform duration-75 active:scale-95 flex items-center gap-1 px-2 py-1 min-h-[44px] min-w-[44px] rounded-lg hover:bg-teal-500/10">
               <Mic className="w-3.5 h-3.5" />
               Voice →
             </Link>

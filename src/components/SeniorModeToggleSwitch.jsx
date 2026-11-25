@@ -67,7 +67,7 @@ export default function SeniorModeToggleSwitch({ variant = "default", className 
         aria-checked={active}
         aria-label="Toggle Senior & Family Safety Mode"
         onClick={handleToggle}
-        className={`h-9 sm:h-10 px-1 sm:px-3 rounded-lg sm:rounded-xl border flex items-center justify-center gap-1 sm:gap-2 text-xs font-black transition-all cursor-pointer select-none active:scale-95 shrink-0 touch-manipulation relative overflow-hidden ${
+        className={`h-9 sm:h-10 px-1 sm:px-3 rounded-lg sm:rounded-xl border flex items-center justify-center gap-1 sm:gap-2 text-xs font-black transition-transform duration-75 cursor-pointer select-none active:scale-95 shrink-0 touch-manipulation relative overflow-hidden ${
           active
             ? "bg-emerald-500/20 border-emerald-400 text-emerald-700 dark:text-emerald-300 shadow-[0_0_12px_rgba(16,185,129,0.35)]"
             : "border-slate-300 dark:border-slate-700 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:border-slate-400"
@@ -100,7 +100,7 @@ export default function SeniorModeToggleSwitch({ variant = "default", className 
         aria-checked={active}
         aria-label="Toggle Senior & Family Safety Mode"
         onClick={handleToggle}
-        className={`group p-4 sm:p-5 rounded-3xl border-2 transition-all cursor-pointer select-none active:scale-98 flex items-center justify-between gap-4 shadow-lg touch-manipulation relative overflow-hidden ${
+        className={`group p-4 sm:p-5 rounded-3xl border-2 transition-transform duration-75 active:scale-98 flex items-center justify-between gap-4 shadow-lg touch-manipulation relative overflow-hidden ${
           active
             ? "border-emerald-400 bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 text-white shadow-emerald-500/20"
             : "border-slate-300 dark:border-slate-700 bg-slate-100 dark:bg-slate-900 text-slate-900 dark:text-white hover:border-emerald-500"
@@ -159,7 +159,7 @@ export default function SeniorModeToggleSwitch({ variant = "default", className 
       aria-checked={active}
       aria-label="Toggle Senior & Family Safety Mode"
       onClick={handleToggle}
-      className={`h-11 px-4 rounded-2xl border flex items-center justify-between gap-3 font-bold text-xs sm:text-sm transition-all cursor-pointer select-none active:scale-95 shrink-0 touch-manipulation relative overflow-hidden ${
+      className={`h-11 px-4 rounded-2xl border flex items-center justify-between gap-3 font-bold text-xs sm:text-sm transition-transform duration-75 cursor-pointer select-none active:scale-95 shrink-0 touch-manipulation relative overflow-hidden ${
         active
           ? "bg-emerald-500/20 border-emerald-400 text-emerald-700 dark:text-emerald-300 shadow-[0_0_12px_rgba(16,185,129,0.3)]"
           : "border-slate-300 dark:border-slate-700 bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 hover:border-slate-400"

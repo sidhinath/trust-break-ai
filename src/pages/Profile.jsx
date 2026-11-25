@@ -124,7 +124,7 @@ export default function Profile() {
         
         <Link
           to={createPageUrl("PrivacyCenter")}
-          className="tb-card p-4 flex items-center justify-between hover:border-slate-500 transition-all block">
+          className="touch-manipulation min-h-[44px] min-w-[44px] tb-card p-4 flex items-center justify-between hover:border-slate-500 transition-transform duration-75 active:scale-95 block" role="button"
           <div className="flex items-center gap-3">
             <div className="w-9 h-9 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center">
               <Lock className="w-4 h-4 text-emerald-500" />
@@ -139,7 +139,7 @@ export default function Profile() {
 
         <Link
           to={createPageUrl("Technology")}
-          className="tb-card p-4 flex items-center justify-between hover:border-slate-500 transition-all block">
+          className="touch-manipulation min-h-[44px] min-w-[44px] tb-card p-4 flex items-center justify-between hover:border-slate-500 transition-transform duration-75 active:scale-95 block" role="button"
           <div className="flex items-center gap-3">
             <div className="w-9 h-9 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center">
               <Cpu className="w-4 h-4 text-emerald-500" />
@@ -157,7 +157,7 @@ export default function Profile() {
       <Button
         onClick={signOut}
         variant="outline"
-        className="w-full h-12 rounded-xl border border-rose-500/30 text-rose-600 dark:text-rose-400 hover:bg-rose-500/10 font-bold transition-all">
+        className="w-full h-12 rounded-xl border border-rose-500/30 text-rose-600 dark:text-rose-400 hover:bg-rose-500/10 font-bold transition-transform duration-75 active:scale-95">
         <LogOut className="w-4 h-4 mr-2" />
         Sign Out of TrustBreak AI Console
       </Button>

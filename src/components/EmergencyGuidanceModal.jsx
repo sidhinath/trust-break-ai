@@ -95,7 +95,7 @@ export default function EmergencyGuidanceModal({ isOpen, onClose }) {
               await triggerHaptic("light");
               onClose();
             }}
-            className="w-10 h-10 rounded-xl bg-slate-200 hover:bg-slate-300 dark:bg-slate-800 dark:hover:bg-slate-700 flex items-center justify-center text-slate-800 dark:text-slate-200 transition-all cursor-pointer touch-manipulation"
+            className="touch-manipulation min-h-[44px] min-w-[44px] w-10 h-10 rounded-xl bg-slate-200 hover:bg-slate-300 dark:bg-slate-800 dark:hover:bg-slate-700 flex items-center justify-center text-slate-800 dark:text-slate-200 transition-transform duration-75 active:scale-95 cursor-pointer"
           >
             <X className="w-5 h-5 pointer-events-none" />
           </button>
@@ -113,7 +113,7 @@ export default function EmergencyGuidanceModal({ isOpen, onClose }) {
           <a
             href="tel:1930"
             onClick={() => triggerHaptic("heavy")}
-            className="h-12 px-6 rounded-xl bg-white text-rose-700 font-black text-sm flex items-center justify-center gap-2 hover:bg-rose-50 shadow-md transition-all active:scale-95 cursor-pointer touch-manipulation"
+            className="h-12 px-6 rounded-xl bg-white text-rose-700 font-black text-sm flex items-center justify-center gap-2 hover:bg-rose-50 shadow-md transition-transform duration-75 active:scale-95 cursor-pointer touch-manipulation"
           >
             <Phone className="w-4 h-4 fill-current pointer-events-none" />
             <span className="pointer-events-none">Call 1930 Now</span>
@@ -135,7 +135,7 @@ export default function EmergencyGuidanceModal({ isOpen, onClose }) {
                   await triggerHaptic("light");
                   setSelectedScenario(s.id);
                 }}
-                className={`p-3 rounded-xl border text-left text-xs font-bold transition-all flex items-center justify-between cursor-pointer touch-manipulation ${
+                className={`touch-manipulation min-h-[44px] min-w-[44px] p-3 rounded-xl border text-left text-xs font-bold transition-transform duration-75 active:scale-95 flex items-center justify-between cursor-pointer ${
                   selectedScenario === s.id
                     ? "border-2 border-emerald-500 bg-emerald-500/15 dark:bg-emerald-950/60 text-emerald-950 dark:text-emerald-200 font-black shadow-md ring-2 ring-emerald-500/30"
                     : "border border-slate-300 dark:border-slate-700 bg-slate-100 dark:bg-slate-800/80 hover:border-emerald-500 text-slate-900 dark:text-slate-100"
@@ -171,7 +171,7 @@ export default function EmergencyGuidanceModal({ isOpen, onClose }) {
               await triggerHaptic("light");
               onClose();
             }}
-            className="h-12 px-6 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-bold text-sm transition-all cursor-pointer touch-manipulation"
+            className="h-12 px-6 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-bold text-sm transition-transform duration-75 active:scale-95 cursor-pointer touch-manipulation"
           >
             <span className="pointer-events-none">Close Help Guide</span>
           </button>

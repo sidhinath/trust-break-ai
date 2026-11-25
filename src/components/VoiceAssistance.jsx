@@ -289,7 +289,7 @@ export default function VoiceAssistance({ textToRead, title = "Listen to Explana
           <button
             type="button"
             onClick={speak}
-            className="h-12 px-6 rounded-2xl bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-500 hover:to-emerald-600 text-white font-black text-xs sm:text-sm flex items-center justify-center gap-2 shadow-md transition-all active:scale-95 cursor-pointer touch-manipulation min-w-[140px]"
+            className="h-12 px-6 rounded-2xl bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-500 hover:to-emerald-600 text-white font-black text-xs sm:text-sm flex items-center justify-center gap-2 shadow-md transition-transform duration-75 active:scale-95 cursor-pointer touch-manipulation min-w-[140px]"
           >
             <Play className="w-4 h-4 fill-current pointer-events-none" />
             <span className="pointer-events-none">{paused ? "Resume Reading" : "Read Aloud"}</span>
@@ -298,7 +298,7 @@ export default function VoiceAssistance({ textToRead, title = "Listen to Explana
           <button
             type="button"
             onClick={pause}
-            className="h-12 px-6 rounded-2xl bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-500 hover:to-amber-600 text-white font-black text-xs sm:text-sm flex items-center justify-center gap-2 shadow-md transition-all active:scale-95 cursor-pointer touch-manipulation min-w-[140px]"
+            className="h-12 px-6 rounded-2xl bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-500 hover:to-amber-600 text-white font-black text-xs sm:text-sm flex items-center justify-center gap-2 shadow-md transition-transform duration-75 active:scale-95 cursor-pointer touch-manipulation min-w-[140px]"
           >
             <Pause className="w-4 h-4 fill-current pointer-events-none" />
             <span className="pointer-events-none">Pause Voice</span>
@@ -309,7 +309,7 @@ export default function VoiceAssistance({ textToRead, title = "Listen to Explana
           <button
             type="button"
             onClick={stop}
-            className="h-12 px-6 rounded-2xl bg-gradient-to-r from-rose-600 to-rose-700 hover:from-rose-500 hover:to-rose-600 text-white font-black text-xs sm:text-sm flex items-center justify-center gap-2 shadow-md transition-all active:scale-95 cursor-pointer touch-manipulation min-w-[130px]"
+            className="h-12 px-6 rounded-2xl bg-gradient-to-r from-rose-600 to-rose-700 hover:from-rose-500 hover:to-rose-600 text-white font-black text-xs sm:text-sm flex items-center justify-center gap-2 shadow-md transition-transform duration-75 active:scale-95 cursor-pointer touch-manipulation min-w-[130px]"
           >
             <Square className="w-4 h-4 fill-current pointer-events-none" />
             <span className="pointer-events-none">Stop Reading</span>

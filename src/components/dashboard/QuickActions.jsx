@@ -84,7 +84,7 @@ export default function QuickActions() {
             transition={{ duration: 0.15 }}>
             <Link
               to={createPageUrl(action.page)}
-              className="tb-card p-4 flex items-center justify-between group transition-all block h-full">
+              className="touch-manipulation min-h-[44px] min-w-[44px] tb-card p-4 flex items-center justify-between group transition-transform duration-75 active:scale-95 block h-full">
               <div className="flex items-center gap-3">
                 <div
                   className="w-11 h-11 rounded-xl flex items-center justify-center shrink-0 transition-transform group-hover:scale-105"
@@ -102,7 +102,7 @@ export default function QuickActions() {
                   </p>
                 </div>
               </div>
-              <ArrowRight className="w-4 h-4 text-slate-400 group-hover:translate-x-1 transition-all shrink-0 ml-2" />
+              <ArrowRight className="w-4 h-4 text-slate-400 group-hover:translate-x-1 transition-transform duration-75 shrink-0 ml-2" />
             </Link>
           </motion.div>
         );

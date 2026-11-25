@@ -386,7 +386,7 @@ export default function VoiceScanner() {
                   onClick={() => handleTinyFishInvestigation(result.transcript)}
                   disabled={investigating}
                   variant="outline"
-                  className="w-full h-10 rounded-xl font-bold border-emerald-500/40 hover:bg-emerald-500/10 text-emerald-400 transition-all text-xs">
+                  className="touch-manipulation min-h-[44px] min-w-[44px] w-full h-10 rounded-xl font-bold border-emerald-500/40 hover:bg-emerald-500/10 text-emerald-400 transition-transform duration-75 active:scale-95 text-xs">
                   {investigating ? "Live Agent Investigating..." : `🤖 TinyFish Live AI Agent: Inspect ${extractUrlFromText(result.transcript)}`}
                 </Button>
               )}

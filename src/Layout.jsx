@@ -312,7 +312,7 @@ export default function Layout({ children, currentPageName }) {
     return (
       <div className="min-h-screen flex flex-col transition-colors duration-300 relative" onClickCapture={handleProtectedLinkClick} style={{ background: 'var(--tb-bg)', color: 'var(--tb-text)' }}>
         {/* ThreeUI Ambient Living Particle Drift Field */}
-        <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden opacity-25 dark:opacity-35 transition-opacity">
+        <div className="fixed inset-0 pointer-events-none tb-decorative z-0 overflow-hidden opacity-25 dark:opacity-35 transition-opacity">
           <ConstellationField
             mode={theme === 'light' ? 'light' : 'dark'}
             speed={0.65}
@@ -330,7 +330,7 @@ export default function Layout({ children, currentPageName }) {
               <button
                 type="button"
                 onClick={handleExitCurrentTab}
-                className="mr-1 sm:mr-2 h-8 w-8 sm:w-auto shrink-0 rounded-lg border px-0 sm:px-2.5 flex items-center justify-center text-[10px] font-bold uppercase tracking-[0.14em] transition-all hover:border-emerald-400 hover:text-emerald-400"
+                className="mr-1 sm:mr-2 h-8 w-8 sm:w-auto shrink-0 rounded-lg border px-0 sm:px-2.5 flex items-center justify-center text-[10px] font-bold uppercase tracking-[0.14em] touch-manipulation min-h-[44px] min-w-[44px] transition-transform duration-75 active:scale-95 hover:border-emerald-400 hover:text-emerald-400"
                 style={{ background: 'var(--tb-surface-2)', borderColor: 'var(--tb-border)', color: 'var(--tb-text-dim)' }}
               >
                 <X className="w-3.5 h-3.5 sm:hidden" />
@@ -339,7 +339,7 @@ export default function Layout({ children, currentPageName }) {
             )}
 
             <div className="flex items-center gap-1 sm:gap-3 min-w-0">
-              <Link to="/" className="flex items-center gap-1 sm:gap-2.5 min-w-0 group">
+              <Link to="/" className="touch-manipulation tb-touch-target flex items-center gap-1 sm:gap-2.5 min-w-0 group">
                 <div className="w-6 h-6 sm:w-8 sm:h-8 shrink-0 rounded-lg overflow-hidden border border-emerald-500/40 shadow-[0_0_15px_rgba(16,185,129,0.4)] flex items-center justify-center bg-slate-950">
                   <img src="/logo-icon.svg" alt="TrustBreak AI Logo" className="w-full h-full object-cover" />
                 </div>
@@ -353,7 +353,7 @@ export default function Layout({ children, currentPageName }) {
                   type="button"
                   aria-label="Open policy menu"
                   onClick={() => setPolicyMenuOpen((prev) => !prev)}
-                  className="flex h-9 w-9 items-center justify-center rounded-xl border transition-all hover:border-emerald-400"
+                  className="flex h-9 w-9 items-center justify-center rounded-xl border touch-manipulation min-h-[44px] min-w-[44px] transition-transform duration-75 active:scale-95 hover:border-emerald-400"
                   style={{ background: 'var(--tb-surface-2)', borderColor: 'var(--tb-border)', color: 'var(--tb-text)' }}
                 >
                   <div className="flex flex-col items-center justify-center gap-[3px]">
@@ -375,7 +375,7 @@ export default function Layout({ children, currentPageName }) {
                           key={page}
                           to={createPageUrl(page)}
                           onClick={() => setPolicyMenuOpen(false)}
-                          className={`flex items-center gap-2 rounded-xl px-3 py-2 text-left text-xs font-bold transition-colors ${currentPageName === page ? 'text-emerald-500' : 'hover:text-emerald-500'}`}
+                          className={`flex items-center gap-2 touch-manipulation min-h-[44px] min-w-[44px] rounded-xl px-3 py-2 text-left text-xs font-bold transition-transform duration-75 active:scale-95 ${currentPageName === page ? 'text-emerald-500' : 'hover:text-emerald-500'}`}
                           style={{ color: currentPageName === page ? 'var(--tb-text)' : 'var(--tb-text-dim)' }}
                         >
                           <Icon className="h-3.5 w-3.5" />
@@ -390,7 +390,7 @@ export default function Layout({ children, currentPageName }) {
                           key={page}
                           to={createPageUrl(page)}
                           onClick={() => setPolicyMenuOpen(false)}
-                          className={`rounded-xl px-3 py-2 text-left text-xs font-bold transition-colors ${currentPageName === page ? 'text-emerald-500' : 'hover:text-emerald-500'}`}
+                          className={`touch-manipulation min-h-[44px] min-w-[44px] rounded-xl px-3 py-2 text-left text-xs font-bold transition-transform duration-75 active:scale-95 ${currentPageName === page ? 'text-emerald-500' : 'hover:text-emerald-500'}`}
                           style={{ color: currentPageName === page ? 'var(--tb-text)' : 'var(--tb-text-dim)' }}
                         >
                           {label}
@@ -406,7 +406,7 @@ export default function Layout({ children, currentPageName }) {
               <button
                 onClick={toggleTheme}
                 title={`Switch to ${theme === 'dark' ? 'Light' : 'Dark'} Mode`}
-                className="w-6 h-8 sm:w-8 sm:h-8 rounded-lg flex items-center justify-center border transition-all shrink-0"
+                className="w-6 h-8 sm:w-8 sm:h-8 rounded-lg flex items-center justify-center border touch-manipulation min-h-[44px] min-w-[44px] transition-transform duration-75 active:scale-95 shrink-0"
                 style={{ background: 'var(--tb-surface-2)', borderColor: 'var(--tb-border)', color: 'var(--tb-text)' }}>
                 {theme === "dark" ? <Sun className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-400" /> : <Moon className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-emerald-600" />}
               </button>
@@ -419,7 +419,7 @@ export default function Layout({ children, currentPageName }) {
                   type="button"
                   onClick={() => setShowUserModal(true)}
                   title="View account details"
-                  className="h-9 px-2 rounded-xl flex items-center gap-2 border border-emerald-500/30 bg-emerald-500/10 hover:border-emerald-400 transition-all"
+                  className="h-9 px-2 rounded-xl flex items-center gap-2 border border-emerald-500/30 bg-emerald-500/10 touch-manipulation min-h-[44px] min-w-[44px] transition-transform duration-75 active:scale-95 hover:border-emerald-400"
                 >
                   <div className="w-6 h-6 rounded-lg bg-gradient-to-br from-emerald-400 to-blue-500 flex items-center justify-center text-[10px] font-black text-slate-950">
                     {getInitials(user)}
@@ -435,7 +435,7 @@ export default function Layout({ children, currentPageName }) {
                   <button
                     type="button"
                     onClick={openSignIn}
-                    className="tb-auth-button h-8 sm:h-9 px-1 sm:px-3 rounded-lg sm:rounded-xl text-[13px] sm:text-sm font-bold border transition-all hover:border-emerald-400 hover:text-emerald-300 shrink-0"
+                    className="tb-auth-button h-8 sm:h-9 px-1 sm:px-3 rounded-lg sm:rounded-xl text-[13px] sm:text-sm font-bold border touch-manipulation min-h-[44px] min-w-[44px] transition-transform duration-75 active:scale-95 hover:border-emerald-400 hover:text-emerald-300 shrink-0"
                     style={{ background: 'var(--tb-surface-2)', borderColor: 'var(--tb-border)', color: 'var(--tb-text-dim)' }}
                   >
                     Sign In
@@ -443,7 +443,7 @@ export default function Layout({ children, currentPageName }) {
                   <button
                     type="button"
                     onClick={openSignUp}
-                    className="tb-auth-button h-8 sm:h-9 px-2 sm:px-3.5 rounded-lg sm:rounded-xl text-[13px] sm:text-sm font-bold bg-gradient-to-r from-emerald-400 to-blue-500 text-slate-950 shadow-sm transition-all hover:brightness-110 shrink-0"
+                    className="tb-auth-button h-8 sm:h-9 px-2 sm:px-3.5 rounded-lg sm:rounded-xl text-[13px] sm:text-sm font-bold bg-gradient-to-r from-emerald-400 to-blue-500 text-slate-950 shadow-sm touch-manipulation min-h-[44px] min-w-[44px] transition-transform duration-75 active:scale-95 hover:brightness-110 shrink-0"
                   >
                     Sign Up
                   </button>
@@ -541,7 +541,7 @@ export default function Layout({ children, currentPageName }) {
                 onClick={handleExitCurrentTab}
                 aria-label="Go Back"
                 title="Go Back"
-                className="h-8 w-8 sm:h-9 sm:w-auto sm:px-2.5 rounded-lg sm:rounded-xl border flex items-center justify-center gap-1 sm:gap-1.5 transition-all cursor-pointer hover:border-emerald-400 active:scale-95 shrink-0"
+                className="h-8 w-8 sm:h-9 sm:w-auto sm:px-2.5 rounded-lg sm:rounded-xl border flex items-center justify-center gap-1 sm:gap-1.5 touch-manipulation min-h-[44px] min-w-[44px] transition-transform duration-75 active:scale-95 cursor-pointer hover:border-emerald-400 shrink-0"
                 style={{
                   background: 'var(--tb-surface-2)',
                   borderColor: 'var(--tb-border)',
@@ -578,7 +578,7 @@ export default function Layout({ children, currentPageName }) {
                 }}
                 aria-label={sidebarOpen ? "Close Sidebar Navigation" : "Open Sidebar Navigation"}
                 title={sidebarOpen ? "Close Sidebar Navigation" : "Open Sidebar Navigation"}
-                className="hidden md:flex w-9 h-9 rounded-xl items-center justify-center border transition-all cursor-pointer hover:border-emerald-400 active:scale-95 shrink-0"
+                className="hidden md:flex w-9 h-9 rounded-xl items-center justify-center border touch-manipulation min-h-[44px] min-w-[44px] transition-transform duration-75 active:scale-95 cursor-pointer hover:border-emerald-400 shrink-0"
                 style={{
                   background: 'var(--tb-surface-2)',
                   borderColor: 'var(--tb-border)',
@@ -597,7 +597,7 @@ export default function Layout({ children, currentPageName }) {
               type="button"
               onClick={toggleTheme}
               title={`Switch to ${theme === 'dark' ? 'Light' : 'Dark'} Mode`}
-              className="hidden min-[400px]:flex w-8 h-8 sm:w-9 sm:h-9 rounded-lg sm:rounded-xl items-center justify-center border transition-all cursor-pointer hover:border-emerald-400 active:scale-95 shrink-0"
+              className="hidden min-[400px]:flex w-8 h-8 sm:w-9 sm:h-9 rounded-lg sm:rounded-xl items-center justify-center border touch-manipulation min-h-[44px] min-w-[44px] transition-transform duration-75 active:scale-95 cursor-pointer hover:border-emerald-400 shrink-0"
               style={{
                 background: 'var(--tb-surface-2)',
                 borderColor: 'var(--tb-border)',
@@ -620,7 +620,7 @@ export default function Layout({ children, currentPageName }) {
                 type="button"
                 onClick={async () => { await triggerHaptic('light'); setShowUserModal(true); }}
                 title="View account details"
-                className="flex items-center gap-2 h-9 px-2 rounded-xl border border-emerald-500/30 bg-emerald-500/10 hover:border-emerald-400 transition-all cursor-pointer active:scale-95 shrink-0"
+                className="touch-manipulation min-h-[44px] min-w-[44px] flex items-center gap-2 h-9 px-2 rounded-xl border border-emerald-500/30 bg-emerald-500/10 hover:border-emerald-400 transition-transform duration-75 active:scale-95 cursor-pointer shrink-0"
               >
                 <div className="w-6 h-6 rounded-lg bg-gradient-to-br from-emerald-400 to-blue-500 flex items-center justify-center text-[10px] font-black text-slate-950 shrink-0">
                   {getInitials(user)}
@@ -636,7 +636,7 @@ export default function Layout({ children, currentPageName }) {
                 <button
                   type="button"
                   onClick={async () => { await triggerHaptic('light'); openSignIn(); }}
-                  className="tb-auth-button h-8 sm:h-9 px-1.5 sm:px-3 rounded-lg sm:rounded-xl text-[13px] sm:text-sm font-bold border transition-all hover:border-emerald-400 hover:text-emerald-300 active:scale-95 shrink-0"
+                  className="tb-auth-button h-8 sm:h-9 px-1.5 sm:px-3 rounded-lg sm:rounded-xl text-[13px] sm:text-sm font-bold border touch-manipulation min-h-[44px] min-w-[44px] transition-transform duration-75 active:scale-95 hover:border-emerald-400 hover:text-emerald-300 shrink-0"
                   style={{ background: 'var(--tb-surface-2)', borderColor: 'var(--tb-border)', color: 'var(--tb-text-dim)' }}
                 >
                   Sign In
@@ -644,7 +644,7 @@ export default function Layout({ children, currentPageName }) {
                 <button
                   type="button"
                   onClick={async () => { await triggerHaptic('light'); openSignUp(); }}
-                  className="tb-auth-button h-8 sm:h-9 px-2 sm:px-3.5 rounded-lg sm:rounded-xl text-[13px] sm:text-sm font-bold bg-gradient-to-r from-emerald-400 to-blue-500 text-slate-950 shadow-sm transition-all hover:brightness-110 active:scale-95 shrink-0"
+                  className="tb-auth-button h-8 sm:h-9 px-2 sm:px-3.5 rounded-lg sm:rounded-xl text-[13px] sm:text-sm font-bold bg-gradient-to-r from-emerald-400 to-blue-500 text-slate-950 shadow-sm touch-manipulation min-h-[44px] min-w-[44px] transition-transform duration-75 active:scale-95 hover:brightness-110 shrink-0"
                 >
                   Sign Up
                 </button>
@@ -658,7 +658,7 @@ export default function Layout({ children, currentPageName }) {
                 await triggerHaptic('light');
                 setMobileMenuOpen(!mobileMenuOpen);
               }}
-              className="md:hidden w-8 h-8 sm:w-9 sm:h-9 rounded-lg sm:rounded-xl flex items-center justify-center border cursor-pointer active:scale-95 shrink-0"
+              className="md:hidden w-8 h-8 sm:w-9 sm:h-9 rounded-lg sm:rounded-xl flex items-center justify-center border touch-manipulation min-h-[44px] min-w-[44px] transition-transform duration-75 active:scale-95 shrink-0"
               aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
               style={{
                 background: 'var(--tb-surface-2)',
@@ -694,7 +694,7 @@ export default function Layout({ children, currentPageName }) {
             <button
               onClick={() => setMobileMenuOpen(false)}
               aria-label="Close menu"
-              className="w-9 h-9 rounded-xl border flex items-center justify-center transition-all hover:bg-slate-500/20"
+              className="w-9 h-9 rounded-xl border flex items-center justify-center touch-manipulation min-h-[44px] min-w-[44px] transition-transform duration-75 active:scale-95 hover:bg-slate-500/20"
               style={{ background: 'var(--tb-surface-2)', borderColor: 'var(--tb-border)', color: 'var(--tb-text)' }}>
               <X className="w-5 h-5 text-emerald-400" />
             </button>
@@ -713,7 +713,7 @@ export default function Layout({ children, currentPageName }) {
                 </div>
                 <button
                   onClick={toggleFamilyMode}
-                  className={`text-[10px] font-mono font-black uppercase px-3 py-1 rounded-full border transition-all ${
+                  className={`text-[10px] font-mono font-black uppercase px-3 py-1 rounded-full border touch-manipulation min-h-[44px] min-w-[44px] transition-transform duration-75 active:scale-95 ${
                     familyMode
                       ? "bg-emerald-500 text-slate-950 border-emerald-400"
                       : "bg-slate-700/50 text-slate-300 border-slate-600"
@@ -730,7 +730,7 @@ export default function Layout({ children, currentPageName }) {
             <button
               type="button"
               onClick={toggleTheme}
-              className="w-full flex items-center justify-between gap-3 px-3 py-3 rounded-xl border transition-all"
+              className="w-full flex items-center justify-between gap-3 px-3 py-3 rounded-xl border touch-manipulation min-h-[44px] min-w-[44px] transition-transform duration-75 active:scale-95"
               style={{ background: 'var(--tb-surface-2)', borderColor: 'var(--tb-border)', color: 'var(--tb-text)' }}
             >
               <span className="flex items-center gap-2 text-xs font-bold">
@@ -757,9 +757,7 @@ export default function Layout({ children, currentPageName }) {
                   key={item.page}
                   to={createPageUrl(item.page)}
                   onClick={() => setMobileMenuOpen(false)}
-                  className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${
-                    active ? 'bg-emerald-500/15 text-emerald-500 border border-emerald-500/30' : 'hover:bg-slate-500/10'
-                  }`}
+                  className={`flex items-center gap-3 px-4 py-3 rounded-xl touch-manipulation min-h-[44px] min-w-[44px] transition-transform duration-75 active:scale-95 ${active ? 'bg-emerald-500/15 text-emerald-500 border border-emerald-500/30' : 'hover:bg-slate-500/10'}`}
                   style={{ color: active ? undefined : 'var(--tb-text)' }}>
                   <Icon className="w-4 h-4" />
                   <span className="font-bold text-sm">{item.name}</span>
@@ -778,9 +776,7 @@ export default function Layout({ children, currentPageName }) {
                   key={item.page}
                   to={createPageUrl(item.page)}
                   onClick={() => setMobileMenuOpen(false)}
-                  className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${
-                    active ? 'bg-emerald-500/15 text-emerald-500 border border-emerald-500/30' : 'hover:bg-slate-500/10'
-                  }`}
+                  className={`flex items-center gap-3 px-4 py-3 rounded-xl touch-manipulation min-h-[44px] min-w-[44px] transition-transform duration-75 active:scale-95 ${active ? 'bg-emerald-500/15 text-emerald-500 border border-emerald-500/30' : 'hover:bg-slate-500/10'}`}
                   style={{ color: active ? undefined : 'var(--tb-text)' }}>
                   <Icon className="w-4 h-4" />
                   <span className="font-bold text-sm">{item.name}</span>
@@ -799,9 +795,7 @@ export default function Layout({ children, currentPageName }) {
                   key={item.page}
                   to={createPageUrl(item.page)}
                   onClick={() => setMobileMenuOpen(false)}
-                  className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${
-                    active ? 'bg-emerald-500/15 text-emerald-500 border border-emerald-500/30' : 'hover:bg-slate-500/10'
-                  }`}
+                  className={`flex items-center gap-3 px-4 py-3 rounded-xl touch-manipulation min-h-[44px] min-w-[44px] transition-transform duration-75 active:scale-95 ${active ? 'bg-emerald-500/15 text-emerald-500 border border-emerald-500/30' : 'hover:bg-slate-500/10'}`}
                   style={{ color: active ? undefined : 'var(--tb-text)' }}>
                   <Icon className="w-4 h-4" />
                   <span className="font-bold text-sm">{item.name}</span>
@@ -823,13 +817,13 @@ export default function Layout({ children, currentPageName }) {
               <div className="mt-4 grid grid-cols-2 gap-2">
                 <button
                   onClick={() => { setMobileMenuOpen(false); openSignIn(); }}
-                  className="tb-auth-button flex items-center justify-center gap-1.5 px-3 py-3 rounded-xl font-bold text-xs border border-slate-600 bg-slate-800 text-slate-200 hover:border-emerald-400 transition-all"
+                  className="tb-auth-button flex items-center justify-center gap-1.5 px-3 py-3 rounded-xl font-bold text-xs touch-manipulation min-h-[44px] min-w-[44px] transition-transform duration-75 active:scale-95 border border-slate-600 bg-slate-800 text-slate-200 hover:border-emerald-400"
                 >
                   <User className="w-3.5 h-3.5" /> Sign In
                 </button>
                 <button
                   onClick={() => { setMobileMenuOpen(false); openSignUp(); }}
-                  className="tb-auth-button flex items-center justify-center gap-1.5 px-3 py-3 rounded-xl font-bold text-xs bg-gradient-to-r from-emerald-400 to-blue-500 text-slate-950"
+                  className="tb-auth-button flex items-center justify-center gap-1.5 px-3 py-3 rounded-xl font-bold text-xs touch-manipulation min-h-[44px] min-w-[44px] transition-transform duration-75 active:scale-95 bg-gradient-to-r from-emerald-400 to-blue-500 text-slate-950"
                 >
                   <UserPlus className="w-3.5 h-3.5" /> Sign Up
                 </button>
@@ -840,7 +834,7 @@ export default function Layout({ children, currentPageName }) {
       )}
 
       {/* Desktop Toggleable Sidebar */}
-      <aside className={`hidden md:flex fixed left-0 top-14 bottom-0 flex-col border-r z-30 py-4 overflow-y-auto no-scrollbar justify-between backdrop-blur-xl transition-all duration-300 ${
+      <aside className={`hidden md:flex fixed left-0 top-14 bottom-0 flex-col border-r z-30 py-4 overflow-y-auto no-scrollbar justify-between backdrop-blur-xl transition-transform duration-300 ${
         sidebarOpen ? 'w-72 2xl:w-80 px-3.5' : 'w-16 px-2'
       }`}
         style={{
@@ -865,7 +859,7 @@ export default function Layout({ children, currentPageName }) {
                   key={item.page}
                   to={createPageUrl(item.page)}
                   title={item.name}
-                  className={`flex items-center gap-3 py-2.5 rounded-xl transition-all text-xs font-bold ${
+                  className={`flex items-center gap-3 py-2.5 rounded-xl touch-manipulation min-h-[44px] min-w-[44px] transition-transform duration-75 active:scale-95 text-xs font-bold ${
                     sidebarOpen ? 'px-3 justify-start' : 'px-0 justify-center'
                   } ${
                     active
@@ -895,7 +889,7 @@ export default function Layout({ children, currentPageName }) {
                   key={item.page}
                   to={createPageUrl(item.page)}
                   title={item.name}
-                  className={`flex items-center gap-3 py-2.5 rounded-xl transition-all text-xs font-bold ${
+                  className={`flex items-center gap-3 py-2.5 rounded-xl touch-manipulation min-h-[44px] min-w-[44px] transition-transform duration-75 active:scale-95 text-xs font-bold ${
                     sidebarOpen ? 'px-3 justify-start' : 'px-0 justify-center'
                   } ${
                     active
@@ -925,7 +919,7 @@ export default function Layout({ children, currentPageName }) {
                   key={item.page}
                   to={createPageUrl(item.page)}
                   title={item.name}
-                  className={`flex items-center gap-3 py-2.5 rounded-xl transition-all text-xs font-bold ${
+                  className={`flex items-center gap-3 py-2.5 rounded-xl touch-manipulation min-h-[44px] min-w-[44px] transition-transform duration-75 active:scale-95 text-xs font-bold ${
                     sidebarOpen ? 'px-3 justify-start' : 'px-0 justify-center'
                   } ${
                     active
@@ -963,7 +957,7 @@ export default function Layout({ children, currentPageName }) {
       </aside>
 
       {/* Main Content Viewport - Dynamically adjusts padding based on sidebar state */}
-      <main className={`relative z-10 pt-16 pb-24 md:pb-8 flex-1 w-full overflow-x-hidden transition-all duration-300 ${
+      <main className={`relative z-10 pt-16 pb-24 md:pb-8 flex-1 w-full overflow-x-hidden ${
         sidebarOpen ? 'md:pl-72 2xl:pl-80' : 'md:pl-16'
       }`}>
         <div className="max-w-5xl lg:max-w-7xl 2xl:max-w-[1720px] mx-auto px-4 sm:px-6 lg:px-10 2xl:px-16 w-full">
@@ -1014,7 +1008,7 @@ export default function Layout({ children, currentPageName }) {
               <Link
                 key={item.page}
                 to={createPageUrl(item.page)}
-                className={`flex flex-col items-center gap-0.5 py-1 px-2.5 rounded-lg transition-all ${
+                className={`touch-manipulation min-h-[44px] min-w-[44px] flex flex-col items-center gap-0.5 py-1 px-2.5 rounded-lg transition-transform duration-75 active:scale-95 ${
                   active ? 'text-emerald-500 font-bold' : 'font-medium'
                 }`}
                 style={{ color: active ? undefined : 'var(--tb-text-dim)' }}>

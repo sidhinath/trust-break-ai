@@ -88,7 +88,7 @@ export default function ScamSimulationModal({ isOpen, onClose }) {
               await triggerHaptic("light");
               onClose();
             }}
-            className="w-9 h-9 rounded-xl bg-slate-200 hover:bg-slate-300 dark:bg-slate-800 dark:hover:bg-slate-700 flex items-center justify-center text-slate-800 dark:text-slate-200 transition-all cursor-pointer touch-manipulation"
+            className="w-9 h-9 rounded-xl bg-slate-200 hover:bg-slate-300 dark:bg-slate-800 dark:hover:bg-slate-700 flex items-center justify-center text-slate-800 dark:text-slate-200 transition-transform duration-75 active:scale-95 cursor-pointer touch-manipulation"
           >
             <X className="w-4 h-4 pointer-events-none" />
           </button>
@@ -111,7 +111,7 @@ export default function ScamSimulationModal({ isOpen, onClose }) {
             <button
               type="button"
               onClick={() => handleAnswer("scam")}
-              className="h-14 rounded-2xl bg-rose-600 hover:bg-rose-500 text-white font-black text-sm flex items-center justify-center gap-2 shadow-md transition-all active:scale-95 cursor-pointer touch-manipulation"
+              className="h-14 rounded-2xl bg-rose-600 hover:bg-rose-500 text-white font-black text-sm flex items-center justify-center gap-2 shadow-md transition-transform duration-75 active:scale-95 cursor-pointer touch-manipulation"
             >
               <ShieldAlert className="w-5 h-5 pointer-events-none" />
               <span className="pointer-events-none">IT'S A SCAM!</span>
@@ -120,7 +120,7 @@ export default function ScamSimulationModal({ isOpen, onClose }) {
             <button
               type="button"
               onClick={() => handleAnswer("safe")}
-              className="h-14 rounded-2xl bg-emerald-600 hover:bg-emerald-500 text-white font-black text-sm flex items-center justify-center gap-2 shadow-md transition-all active:scale-95 cursor-pointer touch-manipulation"
+              className="h-14 rounded-2xl bg-emerald-600 hover:bg-emerald-500 text-white font-black text-sm flex items-center justify-center gap-2 shadow-md transition-transform duration-75 active:scale-95 cursor-pointer touch-manipulation"
             >
               <CheckCircle2 className="w-5 h-5 pointer-events-none" />
               <span className="pointer-events-none">IT'S SAFE</span>
@@ -156,7 +156,7 @@ export default function ScamSimulationModal({ isOpen, onClose }) {
             <button
               type="button"
               onClick={handleNext}
-              className="w-full h-12 rounded-2xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-sm flex items-center justify-center gap-2 shadow-md transition-all cursor-pointer touch-manipulation"
+              className="w-full h-12 rounded-2xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-sm flex items-center justify-center gap-2 shadow-md transition-transform duration-75 active:scale-95 cursor-pointer touch-manipulation"
             >
               <span className="pointer-events-none">{currentScenarioIndex < scenarios.length - 1 ? "Try Next Scenario" : "Finish Practice"}</span>
               <ArrowRight className="w-4 h-4 pointer-events-none" />

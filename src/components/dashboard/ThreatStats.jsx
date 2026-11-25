@@ -2,6 +2,8 @@ import React from "react";
 import { motion } from "framer-motion";
 import { TrendingUp, AlertTriangle, ShieldCheck, Eye, Activity, BarChart2 } from "lucide-react";
 import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, Cell, AreaChart, Area } from "recharts";
+import { LazyViewport } from "@/components/ui/lazy-viewport";
+import { ChartSkeleton } from "@/components/ui/skeleton";
 
 export default function ThreatStats({ reports = [], scans = [] }) {
   const totalScams = scans.filter(s => s.risk_level === 'scam').length + reports.filter(r => r.risk_level === 'scam').length;
@@ -84,9 +86,10 @@ export default function ThreatStats({ reports = [], scans = [] }) {
             <span className="text-xs text-slate-400 font-mono">Live Telemetry</span>
           </div>
 
-          <div className="h-44 w-full">
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={categoryData} margin={{ top: 10, right: 10, left: -25, bottom: 0 }}>
+          <LazyViewport rootMargin="400px" placeholder={<ChartSkeleton height={180} className="w-full" />}>
+            <div className="h-44 w-full">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={categoryData} margin={{ top: 10, right: 10, left: -25, bottom: 0 }}>
                 <XAxis dataKey="name" stroke="#64748b" fontSize={11} tickLine={false} />
                 <YAxis stroke="#64748b" fontSize={11} tickLine={false} allowDecimals={false} />
                 <Tooltip
@@ -107,6 +110,7 @@ export default function ThreatStats({ reports = [], scans = [] }) {
               </BarChart>
             </ResponsiveContainer>
           </div>
+          </LazyViewport>
         </div>
 
         {/* 7-Day Activity Trend */}
@@ -119,9 +123,10 @@ export default function ThreatStats({ reports = [], scans = [] }) {
             <span className="text-xs text-slate-400 font-mono">Weekly Curve</span>
           </div>
 
-          <div className="h-44 w-full">
-            <ResponsiveContainer width="100%" height="100%">
-              <AreaChart data={activityData} margin={{ top: 10, right: 10, left: -25, bottom: 0 }}>
+          <LazyViewport rootMargin="400px" placeholder={<ChartSkeleton height={180} className="w-full" />}>
+            <div className="h-44 w-full">
+              <ResponsiveContainer width="100%" height="100%">
+                <AreaChart data={activityData} margin={{ top: 10, right: 10, left: -25, bottom: 0 }}>
                 <defs>
                   <linearGradient id="scansGrad" x1="0" y1="0" x2="0" y2="1">
                     <stop offset="5%" stopColor="#00e5ff" stopOpacity={0.4}/>
@@ -143,6 +148,7 @@ export default function ThreatStats({ reports = [], scans = [] }) {
               </AreaChart>
             </ResponsiveContainer>
           </div>
+          </LazyViewport>
         </div>
 
       </div>

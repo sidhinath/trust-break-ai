@@ -48,7 +48,7 @@ export default function SeniorHomeView({ onSwitchToNormalMode }) {
         <button
           type="button"
           onClick={() => handleAction("MessageScanner")}
-          className="group relative p-6 rounded-3xl border-2 border-emerald-500/40 dark:border-emerald-500/60 bg-gradient-to-br from-emerald-500/10 via-emerald-500/5 to-transparent dark:from-emerald-950/70 dark:to-slate-950 hover:border-emerald-400 text-left shadow-md hover:shadow-emerald-500/15 transition-all active:scale-98 cursor-pointer flex flex-col justify-between min-h-[170px] touch-manipulation overflow-hidden"
+          className="group relative p-6 rounded-3xl border-2 border-emerald-500/40 dark:border-emerald-500/60 bg-gradient-to-br from-emerald-500/10 via-emerald-500/5 to-transparent dark:from-emerald-950/70 dark:to-slate-950 hover:border-emerald-400 text-left shadow-md hover:shadow-emerald-500/15 transition-transform duration-75 active:scale-98 cursor-pointer flex flex-col justify-between min-h-[170px] touch-manipulation overflow-hidden"
         >
           <div className="flex items-start justify-between w-full pointer-events-none">
             <div className="w-14 h-14 rounded-2xl bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 border border-emerald-500/40 flex items-center justify-center group-hover:scale-110 transition-transform shadow-sm pointer-events-none">
@@ -72,7 +72,7 @@ export default function SeniorHomeView({ onSwitchToNormalMode }) {
         <button
           type="button"
           onClick={() => handleAction("LinkScanner")}
-          className="group relative p-6 rounded-3xl border-2 border-blue-500/40 dark:border-blue-500/60 bg-gradient-to-br from-blue-500/10 via-blue-500/5 to-transparent dark:from-blue-950/70 dark:to-slate-950 hover:border-blue-400 text-left shadow-md hover:shadow-blue-500/15 transition-all active:scale-98 cursor-pointer flex flex-col justify-between min-h-[170px] touch-manipulation overflow-hidden"
+          className="group relative p-6 rounded-3xl border-2 border-blue-500/40 dark:border-blue-500/60 bg-gradient-to-br from-blue-500/10 via-blue-500/5 to-transparent dark:from-blue-950/70 dark:to-slate-950 hover:border-blue-400 text-left shadow-md hover:shadow-blue-500/15 transition-transform duration-75 active:scale-98 cursor-pointer flex flex-col justify-between min-h-[170px] touch-manipulation overflow-hidden"
         >
           <div className="flex items-start justify-between w-full pointer-events-none">
             <div className="w-14 h-14 rounded-2xl bg-blue-500/20 text-blue-600 dark:text-blue-400 border border-blue-500/40 flex items-center justify-center group-hover:scale-110 transition-transform shadow-sm pointer-events-none">
@@ -96,7 +96,7 @@ export default function SeniorHomeView({ onSwitchToNormalMode }) {
         <button
           type="button"
           onClick={() => handleAction("ScreenshotScanner")}
-          className="group relative p-6 rounded-3xl border-2 border-purple-500/40 dark:border-purple-500/60 bg-gradient-to-br from-purple-500/10 via-purple-500/5 to-transparent dark:from-purple-950/70 dark:to-slate-950 hover:border-purple-400 text-left shadow-md hover:shadow-purple-500/15 transition-all active:scale-98 cursor-pointer flex flex-col justify-between min-h-[170px] touch-manipulation overflow-hidden"
+          className="group relative p-6 rounded-3xl border-2 border-purple-500/40 dark:border-purple-500/60 bg-gradient-to-br from-purple-500/10 via-purple-500/5 to-transparent dark:from-purple-950/70 dark:to-slate-950 hover:border-purple-400 text-left shadow-md hover:shadow-purple-500/15 transition-transform duration-75 active:scale-98 cursor-pointer flex flex-col justify-between min-h-[170px] touch-manipulation overflow-hidden"
         >
           <div className="flex items-start justify-between w-full pointer-events-none">
             <div className="w-14 h-14 rounded-2xl bg-purple-500/20 text-purple-600 dark:text-purple-400 border border-purple-500/40 flex items-center justify-center group-hover:scale-110 transition-transform shadow-sm pointer-events-none">
@@ -123,7 +123,7 @@ export default function SeniorHomeView({ onSwitchToNormalMode }) {
             await triggerHaptic("heavy");
             setShowEmergencyModal(true);
           }}
-          className="group relative p-6 rounded-3xl border-2 border-rose-500 bg-gradient-to-br from-rose-500/20 via-rose-500/10 to-transparent dark:from-rose-950/80 dark:to-slate-950 hover:border-rose-400 text-left shadow-xl hover:shadow-rose-500/20 transition-all active:scale-98 cursor-pointer flex flex-col justify-between min-h-[170px] touch-manipulation overflow-hidden"
+          className="group relative p-6 rounded-3xl border-2 border-rose-500 bg-gradient-to-br from-rose-500/20 via-rose-500/10 to-transparent dark:from-rose-950/80 dark:to-slate-950 hover:border-rose-400 text-left shadow-xl hover:shadow-rose-500/20 transition-transform duration-75 active:scale-98 cursor-pointer flex flex-col justify-between min-h-[170px] touch-manipulation overflow-hidden"
         >
           <div className="flex items-start justify-between w-full pointer-events-none">
             <div className="w-14 h-14 rounded-2xl bg-rose-500/25 text-rose-600 dark:text-rose-400 border border-rose-500/40 flex items-center justify-center group-hover:scale-110 transition-transform shadow-sm animate-pulse pointer-events-none">
@@ -163,7 +163,7 @@ export default function SeniorHomeView({ onSwitchToNormalMode }) {
               await triggerHaptic("light");
               setShowSimulationModal(true);
             }}
-            className="h-12 px-6 rounded-2xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-black text-xs shrink-0 flex items-center gap-2 shadow-md active:scale-95 transition-all cursor-pointer touch-manipulation"
+            className="h-12 px-6 rounded-2xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-black text-xs shrink-0 flex items-center gap-2 shadow-md active:scale-95 transition-transform duration-75 cursor-pointer touch-manipulation"
           >
             <span className="pointer-events-none">Start Practice</span>
             <ArrowRight className="w-4 h-4 pointer-events-none" />
@@ -187,7 +187,7 @@ export default function SeniorHomeView({ onSwitchToNormalMode }) {
               await triggerHaptic("light");
               setShowTrustedContactModal(true);
             }}
-            className="h-12 px-6 rounded-2xl bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-400 hover:to-emerald-500 text-slate-950 font-black text-xs shrink-0 flex items-center gap-2 shadow-md active:scale-95 transition-all cursor-pointer touch-manipulation"
+            className="h-12 px-6 rounded-2xl bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-400 hover:to-emerald-500 text-slate-950 font-black text-xs shrink-0 flex items-center gap-2 shadow-md active:scale-95 transition-transform duration-75 cursor-pointer touch-manipulation"
           >
             <span className="pointer-events-none">Share Findings</span>
             <ArrowRight className="w-4 h-4 pointer-events-none" />

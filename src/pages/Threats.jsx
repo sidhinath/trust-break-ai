@@ -215,7 +215,7 @@ export default function Threats() {
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all ${
+                className={`touch-manipulation min-h-[44px] min-w-[44px] flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-transform duration-75 active:scale-95 ${
                   isSelected
                     ? "bg-emerald-500 text-slate-950 shadow-md shadow-emerald-500/20"
                     : "hover:bg-slate-500/10 text-slate-400 hover:text-slate-200"
@@ -293,7 +293,7 @@ export default function Threats() {
               <button
                 key={filter}
                 onClick={() => setSelectedFilter(filter)}
-                className={`px-3 py-1 rounded-lg text-xs font-bold capitalize transition-all ${
+                className={`touch-manipulation min-h-[44px] min-w-[44px] px-3 py-1 rounded-lg text-xs font-bold capitalize transition-transform duration-75 active:scale-95 ${
                   selectedFilter === filter
                     ? "bg-emerald-500/20 text-emerald-400 border border-emerald-500/40"
                     : "bg-slate-800/40 text-slate-400 border border-slate-700/50 hover:text-slate-200"
@@ -325,7 +325,7 @@ export default function Threats() {
                         initial={{ opacity: 0, y: -8 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, height: 0 }}
-                        className="p-3.5 rounded-xl border flex flex-col sm:flex-row sm:items-center justify-between gap-3 transition-all hover:border-emerald-400/50"
+                        className="p-3.5 rounded-xl border flex flex-col sm:flex-row sm:items-center justify-between gap-3 transition-transform duration-75 active:scale-95 hover:border-emerald-400/50"
                         style={{ background: 'var(--tb-surface-2)', borderColor: 'var(--tb-border)' }}>
                         <div className="flex items-start gap-3 min-w-0">
                           <div className="w-9 h-9 rounded-xl bg-rose-500/15 border border-rose-500/30 flex items-center justify-center shrink-0 text-rose-500 mt-0.5 sm:mt-0">

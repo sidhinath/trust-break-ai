@@ -154,7 +154,7 @@ export default function MessageScanner() {
               <button
                 key={threat.id}
                 onClick={() => handleSelectSample(threat.sampleInput)}
-                className="text-[11px] font-bold px-3 py-1.5 rounded-lg border hover:border-emerald-400/50 transition-all text-left cursor-pointer"
+                className="touch-manipulation min-h-[44px] min-w-[44px] text-[11px] font-bold px-3 py-1.5 rounded-lg border hover:border-emerald-400/50 transition-transform duration-75 active:scale-95 text-left cursor-pointer"
                 style={{
                   background: 'var(--tb-surface-2)',
                   borderColor: 'var(--tb-border)',
@@ -184,7 +184,7 @@ export default function MessageScanner() {
           <Button
             onClick={() => handleScan()}
             disabled={scanning || investigating || !message.trim()}
-            className="h-12 rounded-xl font-bold transition-all shadow-md bg-emerald-500 hover:bg-emerald-400 text-slate-950 cursor-pointer">
+            className="h-12 rounded-xl font-bold transition-transform duration-75 active:scale-95 shadow-md bg-emerald-500 hover:bg-emerald-400 text-slate-950 cursor-pointer">
             {scanning ? "Evaluating Threat Vectors..." : "Inspect & Reconstruct Threat"}
           </Button>
 
@@ -193,7 +193,7 @@ export default function MessageScanner() {
               onClick={() => handleTinyFishInvestigation(extractedUrl)}
               disabled={scanning || investigating || !message.trim()}
               variant="outline"
-              className="h-12 rounded-xl font-bold border-emerald-500/40 hover:bg-emerald-500/10 text-emerald-400 transition-all cursor-pointer">
+              className="h-12 rounded-xl font-bold border-emerald-500/40 hover:bg-emerald-500/10 text-emerald-400 transition-transform duration-75 active:scale-95 cursor-pointer">
               {investigating ? "Live Agent Investigating..." : "🤖 TinyFish Live AI Agent"}
             </Button>
           )}
@@ -231,7 +231,7 @@ export default function MessageScanner() {
                 await triggerHaptic("light");
                 setShowTrustedContact(true);
               }}
-              className="h-11 px-4 rounded-xl bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-400 border border-emerald-500/40 font-bold text-xs flex items-center gap-2 transition-all cursor-pointer">
+              className="touch-manipulation min-h-[44px] min-w-[44px] h-11 px-4 rounded-xl bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-400 border border-emerald-500/40 font-bold text-xs flex items-center gap-2 transition-transform duration-75 active:scale-95 cursor-pointer">
               <Users className="w-4 h-4" />
               <span>Ask Trusted Contact / Family Member</span>
             </button>
