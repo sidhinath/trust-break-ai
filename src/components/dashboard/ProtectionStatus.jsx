@@ -55,10 +55,10 @@ export default function ProtectionStatus({ threatsBlocked = 0, safetyScore = 100
       {/* Glow */}
       <div className="absolute top-0 right-0 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
 
-      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 relative z-10">
+      <div className="grid grid-cols-1 lg:grid-cols-[1.35fr_1fr] items-center gap-6 relative z-10">
         
         {/* Left Posture Pitch & Quick-Scan Bar */}
-        <div className="space-y-3.5 flex-1 min-w-0 max-w-xl">
+        <div className="space-y-3.5 min-w-0">
           <div
             className={`inline-flex items-center gap-2 px-3 py-1 rounded-full border backdrop-blur-md ${
               isHealthy
@@ -136,15 +136,15 @@ export default function ProtectionStatus({ threatsBlocked = 0, safetyScore = 100
         </div>
 
         {/* Unified Security Telemetry Card */}
-        <div className="relative w-full lg:w-[400px] shrink-0 overflow-hidden rounded-2xl border border-slate-200 bg-white dark:border-slate-800/80 dark:bg-[#0d1424]/90 p-4 shadow-sm dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]">
+        <div className="relative w-full min-w-0 overflow-hidden rounded-2xl border border-slate-200 bg-white dark:border-slate-800/80 dark:bg-[#0d1424]/90 p-5 shadow-sm dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]">
           {/* Inner top highlight + ambient emerald wash (decorative) */}
           <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-emerald-400/50 to-transparent" />
           <div className="pointer-events-none absolute -top-12 right-0 h-40 w-40 bg-[radial-gradient(circle,rgba(16,185,129,0.12),transparent_70%)]" />
 
-          <div className="relative grid grid-cols-1 min-[480px]:grid-cols-[auto_1fr] items-center gap-4">
+          <div className="relative grid grid-cols-1 min-[480px]:grid-cols-[auto_minmax(0,1fr)] items-center gap-4">
 
             {/* Left — Radial Security Score */}
-            <div className="flex flex-col items-center justify-center gap-2 px-1 min-[480px]:border-r min-[480px]:border-slate-200 dark:min-[480px]:border-slate-800/70 min-[480px]:pr-4">
+            <div className="flex flex-col items-center justify-center gap-2 min-[480px]:border-r min-[480px]:border-slate-200 dark:min-[480px]:border-slate-800/70 min-[480px]:pr-4">
               <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-slate-500 dark:text-slate-400">
                 Security Score
               </span>
@@ -207,10 +207,10 @@ export default function ProtectionStatus({ threatsBlocked = 0, safetyScore = 100
             </div>
 
             {/* Right — Stacked Compact Stat Rows */}
-            <div className="flex flex-1 flex-col justify-center gap-2 min-[480px]:pl-2">
+            <div className="flex min-w-0 flex-1 flex-col justify-center gap-3">
 
               {/* Threats Flagged */}
-              <div className="flex items-center gap-2.5 rounded-xl border border-slate-200 bg-slate-50 dark:border-slate-800/70 dark:bg-slate-900/40 px-3 py-2.5">
+              <div className="flex items-center gap-2.5 rounded-xl border border-slate-200 bg-slate-50 dark:border-slate-800/70 dark:bg-slate-900/40 px-3.5 py-2.5 min-w-0">
                 <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-rose-500/10 text-rose-600 dark:text-rose-400 ring-1 ring-inset ring-rose-500/20">
                   <ShieldAlert className="h-4 w-4" strokeWidth={2.2} />
                 </span>
@@ -228,7 +228,7 @@ export default function ProtectionStatus({ threatsBlocked = 0, safetyScore = 100
               </div>
 
               {/* Total Scans */}
-              <div className="flex items-center gap-2.5 rounded-xl border border-slate-200 bg-slate-50 dark:border-slate-800/70 dark:bg-slate-900/40 px-3 py-2.5">
+              <div className="flex items-center gap-2.5 rounded-xl border border-slate-200 bg-slate-50 dark:border-slate-800/70 dark:bg-slate-900/40 px-3.5 py-2.5 min-w-0">
                 <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-amber-500/10 text-amber-600 dark:text-amber-400 ring-1 ring-inset ring-amber-500/20">
                   <Zap className="h-4 w-4" strokeWidth={2.2} />
                 </span>
