@@ -1,4 +1,5 @@
 import React from "react";
+import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { ShieldAlert, LogIn, UserPlus, X } from "lucide-react";
 import { useAuth } from "@/lib/AuthContext";
@@ -37,17 +38,20 @@ export default function LoginRequiredModal({ isOpen, onClose, feature, onSignIn,
     openSignUp();
   };
 
-  return (
+  const modalContent = (
     <AnimatePresence>
       {isOpen && (
-        <div className="fixed inset-0 z-[70] flex items-center justify-center p-4 bg-black/85 backdrop-blur-sm">
+        <div
+          className="fixed inset-0 z-[9999] flex items-center justify-center p-4 overflow-y-auto"
+          style={{ backgroundColor: "rgba(3, 7, 18, 0.94)" }}
+        >
           <motion.div
             initial={{ opacity: 0, scale: 0.92, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.92, y: 20 }}
             transition={{ duration: 0.22, ease: "easeOut" }}
-            style={{ backgroundColor: "#0b1120", color: "#ffffff" }}
-            className="relative w-full max-w-md max-h-[90vh] overflow-y-auto rounded-2xl border border-slate-800 bg-[#0b1120] dark:bg-[#0b1120] text-white p-6 shadow-2xl"
+            style={{ backgroundColor: "#0b1120", color: "#f8fafc" }}
+            className="relative w-full max-w-md max-h-[90vh] overflow-y-auto rounded-2xl border border-slate-800 p-6 shadow-2xl my-auto"
           >
             {/* Close */}
             {onClose && (
@@ -92,7 +96,7 @@ export default function LoginRequiredModal({ isOpen, onClose, feature, onSignIn,
               <button
                 type="button"
                 onClick={handleSignIn}
-                style={{ color: "#ffffff" }}
+                style={{ backgroundColor: "#10b981", color: "#ffffff" }}
                 className="touch-manipulation min-h-[44px] min-w-[44px] w-full h-11 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-sm font-semibold text-white shadow-[0_0_20px_rgba(16,185,129,0.28)] transition-transform duration-75 active:scale-95 flex items-center justify-center gap-2 cursor-pointer"
               >
                 <LogIn className="h-4 w-4" />
@@ -121,6 +125,9 @@ export default function LoginRequiredModal({ isOpen, onClose, feature, onSignIn,
       )}
     </AnimatePresence>
   );
+
+  if (typeof document === "undefined") return null;
+  return createPortal(modalContent, document.body);
 }
 
 

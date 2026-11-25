@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Mail, Lock, ShieldCheck, UserRound, Eye, EyeOff, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -98,17 +99,20 @@ export default function SignInModal({ isOpen, onClose, onSuccess, initialMode })
     }
   };
 
-  return (
+  const modalContent = (
     <AnimatePresence>
       {isOpen && (
-        <div className="fixed inset-0 z-[70] flex items-center justify-center p-4 bg-black/85 backdrop-blur-sm">
+        <div
+          className="fixed inset-0 z-[9999] flex items-center justify-center p-4 overflow-y-auto"
+          style={{ backgroundColor: "rgba(3, 7, 18, 0.94)" }}
+        >
           <motion.div
             initial={{ opacity: 0, y: 16, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 16, scale: 0.95 }}
             transition={{ duration: 0.22, ease: "easeOut" }}
-            style={{ backgroundColor: "#0b1120", color: "#ffffff" }}
-            className="w-full max-w-md max-h-[90vh] overflow-y-auto rounded-2xl border border-slate-800 bg-[#0b1120] dark:bg-[#0b1120] text-white p-6 shadow-2xl"
+            style={{ backgroundColor: "#0b1120", color: "#f8fafc" }}
+            className="relative w-full max-w-md max-h-[90vh] overflow-y-auto rounded-2xl border border-slate-800 p-6 shadow-2xl my-auto"
           >
             {/* Header */}
             <div className="mb-5 flex items-start justify-between gap-3">
@@ -246,7 +250,7 @@ export default function SignInModal({ isOpen, onClose, onSuccess, initialMode })
 
               <Button
                 type="submit"
-                style={{ color: "#ffffff" }}
+                style={{ backgroundColor: "#10b981", color: "#ffffff" }}
                 className="h-11 w-full rounded-xl bg-emerald-500 hover:bg-emerald-400 text-sm font-semibold text-white shadow-[0_0_24px_rgba(16,185,129,0.28)] disabled:opacity-60 transition-transform duration-75 active:scale-95"
                 disabled={loading}
               >
@@ -285,6 +289,9 @@ export default function SignInModal({ isOpen, onClose, onSuccess, initialMode })
       )}
     </AnimatePresence>
   );
+
+  if (typeof document === "undefined") return null;
+  return createPortal(modalContent, document.body);
 }
 
 
