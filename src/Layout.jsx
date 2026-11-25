@@ -856,7 +856,7 @@ export default function Layout({ children, currentPageName }) {
                     key={item.page}
                     to={createPageUrl(item.page)}
                     title={item.name}
-                    className={`group flex items-center gap-3 py-2 rounded-lg touch-manipulation min-h-[38px] text-[13.5px] transition-all duration-150 active:scale-[0.98] ${
+                    className={`group flex items-center gap-3 py-2 rounded-lg touch-manipulation min-h-[38px] text-[15px] transition-all duration-150 active:scale-[0.98] ${
                       sidebarOpen ? "px-3 justify-between" : "px-0 justify-center"
                     } ${
                       active

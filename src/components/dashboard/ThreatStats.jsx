@@ -167,7 +167,7 @@ export default function ThreatStats({ reports = [], scans = [] }) {
                 >
                   <Icon className="w-4 h-4" style={{ color: row.accent }} />
                 </div>
-                <span className="text-xs font-semibold truncate text-slate-700 dark:text-slate-300">
+                <span className="text-[15px] font-bold truncate text-slate-950 dark:text-slate-200">
                   {row.label}
                 </span>
               </div>

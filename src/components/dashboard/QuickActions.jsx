@@ -101,10 +101,10 @@ export default function QuickActions() {
 
                 <div className="flex items-end justify-between gap-2">
                   <div className="min-w-0">
-                    <h3 className="text-base font-bold text-slate-950 dark:text-white group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors leading-snug">
+                    <h3 className="text-lg font-bold text-slate-950 dark:text-white group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors leading-snug">
                       {scanner.title}
                     </h3>
-                    <p className="text-[13px] text-slate-600 dark:text-slate-400 mt-1 leading-snug">
+                    <p className="text-sm font-medium text-slate-700 dark:text-slate-300 mt-1 leading-snug">
                       {scanner.subtitle}
                     </p>
                   </div>
@@ -133,7 +133,7 @@ export default function QuickActions() {
                 >
                   <Icon className="w-3.5 h-3.5 text-emerald-600 dark:text-[#10b981]" />
                 </div>
-                <span className="text-xs font-semibold text-slate-800 dark:text-slate-200 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors truncate">
+                <span className="text-[15px] font-bold text-slate-950 dark:text-slate-200 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors truncate">
                   {item.title}
                 </span>
               </div>

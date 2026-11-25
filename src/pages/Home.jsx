@@ -77,21 +77,21 @@ export default function Home() {
 
       <div className="space-y-3">
         <div className="flex items-center justify-between">
-          <h2 className="text-sm font-bold uppercase tracking-wider" style={{ color: '#10b981' }}>
+          <h2 className="text-[15px] font-bold uppercase tracking-wider" style={{ color: '#10b981' }}>
             Security Scanners & Tools
           </h2>
-          <span className="text-xs text-slate-400 font-mono font-bold">Multi-Modal Protection Engines</span>
+          <span className="text-sm text-slate-600 dark:text-slate-400 font-mono font-semibold">Multi-Modal Protection Engines</span>
         </div>
         <QuickActions />
       </div>
 
       <div className="space-y-3">
         <div className="flex items-center justify-between">
-          <h2 className="text-sm font-bold uppercase tracking-wider" style={{ color: '#10b981' }}>
+          <h2 className="text-[15px] font-bold uppercase tracking-wider" style={{ color: '#10b981' }}>
             Global & Local Intelligence
           </h2>
-          <Link to={createPageUrl("Threats")} className="text-xs text-slate-400 hover:text-emerald-400 hover:underline flex items-center gap-1">
-            Open Threat Intelligence <ArrowRight className="w-3 h-3 text-slate-400 hover:text-emerald-400" />
+          <Link to={createPageUrl("Threats")} className="text-sm text-slate-600 dark:text-slate-400 hover:text-emerald-500 hover:underline flex items-center gap-1">
+            Open Threat Intelligence <ArrowRight className="w-3.5 h-3.5" />
           </Link>
         </div>
         {isLoading ? (
@@ -103,10 +103,10 @@ export default function Home() {
 
       <div className="space-y-3">
         <div className="flex items-center justify-between">
-          <h2 className="text-sm font-bold uppercase tracking-wider" style={{ color: '#10b981' }}>
+          <h2 className="text-[15px] font-bold uppercase tracking-wider" style={{ color: '#10b981' }}>
             Recent Inspections
           </h2>
-          <Link to={createPageUrl("Reports")} className="text-xs text-slate-400 hover:text-emerald-400 hover:underline">
+          <Link to={createPageUrl("Reports")} className="text-sm text-slate-600 dark:text-slate-400 hover:text-emerald-500 hover:underline">
             View All History
           </Link>
         </div>

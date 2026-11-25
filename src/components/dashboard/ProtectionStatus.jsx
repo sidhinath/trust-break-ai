@@ -87,7 +87,7 @@ export default function ProtectionStatus({ threatsBlocked = 0, safetyScore = 100
             </span>
           </h1>
 
-          <p className="text-xs sm:text-sm font-medium leading-relaxed max-w-md text-slate-600 dark:text-slate-400">
+          <p className="text-base font-medium leading-relaxed max-w-md text-slate-700 dark:text-slate-300">
             TrustBreak AI protects users before they trust, click, scan, pay or respond.
           </p>
 
@@ -215,10 +215,10 @@ export default function ProtectionStatus({ threatsBlocked = 0, safetyScore = 100
                   <ShieldAlert className="h-4 w-4" strokeWidth={2.2} />
                 </span>
                 <div className="min-w-0 flex-1">
-                  <p className="whitespace-nowrap text-[11px] font-bold uppercase leading-tight tracking-wider text-slate-800 dark:text-slate-300">
+                  <p className="whitespace-nowrap text-[15px] font-bold uppercase leading-tight tracking-wide text-slate-950 dark:text-slate-200">
                     THREATS FLAGGED
                   </p>
-                  <p className="text-[10px] font-medium leading-tight text-slate-500 dark:text-slate-500">
+                  <p className="text-sm font-medium leading-tight text-slate-700 dark:text-slate-300">
                     High-risk attacks
                   </p>
                 </div>
@@ -233,10 +233,10 @@ export default function ProtectionStatus({ threatsBlocked = 0, safetyScore = 100
                   <Zap className="h-4 w-4" strokeWidth={2.2} />
                 </span>
                 <div className="min-w-0 flex-1">
-                  <p className="whitespace-nowrap text-[11px] font-bold uppercase leading-tight tracking-wider text-slate-800 dark:text-slate-300">
+                  <p className="whitespace-nowrap text-[15px] font-bold uppercase leading-tight tracking-wide text-slate-950 dark:text-slate-200">
                     TOTAL SCANS
                   </p>
-                  <p className="text-[10px] font-medium leading-tight text-slate-500 dark:text-slate-500">
+                  <p className="text-sm font-medium leading-tight text-slate-700 dark:text-slate-300">
                     Multi-modal runs
                   </p>
                 </div>
