@@ -85,36 +85,30 @@ export default function QuickActions() {
             >
               <Link
                 to={createPageUrl(scanner.page)}
-                className="touch-manipulation min-h-[44px] h-full bg-[#0d1424]/90 border border-slate-800/80 rounded-2xl p-5 flex flex-col justify-between gap-4 group transition-all duration-200 hover:border-emerald-500/50 hover:shadow-[0_0_24px_rgba(16,185,129,0.14)] active:scale-[0.98]"
+                className="touch-manipulation min-h-[44px] h-full bg-white dark:bg-[#0d1424]/90 border border-slate-200 dark:border-slate-800/80 shadow-sm rounded-2xl p-5 flex flex-col justify-between gap-4 group transition-all duration-200 hover:border-emerald-500/50 hover:shadow-[0_0_24px_rgba(16,185,129,0.12)] active:scale-[0.98]"
               >
                 <div className="flex items-start justify-between gap-3">
                   <div
                     className="w-11 h-11 rounded-xl flex items-center justify-center shrink-0 border border-emerald-500/25 transition-transform duration-200 group-hover:scale-105"
                     style={{ background: "rgba(16, 185, 129, 0.12)" }}
                   >
-                    <Icon className="w-5 h-5" style={{ color: "#10b981" }} />
+                    <Icon className="w-5 h-5 text-emerald-600 dark:text-[#10b981]" />
                   </div>
-                  <span className="text-[10px] font-mono font-bold uppercase tracking-wider px-2 py-0.5 rounded-md bg-emerald-500/10 text-emerald-400 border border-emerald-500/25 shrink-0">
+                  <span className="text-[10px] font-mono font-bold uppercase tracking-wider px-2 py-0.5 rounded-md bg-emerald-50 text-emerald-700 border border-emerald-200 dark:bg-emerald-500/10 dark:text-emerald-400 dark:border-emerald-500/25 shrink-0">
                     {scanner.tag}
                   </span>
                 </div>
 
                 <div className="flex items-end justify-between gap-2">
                   <div className="min-w-0">
-                    <h3
-                      className="text-base font-bold text-white group-hover:text-emerald-400 transition-colors leading-snug"
-                      style={{ color: "#f8fafc" }}
-                    >
+                    <h3 className="text-base font-bold text-slate-950 dark:text-white group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors leading-snug">
                       {scanner.title}
                     </h3>
-                    <p
-                      className="text-[13px] text-slate-300 mt-1 leading-snug"
-                      style={{ color: "#cbd5e1" }}
-                    >
+                    <p className="text-[13px] text-slate-600 dark:text-slate-400 mt-1 leading-snug">
                       {scanner.subtitle}
                     </p>
                   </div>
-                  <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-emerald-400 group-hover:translate-x-1 transition-all duration-150 shrink-0 mb-0.5" />
+                  <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 group-hover:translate-x-1 transition-all duration-150 shrink-0 mb-0.5" />
                 </div>
               </Link>
             </motion.div>
@@ -130,23 +124,20 @@ export default function QuickActions() {
             <Link
               key={item.page}
               to={createPageUrl(item.page)}
-              className="touch-manipulation min-h-[44px] py-3 px-4 rounded-xl bg-[#0d1424]/80 border border-slate-800/80 hover:border-emerald-500/45 hover:shadow-[0_0_16px_rgba(16,185,129,0.1)] flex items-center justify-between gap-2.5 group transition-all duration-150 active:scale-[0.98]"
+              className="touch-manipulation min-h-[44px] py-3 px-4 rounded-xl bg-white dark:bg-[#0d1424]/80 border border-slate-200 dark:border-slate-800/80 shadow-sm hover:border-emerald-500/45 hover:shadow-[0_0_16px_rgba(16,185,129,0.1)] flex items-center justify-between gap-2.5 group transition-all duration-150 active:scale-[0.98]"
             >
               <div className="flex items-center gap-2.5 min-w-0">
                 <div
                   className="w-7 h-7 rounded-lg flex items-center justify-center shrink-0 border border-emerald-500/20"
                   style={{ background: "rgba(16, 185, 129, 0.1)" }}
                 >
-                  <Icon className="w-3.5 h-3.5" style={{ color: "#10b981" }} />
+                  <Icon className="w-3.5 h-3.5 text-emerald-600 dark:text-[#10b981]" />
                 </div>
-                <span
-                  className="text-xs font-semibold text-slate-200 group-hover:text-emerald-400 transition-colors truncate"
-                  style={{ color: "#e2e8f0" }}
-                >
+                <span className="text-xs font-semibold text-slate-800 dark:text-slate-200 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors truncate">
                   {item.title}
                 </span>
               </div>
-              <ArrowRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-emerald-400 group-hover:translate-x-1 transition-all duration-150 shrink-0" />
+              <ArrowRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 group-hover:translate-x-1 transition-all duration-150 shrink-0" />
             </Link>
           );
         })}

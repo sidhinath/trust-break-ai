@@ -827,13 +827,9 @@ export default function Layout({ children, currentPageName }) {
 
       {/* Desktop Toggleable Sidebar */}
       <aside
-        className={`hidden md:flex fixed left-0 top-14 bottom-0 flex-col border-r z-30 py-3 overflow-y-auto no-scrollbar justify-between backdrop-blur-xl transition-transform duration-300 ${
+        className={`hidden md:flex fixed left-0 top-14 bottom-0 flex-col bg-white dark:bg-[#070c16] border-r border-slate-200 dark:border-slate-800 z-30 py-3 overflow-y-auto no-scrollbar justify-between backdrop-blur-xl transition-transform duration-300 ${
           sidebarOpen ? "w-72 2xl:w-80 px-3" : "w-16 px-2"
         }`}
-        style={{
-          background: "#070c16",
-          borderColor: "rgba(30, 41, 59, 0.8)",
-        }}
       >
         <nav className="flex flex-col gap-3">
           {[
@@ -846,7 +842,7 @@ export default function Layout({ children, currentPageName }) {
                 <span
                   className={`font-display text-[11px] font-bold uppercase tracking-wider px-3 block ${
                     sectionIdx === 0 ? "mt-1" : "mt-2.5"
-                  } mb-1.5 text-emerald-400`}
+                  } mb-1.5 text-emerald-600 dark:text-emerald-400`}
                 >
                   {section.title}
                 </span>
@@ -866,31 +862,30 @@ export default function Layout({ children, currentPageName }) {
                       sidebarOpen ? "px-3 justify-between" : "px-0 justify-center"
                     } ${
                       active
-                        ? "border-l-[3px] border-emerald-400 bg-gradient-to-r from-emerald-500/15 to-transparent font-bold text-white"
-                        : "font-medium text-slate-300 hover:bg-slate-800/50 hover:text-white hover:translate-x-0.5"
+                        ? "border-l-[3px] border-emerald-500 dark:border-emerald-400 bg-gradient-to-r from-emerald-500/15 to-transparent font-bold text-slate-950 dark:text-white"
+                        : "font-medium text-slate-700 hover:bg-slate-100 hover:text-slate-950 dark:text-slate-300 dark:hover:bg-slate-800/50 dark:hover:text-white hover:translate-x-0.5"
                     }`}
-                    style={{ color: active ? "#f8fafc" : "#cbd5e1" }}
                   >
                     <div className="flex items-center gap-3 min-w-0">
                       <Icon
                         className={`w-4 h-4 shrink-0 transition-colors ${
                           active
-                            ? "text-emerald-400 drop-shadow-[0_0_6px_rgba(16,185,129,0.7)]"
-                            : "text-slate-400 group-hover:text-emerald-400"
+                            ? "text-emerald-600 dark:text-emerald-400 drop-shadow-[0_0_6px_rgba(16,185,129,0.5)]"
+                            : "text-slate-500 dark:text-slate-400 group-hover:text-emerald-600 dark:group-hover:text-emerald-400"
                         }`}
                       />
                       {sidebarOpen && <span className="truncate">{item.name}</span>}
                     </div>
 
                     {sidebarOpen && isHistory && (
-                      <span className="px-1.5 py-0.5 rounded-full text-[10px] font-mono font-bold bg-slate-800/90 text-slate-300 border border-slate-700/80 shrink-0">
+                      <span className="px-1.5 py-0.5 rounded-full text-[10px] font-mono font-bold bg-slate-100 text-slate-700 border border-slate-200 dark:bg-slate-800/90 dark:text-slate-300 dark:border-slate-700/80 shrink-0">
                         {sidebarScans.length}
                       </span>
                     )}
 
                     {sidebarOpen && isBrowserShield && (
-                      <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md text-[9px] font-mono font-bold uppercase tracking-wider bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 shrink-0">
-                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 shadow-[0_0_6px_#10b981]" />
+                      <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md text-[9px] font-mono font-bold uppercase tracking-wider bg-emerald-50 text-emerald-700 border border-emerald-200 dark:bg-emerald-500/15 dark:text-emerald-400 dark:border-emerald-500/30 shrink-0">
+                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 dark:bg-emerald-400 shadow-[0_0_6px_#10b981]" />
                         NEW
                       </span>
                     )}
@@ -904,29 +899,29 @@ export default function Layout({ children, currentPageName }) {
         {/* Sidebar Footer Posture Badge & Compact Legal Links */}
         {sidebarOpen ? (
           <div className="mt-4 pt-2 space-y-2.5 shrink-0">
-            <div className="p-3.5 rounded-xl border border-emerald-500/25 bg-emerald-500/10 space-y-1 shadow-[inset_0_1px_0_rgba(16,185,129,0.12)]">
+            <div className="p-3.5 rounded-xl border border-emerald-200 bg-emerald-50/70 dark:border-emerald-500/25 dark:bg-emerald-500/10 space-y-1 shadow-[inset_0_1px_0_rgba(16,185,129,0.12)]">
               <div className="flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-emerald-400 shadow-[0_0_8px_#10b981] animate-pulse shrink-0" />
-                <span className="text-xs font-bold text-emerald-400">
+                <span className="w-2 h-2 rounded-full bg-emerald-500 dark:bg-emerald-400 shadow-[0_0_8px_#10b981] animate-pulse shrink-0" />
+                <span className="text-xs font-bold text-emerald-700 dark:text-emerald-400">
                   Autonomous Defense
                 </span>
               </div>
-              <p className="text-[12px] leading-snug text-slate-300" style={{ color: "#cbd5e1" }}>
+              <p className="text-[12px] leading-snug text-slate-600 dark:text-slate-300">
                 Groq LPU + Gemini Vision telemetry active
               </p>
             </div>
 
-            <div className="flex items-center justify-center gap-2 text-[11px] text-slate-400 px-2">
+            <div className="flex items-center justify-center gap-2 text-[11px] text-slate-500 dark:text-slate-400 px-2">
               <Link
                 to={createPageUrl("PrivacyPolicy")}
-                className="hover:text-emerald-400 transition-colors"
+                className="hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors"
               >
                 Privacy Policy
               </Link>
               <span aria-hidden="true">·</span>
               <Link
                 to={createPageUrl("Terms")}
-                className="hover:text-emerald-400 transition-colors"
+                className="hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors"
               >
                 Terms of Service
               </Link>
@@ -934,10 +929,10 @@ export default function Layout({ children, currentPageName }) {
           </div>
         ) : (
           <div
-            className="flex items-center justify-center p-2 rounded-xl border border-emerald-500/25 bg-emerald-500/10 mt-4 shrink-0"
+            className="flex items-center justify-center p-2 rounded-xl border border-emerald-200 bg-emerald-50/70 dark:border-emerald-500/25 dark:bg-emerald-500/10 mt-4 shrink-0"
             title="Autonomous Cyber Defense Active"
           >
-            <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 shadow-[0_0_8px_#10b981] animate-pulse" />
+            <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 dark:bg-emerald-400 shadow-[0_0_8px_#10b981] animate-pulse" />
           </div>
         )}
       </aside>

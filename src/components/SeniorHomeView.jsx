@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { MessageSquareWarning, Link2, Image, ShieldAlert, Award, Users, ArrowRight } from "lucide-react";
+import { ShieldAlert, Award, Users, ArrowRight } from "lucide-react";
 import { createPageUrl } from "@/utils";
 import { triggerHaptic } from "@/lib/haptics";
 import SeniorModeToggleSwitch from "./SeniorModeToggleSwitch";
@@ -12,187 +12,240 @@ import TrustedContactModal from "./TrustedContactModal";
 /**
  * SeniorHomeView Component
  * Dedicated Senior & Family Safety Mode Home Screen.
- * Enhanced with high-contrast theme-aware cards, physical sliding toggle switch, and executive UI styling.
- * Guarantees 100% button surface clickability for senior accessibility.
+ * Full-width 60/40 Bento scanner + 3-step visual safety guide, paired with an aligned 3-column support row.
  */
-export default function SeniorHomeView({ onSwitchToNormalMode }) {
+export default function SeniorHomeView() {
   const navigate = useNavigate();
+  const [seniorInput, setSeniorInput] = useState("");
   const [showEmergencyModal, setShowEmergencyModal] = useState(false);
   const [showSimulationModal, setShowSimulationModal] = useState(false);
   const [showTrustedContactModal, setShowTrustedContactModal] = useState(false);
 
   const homeSpeechText = `
-    Welcome to TrustBreak AI Senior Mode. 
-    Select Check a Message to inspect SMS or WhatsApp text. 
-    Select Check a Link to test a website address. 
-    Select Check a Screenshot to scan an image or QR code. 
-    Select Get Emergency Help if you lost money or shared your password.
+    Welcome to TrustBreak AI Senior Mode.
+    Paste any suspicious message or link into the big box, then tap Paste and Check.
+    Or tap Check Screenshot or QR to scan a photo.
+    If you already sent money or shared an OTP, tap Emergency Call 1930 right away.
   `.trim();
 
-  const handleAction = async (pageName, stateObj) => {
-    await triggerHaptic("medium");
-    navigate(createPageUrl(pageName), { state: stateObj });
+  const routeContentToScanner = (rawText) => {
+    const trimmed = (rawText || "").trim();
+    if (!trimmed) {
+      navigate(createPageUrl("MessageScanner"));
+      return;
+    }
+    const isUrl = /^(https?:\/\/|www\.)/i.test(trimmed);
+    navigate(createPageUrl(isUrl ? "LinkScanner" : "MessageScanner"), {
+      state: { sharedContent: trimmed },
+    });
   };
 
+  const handlePasteAndCheck = async () => {
+    await triggerHaptic("medium");
+    if (seniorInput.trim()) {
+      routeContentToScanner(seniorInput);
+      return;
+    }
+    try {
+      if (navigator?.clipboard?.readText) {
+        const clipText = await navigator.clipboard.readText();
+        if (clipText && clipText.trim()) {
+          setSeniorInput(clipText.trim());
+          routeContentToScanner(clipText);
+          return;
+        }
+      }
+    } catch {
+      // Clipboard permission denied or unavailable — fall back to MessageScanner
+    }
+    navigate(createPageUrl("MessageScanner"));
+  };
+
+  const handleScreenshotCheck = async () => {
+    await triggerHaptic("medium");
+    navigate(createPageUrl("ScreenshotScanner"));
+  };
+
+  const safetySteps = [
+    {
+      num: "1",
+      title: "Copy or Screenshot",
+      desc: "any suspicious SMS, WhatsApp message, or link.",
+    },
+    {
+      num: "2",
+      title: 'Tap "Paste & Check"',
+      desc: "to let AI check for fraud in seconds.",
+    },
+    {
+      num: "3",
+      title: "Ask Family or Call 1930",
+      desc: "before sending money or sharing an OTP.",
+    },
+  ];
+
   return (
-    <div className="space-y-6 pb-8 animate-in fade-in duration-300">
+    <div className="w-full space-y-6 pb-8 animate-in fade-in duration-300">
       {/* Prominent Active Mode Large Toggle Switch Banner */}
       <SeniorModeToggleSwitch variant="large" className="w-full" />
 
       {/* Voice Assistance Bar */}
       <VoiceAssistance textToRead={homeSpeechText} title="🔊 Voice Guide for Home Screen" />
 
-      {/* 4 Primary Action Cards Grid (Theme-Aware High Contrast) */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {/* Card 1: Check A Message */}
+      {/* Top Full-Width 2-Column Bento Section (60% Left / 40% Right on desktop) */}
+      <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,60fr)_minmax(0,40fr)] gap-4 items-stretch w-full">
+        {/* Left Column (60%) — Main Scanner Card */}
+        <div className="bg-white dark:bg-[#0d1424] border border-emerald-500/30 rounded-2xl p-6 flex flex-col justify-between gap-5 shadow-sm dark:shadow-[0_0_30px_rgba(16,185,129,0.08)]">
+          <div className="space-y-3">
+            <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-mono font-bold uppercase tracking-wider bg-emerald-50 text-emerald-700 border border-emerald-200 dark:bg-emerald-500/10 dark:text-emerald-400 dark:border-emerald-500/30">
+              <span className="w-2 h-2 rounded-full bg-emerald-500 dark:bg-emerald-400 animate-pulse" />
+              Easy Scam Checker
+            </span>
+
+            <h2 className="text-xl sm:text-2xl font-black font-display tracking-tight text-slate-950 dark:text-white leading-snug">
+              Received a suspicious message, link, or photo?
+            </h2>
+
+            <textarea
+              value={seniorInput}
+              onChange={(e) => setSeniorInput(e.target.value)}
+              placeholder="Paste anything here..."
+              aria-label="Paste suspicious message or link here"
+              rows={4}
+              className="w-full min-h-[128px] rounded-xl border border-slate-300 bg-slate-50 dark:border-slate-700/80 dark:bg-slate-900/75 p-4 text-base text-slate-900 dark:text-slate-100 placeholder:text-slate-500 dark:placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 resize-none leading-relaxed"
+            />
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <button
+              type="button"
+              onClick={handlePasteAndCheck}
+              className="touch-manipulation min-h-[56px] px-5 py-3 rounded-xl bg-gradient-to-r from-emerald-500 to-emerald-400 hover:from-emerald-400 hover:to-emerald-300 text-slate-950 font-black text-sm sm:text-base shadow-[0_0_24px_rgba(16,185,129,0.28)] transition-transform duration-75 active:scale-[0.98] cursor-pointer flex items-center justify-center gap-2"
+            >
+              <span>📋 Paste &amp; Check</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={handleScreenshotCheck}
+              className="touch-manipulation min-h-[56px] px-5 py-3 rounded-xl border-2 border-slate-300 bg-slate-100 hover:border-emerald-400 hover:bg-emerald-50 text-slate-900 dark:border-slate-700 dark:bg-slate-900/80 dark:hover:border-emerald-500/60 dark:hover:bg-slate-800/80 dark:text-white font-black text-sm sm:text-base transition-transform duration-75 active:scale-[0.98] cursor-pointer flex items-center justify-center gap-2"
+            >
+              <span>📷 Check Screenshot / QR</span>
+            </button>
+          </div>
+        </div>
+
+        {/* Right Column (40%) — 3-Step Visual Safety Guide Card */}
+        <div className="bg-white dark:bg-[#0d1424]/90 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 flex flex-col justify-between gap-5 shadow-sm">
+          <div className="space-y-4">
+            <h3 className="text-lg sm:text-xl font-black font-display tracking-tight text-slate-950 dark:text-white">
+              How to Stay Safe (3 Easy Steps)
+            </h3>
+
+            <div className="space-y-3.5">
+              {safetySteps.map((step) => (
+                <div
+                  key={step.num}
+                  className="flex items-start gap-3.5 p-3.5 rounded-xl border border-slate-200 bg-slate-50 dark:border-slate-800/80 dark:bg-slate-900/60"
+                >
+                  <div className="w-9 h-9 rounded-xl bg-emerald-500/15 border border-emerald-500/30 text-emerald-700 dark:text-emerald-400 font-mono font-black text-base flex items-center justify-center shrink-0">
+                    {step.num}
+                  </div>
+                  <p className="text-sm leading-relaxed text-slate-700 dark:text-slate-300">
+                    <strong className="font-bold text-slate-950 dark:text-white">
+                      {step.title}
+                    </strong>{" "}
+                    {step.desc}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <p className="text-xs font-semibold text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-200 dark:border-emerald-500/25 rounded-xl px-3.5 py-2.5">
+            Never rush. Real banks and government officials never demand urgent UPI transfers or OTPs.
+          </p>
+        </div>
+      </div>
+
+      {/* Aligned 3-Column Bottom Row */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 w-full">
+        {/* Card 1: Ask a Family Member */}
         <button
           type="button"
-          onClick={() => handleAction("MessageScanner")}
-          className="group relative p-6 rounded-3xl border-2 border-emerald-500/40 dark:border-emerald-500/60 bg-gradient-to-br from-emerald-500/10 via-emerald-500/5 to-transparent dark:from-emerald-950/70 dark:to-slate-950 hover:border-emerald-400 text-left shadow-md hover:shadow-emerald-500/15 transition-transform duration-75 active:scale-98 cursor-pointer flex flex-col justify-between min-h-[170px] touch-manipulation overflow-hidden"
+          onClick={async () => {
+            await triggerHaptic("light");
+            setShowTrustedContactModal(true);
+          }}
+          className="group p-5 rounded-2xl border border-emerald-500/35 bg-white dark:bg-[#0d1424]/90 hover:border-emerald-400 text-left shadow-sm hover:shadow-[0_0_20px_rgba(16,185,129,0.12)] transition-all duration-150 active:scale-[0.98] cursor-pointer touch-manipulation flex flex-col justify-between gap-4"
         >
-          <div className="flex items-start justify-between w-full pointer-events-none">
-            <div className="w-14 h-14 rounded-2xl bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 border border-emerald-500/40 flex items-center justify-center group-hover:scale-110 transition-transform shadow-sm pointer-events-none">
-              <MessageSquareWarning className="w-8 h-8 pointer-events-none" />
+          <div className="flex items-center justify-between w-full pointer-events-none">
+            <div className="w-11 h-11 rounded-xl bg-emerald-500/15 border border-emerald-500/30 text-emerald-600 dark:text-emerald-400 flex items-center justify-center">
+              <Users className="w-5 h-5" />
             </div>
-            <span className="text-xs font-mono font-black px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 border border-emerald-500/40 pointer-events-none">
-              1-TAP SCAN
-            </span>
+            <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-emerald-500 group-hover:translate-x-1 transition-all" />
           </div>
-          <div className="mt-4 pointer-events-none">
-            <h2 className="text-xl font-black font-display tracking-tight text-slate-900 dark:text-white group-hover:text-emerald-600 dark:group-hover:text-emerald-300 transition-colors pointer-events-none">
-              CHECK A MESSAGE
-            </h2>
-            <p className="text-xs sm:text-sm font-bold text-slate-700 dark:text-slate-200 mt-1 leading-relaxed pointer-events-none">
-              Inspect suspicious SMS, WhatsApp messages, or emails for scams.
+          <div className="pointer-events-none">
+            <h3 className="text-base font-black font-display text-slate-950 dark:text-white group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
+              Ask a Family Member
+            </h3>
+            <p className="text-xs sm:text-sm font-medium text-slate-600 dark:text-slate-300 mt-1 leading-relaxed">
+              Share scan findings with your trusted guardian before taking action.
             </p>
           </div>
         </button>
 
-        {/* Card 2: Check A Link */}
-        <button
-          type="button"
-          onClick={() => handleAction("LinkScanner")}
-          className="group relative p-6 rounded-3xl border-2 border-blue-500/40 dark:border-blue-500/60 bg-gradient-to-br from-blue-500/10 via-blue-500/5 to-transparent dark:from-blue-950/70 dark:to-slate-950 hover:border-blue-400 text-left shadow-md hover:shadow-blue-500/15 transition-transform duration-75 active:scale-98 cursor-pointer flex flex-col justify-between min-h-[170px] touch-manipulation overflow-hidden"
-        >
-          <div className="flex items-start justify-between w-full pointer-events-none">
-            <div className="w-14 h-14 rounded-2xl bg-blue-500/20 text-blue-600 dark:text-blue-400 border border-blue-500/40 flex items-center justify-center group-hover:scale-110 transition-transform shadow-sm pointer-events-none">
-              <Link2 className="w-8 h-8 pointer-events-none" />
-            </div>
-            <span className="text-xs font-mono font-black px-3 py-1 rounded-full bg-blue-500/20 text-blue-700 dark:text-blue-300 border border-blue-500/40 pointer-events-none">
-              LINK SAFETY
-            </span>
-          </div>
-          <div className="mt-4 pointer-events-none">
-            <h2 className="text-xl font-black font-display tracking-tight text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-300 transition-colors pointer-events-none">
-              CHECK A LINK
-            </h2>
-            <p className="text-xs sm:text-sm font-bold text-slate-700 dark:text-slate-200 mt-1 leading-relaxed pointer-events-none">
-              Verify if a web link address or bank portal URL is safe before clicking.
-            </p>
-          </div>
-        </button>
-
-        {/* Card 3: Check A Screenshot */}
-        <button
-          type="button"
-          onClick={() => handleAction("ScreenshotScanner")}
-          className="group relative p-6 rounded-3xl border-2 border-purple-500/40 dark:border-purple-500/60 bg-gradient-to-br from-purple-500/10 via-purple-500/5 to-transparent dark:from-purple-950/70 dark:to-slate-950 hover:border-purple-400 text-left shadow-md hover:shadow-purple-500/15 transition-transform duration-75 active:scale-98 cursor-pointer flex flex-col justify-between min-h-[170px] touch-manipulation overflow-hidden"
-        >
-          <div className="flex items-start justify-between w-full pointer-events-none">
-            <div className="w-14 h-14 rounded-2xl bg-purple-500/20 text-purple-600 dark:text-purple-400 border border-purple-500/40 flex items-center justify-center group-hover:scale-110 transition-transform shadow-sm pointer-events-none">
-              <Image className="w-8 h-8 pointer-events-none" />
-            </div>
-            <span className="text-xs font-mono font-black px-3 py-1 rounded-full bg-purple-500/20 text-purple-700 dark:text-purple-300 border border-purple-500/40 pointer-events-none">
-              VISION SCAN
-            </span>
-          </div>
-          <div className="mt-4 pointer-events-none">
-            <h2 className="text-xl font-black font-display tracking-tight text-slate-900 dark:text-white group-hover:text-purple-600 dark:group-hover:text-purple-300 transition-colors pointer-events-none">
-              CHECK A SCREENSHOT
-            </h2>
-            <p className="text-xs sm:text-sm font-bold text-slate-700 dark:text-slate-200 mt-1 leading-relaxed pointer-events-none">
-              Upload a chat photo, payment QR code, or screenshot to check for fraud.
-            </p>
-          </div>
-        </button>
-
-        {/* Card 4: Get Emergency Help */}
+        {/* Card 2: Emergency: Call 1930 */}
         <button
           type="button"
           onClick={async () => {
             await triggerHaptic("heavy");
             setShowEmergencyModal(true);
           }}
-          className="group relative p-6 rounded-3xl border-2 border-rose-500 bg-gradient-to-br from-rose-500/20 via-rose-500/10 to-transparent dark:from-rose-950/80 dark:to-slate-950 hover:border-rose-400 text-left shadow-xl hover:shadow-rose-500/20 transition-transform duration-75 active:scale-98 cursor-pointer flex flex-col justify-between min-h-[170px] touch-manipulation overflow-hidden"
+          className="group p-5 rounded-2xl border-2 border-rose-500/60 bg-rose-50/60 dark:bg-[#0d1424]/95 hover:border-rose-400 text-left shadow-sm hover:shadow-[0_0_24px_rgba(244,63,94,0.18)] transition-all duration-150 active:scale-[0.98] cursor-pointer touch-manipulation flex flex-col justify-between gap-4"
         >
-          <div className="flex items-start justify-between w-full pointer-events-none">
-            <div className="w-14 h-14 rounded-2xl bg-rose-500/25 text-rose-600 dark:text-rose-400 border border-rose-500/40 flex items-center justify-center group-hover:scale-110 transition-transform shadow-sm animate-pulse pointer-events-none">
-              <ShieldAlert className="w-8 h-8 pointer-events-none" />
+          <div className="flex items-center justify-between w-full pointer-events-none">
+            <div className="w-11 h-11 rounded-xl bg-rose-500/15 border border-rose-500/35 text-rose-600 dark:text-rose-400 flex items-center justify-center animate-pulse">
+              <ShieldAlert className="w-5 h-5" />
             </div>
-            <span className="text-xs font-mono font-black px-3 py-1 rounded-full bg-rose-500/25 text-rose-700 dark:text-rose-200 border border-rose-500/40 pointer-events-none">
-              24/7 HELPLINE 1930
+            <span className="text-[10px] font-mono font-black uppercase px-2.5 py-1 rounded-full bg-rose-500/15 text-rose-700 dark:text-rose-300 border border-rose-500/30">
+              24/7 Helpline
             </span>
           </div>
-          <div className="mt-4 pointer-events-none">
-            <h2 className="text-xl font-black font-display tracking-tight text-rose-700 dark:text-rose-400 group-hover:text-rose-600 dark:group-hover:text-rose-300 transition-colors pointer-events-none">
-              GET EMERGENCY HELP
-            </h2>
-            <p className="text-xs sm:text-sm font-bold text-slate-800 dark:text-slate-100 mt-1 leading-relaxed pointer-events-none">
-              Transferred money or shared OTP? Open 100% offline emergency recovery steps.
+          <div className="pointer-events-none">
+            <h3 className="text-base font-black font-display text-rose-700 dark:text-rose-400 group-hover:text-rose-600 dark:group-hover:text-rose-300 transition-colors">
+              Emergency: Call 1930
+            </h3>
+            <p className="text-xs sm:text-sm font-medium text-slate-700 dark:text-slate-200 mt-1 leading-relaxed">
+              Lost money or shared an OTP? Open step-by-step recovery help now.
             </p>
           </div>
         </button>
-      </div>
 
-      {/* Secondary Practice & Sharing Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {/* Spot The Scam */}
-        <div className="p-5 rounded-3xl border-2 border-amber-500/40 bg-gradient-to-br from-amber-500/15 via-amber-500/5 to-transparent dark:from-amber-950/60 dark:to-slate-950 text-slate-900 dark:text-amber-100 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-sm">
-          <div className="space-y-1">
-            <h3 className="font-black text-base flex items-center gap-2 text-amber-800 dark:text-amber-400">
-              <Award className="w-5 h-5 pointer-events-none" />
-              <span>Can You Spot the Scam?</span>
+        {/* Card 3: Simple Scam Quiz */}
+        <button
+          type="button"
+          onClick={async () => {
+            await triggerHaptic("light");
+            setShowSimulationModal(true);
+          }}
+          className="group p-5 rounded-2xl border border-amber-500/35 bg-white dark:bg-[#0d1424]/90 hover:border-amber-400 text-left shadow-sm hover:shadow-[0_0_20px_rgba(245,158,11,0.12)] transition-all duration-150 active:scale-[0.98] cursor-pointer touch-manipulation flex flex-col justify-between gap-4"
+        >
+          <div className="flex items-center justify-between w-full pointer-events-none">
+            <div className="w-11 h-11 rounded-xl bg-amber-500/15 border border-amber-500/30 text-amber-600 dark:text-amber-400 flex items-center justify-center">
+              <Award className="w-5 h-5" />
+            </div>
+            <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-amber-500 group-hover:translate-x-1 transition-all" />
+          </div>
+          <div className="pointer-events-none">
+            <h3 className="text-base font-black font-display text-slate-950 dark:text-white group-hover:text-amber-600 dark:group-hover:text-amber-400 transition-colors">
+              Simple Scam Quiz
             </h3>
-            <p className="text-xs font-semibold text-slate-700 dark:text-amber-200/90 leading-relaxed">
-              Practice identifying real scam SMS and phone calls with interactive quiz cases.
+            <p className="text-xs sm:text-sm font-medium text-slate-600 dark:text-slate-300 mt-1 leading-relaxed">
+              Practice spotting fake SMS and fraud calls with easy examples.
             </p>
           </div>
-          <button
-            type="button"
-            onClick={async () => {
-              await triggerHaptic("light");
-              setShowSimulationModal(true);
-            }}
-            className="h-12 px-6 rounded-2xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-black text-xs shrink-0 flex items-center gap-2 shadow-md active:scale-95 transition-transform duration-75 cursor-pointer touch-manipulation"
-          >
-            <span className="pointer-events-none">Start Practice</span>
-            <ArrowRight className="w-4 h-4 pointer-events-none" />
-          </button>
-        </div>
-
-        {/* Ask Trusted Contact */}
-        <div className="p-5 rounded-3xl border-2 border-emerald-500/40 bg-gradient-to-br from-emerald-500/15 via-emerald-500/5 to-transparent dark:from-emerald-950/60 dark:to-slate-950 text-slate-900 dark:text-emerald-100 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-sm">
-          <div className="space-y-1">
-            <h3 className="font-black text-base flex items-center gap-2 text-emerald-800 dark:text-emerald-400">
-              <Users className="w-5 h-5 pointer-events-none" />
-              <span>Ask a Trusted Contact</span>
-            </h3>
-            <p className="text-xs font-semibold text-slate-700 dark:text-emerald-200/90 leading-relaxed">
-              Share scan findings with your family member or trusted guardian for safety verification.
-            </p>
-          </div>
-          <button
-            type="button"
-            onClick={async () => {
-              await triggerHaptic("light");
-              setShowTrustedContactModal(true);
-            }}
-            className="h-12 px-6 rounded-2xl bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-400 hover:to-emerald-500 text-slate-950 font-black text-xs shrink-0 flex items-center gap-2 shadow-md active:scale-95 transition-transform duration-75 cursor-pointer touch-manipulation"
-          >
-            <span className="pointer-events-none">Share Findings</span>
-            <ArrowRight className="w-4 h-4 pointer-events-none" />
-          </button>
-        </div>
+        </button>
       </div>
 
       {/* Modals */}
@@ -202,5 +255,3 @@ export default function SeniorHomeView({ onSwitchToNormalMode }) {
     </div>
   );
 }
-
-

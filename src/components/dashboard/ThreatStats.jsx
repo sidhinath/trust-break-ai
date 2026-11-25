@@ -145,10 +145,16 @@ export default function ThreatStats({ reports = [], scans = [] }) {
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.25 }}
-        className="bg-[#070c16] border border-slate-800/80 rounded-2xl p-4 flex flex-col justify-between divide-y divide-slate-800/70 shadow-lg"
+        className="bg-white dark:bg-[#070c16] border border-slate-200 dark:border-slate-800/80 rounded-2xl p-4 flex flex-col justify-between divide-y divide-slate-200 dark:divide-slate-800/70 shadow-sm dark:shadow-lg"
       >
         {kpiRows.map((row) => {
           const Icon = row.icon;
+          const valueColorClass =
+            row.accent === "#fb7185"
+              ? "text-rose-600 dark:text-rose-400"
+              : row.accent === "#f59e0b"
+              ? "text-amber-600 dark:text-amber-400"
+              : "text-slate-950 dark:text-white";
           return (
             <div
               key={row.label}
@@ -156,25 +162,19 @@ export default function ThreatStats({ reports = [], scans = [] }) {
             >
               <div className="flex items-center gap-2.5 min-w-0">
                 <div
-                  className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0 border border-white/5"
+                  className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0 border border-slate-200/60 dark:border-white/5"
                   style={{ background: row.bg }}
                 >
                   <Icon className="w-4 h-4" style={{ color: row.accent }} />
                 </div>
-                <span
-                  className="text-xs font-semibold truncate"
-                  style={{ color: "#cbd5e1" }}
-                >
+                <span className="text-xs font-semibold truncate text-slate-700 dark:text-slate-300">
                   {row.label}
                 </span>
               </div>
 
               <div className="flex items-center gap-2.5 shrink-0">
                 <MiniSparkline points={row.spark} color={row.accent} />
-                <span
-                  className="text-xl font-black font-mono tabular-nums min-w-[1.5ch] text-right"
-                  style={{ color: row.accent === "#fb7185" || row.accent === "#f59e0b" ? row.accent : "#f8fafc" }}
-                >
+                <span className={`text-xl font-black font-mono tabular-nums min-w-[1.5ch] text-right ${valueColorClass}`}>
                   {row.value}
                 </span>
               </div>
@@ -188,14 +188,11 @@ export default function ThreatStats({ reports = [], scans = [] }) {
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.25, delay: 0.05 }}
-        className="bg-[#070c16] border border-slate-800/80 rounded-2xl p-5 flex flex-col justify-between space-y-3 shadow-lg"
+        className="bg-white dark:bg-[#070c16] border border-slate-200 dark:border-slate-800/80 rounded-2xl p-5 flex flex-col justify-between space-y-3 shadow-sm dark:shadow-lg"
       >
         <div className="flex items-center justify-between gap-2">
-          <h3
-            className="text-xs font-bold uppercase tracking-wider flex items-center gap-1.5"
-            style={{ color: "#10b981" }}
-          >
-            <PieChartIcon className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
+          <h3 className="text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 text-emerald-600 dark:text-[#10b981]">
+            <PieChartIcon className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-500 shrink-0" />
             Vectors Scanned By Channel
           </h3>
         </div>
@@ -224,27 +221,21 @@ export default function ThreatStats({ reports = [], scans = [] }) {
                 </Pie>
                 <Tooltip
                   contentStyle={{
-                    background: "#0d1424",
-                    borderColor: "rgba(16,185,129,0.3)",
+                    background: "var(--tb-surface)",
+                    borderColor: "var(--tb-border)",
                     borderRadius: 10,
                     fontSize: 12,
-                    color: "#f8fafc",
+                    color: "var(--tb-text)",
                   }}
                 />
               </PieChart>
             </ResponsiveContainer>
             {/* Centered Ring Label */}
             <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-              <span
-                className="text-2xl font-black font-mono leading-none"
-                style={{ color: "#f8fafc" }}
-              >
+              <span className="text-2xl font-black font-mono leading-none text-slate-950 dark:text-white">
                 {totalVectors}
               </span>
-              <span
-                className="text-[10px] font-mono font-bold uppercase tracking-widest mt-1"
-                style={{ color: "#94a3b8" }}
-              >
+              <span className="text-[10px] font-mono font-bold uppercase tracking-widest mt-1 text-slate-500 dark:text-slate-400">
                 TOTAL
               </span>
             </div>
@@ -252,7 +243,7 @@ export default function ThreatStats({ reports = [], scans = [] }) {
         </LazyViewport>
 
         {/* 2x2 Legend */}
-        <div className="grid grid-cols-2 gap-x-3 gap-y-2 pt-1 border-t border-slate-800/70">
+        <div className="grid grid-cols-2 gap-x-3 gap-y-2 pt-1 border-t border-slate-200 dark:border-slate-800/70">
           {categoryData.map((item) => (
             <div key={item.name} className="flex items-center justify-between gap-1.5 min-w-0">
               <div className="flex items-center gap-1.5 min-w-0">
@@ -260,17 +251,11 @@ export default function ThreatStats({ reports = [], scans = [] }) {
                   className="w-2 h-2 rounded-full shrink-0"
                   style={{ backgroundColor: item.color }}
                 />
-                <span
-                  className="text-[11px] font-medium truncate"
-                  style={{ color: "#cbd5e1" }}
-                >
+                <span className="text-[11px] font-medium truncate text-slate-600 dark:text-slate-300">
                   {item.name}
                 </span>
               </div>
-              <span
-                className="text-[11px] font-mono font-bold shrink-0"
-                style={{ color: "#f8fafc" }}
-              >
+              <span className="text-[11px] font-mono font-bold shrink-0 text-slate-950 dark:text-white">
                 {item.count}
               </span>
             </div>
@@ -283,20 +268,17 @@ export default function ThreatStats({ reports = [], scans = [] }) {
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.25, delay: 0.1 }}
-        className="bg-[#070c16] border border-slate-800/80 rounded-2xl p-5 flex flex-col justify-between space-y-3 shadow-lg relative"
+        className="bg-white dark:bg-[#070c16] border border-slate-200 dark:border-slate-800/80 rounded-2xl p-5 flex flex-col justify-between space-y-3 shadow-sm dark:shadow-lg relative"
       >
         <div className="flex items-center justify-between gap-2 flex-wrap">
-          <h3
-            className="text-xs font-bold uppercase tracking-wider flex items-center gap-1.5"
-            style={{ color: "#10b981" }}
-          >
-            <Activity className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
+          <h3 className="text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 text-emerald-600 dark:text-[#10b981]">
+            <Activity className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-500 shrink-0" />
             Detection Activity Trend
           </h3>
 
           {/* Floating Glass Peak Badge */}
-          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-[11px] font-mono font-bold text-emerald-400 backdrop-blur-md">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-700 dark:bg-emerald-500/10 dark:border-emerald-500/30 dark:text-emerald-400 text-[11px] font-mono font-bold backdrop-blur-md">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 dark:bg-emerald-400 animate-pulse" />
             Peak: {peakScans} Scans
           </span>
         </div>
@@ -327,7 +309,7 @@ export default function ThreatStats({ reports = [], scans = [] }) {
                 <CartesianGrid
                   vertical={false}
                   strokeDasharray="3 3"
-                  stroke="rgba(148, 163, 184, 0.14)"
+                  stroke="rgba(148, 163, 184, 0.2)"
                 />
                 <XAxis
                   dataKey="day"
@@ -345,11 +327,11 @@ export default function ThreatStats({ reports = [], scans = [] }) {
                 />
                 <Tooltip
                   contentStyle={{
-                    background: "#0d1424",
-                    borderColor: "rgba(16,185,129,0.3)",
+                    background: "var(--tb-surface)",
+                    borderColor: "var(--tb-border)",
                     borderRadius: 10,
                     fontSize: 12,
-                    color: "#f8fafc",
+                    color: "var(--tb-text)",
                   }}
                 />
                 <Area
