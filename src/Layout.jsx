@@ -469,14 +469,12 @@ export default function Layout({ children, currentPageName }) {
                 <Link to="/PrivacyPolicy" className="hover:text-emerald-500 transition-colors">Privacy Policy</Link>
                 <Link to="/Terms" className="hover:text-emerald-500 transition-colors">Terms of Service</Link>
                 <Link to="/CookiePolicy" className="hover:text-emerald-500 transition-colors">Cookie Policy</Link>
-                <Link to="/RefundPolicy" className="hover:text-emerald-500 transition-colors">Refund Policy</Link>
                 <Link to="/PrivacyCenter" className="hover:text-emerald-500 transition-colors">Data Sovereignty</Link>
-                <Link to="/BusinessModel" className="hover:text-emerald-500 transition-colors">Pricing</Link>
               </div>
             </div>
             <div className="flex flex-col sm:flex-row items-center justify-between gap-2 text-[10px] font-mono border-t pt-4" style={{ borderColor: 'var(--tb-border)' }}>
-              <p>© 2026 TrustBreak AI. India DPDP Act 2023 & GDPR Compliant Data Fiduciary.</p>
-              <p>Grievance Officer: dpo@trustbreak.ai | Bengaluru, KA, India</p>
+              <p>© 2026 TrustBreak AI · Built for Digital Safety &amp; Privacy (DPDP Act 2023 Aligned)</p>
+              <p>Security &amp; Privacy Contact: support@trustbreak.ai | Greater Noida, UP, India</p>
             </div>
           </footer>
         </main>
@@ -958,17 +956,16 @@ export default function Layout({ children, currentPageName }) {
                 <Link to={createPageUrl("PrivacyPolicy")} className="hover:text-emerald-500 transition-colors">Privacy Policy</Link>
                 <Link to={createPageUrl("Terms")} className="hover:text-emerald-500 transition-colors">Terms of Service</Link>
                 <Link to={createPageUrl("CookiePolicy")} className="hover:text-emerald-500 transition-colors">Cookie Policy</Link>
-                <Link to={createPageUrl("RefundPolicy")} className="hover:text-emerald-500 transition-colors">Refund Policy</Link>
                 <Link to={createPageUrl("PrivacyCenter")} className="hover:text-emerald-500 transition-colors">Data Sovereignty</Link>
               </div>
             </div>
 
             <div className="flex flex-col sm:flex-row items-center justify-between gap-2 text-[10px] font-mono border-t pt-4" style={{ borderColor: 'var(--tb-border)' }}>
               <p>
-                © 2026 TrustBreak AI. India DPDP Act 2023 & GDPR Compliant Data Fiduciary.
+                © 2026 TrustBreak AI · Built for Digital Safety &amp; Privacy (DPDP Act 2023 Aligned)
               </p>
               <p>
-                Grievance Officer: dpo@trustbreak.ai | Bengaluru, KA, India
+                Security &amp; Privacy Contact: support@trustbreak.ai | Greater Noida, UP, India
               </p>
             </div>
           </footer>
