@@ -347,10 +347,9 @@ function recordThreatIndicator(indicatorHash, indicatorType, riskScore, reasonCo
 
 const GROQ_MODELS = [
   'llama-3.3-70b-versatile',
+  'openai/gpt-oss-20b',
   'llama-3.1-8b-instant',
-  'llama3-70b-8192',
-  'llama3-8b-8192',
-  'mixtral-8x7b-32768',
+  'openai/gpt-oss-safeguard-20b',
 ]
 
 const REASON_CODES_INSTRUCTION = `
@@ -386,7 +385,8 @@ function resolveGroqKey(req = null) {
   }
 
   const envValue = process.env.GROQ_API_KEY || process.env.VITE_GROQ_API_KEY
-  const fromEnv = inspectApiKey(envValue)
+  const cleanedEnv = typeof envValue === 'string' ? envValue.trim() : envValue
+  const fromEnv = inspectApiKey(cleanedEnv)
   if (fromEnv.key) {
     return { key: fromEnv.key, source: 'server env (GROQ_API_KEY)', reason: null }
   }
@@ -407,7 +407,8 @@ function getValidGroqKey(req = null) {
 
 export function getGroqConfigurationStatus() {
   const envValue = process.env.GROQ_API_KEY || process.env.VITE_GROQ_API_KEY
-  const status = inspectApiKey(envValue)
+  const cleanedEnv = typeof envValue === 'string' ? envValue.trim() : envValue
+  const status = inspectApiKey(cleanedEnv)
   return {
     configured: Boolean(status.key),
     source: 'GROQ_API_KEY',
@@ -549,7 +550,7 @@ ${REASON_CODES_INSTRUCTION}`
           status: response.status,
           ok: false,
           durationMs: Date.now() - startedAt,
-          error: errorBody.slice(0, 300),
+          error: `${model}=${response.status}${errorBody ? ` (${errorBody.slice(0, 200)})` : ''}`,
         }
         if (diag) diag.attempts.push(detail)
         console.warn(
@@ -1052,7 +1053,9 @@ export default async function handler(req, res) {
   res.setHeader('Referrer-Policy', 'no-referrer')
 
   // CORS headers — required for browser extension (Feature 7)
-  res.setHeader('Access-Control-Allow-Origin', '*')
+  const origin = req.headers?.origin || '*'
+  const allowOrigin = (typeof origin === 'string' && (origin.startsWith('chrome-extension://') || origin.startsWith('moz-extension://'))) ? origin : '*'
+  res.setHeader('Access-Control-Allow-Origin', allowOrigin)
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS')
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, x-groq-api-key, x-gemini-api-key, x-trustbreak-debug')
 
