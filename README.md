@@ -5,6 +5,7 @@
 [![Live Demo](https://img.shields.io/badge/Live%20Production-trust--break--ai.vercel.app-10b981?style=for-the-badge&logo=vercel&logoColor=white)](https://trust-break-ai.vercel.app)
 [![GitHub Repository](https://img.shields.io/badge/GitHub-sidhinath%2Ftrust--break--ai-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/sidhinath/trust-break-ai.git)
 [![PWA Ready](https://img.shields.io/badge/PWA-Installable%20(Android%20%7C%20iOS%20%7C%20Desktop)-34d399?style=for-the-badge&logo=pwa&logoColor=white)](https://trust-break-ai.vercel.app)
+[![Automated Verification](https://img.shields.io/badge/Verification-104%20%2F%20104%20passed-10b981?style=for-the-badge&logo=checkmarx&logoColor=white)](#-automated-verification)
 [![License](https://img.shields.io/badge/License-MIT-059669?style=for-the-badge)](https://opensource.org/licenses/MIT)
 
 **Live Web Application:** [https://trust-break-ai.vercel.app](https://trust-break-ai.vercel.app)  
@@ -129,6 +130,39 @@ TrustBreak AI is a certified, fully installable **Progressive Web App (PWA)**:
 - **Native Install Interception:** Intercepts `beforeinstallprompt` to surface a clean, accessible **"📲 Install App"** button inside the sidebar, mobile navigation drawer, and Settings page.
 - **Zero Input Freeze on Mobile:** Initial splash screen unmounts instantly (`<600ms`), while heavy Recharts and Leaflet graphics hydrate asynchronously in the background. Mobile header buttons (`← Back`, `Sign In`, `Menu`) remain 100% responsive from the first frame (`0.0s`).
 - **Offline Shell & Caching:** Standard Service Worker (`public/sw.js`) caches static assets, logos, fonts, and core views for instant loading under intermittent or disconnected network states.
+- **Silent PWA Auto-Updates:** Immediate service worker activation via `skipWaiting()` + `clients.claim()` delivers seamless background updates on mobile and desktop — no manual refresh or "reload to update" prompt.
+
+---
+
+## ⚡ Performance & Scalability
+
+TrustBreak AI is engineered to stay fast as traffic, devices, and scan history grow:
+
+- **Sub-Second Load Performance:** Route-level code splitting with `React.lazy` + `Suspense` keeps the initial bundle small (secondary views load on demand), `preconnect` hints warm Supabase / API / Groq / Gemini origins before the JS bundle boots, and Supabase scan history is fetched in 20-row pages (`.range(0, 19)`) instead of pulling every row at once with a `Load More` action.
+- **Dual-Layer Caching:** An in-browser `localStorage` cache (24-hour TTL) inside the centralized `aiRouter` works alongside server-side 24-hour deduplication, so identical message, URL, and investigation requests resolve instantly — online or offline — with zero wasted API quota. Only complete, verified verdicts are cached; degraded results are never persisted.
+- **Head-Only KPI Counts:** Dashboard totals use Supabase `{ count: 'exact', head: true }` queries, so KPI cards stay accurate with millions of rows without transferring or scanning the full history table.
+
+---
+
+## 📱 Mobile-First Experience
+
+- **Quick-Scan Bottom Sheet:** One-tap access to **Message, Link, Screenshot, QR, and Voice** scanners directly from the Command Center dashboard.
+- **Responsive Cards & Tabs:** Threat Radar tabs, Reports filter pills, scan log cards, and Settings action rows reflow cleanly on small screens — every button and timestamp stays inside its card border with no horizontal overflow.
+- **Focused Dashboard:** The Command Center shows only the latest **4 Recent Inspections** plus a full-width **View All History** action when more records exist.
+- **Touch-Ready Controls:** 44px+ targets, non-wrapping action pills, and stacked mobile actions keep the interface comfortable and easy to tap.
+
+---
+
+## ✅ Automated Verification
+
+**104 / 104 automated end-to-end verification tests pass**, covering the centralized `aiRouter` (fallback chains, normalized verdict schema, cache behavior), scam-detection heuristics (smishing, lookalike KYC URLs, legitimate domains), Hindi/English Senior Mode translations, and PWA configuration (manifest, service worker activation). The suite has since grown to **107 / 107** with three additional cache regression tests.
+
+```bash
+npm test           # scanner, tinyfish, extension, blocklist, auth, and cache regression suites
+npm run verify:app # 10 core app verification checks
+npm run lint       # zero lint violations
+npm run build      # production build succeeds
+```
 
 ---
 
@@ -233,7 +267,8 @@ npm run preview
 | `npm run build` | Compiles frontend assets, PWA manifest, and service worker into `dist/` |
 | `npm run preview` | Starts local HTTP server previewing the compiled production bundle |
 | `npm run build:extension` | Validates MV3 CSP constraints and packages the Chrome extension to `dist-extension/` |
-| `npm test` | Runs internal automated test suites for scanners and heuristic logic |
+| `npm test` | Runs automated test suites for scanners, auth, and heuristic/cache logic |
+| `npm run verify:app` | Runs the 10 core end-to-end app verification checks (`aiRouter`, heuristics, Senior Mode, PWA) |
 | `npm run lint` | Analyzes codebase for formatting and lint violations |
 | `npm run supabase:setup` | Provisions database tables, RLS policies, and telemetry schemas in Supabase |
 
