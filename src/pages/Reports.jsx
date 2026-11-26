@@ -188,8 +188,8 @@ export default function Reports() {
                 onClick={() => setSelectedReport(scan)}
                 role="button"
                 className="touch-manipulation min-h-[44px] min-w-[44px] tb-card flex flex-col gap-3 p-4 rounded-2xl hover:border-emerald-500/40 transition-transform duration-75 active:scale-95 cursor-pointer group md:flex-row md:items-center md:justify-between">
-                <div className="flex items-start justify-between gap-3 w-full min-w-0 md:flex-1">
-                  <div className="flex items-center gap-3 min-w-0 flex-1">
+                <div className="flex items-center justify-between gap-3 w-full min-w-0 md:flex-1">
+                  <div className="flex items-start gap-3 flex-1 min-w-0">
                     <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 border ${
                       isScam ? "bg-rose-500/10 border-rose-500/30 text-rose-500" :
                       isSuspicious ? "bg-amber-500/10 border-amber-500/30 text-amber-500" :
@@ -203,21 +203,24 @@ export default function Reports() {
                         {scan.input_content || scan.analysis || "Scan Report Entry"}
                       </p>
 
-                      <div className="flex items-center gap-2 text-[10px] text-slate-400 font-mono">
+                      <div className="flex items-center gap-2 text-[10px] text-slate-400 font-mono min-w-0">
                         <Clock className="w-3 h-3 text-emerald-500 shrink-0" />
-                        <span className="whitespace-nowrap">{new Date(scan.created_at || scan.timestamp || Date.now()).toLocaleString()}</span>
+                        <span className="truncate">{new Date(scan.created_at || scan.timestamp || Date.now()).toLocaleString()}</span>
                         {scan.threat_category && (
                           <>
-                            <span className="whitespace-nowrap">•</span>
-                            <span className="text-emerald-400 whitespace-nowrap">{scan.threat_category}</span>
+                            <span className="shrink-0">•</span>
+                            <span className="text-emerald-400 truncate">{scan.threat_category}</span>
                           </>
                         )}
                       </div>
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-2 shrink-0">
-                    <Button variant="ghost" className="h-8 text-xs gap-1 text-emerald-400 hover:text-emerald-300">
+                  <div className="flex items-center gap-2.5 shrink-0">
+                    <Button
+                      variant="ghost"
+                      className="whitespace-nowrap px-2.5 py-1 rounded-lg bg-emerald-500/10 border border-emerald-500/25 text-emerald-400 hover:bg-emerald-500/20 text-xs font-semibold gap-1"
+                    >
                       Details <ChevronRight className="w-4 h-4" />
                     </Button>
                     <button

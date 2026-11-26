@@ -278,17 +278,17 @@ export default function Settings() {
           </div>
 
           {/* Progressive Web App (PWA) Installation Tile */}
-          <div className="flex items-center justify-between p-3 rounded-xl border" style={{ background: "var(--tb-surface-2)", borderColor: "var(--tb-border)" }}>
-            <div className="space-y-0.5">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 p-3 rounded-xl border" style={{ background: "var(--tb-surface-2)", borderColor: "var(--tb-border)" }}>
+            <div className="space-y-0.5 min-w-0">
               <span className="text-xs font-bold flex items-center gap-1.5" style={{ color: "var(--tb-text)" }}>
-                <Download className="w-4 h-4 text-emerald-400" /> Progressive Web App (PWA)
+                <Download className="w-4 h-4 text-emerald-400 shrink-0" /> Progressive Web App (PWA)
               </span>
               <span className="text-[11px] block" style={{ color: "var(--tb-text-dim)" }}>
                 {isInstalled ? "TrustBreak AI is installed on this device." : "Install directly onto your home screen or desktop with standalone mode."}
               </span>
             </div>
             {isInstalled ? (
-              <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">
+              <span className="shrink-0 self-start text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">
                 Installed
               </span>
             ) : (
@@ -299,9 +299,9 @@ export default function Settings() {
                     alert("To install TrustBreak AI:\n• iOS Safari: Tap Share ➔ 'Add to Home Screen'\n• Android Chrome: Tap three dots ➔ 'Install App'\n• Desktop Chrome/Edge: Click the install icon in your address bar.");
                   }
                 }}
-                className="h-8 text-xs gap-1.5 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold"
+                className="w-full sm:w-auto shrink-0 whitespace-nowrap justify-center px-4 py-2.5 rounded-xl text-sm font-semibold gap-1.5 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold"
               >
-                <Download className="w-3.5 h-3.5" /> 📲 Install App
+                <Download className="w-3.5 h-3.5 shrink-0" /> 📲 Install App
               </Button>
             )}
           </div>
@@ -340,8 +340,8 @@ export default function Settings() {
             </div>
           </div>
 
-          <div className="pt-1 flex items-center justify-between border-t" style={{ borderColor: "var(--tb-border)" }}>
-            <div className="space-y-0.5">
+          <div className="pt-1 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border-t" style={{ borderColor: "var(--tb-border)" }}>
+            <div className="space-y-0.5 min-w-0">
               <span className="text-xs font-bold block" style={{ color: "var(--tb-text)" }}>
                 Clear Local Scan History
               </span>
@@ -353,8 +353,8 @@ export default function Settings() {
             <Button
               onClick={clearLocalHistory}
               variant="outline"
-              className="h-8 text-xs gap-1 border-slate-700 hover:bg-slate-800 text-slate-300">
-              <Trash2 className="w-3.5 h-3.5 text-rose-400" /> Purge Cache
+              className="w-full sm:w-auto shrink-0 whitespace-nowrap justify-center px-4 py-2.5 rounded-xl text-sm font-semibold gap-1 border-slate-700 hover:bg-slate-800 text-slate-300">
+              <Trash2 className="w-3.5 h-3.5 text-rose-400 shrink-0" /> Purge Cache
             </Button>
           </div>
 
@@ -364,8 +364,8 @@ export default function Settings() {
             </p>
           )}
 
-          <div className="pt-2 flex items-center justify-between border-t" style={{ borderColor: "var(--tb-border)" }}>
-            <div className="space-y-0.5">
+          <div className="pt-2 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border-t" style={{ borderColor: "var(--tb-border)" }}>
+            <div className="space-y-0.5 min-w-0">
               <span className="text-xs font-bold block" style={{ color: "var(--tb-text)" }}>
                 Replay Application Introduction
               </span>
@@ -381,8 +381,8 @@ export default function Settings() {
                 setTimeout(() => setResetOnboardingNotice(false), 3000);
               }}
               variant="outline"
-              className="h-8 text-xs gap-1 border-slate-700 hover:bg-slate-800 text-emerald-400">
-              <Info className="w-3.5 h-3.5 text-emerald-400" /> Replay Onboarding
+              className="w-full sm:w-auto shrink-0 whitespace-nowrap justify-center px-4 py-2.5 rounded-xl text-sm font-semibold gap-1 border-slate-700 hover:bg-slate-800 text-emerald-400">
+              <Info className="w-3.5 h-3.5 text-emerald-400 shrink-0" /> Replay Onboarding
             </Button>
           </div>
 
