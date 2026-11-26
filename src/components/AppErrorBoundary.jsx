@@ -1,8 +1,17 @@
 import React from 'react'
 import { Loader2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { isChunkLoadError, reloadForChunkError } from '@/lib/lazyWithRetry'
+import { isChunkLoadError } from '@/lib/lazyWithRetry'
+import { reloadAppOnce } from '@/lib/pwaUpdate'
 
+/**
+ * Last-resort boundary for real render errors.
+ *
+ * Stale-chunk failures are handled silently: lazyWithRetry() reloads once with
+ * the shared sessionStorage guard, and this boundary only shows a small
+ * transient loader while the browser navigates. There is no update prompt and
+ * no "Refresh Now" button anywhere in the recovery path.
+ */
 export default class AppErrorBoundary extends React.Component {
   constructor(props) {
     super(props)
@@ -10,7 +19,6 @@ export default class AppErrorBoundary extends React.Component {
       hasError: false,
       errorMessage: '',
       isChunkError: false,
-      autoReloading: false,
     }
   }
 
@@ -26,15 +34,15 @@ export default class AppErrorBoundary extends React.Component {
     console.error('AppErrorBoundary caught an error:', error, info)
 
     if (isChunkLoadError(error)) {
-      // Stale chunk after a deployment — fetch the latest build automatically.
-      // The helper is cooldown-guarded, so this can never reload in a loop.
-      const reloading = reloadForChunkError()
-      if (reloading) this.setState({ autoReloading: true })
+      // Already guarded by `last_auto_reload` (10s). If a reload happened very
+      // recently this returns false and the transient loader stays until the
+      // next navigation/update check — no blocking prompt is ever rendered.
+      reloadAppOnce({ reason: 'chunk-error' })
     }
   }
 
   handleReload = () => {
-    window.location.reload()
+    reloadAppOnce({ reason: 'manual-reload', force: true })
   }
 
   handleReset = () => {
@@ -42,68 +50,61 @@ export default class AppErrorBoundary extends React.Component {
       hasError: false,
       errorMessage: '',
       isChunkError: false,
-      autoReloading: false,
     })
   }
 
-  render() {
-    if (!this.state.hasError) {
-      return this.props.children
-    }
+  renderChunkRecovery() {
+    return (
+      <div
+        role="status"
+        aria-label="Restarting TrustBreak AI"
+        className="flex min-h-[100dvh] w-full items-center justify-center"
+        style={{ background: 'var(--tb-bg)' }}
+      >
+        <Loader2 className="h-5 w-5 animate-spin" style={{ color: 'var(--tb-neon)' }} />
+      </div>
+    )
+  }
 
-    const { isChunkError, autoReloading, errorMessage } = this.state
-
-    // Stale-deployment recovery: never offer "Try Again" here, because
-    // React.lazy caches the rejected import and would throw again.
-    if (isChunkError) {
-      return (
-        <div className="min-h-screen flex items-center justify-center px-4" style={{ background: 'var(--tb-bg)' }}>
-          <div className="tb-card w-full max-w-xl p-6 space-y-4">
-            <p className="text-xs font-bold uppercase tracking-widest" style={{ color: 'var(--tb-neon)' }}>
-              App Update
-            </p>
-            <h1 className="text-2xl font-extrabold text-white">A new version is available.</h1>
-            <p className="text-sm" style={{ color: 'var(--tb-text-dim)' }}>
-              {autoReloading
-                ? 'Refreshing to load the latest version of TrustBreak AI…'
-                : 'TrustBreak AI was updated while you were browsing. Refresh to load the latest version — your session stays signed in.'}
-            </p>
-            <div className="flex gap-2">
-              <Button className="rounded-xl" onClick={this.handleReload} disabled={autoReloading}>
-                {autoReloading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                {autoReloading ? 'Refreshing…' : 'Refresh Now'}
-              </Button>
-            </div>
-            {!autoReloading && (
-              <p className="text-[11px]" style={{ color: 'var(--tb-text-muted)' }}>
-                If this keeps happening, close and reopen the app.
-              </p>
-            )}
-          </div>
-        </div>
-      )
-    }
+  renderApplicationError() {
+    const { errorMessage } = this.state
 
     return (
-      <div className="min-h-screen flex items-center justify-center px-4" style={{ background: 'var(--tb-bg)' }}>
-        <div className="tb-card w-full max-w-xl p-6 space-y-4">
-          <p className="text-xs font-bold uppercase tracking-widest" style={{ color: 'var(--tb-red)' }}>
+      <div
+        className="flex min-h-screen w-full items-center justify-center overflow-y-auto px-4 py-10"
+        style={{ minHeight: '100dvh', background: 'var(--tb-bg)' }}
+      >
+        <div
+          role="alertdialog"
+          aria-modal="true"
+          aria-labelledby="tb-app-error-title"
+          className="tb-card w-full max-w-lg space-y-4 rounded-2xl p-5 text-center sm:p-6 sm:text-left"
+        >
+          <p
+            className="text-xs font-bold uppercase tracking-widest"
+            style={{ color: 'var(--tb-red)' }}
+          >
             Application Error
           </p>
-          <h1 className="text-2xl font-extrabold text-white">Something went wrong.</h1>
+          <h1 id="tb-app-error-title" className="text-xl font-extrabold text-white sm:text-2xl">
+            Something went wrong.
+          </h1>
           <p className="text-sm" style={{ color: 'var(--tb-text-dim)' }}>
             TrustBreak AI encountered an unexpected error. Your session is safe, but this view could not render.
           </p>
-          <div className="rounded-xl px-3 py-2 text-xs font-medium break-all" style={{ background: 'var(--tb-surface-2)', color: '#8fa8c8' }}>
+          <div
+            className="break-all rounded-xl px-3 py-2 text-xs font-medium"
+            style={{ background: 'var(--tb-surface-2)', color: '#8fa8c8' }}
+          >
             {errorMessage}
           </div>
-          <div className="flex gap-2">
-            <Button className="rounded-xl" onClick={this.handleReset}>
+          <div className="flex flex-col gap-2 sm:flex-row">
+            <Button className="w-full rounded-xl sm:w-auto" onClick={this.handleReset}>
               Try Again
             </Button>
             <Button
               variant="outline"
-              className="rounded-xl"
+              className="w-full rounded-xl sm:w-auto"
               onClick={this.handleReload}
               style={{ background: 'transparent', color: 'var(--tb-neon)' }}
             >
@@ -113,5 +114,11 @@ export default class AppErrorBoundary extends React.Component {
         </div>
       </div>
     )
+  }
+
+  render() {
+    if (!this.state.hasError) return this.props.children
+    if (this.state.isChunkError) return this.renderChunkRecovery()
+    return this.renderApplicationError()
   }
 }

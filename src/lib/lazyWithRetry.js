@@ -1,4 +1,5 @@
 import { lazy } from 'react'
+import { reloadAppOnce } from '@/lib/pwaUpdate'
 
 /**
  * Chunk-load recovery.
@@ -6,15 +7,11 @@ import { lazy } from 'react'
  * After a new Vercel deployment the previous build's hashed chunks disappear.
  * A mobile client that still holds the old `index.html` (or is on a flaky
  * network) then fails with `ChunkLoadError` / "Failed to fetch dynamically
- * imported module". This helper retries the import once, then performs a
- * single guarded hard reload so the browser fetches the new build manifest.
- *
- * The guard is a timestamp in sessionStorage: a reload is only allowed once
- * per cooldown window, so a persistent failure can never create a reload loop.
+ * imported module". This helper retries the import once, then silently reloads
+ * via the shared `last_auto_reload` guard in pwaUpdate.js, so a PWA update and
+ * a stale chunk can never reload back-to-back.
  */
 
-const RELOAD_AT_KEY = 'tb:chunk-reload-at'
-const RELOAD_COOLDOWN_MS = 10_000
 const DEFAULT_RETRY_DELAY_MS = 350
 
 const CHUNK_ERROR_PATTERNS = [
@@ -39,37 +36,12 @@ export function isChunkLoadError(error) {
   return CHUNK_ERROR_PATTERNS.some((pattern) => haystack.includes(pattern))
 }
 
-function readLastReloadAt() {
-  try {
-    const raw = window.sessionStorage.getItem(RELOAD_AT_KEY)
-    const parsed = raw ? Number(raw) : 0
-    return Number.isFinite(parsed) ? parsed : 0
-  } catch {
-    return 0
-  }
-}
-
-function writeLastReloadAt(timestamp) {
-  try {
-    window.sessionStorage.setItem(RELOAD_AT_KEY, String(timestamp))
-  } catch {
-    /* sessionStorage unavailable (private mode / embedded webview) */
-  }
-}
-
 /**
  * Reload the page at most once per cooldown window.
  * Returns true when a reload was actually triggered.
  */
-export function reloadForChunkError({ force = false } = {}) {
-  if (typeof window === 'undefined') return false
-
-  const now = Date.now()
-  if (!force && now - readLastReloadAt() < RELOAD_COOLDOWN_MS) return false
-
-  writeLastReloadAt(now)
-  window.location.reload()
-  return true
+export function reloadForChunkError() {
+  return reloadAppOnce({ reason: 'chunk-error' })
 }
 
 const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
@@ -95,8 +67,8 @@ async function importWithRetry(importer, retries, retryDelay) {
         return new Promise(() => {})
       }
 
-      // Reload already attempted recently — surface the error instead of
-      // looping, letting AppErrorBoundary show the manual refresh UI.
+      // Reload already attempted recently — let the boundary keep a transient
+      // loader visible instead of looping or showing a blocking update prompt.
       throw error
     }
   }

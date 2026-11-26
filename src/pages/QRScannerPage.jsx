@@ -3,6 +3,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { QrCode, AlertCircle, Bot } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import ScannerHeader from "../components/scanner/ScannerHeader";
+import ScannerQuickSwitcher from "../components/scanner/ScannerQuickSwitcher";
 import QRScanner from "../components/QRScanner";
 import FraudScoreDisplay from "../components/scanner/FraudScoreDisplay";
 import TinyFishInvestigationCard from "../components/scanner/TinyFishInvestigationCard";
@@ -93,6 +94,7 @@ export default function QRScannerPage() {
         description="Decode and inspect physical or digital QR codes for concealed phishing URLs, reverse-charge UPI traps, and deceptive redirection chains"
         color="#8b5cf6"
       />
+      <ScannerQuickSwitcher activePage="QRScanner" />
 
       {/* Main Upload / Decoder */}
       <div className="tb-card p-5">

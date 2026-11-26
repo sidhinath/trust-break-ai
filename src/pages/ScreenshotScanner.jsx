@@ -5,6 +5,7 @@ import { createPageUrl } from "@/utils";
 import { Image, Upload, X, FileSearch, Info, QrCode, Users, AlertTriangle, RefreshCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import ScannerHeader from "../components/scanner/ScannerHeader";
+import ScannerQuickSwitcher from "../components/scanner/ScannerQuickSwitcher";
 import FraudScoreDisplay from "../components/scanner/FraudScoreDisplay";
 import TinyFishInvestigationCard from "../components/scanner/TinyFishInvestigationCard";
 import SeniorScanExplanation from "../components/SeniorScanExplanation";
@@ -229,6 +230,7 @@ export default function ScreenshotScanner() {
         description="Upload suspicious chat screenshots, payment QR codes, fake banking notices, or social media lures"
         color="#ec4899"
       />
+      <ScannerQuickSwitcher activePage="ScreenshotScanner" />
 
       {/* Mode Navigation Tabs */}
       <div className="flex rounded-xl p-1 border gap-1"

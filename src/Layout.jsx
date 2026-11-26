@@ -18,6 +18,8 @@ import {
 import SeniorModeToggleSwitch from "@/components/SeniorModeToggleSwitch";
 import { ConstellationField } from "@/shaders/constellation-field/ConstellationField";
 import { usePWAInstall } from "@/hooks/usePWAInstall";
+import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "@/components/ui/sheet";
+import { SCAN_TOOLS, SCANNER_PAGES } from "@/components/scanner/scanTools";
 import { Download } from "lucide-react";
 
 const detectionNav = [
@@ -62,6 +64,7 @@ const governanceNav = [
 
 export default function Layout({ children, currentPageName }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [quickScanOpen, setQuickScanOpen] = useState(false);
   const [familyMode, setFamilyMode] = useState(() => {
     try {
       return document.body.classList.contains("family-safety-mode") || localStorage.getItem("trustbreak_senior_mode") === "true";
@@ -287,11 +290,12 @@ export default function Layout({ children, currentPageName }) {
 
   useEffect(() => {
     setMobileMenuOpen(false);
+    setQuickScanOpen(false);
   }, [currentPageName]);
 
   const bottomNavItems = [
     { name: "Home", page: "Home", icon: Home },
-    { name: "Scan", page: "MessageScanner", icon: MessageSquareWarning },
+    { name: "Scan", page: "MessageScanner", icon: MessageSquareWarning, action: "quickScan" },
     { name: "Threats", page: "Threats", icon: Map },
     { name: "Reports", page: "Reports", icon: FileText },
     { name: "Settings", page: "Settings", icon: Settings },
@@ -1050,22 +1054,99 @@ export default function Layout({ children, currentPageName }) {
         <div className="flex items-center justify-around py-2 px-1">
           {bottomNavItems.map(item => {
             const Icon = item.icon;
-            const active = currentPageName === item.page;
+            const active = item.action === "quickScan"
+              ? SCANNER_PAGES.has(currentPageName)
+              : currentPageName === item.page;
+            const className = `touch-manipulation min-h-[44px] min-w-[44px] flex flex-col items-center gap-0.5 py-1 px-2.5 rounded-lg transition-transform duration-75 active:scale-95 ${
+              active ? 'text-emerald-500 font-bold' : 'font-medium'
+            }`;
+            const content = (
+              <>
+                <Icon className="w-4 h-4" />
+                <span className="text-[10px] tracking-tight">{item.name}</span>
+              </>
+            );
+
+            if (item.action === "quickScan") {
+              return (
+                <button
+                  key="quick-scan"
+                  type="button"
+                  aria-label="Open quick scan tools"
+                  aria-haspopup="dialog"
+                  onClick={() => {
+                    triggerHaptic("light").catch(() => {});
+                    setQuickScanOpen(true);
+                  }}
+                  className={className}
+                  style={{ color: active ? undefined : 'var(--tb-text-dim)' }}>
+                  {content}
+                </button>
+              );
+            }
+
             return (
               <Link
                 key={item.page}
                 to={createPageUrl(item.page)}
-                className={`touch-manipulation min-h-[44px] min-w-[44px] flex flex-col items-center gap-0.5 py-1 px-2.5 rounded-lg transition-transform duration-75 active:scale-95 ${
-                  active ? 'text-emerald-500 font-bold' : 'font-medium'
-                }`}
+                className={className}
                 style={{ color: active ? undefined : 'var(--tb-text-dim)' }}>
-                <Icon className="w-4 h-4" />
-                <span className="text-[10px] tracking-tight">{item.name}</span>
+                {content}
               </Link>
             );
           })}
         </div>
       </nav>
+
+      {/* Mobile Quick Scan Picker */}
+      <Sheet open={quickScanOpen} onOpenChange={setQuickScanOpen}>
+        <SheetContent
+          side="bottom"
+          className="md:hidden z-50 rounded-t-2xl border-0 bg-white p-5 text-[var(--tb-text)] shadow-2xl dark:bg-[#0b1120]"
+          style={{
+            background: theme === 'dark' ? '#0b1120' : '#ffffff',
+            paddingBottom: 'max(1.25rem, env(safe-area-inset-bottom))',
+          }}>
+          <SheetHeader className="text-left">
+            <SheetTitle className="text-lg font-black font-display" style={{ color: 'var(--tb-text)' }}>
+              Quick Scan
+            </SheetTitle>
+            <SheetDescription className="text-xs" style={{ color: 'var(--tb-text-dim)' }}>
+              Choose a scanner to launch.
+            </SheetDescription>
+          </SheetHeader>
+
+          <div className="mt-4 space-y-2">
+            {SCAN_TOOLS.map((tool) => {
+              const Icon = tool.icon;
+              return (
+                <button
+                  key={tool.page}
+                  type="button"
+                  onClick={() => {
+                    triggerHaptic("light").catch(() => {});
+                    setQuickScanOpen(false);
+                    navigate(createPageUrl(tool.page));
+                  }}
+                  className="w-full min-h-[64px] rounded-xl border px-4 py-3 flex items-center gap-3 text-left touch-manipulation transition-transform duration-75 active:scale-[0.99] cursor-pointer"
+                  style={{ background: 'var(--tb-surface-2)', borderColor: 'var(--tb-border)' }}>
+                  <span className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 bg-emerald-500/10">
+                    <Icon className="w-5 h-5 text-emerald-500" />
+                  </span>
+                  <span className="min-w-0 flex-1">
+                    <span className="block text-sm font-bold" style={{ color: 'var(--tb-text)' }}>
+                      {tool.label}
+                    </span>
+                    <span className="block text-[11px] font-medium" style={{ color: 'var(--tb-text-dim)' }}>
+                      {tool.description}
+                    </span>
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+        </SheetContent>
+      </Sheet>
 
       {/* User Login Details Modal */}
       <UserModal

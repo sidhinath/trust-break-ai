@@ -4,6 +4,7 @@ import { MessageSquareWarning, Sparkles, Trash2, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import ScannerHeader from "../components/scanner/ScannerHeader";
+import ScannerQuickSwitcher from "../components/scanner/ScannerQuickSwitcher";
 import FraudScoreDisplay from "../components/scanner/FraudScoreDisplay";
 import TinyFishInvestigationCard from "../components/scanner/TinyFishInvestigationCard";
 import SeniorScanExplanation from "../components/SeniorScanExplanation";
@@ -129,6 +130,7 @@ export default function MessageScanner() {
         description="Inspect SMS, WhatsApp, Telegram, or email text for urgency manipulation, credential harvesting, and fraudulent payment prompts"
         color="#00e5ff"
       />
+      <ScannerQuickSwitcher activePage="MessageScanner" />
 
       {/* Main Input Card */}
       <div className="tb-card p-5 space-y-4">

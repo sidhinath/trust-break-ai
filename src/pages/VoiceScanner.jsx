@@ -1,6 +1,7 @@
 import React from "react";
 import { Mic } from "lucide-react";
 import ScannerHeader from "../components/scanner/ScannerHeader";
+import ScannerQuickSwitcher from "../components/scanner/ScannerQuickSwitcher";
 import VoiceScanner from "../components/VoiceScanner";
 import ProtectedPage from "@/components/auth/ProtectedPage";
 
@@ -14,6 +15,7 @@ export default function VoiceScannerPage() {
           description="Inspect audio recordings and voicemails for voice cloning, synthesized vocoders, social engineering coercion, and financial traps"
           color="#10b981"
         />
+        <ScannerQuickSwitcher activePage="VoiceScanner" />
 
         <VoiceScanner />
       </div>

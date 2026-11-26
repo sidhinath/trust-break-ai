@@ -4,6 +4,7 @@ import { Link2, Users, Eye, Sparkles, ShieldCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import ScannerHeader from "../components/scanner/ScannerHeader";
+import ScannerQuickSwitcher from "../components/scanner/ScannerQuickSwitcher";
 import FraudScoreDisplay from "../components/scanner/FraudScoreDisplay";
 import ClickSimulationModal from "../components/scanner/ClickSimulationModal";
 import SeniorScanExplanation from "../components/SeniorScanExplanation";
@@ -112,6 +113,7 @@ export default function LinkScanner() {
         description="Verify domain reputation, check for typosquatting, homograph attacks, and shortener redirection traps"
         color="#00e5ff"
       />
+      <ScannerQuickSwitcher activePage="LinkScanner" />
 
       {/* Main Input Card */}
       <div className="tb-card p-5 space-y-4">
