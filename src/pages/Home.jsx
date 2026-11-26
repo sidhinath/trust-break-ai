@@ -6,7 +6,7 @@ import RecentScans from "../components/dashboard/RecentScans";
 import ThreatStats from "../components/dashboard/ThreatStats";
 import { lazyWithRetry } from "@/lib/lazyWithRetry";
 import { ArrowRight } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import {
   listScanHistory,
@@ -43,6 +43,8 @@ export default function Home() {
       window.removeEventListener("storage", syncMode);
     };
   }, []);
+
+  const navigate = useNavigate();
 
   const handleSwitchToNormalMode = () => {
     setSeniorModeActive(false);
@@ -93,7 +95,6 @@ export default function Home() {
 
   const isLoading = loadingScans || loadingReports;
   const totalScanCount = totalScans || scans.length;
-  const recentScans = scans.slice(0, 4);
   const threatsBlocked = (scamScans + suspiciousScans) ||
     scans.filter(s => s.risk_level === 'scam' || s.risk_level === 'suspicious').length;
   const scamRatio = totalScanCount > 0 ? (scamScans / totalScanCount) : 0;
@@ -165,15 +166,16 @@ export default function Home() {
         {isLoading ? (
           <ThreatListSkeleton count={4} />
         ) : (
-          <RecentScans scans={recentScans} />
+          <RecentScans scans={scans} />
         )}
-        {!isLoading && totalScanCount > 4 && (
-          <Link
-            to={createPageUrl("Reports")}
-            className="w-full py-3 mt-3 rounded-xl border border-emerald-500/30 bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20 font-semibold text-sm flex items-center justify-center gap-2 touch-manipulation transition-colors"
+        {scans.length > 4 && (
+          <button
+            type="button"
+            onClick={() => navigate(createPageUrl("Reports"))}
+            className="w-full py-3 mt-3 rounded-xl border border-emerald-500/30 bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20 font-semibold text-sm flex items-center justify-center gap-2 cursor-pointer touch-manipulation transition-colors"
           >
-            View All History ({totalScanCount} Total) →
-          </Link>
+            View All History ({scans.length} Total) →
+          </button>
         )}
       </div>
     </div>
