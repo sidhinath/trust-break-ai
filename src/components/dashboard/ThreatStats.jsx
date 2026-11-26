@@ -58,23 +58,39 @@ function MiniSparkline({ points, color }) {
   );
 }
 
-export default function ThreatStats({ reports = [], scans = [] }) {
-  const totalScams =
-    scans.filter((s) => s.risk_level === "scam").length +
-    reports.filter((r) => r.risk_level === "scam").length;
-  const totalSuspicious =
-    scans.filter((s) => s.risk_level === "suspicious").length +
-    reports.filter((r) => r.risk_level === "suspicious").length;
-  const totalSafe = scans.filter((s) => s.risk_level === "safe").length;
+export default function ThreatStats({
+  reports = [],
+  scans = [],
+  totalScans,
+  totalScamScans,
+  totalSuspiciousScans,
+  totalReports,
+  totalScamReports,
+}) {
+  // Counts come from head-only Supabase queries when available; the 20-row
+  // sample is only a fallback for guests/offline users.
+  const scamScanCount =
+    totalScamScans ?? scans.filter((s) => s.risk_level === "scam").length;
+  const suspiciousScanCount =
+    totalSuspiciousScans ?? scans.filter((s) => s.risk_level === "suspicious").length;
+  const scamReportCount =
+    totalScamReports ?? reports.filter((r) => r.risk_level === "scam").length;
+  const suspiciousReportCount = reports.filter((r) => r.risk_level === "suspicious").length;
+
+  const performed = totalScans ?? scans.length;
+  const totalScams = scamScanCount + scamReportCount;
+  const totalSuspicious = suspiciousScanCount + suspiciousReportCount;
+  const totalSafe = Math.max(0, performed - scamScanCount - suspiciousScanCount);
+  const verifiedReports = totalReports ?? reports.length;
 
   const kpiRows = [
     {
       label: "Scans Performed",
-      value: scans.length,
+      value: performed,
       icon: Eye,
       accent: "#10b981",
       bg: "rgba(16, 185, 129, 0.12)",
-      spark: [1, 2, 1, 3, Math.max(scans.length, 2)],
+      spark: [1, 2, 1, 3, Math.max(performed, 2)],
     },
     {
       label: "Scams Neutralized",
@@ -112,7 +128,7 @@ export default function ThreatStats({ reports = [], scans = [] }) {
     Screenshot:
       scans.filter((s) => s.scan_type === "screenshot").length +
       reports.filter((r) => r.report_type === "screenshot").length,
-    Report: reports.length,
+    Report: verifiedReports,
   };
 
   const categoryData = [

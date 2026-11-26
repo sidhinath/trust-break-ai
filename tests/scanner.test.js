@@ -303,7 +303,12 @@ import {
 import syncFeedsHandler from '../api/cron/sync-feeds.js'
 import analyzeHandler from '../api/analyze.js'
 import visionHealthHandler from '../api/vision-health.js'
-import { inspectKey, resolveGeminiKey, sanitizeKeyValue } from '../src/lib/vision.js'
+import {
+  VISION_MODELS,
+  inspectKey,
+  resolveGeminiKey,
+  sanitizeKeyValue,
+} from '../src/lib/vision.js'
 import voiceHandler from '../api/analyze-voice.js'
 import {
   analyzeMessage,
@@ -735,7 +740,10 @@ describe('Vision Scanner — /api/analyze screenshot branch', () => {
       assert.strictEqual(res.body.fraud_score, 8)
       assert.strictEqual(res.body.risk_level, 'safe')
       assert.notStrictEqual(res.body.fraud_score, 65)
-      assert.match(calledUrl, /gemini-3\.8-flash/)
+      assert.ok(
+        calledUrl.includes(`models/${VISION_MODELS[0]}:generateContent`),
+        `Expected the primary vision model to be called, got ${calledUrl}`
+      )
       assert.strictEqual(calledApiKeyHeader, process.env.GEMINI_API_KEY, 'Key must be sent as x-goog-api-key header')
     } finally {
       globalThis.fetch = originalFetch
@@ -789,14 +797,14 @@ describe('Vision Scanner — /api/analyze screenshot branch', () => {
       const model = String(url).match(/models\/([^:]+):/)?.[1] || ''
       requestedModels.push(model)
 
-      if (model === 'gemini-3.8-flash') {
+      if (model === VISION_MODELS[0]) {
         return {
           ok: false,
           status: 404,
           text: async () => JSON.stringify({
             error: {
               code: 404,
-              message: 'This model models/gemini-3.8-flash is no longer available. Please update your code to use models/gemini-4.0-flash for the latest features.',
+              message: `This model models/${VISION_MODELS[0]} is no longer available. Please update your code to use models/${VISION_MODELS[1]} for the latest features.`,
             },
           }),
         }
@@ -833,9 +841,9 @@ describe('Vision Scanner — /api/analyze screenshot branch', () => {
       await analyzeHandler(req, res)
 
       assert.strictEqual(res.body.source, 'gemini')
-      assert.strictEqual(res.body.model, 'gemini-4.0-flash')
+      assert.strictEqual(res.body.model, VISION_MODELS[1])
       assert.ok(
-        requestedModels.includes('gemini-4.0-flash'),
+        requestedModels.includes(VISION_MODELS[1]),
         `Expected the replacement model to be requested, got ${requestedModels.join(', ')}`
       )
     } finally {
@@ -916,9 +924,9 @@ describe('Vision Scanner — /api/analyze screenshot branch', () => {
       const model = String(url).match(/models\/([^:]+):/)?.[1] || ''
       requestedModels.push(model)
 
-      if (model === 'gemini-3.8-flash') {
-        // Simulates the real behaviour observed in production: the model
-        // accepts the request and never answers.
+      if (model === VISION_MODELS[0]) {
+        // Simulates the real behaviour observed in production: the preferred
+        // model accepts the request and never answers, so the hedge must win.
         return new Promise(() => {})
       }
 
@@ -955,9 +963,9 @@ describe('Vision Scanner — /api/analyze screenshot branch', () => {
       const elapsed = Date.now() - startedAt
 
       assert.strictEqual(res.body.fraud_score, 77)
-      assert.strictEqual(res.body.model, 'gemini-3.6-flash')
+      assert.strictEqual(res.body.model, VISION_MODELS[1])
       assert.ok(elapsed < 1500, `Hedge should answer fast, took ${elapsed}ms`)
-      assert.ok(requestedModels.includes('gemini-3.6-flash'), 'The fallback model must be tried in parallel')
+      assert.ok(requestedModels.includes(VISION_MODELS[1]), 'The fallback model must be tried in parallel')
     } finally {
       globalThis.fetch = originalFetch
       if (originalKey === undefined) delete process.env.GEMINI_API_KEY
@@ -1092,8 +1100,11 @@ describe('Vision diagnostics — key resolution & health endpoint', () => {
       const res = createMockRes()
       await visionHealthHandler({ method: 'GET', headers: {}, query: { probe: '1' } }, res)
 
-      assert.match(probedUrl, /gemini-3\.8-flash:generateContent/)
-      assert.strictEqual(res.body.probe.workingModel, 'gemini-3.8-flash')
+      assert.ok(
+        probedUrl.includes(`models/${VISION_MODELS[0]}:generateContent`),
+        `Expected the primary vision model to be probed, got ${probedUrl}`
+      )
+      assert.strictEqual(res.body.probe.workingModel, VISION_MODELS[0])
       assert.strictEqual(res.body.probe.attempts[0].status, 200)
       assert.strictEqual(res.body.probe.attempts[0].text, 'ok')
       assert.strictEqual(res.body.keySource, 'GEMINI_API_KEY env var')

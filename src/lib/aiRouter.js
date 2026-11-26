@@ -26,10 +26,55 @@ export const MULTIMODAL_MODEL_CHAIN = [
 
 export const AI_ROUTER_CACHE_TTL_MS = 24 * 60 * 60 * 1000 // 24 hours
 const MAX_ROUTER_CACHE_ENTRIES = 2000
+// Only a bounded slice of the in-memory cache is persisted: localStorage is
+// synchronous and quota-limited, so keeping it small preserves the 0ms path.
+const MAX_PERSISTED_CACHE_ENTRIES = 100
+export const AI_ROUTER_STORAGE_KEY = 'trustbreak_ai_router_cache_v1'
 const GEMINI_ENDPOINT = 'https://generativelanguage.googleapis.com/v1beta/models'
 const GROQ_ENDPOINT = 'https://api.groq.com/openai/v1/chat/completions'
 
 const routerCache = new Map()
+
+function getBrowserStorage() {
+  try {
+    return typeof localStorage === 'undefined' ? null : localStorage
+  } catch {
+    return null
+  }
+}
+
+function readPersistedCache() {
+  const storage = getBrowserStorage()
+  if (!storage) return null
+  try {
+    const raw = storage.getItem(AI_ROUTER_STORAGE_KEY)
+    if (!raw) return null
+    const parsed = JSON.parse(raw)
+    return parsed && typeof parsed === 'object' && !Array.isArray(parsed) ? parsed : null
+  } catch {
+    return null
+  }
+}
+
+function writePersistedCache(entries) {
+  const storage = getBrowserStorage()
+  if (!storage) return
+  try {
+    storage.setItem(AI_ROUTER_STORAGE_KEY, JSON.stringify(entries))
+  } catch {
+    // Quota exceeded / private mode: the in-memory cache still works.
+  }
+}
+
+function prunePersistedCache(entries) {
+  const now = Date.now()
+  return Object.fromEntries(
+    Object.entries(entries)
+      .filter(([, entry]) => entry?.data && entry.expiresAt > now)
+      .sort((a, b) => b[1].expiresAt - a[1].expiresAt)
+      .slice(0, MAX_PERSISTED_CACHE_ENTRIES)
+  )
+}
 
 /**
  * Normalizes raw input so semantically identical URLs/messages share one cache entry.
@@ -68,8 +113,20 @@ export function buildRouterCacheKey(kind, rawInput = '') {
 
 export function getRouterCache(key) {
   if (!key) return null
-  const entry = routerCache.get(key)
+
+  let entry = routerCache.get(key)
+  if (!entry) {
+    // Long-lived browsers and PWA relaunches lose the in-memory Map. The
+    // localStorage copy is the durable 24-hour cache that makes a repeat scan
+    // of the same URL/message answer synchronously, online or offline.
+    const persisted = readPersistedCache()?.[key]
+    if (persisted?.data && persisted.expiresAt > Date.now()) {
+      entry = { data: persisted.data, expiresAt: persisted.expiresAt }
+      routerCache.set(key, entry)
+    }
+  }
   if (!entry) return null
+
   if (Date.now() > entry.expiresAt) {
     routerCache.delete(key)
     return null
@@ -79,14 +136,18 @@ export function getRouterCache(key) {
 
 export function setRouterCache(key, data, ttlMs = AI_ROUTER_CACHE_TTL_MS) {
   if (!key || !data || data.degraded || data.unverified) return
+
   if (routerCache.size >= MAX_ROUTER_CACHE_ENTRIES) {
     const oldest = routerCache.keys().next().value
     if (oldest) routerCache.delete(oldest)
   }
-  routerCache.set(key, {
-    data,
-    expiresAt: Date.now() + ttlMs,
-  })
+
+  const entry = { data, expiresAt: Date.now() + ttlMs }
+  routerCache.set(key, entry)
+
+  const persisted = readPersistedCache() || {}
+  persisted[key] = entry
+  writePersistedCache(prunePersistedCache(persisted))
 }
 
 /**

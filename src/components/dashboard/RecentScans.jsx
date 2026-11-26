@@ -48,7 +48,7 @@ export default function RecentScans({ scans = [] }) {
 
   return (
     <div className="space-y-2">
-      {scans.slice(0, 6).map((scan, i) => {
+      {scans.slice(0, 4).map((scan, i) => {
         const Icon = iconMap[scan.scan_type] || MessageSquareWarning;
         const isScam = scan.risk_level === 'scam';
         const isSuspicious = scan.risk_level === 'suspicious';

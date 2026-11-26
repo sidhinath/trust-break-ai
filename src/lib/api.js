@@ -20,6 +20,9 @@ import {
 } from './vision.js'
 import {
   TEXT_MODEL_CHAIN,
+  buildRouterCacheKey,
+  getRouterCache,
+  setRouterCache,
   runTextAnalysisWithRouter,
   runMultimodalAnalysisWithRouter,
   routerFetchWithRetry,
@@ -93,14 +96,15 @@ Return STRICT JSON only with keys:
     return null
   }
 
+  const contentStr = type === 'message' ? payload.message : (payload.url || '')
   const routerResult = await runTextAnalysisWithRouter({
     prompt,
     groqKey: apiKey,
     geminiKey: getGeminiKey(),
+    cacheKey: buildRouterCacheKey(type, contentStr),
   })
   if (routerResult) {
     const risk = routerResult.verdict
-    const contentStr = type === 'message' ? payload.message : (payload.url || '')
     return {
       ...routerResult,
       attack_intent: routerResult.attack_intent || inferAttackerIntent(contentStr, '', risk),
@@ -345,7 +349,7 @@ Return strict JSON with keys: fraud_score (0-100), risk_level ("safe"|"suspiciou
   return null
 }
 
-async function postAnalyze(type, payload) {
+async function postAnalyzeUncached(type, payload) {
   // 1. Try server endpoints first (for web deployments with serverless backend)
   const endpoints = ['/api/analyze']
   if (typeof window !== 'undefined') {
@@ -422,6 +426,25 @@ async function postAnalyze(type, payload) {
   throw new Error('Analysis request failed')
 }
 
+/**
+ * Instant local pre-check. Text and URL verdicts are deterministic for a given
+ * input, so an identical repeat scan is served from the localStorage-backed
+ * aiRouter cache (24h TTL) before any network request or model call. Images and
+ * audio are deliberately excluded — their payloads are too large to persist.
+ */
+async function postAnalyze(type, payload) {
+  const rawInput = type === 'message' ? payload?.message : type === 'link' ? payload?.url : ''
+  if (!rawInput) return postAnalyzeUncached(type, payload)
+
+  const cacheKey = buildRouterCacheKey(type, rawInput)
+  const cached = getRouterCache(cacheKey)
+  if (cached) return cached
+
+  const result = await postAnalyzeUncached(type, payload)
+  setRouterCache(cacheKey, result)
+  return result
+}
+
 export function analyzeMessage(message) {
   return postAnalyze('message', { message })
 }
@@ -430,7 +453,7 @@ export function analyzeLink(url) {
   return postAnalyze('link', { url })
 }
 
-export async function investigateWebsite(url) {
+async function investigateWebsiteUncached(url) {
   const endpoints = ['/api/tinyfish/investigate']
   if (typeof window !== 'undefined') {
     const customUrl = import.meta.env?.VITE_API_URL
@@ -477,6 +500,21 @@ export async function investigateWebsite(url) {
       limitations: ['Network unreachable for live browser automation.'],
     },
   }
+}
+
+/** Same 24h local pre-check for live website investigations. */
+export async function investigateWebsite(url) {
+  const cacheKey = buildRouterCacheKey('investigation', url)
+  const cached = getRouterCache(cacheKey)
+  if (cached) return cached
+
+  const result = await investigateWebsiteUncached(url)
+  // Never persist an offline/failed investigation — the next visit should get
+  // a real live attempt instead of a stale failure for 24 hours.
+  if (result?.tinyfishInvestigation?.status !== 'failed') {
+    setRouterCache(cacheKey, result)
+  }
+  return result
 }
 
 export function analyzeReport(payload) {

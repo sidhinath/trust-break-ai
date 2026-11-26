@@ -1,15 +1,24 @@
-import React, { useState, useEffect } from "react";
+import React, { Suspense, useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import ProtectionStatus from "../components/dashboard/ProtectionStatus";
 import QuickActions from "../components/dashboard/QuickActions";
 import RecentScans from "../components/dashboard/RecentScans";
 import ThreatStats from "../components/dashboard/ThreatStats";
-import SeniorHomeView from "../components/SeniorHomeView";
+import { lazyWithRetry } from "@/lib/lazyWithRetry";
 import { ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
-import { listScanHistory, listScamReports } from "@/lib/data";
+import {
+  listScanHistory,
+  listScamReports,
+  countScanHistory,
+  countScamReports,
+} from "@/lib/data";
 import { SkeletonCard, ThreatListSkeleton, MetricCardSkeleton } from "../components/ui/skeleton";
+
+// React.lazy with stale-chunk recovery. Senior Mode is a secondary view — its
+// translation strings and widgets must not be parsed on the Command Center path.
+const SeniorHomeView = lazyWithRetry(() => import("../components/SeniorHomeView"));
 
 export default function Home() {
   const [seniorModeActive, setSeniorModeActive] = useState(() => {
@@ -54,13 +63,48 @@ export default function Home() {
     queryFn: () => listScamReports(50),
   });
 
+  // Head-only counts: KPI totals stay accurate with millions of rows without
+  // transferring or scanning the whole history table on every render.
+  const { data: totalScans = 0 } = useQuery({
+    queryKey: ['scanHistoryCount'],
+    queryFn: () => countScanHistory(),
+    staleTime: 60_000,
+  });
+  const { data: scamScans = 0 } = useQuery({
+    queryKey: ['scanHistoryCount', 'scam'],
+    queryFn: () => countScanHistory({ risk_level: 'scam' }),
+    staleTime: 60_000,
+  });
+  const { data: suspiciousScans = 0 } = useQuery({
+    queryKey: ['scanHistoryCount', 'suspicious'],
+    queryFn: () => countScanHistory({ risk_level: 'suspicious' }),
+    staleTime: 60_000,
+  });
+  const { data: totalReports = 0 } = useQuery({
+    queryKey: ['scamReportsCount'],
+    queryFn: () => countScamReports(),
+    staleTime: 60_000,
+  });
+  const { data: scamReports = 0 } = useQuery({
+    queryKey: ['scamReportsCount', 'scam'],
+    queryFn: () => countScamReports({ risk_level: 'scam' }),
+    staleTime: 60_000,
+  });
+
   const isLoading = loadingScans || loadingReports;
-  const threatsBlocked = scans.filter(s => s.risk_level === 'scam' || s.risk_level === 'suspicious').length;
-  const scamRatio = scans.length > 0 ? (scans.filter(s => s.risk_level === 'scam').length / scans.length) : 0;
-  const safetyScore = scans.length === 0 ? 100 : Math.max(10, Math.round(100 - (scamRatio * 80)));
+  const totalScanCount = totalScans || scans.length;
+  const recentScans = scans.slice(0, 4);
+  const threatsBlocked = (scamScans + suspiciousScans) ||
+    scans.filter(s => s.risk_level === 'scam' || s.risk_level === 'suspicious').length;
+  const scamRatio = totalScanCount > 0 ? (scamScans / totalScanCount) : 0;
+  const safetyScore = totalScanCount === 0 ? 100 : Math.max(10, Math.round(100 - (scamRatio * 80)));
 
   if (seniorModeActive) {
-    return <SeniorHomeView onSwitchToNormalMode={handleSwitchToNormalMode} />;
+    return (
+      <Suspense fallback={<SkeletonCard className="h-[560px]" />}>
+        <SeniorHomeView onSwitchToNormalMode={handleSwitchToNormalMode} />
+      </Suspense>
+    );
   }
 
   return (
@@ -71,7 +115,7 @@ export default function Home() {
         <ProtectionStatus
           threatsBlocked={threatsBlocked}
           safetyScore={safetyScore}
-          totalScans={scans.length}
+          totalScans={totalScanCount}
         />
       )}
 
@@ -97,7 +141,15 @@ export default function Home() {
         {isLoading ? (
           <MetricCardSkeleton count={4} />
         ) : (
-          <ThreatStats reports={reports} scans={scans} />
+          <ThreatStats
+            reports={reports}
+            scans={scans}
+            totalScans={totalScans}
+            totalScamScans={scamScans}
+            totalSuspiciousScans={suspiciousScans}
+            totalReports={totalReports}
+            totalScamReports={scamReports}
+          />
         )}
       </div>
 
@@ -113,7 +165,15 @@ export default function Home() {
         {isLoading ? (
           <ThreatListSkeleton count={4} />
         ) : (
-          <RecentScans scans={scans} />
+          <RecentScans scans={recentScans} />
+        )}
+        {!isLoading && totalScanCount > 4 && (
+          <Link
+            to={createPageUrl("Reports")}
+            className="w-full py-3 mt-3 rounded-xl border border-emerald-500/30 bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20 font-semibold text-sm flex items-center justify-center gap-2 touch-manipulation transition-colors"
+          >
+            View All History ({totalScanCount} Total) →
+          </Link>
         )}
       </div>
     </div>

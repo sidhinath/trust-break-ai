@@ -67,14 +67,24 @@ function saveLocalScanHistory(scan) {
 }
 
 
-export async function listScanHistory(limit = 100) {
+export const SCAN_HISTORY_PAGE_SIZE = 20
+
+/**
+ * Paginated scan history. One page is 20 rows — `range(0, 19)` for the first
+ * page — so the query cost stays constant no matter how much history a user
+ * accumulates. Callers pass `offset = page * SCAN_HISTORY_PAGE_SIZE`.
+ */
+export async function listScanHistory(limit = SCAN_HISTORY_PAGE_SIZE, offset = 0) {
+  const pageSize = Math.max(1, Number(limit) || SCAN_HISTORY_PAGE_SIZE)
+  const start = Math.max(0, Number(offset) || 0)
+
   let supabaseItems = []
   try {
     const { data, error } = await supabase
       .from('scan_history')
       .select('*')
       .order('created_at', { ascending: false })
-      .limit(limit)
+      .range(start, start + pageSize - 1)
 
     if (!error && data) {
       supabaseItems = data.map(mapScan)
@@ -83,7 +93,9 @@ export async function listScanHistory(limit = 100) {
     console.warn('[data] listScanHistory Supabase notice:', err?.message || err)
   }
 
-  const localItems = getLocalScanHistory()
+  // Guest scans never reach Supabase, so page the local mirror with the same
+  // offset. Auth users still get their local-only entries on each page.
+  const localItems = getLocalScanHistory().slice(start, start + pageSize)
   const combined = [...supabaseItems, ...localItems]
 
   const seen = new Set()
@@ -96,7 +108,38 @@ export async function listScanHistory(limit = 100) {
 
   deduplicated.sort((a, b) => new Date(b.created_at || b.created_date || 0) - new Date(a.created_at || a.created_date || 0))
 
-  return deduplicated.slice(0, limit)
+  return deduplicated.slice(0, pageSize)
+}
+
+function matchesFilters(row, filters) {
+  return Object.entries(filters).every(([key, value]) => row?.[key] === value)
+}
+
+/**
+ * Head-only count query for KPI cards. No rows are transferred, and the local
+ * mirror is only used as a fallback / floor because it duplicates server rows.
+ */
+async function countRows(table, getLocalItems, filters = {}) {
+  const localCount = getLocalItems().filter((row) => matchesFilters(row, filters)).length
+  try {
+    const query = Object.entries(filters).reduce(
+      (builder, [key, value]) => builder.eq(key, value),
+      supabase.from(table).select('*', { count: 'exact', head: true })
+    )
+    const { count, error } = await query
+    if (!error && typeof count === 'number') return Math.max(count, localCount)
+  } catch (err) {
+    console.warn(`[data] count ${table} notice:`, err?.message || err)
+  }
+  return localCount
+}
+
+export function countScanHistory(filters = {}) {
+  return countRows('scan_history', getLocalScanHistory, filters)
+}
+
+export function countScamReports(filters = {}) {
+  return countRows('scam_reports', getLocalScamReports, filters)
 }
 
 export async function deleteScanHistory(id) {

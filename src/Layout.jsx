@@ -1046,11 +1046,7 @@ export default function Layout({ children, currentPageName }) {
       </main>
 
       {/* Mobile Bottom Bar */}
-      <nav className="md:hidden fixed bottom-0 left-0 right-0 z-40 border-t backdrop-blur-xl transition-colors duration-300"
-        style={{
-          background: theme === 'dark' ? 'rgba(6,11,20,0.95)' : 'rgba(255,255,255,0.95)',
-          borderColor: 'var(--tb-border)'
-        }}>
+      <nav className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-[#070c16] border-t border-slate-800 pb-[env(safe-area-inset-bottom)] backdrop-blur-xl transition-colors duration-300">
         <div className="flex items-center justify-around py-2 px-1">
           {bottomNavItems.map(item => {
             const Icon = item.icon;

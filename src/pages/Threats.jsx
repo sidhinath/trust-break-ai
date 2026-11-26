@@ -207,7 +207,7 @@ export default function Threats() {
 
       {/* Sub-Navigation Tabs */}
       <div className="tb-card p-2">
-        <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-1 px-1">
+        <div className="flex items-center gap-2 overflow-x-auto whitespace-nowrap p-1.5 rounded-2xl bg-[#0d1424] border border-slate-800 no-scrollbar">
           {THREAT_SUB_TABS.map((tab) => {
             const Icon = tab.icon;
             const isSelected = activeTab === tab.id;
@@ -215,7 +215,7 @@ export default function Threats() {
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`touch-manipulation min-h-[44px] min-w-[44px] flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-transform duration-75 active:scale-95 ${
+                className={`touch-manipulation min-h-[44px] min-w-[44px] shrink-0 whitespace-nowrap px-4 py-2 rounded-xl text-sm font-semibold flex items-center gap-2 transition-transform duration-75 active:scale-95 ${
                   isSelected
                     ? "bg-emerald-500 text-slate-950 shadow-md shadow-emerald-500/20"
                     : "hover:bg-slate-500/10 text-slate-400 hover:text-slate-200"
